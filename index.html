@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="uk"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FF4FA1">
+<title>BabyGirl · v2 · Pink. Soft. Oversized. Forever.</title>
+<meta name="description" content="BabyGirl — pink, soft, oversized t-shirts. Y2K icons forever.">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/css2" rel="stylesheet">
+
+<!-- 1. Attribution bootstrap (МУСИТЬ бути першим, перед усіма трекерами) -->
+<script id="attribution-bootstrap">
+/* attribution_bootstrap_v1 — sets window.SESSION_ID + LANDING_URL.
+   Read CLAUDE.md §7 before touching this. */
+(function(){
+  try {
+    var key = 'bg_session_id';
+    var sid = sessionStorage.getItem(key);
+    if(!sid){
+      sid = 's-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10);
+      sessionStorage.setItem(key, sid);
+    }
+    if(!window.SESSION_ID) window.SESSION_ID = sid;
+    var lkey = 'bg_landing_url';
+    if(!sessionStorage.getItem(lkey)) sessionStorage.setItem(lkey, location.href);
+    if(!window.LANDING_URL) window.LANDING_URL = sessionStorage.getItem(lkey);
+  } catch(e){}
+})();
+</script>
+
+<!-- 2. Brand config — admin → Setup пишет в localStorage 'bg_settings' -->
+<script id="brand-config">
+(function(){
+  window.BRAND = 'bg';
+  window.PRODUCTS_TABLE = 'bg_products';
+  try {
+    var s = JSON.parse(localStorage.getItem('bg_settings') || '{}');
+    if (s.SUPABASE_URL)      window.SUPABASE_URL      = s.SUPABASE_URL;
+    if (s.SUPABASE_ANON_KEY) window.SUPABASE_ANON_KEY = s.SUPABASE_ANON_KEY;
+    if (s.PIXEL_ID)          window.PIXEL_ID          = s.PIXEL_ID;
+  } catch(e){}
+})();
+</script>
+
+<!-- 3. Meta Pixel placeholder -->
+<script>
+window.fbq = window.fbq || function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};
+/* Реальная инициализация — когда window.PIXEL_ID появится через admin → Setup. */
+</script>
+
+<style>
+:root{
+  --bubblegum:#FFB8D9;
+  --pink:#FF4FA1;
+  --pink-deep:#E63B8A;
+  --pink-soft:#FFD7E8;
+  --pink-bg:#FFEAF3;
+  --yellow:#FFD93D;
+  --blue:#6FC4E9;
+  --blue-deep:#4A6FFF;
+  --lime:#B6F500;
+  --cream:#FFF5EC;
+  --black:#0E0E12;
+  --silver:#D5D8DD;
+  --silver-deep:#8B8F96;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  color:var(--black);
+  background:var(--cream);
+  overflow-x:hidden;
+  font-size:16px;line-height:1.5;
+}
+img,video{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,button{font-size:16px}
+
+/* ===== BASE: MOBILE FIRST ===== */
+.container{width:100%;padding:0 16px}
+
+/* ===== NAV ===== */
+.nav{
+  background:transparent;
+  padding:10px 0;
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  pointer-events:none;
+  transition:background .25s ease, backdrop-filter .25s ease, border-color .25s ease, padding .2s ease;
+}
+.nav.scrolled{
+  background:rgba(255,245,236,.78);
+  backdrop-filter:blur(12px) saturate(140%);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  border-bottom:2.5px solid var(--black);
+  padding:8px 0;
+  box-shadow:0 4px 0 rgba(0,0,0,.06);
+}
+.nav.scrolled .nav-logo-img{height:30px}
+.nav.scrolled .nav-logo-img img{filter:drop-shadow(2px 2px 0 var(--black)) drop-shadow(0 2px 6px rgba(0,0,0,.18))}
+.nav .nav-row > *{pointer-events:auto}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo-img{
+  display:inline-flex;align-items:center;
+  height:34px;
+  pointer-events:auto;
+  transform-origin:center center;
+  will-change:transform,opacity;
+  animation:logo-land 1.7s cubic-bezier(.55,.05,.2,1) both;
+}
+.nav-logo-img img{
+  height:100%;width:auto;display:block;
+  filter:drop-shadow(2px 2px 0 var(--black)) drop-shadow(0 4px 10px rgba(0,0,0,.35));
+}
+@keyframes logo-land{
+  0%   { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:0; }
+  14%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  55%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  100% { transform:translateY(0) scale(1) rotate(0); opacity:1; }
+}
+.hero-content{ opacity:0; animation:hero-fade .55s ease 1.45s forwards; }
+.hero-scroll{ opacity:0; animation:scroll-fade .5s ease 1.55s forwards, scrollHint 1.6s ease-in-out 2.05s infinite; }
+@keyframes hero-fade{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scroll-fade{ from{opacity:0} to{opacity:.8} }
+@media (prefers-reduced-motion:reduce){
+  .nav-logo-img,.hero-content{animation:none;opacity:1}
+  .hero-scroll{opacity:.8;animation:scrollHint 1.6s ease-in-out infinite}
+}
+.nav-cart{
+  background:var(--yellow);color:var(--black);
+  padding:8px 12px;
+  border:2.5px solid var(--black);border-radius:999px;
+  font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.nav-burger{
+  background:#fff;color:var(--black);
+  width:40px;height:40px;
+  border:2.5px solid var(--black);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  height:min(88vh,720px);
+  min-height:540px;
+  border-bottom:3px solid var(--black);
+  background:#0E0E12;
+  overflow:hidden;
+}
+.hero-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  z-index:0;background:#0E0E12;
+}
+.hero-content{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  height:58%;min-height:280px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;
+  padding:0 16px 26px;
+  text-align:center;
+}
+.hero-eyebrow{
+  display:inline-block;
+  font-family:'Press Start 2P',monospace;
+  font-size:8px;letter-spacing:.22em;color:#fff;
+  text-shadow:0 1px 0 var(--black), 0 2px 6px rgba(0,0,0,.55);
+  margin:8px 0 0;
+}
+.hero-sub{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:34px;line-height:.9;letter-spacing:-.02em;
+  color:#fff;
+  -webkit-text-stroke:1.5px var(--black);
+  text-shadow:3px 3px 0 var(--pink), 3px 3px 0 var(--black);
+  text-transform:uppercase;
+  margin:0;
+  transform:rotate(-2deg);
+}
+.hero-sub .pink{color:var(--yellow)}
+.hero-scroll{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:3;
+  font-family:'VT323',monospace;font-size:13px;color:#fff;letter-spacing:.12em;
+  opacity:.8;pointer-events:none;
+}
+@keyframes scrollHint{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
+
+/* ===== SLOT MACHINE ===== */
+.slot-section{
+  background:radial-gradient(ellipse at 50% 0%, var(--pink) 0%, var(--pink-deep) 50%, #B82A6E 100%);
+  padding:32px 0 40px;
+  border-bottom:3px solid var(--black);
+  position:relative;overflow:hidden;
+}
+.slot-stars{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 12% 18%, #FFD93D 2px, transparent 3px),
+    radial-gradient(circle at 88% 12%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 25% 78%, #FFD93D 1.5px, transparent 2.5px),
+    radial-gradient(circle at 75% 88%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 50% 50%, #FFD93D 1px, transparent 2px);
+}
+.slot-head{ text-align:center;color:#fff; margin-bottom:18px;padding:0 16px; position:relative;z-index:2; }
+.slot-head .kicker{
+  display:inline-block;
+  background:var(--yellow);color:var(--black);
+  padding:5px 12px;
+  border:2.5px solid var(--black);border-radius:999px;
+  font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:.08em;
+  box-shadow:2px 2px 0 var(--black);
+  margin-bottom:12px;
+}
+.slot-head h2{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:42px;line-height:.95;letter-spacing:-.01em;
+  color:var(--yellow);
+  -webkit-text-stroke:2.5px var(--black);
+  text-shadow:4px 4px 0 var(--black);
+  text-transform:uppercase;
+}
+.slot-tagline{
+  margin-top:10px;
+  font-family:'VT323',monospace;font-size:18px;color:#fff;letter-spacing:.04em;
+  text-shadow:1px 1px 0 var(--black);
+}
+.slot-tagline b{
+  background:var(--yellow);color:var(--black);
+  padding:1px 8px;border:2px solid var(--black);border-radius:6px;
+  font-family:'Bowlby One',sans-serif;font-size:13px;letter-spacing:.06em;
+  text-shadow:none;text-transform:uppercase;
+}
+
+/* Применённый промо: бейдж на карточке + анимированный пересчёт цены */
+.promo-applied-bar{
+  position:sticky;top:0;z-index:55;
+  background:var(--lime);color:var(--black);
+  border-bottom:3px solid var(--black);
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 3px 0 var(--black);
+  animation:promoSlide .4s ease-out;
+}
+@keyframes promoSlide{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.promo-applied-bar .code{
+  background:var(--pink);color:#fff;
+  padding:2px 10px;border:2px solid var(--black);border-radius:6px;
+  font-family:'VT323',monospace;font-size:14px;letter-spacing:.08em;
+}
+.promo-applied-bar .pct{
+  background:var(--yellow);color:var(--black);
+  padding:2px 8px;border:2px solid var(--black);border-radius:6px;
+}
+.promo-applied-bar [data-action="clear-promo"]{
+  background:#fff;border:2px solid var(--black);border-radius:6px;
+  font-family:'VT323',monospace;font-size:14px;color:var(--black);
+  padding:1px 8px;cursor:pointer;
+}
+
+.card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
+.card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.price-flash{animation:priceFlash .8s ease-out}
+@keyframes priceFlash{
+  0%{transform:scale(1);color:var(--pink-deep)}
+  30%{transform:scale(1.25) rotate(-3deg);color:var(--lime)}
+  60%{transform:scale(.95) rotate(2deg)}
+  100%{transform:scale(1) rotate(0);color:var(--pink-deep)}
+}
+.slot-machine{ max-width:340px;margin:0 auto; position:relative;z-index:2; }
+.slot-body{
+  background:linear-gradient(180deg,#EAEDF1 0%,#B7BBC2 50%,#8B8F96 100%);
+  border:4px solid var(--black);
+  border-radius:24px 24px 18px 18px;
+  box-shadow:inset 0 4px 0 rgba(255,255,255,.4),inset 0 -4px 0 rgba(0,0,0,.15),8px 8px 0 var(--black);
+  padding:18px 14px 18px;position:relative;
+}
+.slot-top-light{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--pink);color:#fff;
+  padding:5px 16px;
+  border:3px solid var(--black);border-radius:999px;
+  font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.1em;
+  box-shadow:3px 3px 0 var(--black);
+  z-index:3;
+}
+.slot-display{
+  background:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  padding:8px;
+  display:flex;gap:6px;
+  box-shadow:inset 0 0 0 2px #fff;
+}
+.reel{
+  flex:1;background:#fff;border-radius:8px;
+  height:90px;overflow:hidden;position:relative;
+  border:2px solid var(--silver-deep);
+}
+.reel::before,.reel::after{ content:"";position:absolute;left:0;right:0;height:18px;z-index:2;pointer-events:none; }
+.reel::before{top:0;background:linear-gradient(180deg,rgba(255,255,255,.95),transparent)}
+.reel::after{bottom:0;background:linear-gradient(0deg,rgba(255,255,255,.95),transparent)}
+.reel-strip{ display:flex;flex-direction:column; transition:transform 2.4s cubic-bezier(.15,.7,.25,1); }
+.reel-strip.spinning{ animation:spin .12s linear infinite; }
+@keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-90px)} }
+.reel-item{
+  height:90px;display:flex;align-items:center;justify-content:center;
+  font-family:'Bagel Fat One',sans-serif;font-size:42px;
+  color:var(--pink-deep);
+  -webkit-text-stroke:1.5px var(--black);
+}
+.reel-item.word{font-size:22px}
+.reel-item.percent{
+  font-family:'Bowlby One',sans-serif;font-size:32px;
+  color:var(--pink);
+  -webkit-text-stroke:1.5px var(--black);
+}
+.slot-lever{ position:absolute;top:32px;right:-22px;width:22px;z-index:1; }
+.lever-rod{ width:8px;height:80px; background:linear-gradient(180deg,#EAEDF1,#8B8F96); border:2px solid var(--black);border-radius:4px;margin:0 auto; }
+.lever-ball{ width:28px;height:28px; background:radial-gradient(circle at 30% 30%,#FF8FB8,#E63B8A 60%,#9C1E5B); border:3px solid var(--black);border-radius:50%;margin-top:-8px; box-shadow:3px 3px 0 var(--black); }
+.slot-result{
+  margin:18px auto 0;max-width:340px;
+  background:#fff;border:3px solid var(--black);border-radius:14px;
+  padding:14px 16px;text-align:center;
+  box-shadow:5px 5px 0 var(--black);
+  position:relative;z-index:2;
+  min-height:84px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.slot-result .placeholder{ font-family:'Bowlby One',sans-serif;font-size:14px;color:var(--silver-deep);text-transform:uppercase;letter-spacing:.06em; }
+.slot-result .win-line{ font-family:'Bagel Fat One';font-size:22px;color:var(--pink-deep); -webkit-text-stroke:1.5px var(--black); margin-bottom:4px;text-transform:uppercase; }
+.slot-result .code{ font-family:'VT323',monospace;font-size:18px; background:var(--yellow); border:2px solid var(--black);border-radius:8px; padding:3px 10px;letter-spacing:.1em; }
+.spin-btn{
+  display:block;margin:12px auto 0;width:100%;
+  background:var(--lime);color:var(--black);
+  border:3px solid var(--black);border-radius:12px;
+  padding:12px 18px;
+  font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);
+  position:relative;z-index:2;
+  transition:transform .12s,box-shadow .12s,background .15s;
+}
+.spin-btn:hover{background:#9DDB00}
+.spin-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.spin-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== PRODUCTS ===== */
+.section{padding:36px 0}
+.section-title-wrap{ margin-bottom:18px;text-align:center;padding:0 4px; }
+.section-title{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:46px;line-height:.85;letter-spacing:-.02em;
+  color:var(--pink);
+  -webkit-text-stroke:2.5px var(--black);
+  text-shadow:5px 5px 0 var(--yellow), 5px 5px 0 var(--black);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.section-title .alt{color:var(--blue-deep)}
+.section-sub{font-family:'Caveat';font-size:22px;color:var(--pink-deep);display:inline-block;transform:rotate(-2deg)}
+.grid{ display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 4px; }
+.card{
+  background:#fff;
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:4px 4px 0 var(--black);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  cursor:pointer;
+}
+.card-window{
+  background:var(--pink-soft);
+  border-bottom:2.5px solid var(--black);
+  padding:4px 7px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:'VT323',monospace;font-size:11px;color:var(--black);
+}
+.card-window .dots{display:flex;gap:3px}
+.card-window .dot{width:7px;height:7px;border-radius:50%;border:1px solid var(--black);background:var(--pink)}
+.card-window .dot:nth-child(2){background:var(--yellow)}
+.card-window .dot:nth-child(3){background:var(--lime)}
+.card-img{
+  aspect-ratio:1;
+  background:var(--pink-soft);
+  border-bottom:2.5px solid var(--black);
+  overflow:hidden;
+  position:relative;
+}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.card-img .ribbon{
+  position:absolute;top:6px;left:-22px;
+  background:var(--yellow);color:var(--black);
+  font-family:'Bowlby One';font-size:9px;letter-spacing:.08em;
+  padding:3px 24px;transform:rotate(-25deg);
+  border:1.5px solid var(--black);
+}
+.card-img .heart-tag{
+  position:absolute;top:6px;right:6px;
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;border:2px solid var(--black);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--pink);
+  box-shadow:1.5px 1.5px 0 var(--black);
+}
+.card-body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:5px;flex:1}
+.card-title{
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.01em;line-height:1.05;
+  min-height:28px;
+}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.card-price{ font-family:'Bagel Fat One';font-size:16px;color:var(--pink-deep); -webkit-text-stroke:1px var(--black); }
+.card-tag{
+  font-family:'VT323',monospace;font-size:11px;
+  background:var(--lime);border:1.5px solid var(--black);border-radius:999px;
+  padding:0 6px;
+}
+.card-btn{
+  margin-top:auto;
+  background:var(--pink);color:#fff;
+  border:2.5px solid var(--black);border-radius:8px;
+  padding:8px;
+  font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.06em;
+  text-align:center;text-transform:uppercase;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.card-btn.alt{background:var(--blue-deep)}
+.card-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.empty{ padding:40px;text-align:center;color:var(--silver-deep);font-family:'VT323',monospace;font-size:18px; grid-column:1/-1; border:2px dashed var(--silver);border-radius:14px; }
+
+/* ===== ABOUT ===== */
+.about{
+  background:var(--blue-deep);
+  border-top:3px solid var(--black);border-bottom:3px solid var(--black);
+  color:#fff;padding:36px 0;
+}
+.about h2{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:38px;line-height:.9;letter-spacing:-.02em;
+  color:var(--yellow);
+  -webkit-text-stroke:2px var(--black);
+  text-shadow:3px 3px 0 var(--pink-deep), 3px 3px 0 var(--black);
+  text-transform:uppercase;
+  margin-bottom:12px;text-align:center;
+}
+.about-window{
+  background:var(--cream);color:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:6px 6px 0 var(--black);
+  overflow:hidden;margin:0 4px;
+}
+.about-window .bar{
+  background:var(--pink);border-bottom:2.5px solid var(--black);
+  padding:5px 8px;
+  font-family:'VT323',monospace;font-size:14px;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.about-window .bar .dots{display:flex;gap:4px}
+.about-window .bar .dots i{display:block;width:9px;height:9px;border:1.5px solid var(--black);border-radius:50%;background:var(--yellow)}
+.about-window .bar .dots i:nth-child(2){background:var(--lime)}
+.about-window .bar .dots i:nth-child(3){background:var(--pink-soft)}
+.about-window .body{padding:14px 16px;font-size:15px;line-height:1.5}
+.about-window .body p{margin-bottom:6px}
+.about-window .body em{color:var(--pink-deep);font-style:normal;font-weight:700}
+
+/* ===== ABOUT: GTA-style dialog with photo ===== */
+.about-stage{display:grid;grid-template-columns:1fr;gap:14px;align-items:start;margin-top:14px}
+.about-photo{
+  position:relative;
+  border:3px solid var(--black);border-radius:14px;
+  background:var(--pink-soft);
+  overflow:hidden;
+  box-shadow:4px 4px 0 var(--black);
+  aspect-ratio:4/5;max-height:420px;
+}
+.about-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.about-photo .name-tag{
+  position:absolute;top:8px;left:8px;z-index:2;
+  background:var(--pink);color:#fff;
+  font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.12em;
+  padding:4px 8px;border:2px solid var(--black);border-radius:6px;
+  box-shadow:2px 2px 0 var(--black);text-transform:uppercase;
+}
+.about-photo .health{
+  position:absolute;bottom:8px;left:8px;right:8px;z-index:2;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(14,14,18,.55);
+  padding:5px 8px;border:1.5px solid var(--black);border-radius:6px;
+  font-family:'VT323',monospace;font-size:12px;color:var(--yellow);letter-spacing:.04em;
+}
+.about-photo .health .bar-fill{flex:1;height:8px;background:#000;border:1px solid var(--yellow);border-radius:2px;overflow:hidden}
+.about-photo .health .bar-fill > i{display:block;height:100%;width:88%;background:linear-gradient(90deg, var(--pink), var(--yellow));animation:hp 3s ease-in-out infinite}
+@keyframes hp{0%,100%{width:88%}50%{width:96%}}
+
+.gta-dialog{
+  background:var(--cream);color:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:6px 6px 0 var(--black);
+  overflow:hidden;
+  position:relative;
+}
+.gta-dialog .bar{
+  background:linear-gradient(90deg, var(--pink), var(--pink-deep));
+  border-bottom:3px solid var(--black);
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:#fff;
+}
+.gta-dialog .bar .speaker{
+  font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.05em;
+  text-transform:uppercase;text-shadow:1px 1px 0 var(--black);
+}
+.gta-dialog .bar .pip{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.12em;
+  color:var(--yellow);text-shadow:1px 1px 0 var(--black);
+}
+.gta-dialog .bar .pip i{width:7px;height:7px;background:var(--yellow);border:1.5px solid var(--black);border-radius:50%;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.gta-screen{
+  padding:14px 14px 16px;
+  font-family:'VT323',monospace;font-size:17px;line-height:1.45;
+  min-height:200px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 1px, transparent 1px 3px),
+    var(--cream);
+}
+.gta-line{margin-bottom:8px}
+.gta-line.dim{opacity:.55}
+.gta-line .who{
+  display:block;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--pink-deep);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:2px;
+}
+.gta-line .what{color:#1a1a1a}
+.gta-line .what em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.gta-line.me .who{color:var(--blue-deep)}
+.gta-cursor{display:inline-block;width:7px;height:15px;background:var(--pink-deep);vertical-align:-2px;animation:caret 1s steps(2) infinite;margin-left:2px}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+.gta-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  background:var(--pink-bg);
+  border-top:2px dashed rgba(0,0,0,.18);
+  padding:10px 14px;
+  font-family:'VT323',monospace;font-size:13px;color:var(--silver-deep);
+}
+.gta-cta .keys b{
+  display:inline-block;padding:1px 5px;
+  background:#fff;border:1.5px solid var(--black);border-radius:4px;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--black);margin:0 2px;
+}
+.gta-cta button{
+  background:var(--lime);color:var(--black);
+  border:2.5px solid var(--black);border-radius:8px;
+  padding:7px 12px;
+  font-family:'Bowlby One',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);cursor:pointer;
+  flex-shrink:0;
+}
+.gta-cta button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+
+@media (min-width:760px){
+  .about-stage{grid-template-columns:0.9fr 1.1fr;gap:24px}
+  .about-photo{aspect-ratio:auto;height:100%;min-height:380px;max-height:560px}
+  .gta-screen{min-height:300px;font-size:22px}
+  .gta-dialog .bar .speaker{font-size:16px}
+}
+
+/* ===== VIBE ===== */
+.vibe{padding:36px 0;background:var(--pink-bg)}
+.vibe-grid{display:grid;grid-template-columns:1fr;gap:14px;padding:0 4px}
+.vibe-card{
+  background:#fff;border:3px solid var(--black);border-radius:14px;
+  padding:18px 16px;box-shadow:4px 4px 0 var(--black);
+  position:relative;
+}
+.vibe-card .num{
+  position:absolute;top:-14px;left:14px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--pink);color:#fff;
+  border:2.5px solid var(--black);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagel Fat One';font-size:16px;
+  box-shadow:2px 2px 0 var(--black);
+}
+.vibe-card h4{
+  margin-top:6px;font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:18px;color:var(--pink-deep);text-transform:uppercase;line-height:1.05;
+}
+.vibe-card p{margin-top:6px;font-size:14px;line-height:1.5;color:#2a2a2a}
+
+/* ===== NEWSLETTER ===== */
+
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--pink);color:#fff;
+  padding:32px 0 20px;
+  border-top:3px solid var(--black);
+}
+.foot-logo{
+  font-family:'Bagel Fat One',sans-serif;font-size:36px;line-height:1;
+  color:var(--yellow);
+  -webkit-text-stroke:2px var(--black);
+  text-shadow:3px 3px 0 var(--black);
+  letter-spacing:-.02em;text-align:center;margin-bottom:8px;
+}
+.foot-logo .girl{color:var(--cream)}
+.foot-tagline{text-align:center;font-size:13px;margin-bottom:20px}
+.foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 4px}
+.foot-grid h5{
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:6px;
+}
+.foot-grid a{display:block;padding:3px 0;font-weight:500;color:#fff;font-size:14px}
+.foot-bot{
+  margin-top:20px;padding-top:14px;border-top:2px dashed rgba(255,255,255,.4);
+  font-size:11px;text-align:center;
+}
+
+/* ===== BURGER DRAWER ===== */
+.drawer-overlay{
+  position:fixed;inset:0;
+  background:rgba(14,14,18,.55);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease;
+  z-index:60;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(86vw,360px);
+  background:var(--cream);
+  border-right:3px solid var(--black);
+  box-shadow:8px 0 0 var(--black);
+  transform:translateX(-110%);
+  transition:transform .26s cubic-bezier(.2,.8,.2,1);
+  z-index:70;
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-head{
+  background:var(--pink);
+  border-bottom:3px solid var(--black);
+  padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:2;
+}
+.drawer-head .title{
+  font-family:'Bagel Fat One',sans-serif;font-size:24px;color:#fff;
+  text-shadow:2px 2px 0 var(--black);
+  letter-spacing:-.01em;
+}
+.drawer-close{
+  width:38px;height:38px;
+  background:var(--yellow);
+  border:2.5px solid var(--black);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:var(--black);
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.drawer-section{ padding:18px 16px 6px; border-bottom:2px dashed rgba(0,0,0,.12); }
+.drawer-section:last-of-type{border-bottom:none}
+.drawer-section h6{
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;letter-spacing:.08em;
+  color:var(--silver-deep);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.drawer-link{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:11px 14px;margin-bottom:8px;
+  background:#fff;color:var(--black);
+  border:2.5px solid var(--black);border-radius:10px;
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:14px;letter-spacing:.04em;
+  text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);
+  transition:transform .12s,box-shadow .12s;
+}
+.drawer-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+.drawer-link.pink{background:var(--pink);color:#fff}
+.drawer-link.yellow{background:var(--yellow);color:var(--black)}
+.drawer-link.lime{background:var(--lime);color:var(--black)}
+.drawer-link.blue{background:var(--blue-deep);color:#fff}
+.drawer-link .arrow{ font-family:'VT323',monospace;font-size:18px;font-weight:400; opacity:.85; }
+.drawer-foot{
+  padding:18px 16px 24px;margin-top:auto;
+  background:var(--pink-bg);
+  border-top:3px solid var(--black);
+  text-align:center;
+  font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);
+}
+body.drawer-open{overflow:hidden}
+
+/* ===== CART DRAWER ===== */
+.cart-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:80}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(92vw,420px);background:var(--cream);border-left:3px solid var(--black);box-shadow:-8px 0 0 var(--black);transform:translateX(110%);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:90;display:flex;flex-direction:column;overflow-y:auto}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{background:var(--pink);border-bottom:3px solid var(--black);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.cart-head .title{font-family:'Bagel Fat One',sans-serif;font-size:24px;color:#fff;text-shadow:2px 2px 0 var(--black);letter-spacing:-.01em}
+.cart-close{width:38px;height:38px;background:var(--yellow);border:2.5px solid var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--black);box-shadow:2px 2px 0 var(--black);cursor:pointer}
+.cart-body{padding:16px;flex:1}
+.cart-empty{text-align:center;padding:40px 20px;color:var(--silver-deep);font-family:'VT323',monospace;font-size:18px}
+.cart-line{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:2px dashed rgba(0,0,0,.12)}
+.cart-line img{width:54px;height:54px;border-radius:8px;border:2px solid var(--black);background:#fff;object-fit:cover}
+.cart-line .info{flex:1;min-width:0}
+.cart-line .name{font-family:'Bowlby One',sans-serif;font-size:13px;line-height:1.1}
+.cart-line .price{font-family:'Bagel Fat One';font-size:14px;color:var(--pink-deep);-webkit-text-stroke:1px var(--black);margin-top:2px}
+.cart-line .qty{display:flex;align-items:center;gap:6px;font-family:'VT323',monospace;font-size:14px}
+.cart-line .qty button{width:24px;height:24px;border:2px solid var(--black);background:var(--yellow);border-radius:6px;font-weight:900;cursor:pointer}
+.cart-line .rm{background:none;border:none;color:var(--pink-deep);font-size:18px;cursor:pointer;padding:0 4px}
+.cart-line .price .old{text-decoration:line-through;opacity:.55;font-size:11px;margin-right:4px;color:var(--silver-deep)}
+
+.bundle-banner{
+  background:var(--pink-bg);border:2.5px solid var(--black);border-radius:10px;
+  padding:9px 12px;margin-bottom:12px;
+  font-family:'VT323',monospace;font-size:14px;color:var(--pink-deep);line-height:1.3;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.bundle-banner b{font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:var(--yellow);padding:1px 6px;border:1.5px solid var(--black);border-radius:4px}
+.bundle-banner.active{background:var(--lime);color:var(--black);border-color:var(--black);animation:bundleIn .35s ease-out}
+.bundle-banner.active .check{background:var(--pink);color:#fff;border:1.5px solid var(--black);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+@keyframes bundleIn{from{transform:scale(.9);opacity:.6}50%{transform:scale(1.05)}to{transform:scale(1);opacity:1}}
+
+.cart-total{flex-direction:column;align-items:stretch;gap:4px}
+.cart-total .total-row{display:flex;align-items:center;justify-content:space-between;font-family:"DM Sans",sans-serif;font-size:14px;text-transform:none}
+.cart-total .total-row.sub{color:var(--silver-deep)}
+.cart-total .total-row.disc{color:var(--pink-deep);font-weight:700}
+.cart-total .total-row.main{font-family:"Bowlby One",sans-serif;font-size:14px;text-transform:uppercase;margin-top:4px;padding-top:6px;border-top:2px dashed rgba(0,0,0,.12)}
+.cart-total .total-row.main .num{font-family:"Bagel Fat One",sans-serif;font-size:24px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black)}
+
+.bg-toast{
+  position:fixed;bottom:24px;left:50%;transform:translate(-50%, 0);z-index:200;
+  background:var(--lime);color:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  padding:12px 18px;
+  font-family:"Bowlby One",sans-serif;font-size:13px;letter-spacing:.04em;text-transform:lowercase;
+  box-shadow:5px 5px 0 var(--black);
+  animation:toastIn .4s cubic-bezier(.2,.8,.2,1);
+  max-width:90vw;text-align:center;
+}
+.bg-toast b{background:var(--pink);color:#fff;padding:1px 8px;border:1.5px solid var(--black);border-radius:6px;margin:0 2px}
+.bg-toast.hide{animation:toastOut .35s ease-in forwards}
+@keyframes toastIn{from{transform:translate(-50%, 60px);opacity:0}to{transform:translate(-50%, 0);opacity:1}}
+@keyframes toastOut{to{transform:translate(-50%, 60px);opacity:0}}
+.cart-total{padding:14px 16px;background:var(--pink-bg);border-top:3px solid var(--black);border-bottom:3px solid var(--black);display:flex;align-items:center;justify-content:space-between;font-family:'Bowlby One',sans-serif;font-size:16px;text-transform:uppercase}
+.cart-total .num{font-family:'Bagel Fat One';font-size:24px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black)}
+.cart-form{padding:16px;display:flex;flex-direction:column;gap:8px}
+.cart-form label{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.18em;color:var(--silver-deep);text-transform:uppercase;margin-top:4px}
+.cart-form input,.cart-form select{padding:12px;background:#fff;border:2.5px solid var(--black);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;box-shadow:2px 2px 0 var(--black)}
+.cart-form input:focus,.cart-form select:focus{outline:none;border-color:var(--pink);box-shadow:3px 3px 0 var(--pink)}
+.cart-submit{margin-top:12px;width:100%;padding:16px;background:var(--lime);color:var(--black);border:3px solid var(--black);border-radius:12px;font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:4px 4px 0 var(--black);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.cart-submit:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--black)}
+.cart-submit:disabled{opacity:.5;cursor:not-allowed}
+.cart-result{padding:12px 16px;font-family:'VT323',monospace;font-size:15px;color:var(--silver-deep);min-height:38px}
+.cart-result.ok{color:var(--pink-deep);font-weight:bold}
+.cart-result.err{color:#d00}
+body.cart-open{overflow:hidden}
+
+/* ===== TABLET / DESKTOP ===== */
+@media (min-width:600px){
+  .container{max-width:1280px;margin:0 auto;padding:0 24px}
+  .hero{height:min(92vh,820px);min-height:640px}
+  .hero-content{height:62%;min-height:380px;padding:0 32px 36px}
+  .hero-eyebrow{font-size:10px;margin-top:14px}
+  .hero-sub{font-size:64px;text-shadow:6px 6px 0 var(--pink), 6px 6px 0 var(--black)}
+  .grid{grid-template-columns:repeat(3,1fr);gap:18px}
+  .vibe-grid{grid-template-columns:repeat(3,1fr)}
+  .section-title{font-size:72px;text-shadow:6px 6px 0 var(--yellow), 6px 6px 0 var(--black)}
+  .foot-grid{grid-template-columns:1.2fr 1fr 1fr 1fr}
+  .nav-logo-img{height:44px}
+  .slot-machine{max-width:420px}
+  .reel{height:110px}
+  .reel-item{height:110px;font-size:54px}
+  .reel-item.percent{font-size:42px}
+  .reel-item.word{font-size:28px}
+  @keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-110px)} }
+  .slot-head h2{font-size:54px}
+}
+@media (min-width:900px){ .grid{grid-template-columns:repeat(4,1fr)} }
+
+/* ===== CARD MINI-CAROUSEL (фото внутри плитки грида) ===== */
+.card-img{position:relative;touch-action:pan-y}
+.card-photos{display:flex;width:100%;height:100%;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.card-photos > img{flex:0 0 100%;width:100%;height:100%;object-fit:cover}
+.card-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:4px;background:rgba(14,14,18,.55);padding:3px 6px;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.card-dots i{display:block;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.5;transition:opacity .15s}
+.card-dots i.active{opacity:1;background:var(--yellow)}
+
+/* ===== PRODUCT MODAL ===== */
+.pm-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}
+.pm-overlay.open{opacity:1;pointer-events:auto}
+.pm{position:fixed;top:0;left:0;right:0;bottom:0;z-index:110;background:var(--cream);overflow-y:auto;overflow-x:hidden;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.pm.open{transform:translateY(0)}
+body.pm-open{overflow:hidden}
+
+.pm-close{position:fixed;top:12px;right:12px;z-index:115;width:44px;height:44px;background:var(--yellow);border:3px solid var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--black);box-shadow:3px 3px 0 var(--black);cursor:pointer;transition:transform .15s}
+.pm-close:hover{transform:rotate(90deg)}
+.pm-close:active{transform:rotate(90deg) translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+
+.pm-hero{position:relative;background:var(--pink-soft);border-bottom:3px solid var(--black)}
+.pm-stage{position:relative;aspect-ratio:1;overflow:hidden;background:var(--pink-bg);touch-action:pan-y pinch-zoom}
+.pm-stage-track{display:flex;width:100%;height:100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pm-stage-track > img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+.pm-ribbon{position:absolute;top:18px;left:-30px;z-index:3;background:var(--yellow);color:var(--black);font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.08em;padding:6px 36px;transform:rotate(-25deg);border:2px solid var(--black);text-transform:uppercase}
+.pm-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--black);border:2.5px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;cursor:pointer;box-shadow:3px 3px 0 var(--black);transition:transform .12s,box-shadow .12s,background .15s}
+.pm-arrow:hover{background:var(--yellow)}
+.pm-arrow:active{transform:translateY(-50%) translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.pm-arrow.prev{left:10px}
+.pm-arrow.next{right:10px}
+.pm-arrow[hidden]{display:none}
+.pm-counter{position:absolute;bottom:14px;right:14px;z-index:3;background:rgba(14,14,18,.7);color:#fff;font-family:'VT323',monospace;font-size:13px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;border:1.5px solid var(--black)}
+
+.pm-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:#fff;border-bottom:3px solid var(--black);-webkit-overflow-scrolling:touch}
+.pm-thumbs::-webkit-scrollbar{height:6px}
+.pm-thumbs::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px}
+.pm-thumb{flex-shrink:0;width:64px;height:64px;border:2.5px solid var(--black);border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:2px 2px 0 var(--black);background:#fff;transition:transform .12s,box-shadow .12s}
+.pm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pm-thumb.active{outline:3px solid var(--pink);outline-offset:2px}
+.pm-thumb:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+
+.pm-info{padding:24px 16px 28px}
+.pm-info h1{font-family:'Bagel Fat One',sans-serif;font-weight:400;font-size:42px;line-height:.9;letter-spacing:-.02em;color:var(--pink);-webkit-text-stroke:2px var(--black);text-shadow:4px 4px 0 var(--yellow), 4px 4px 0 var(--black);text-transform:uppercase;margin-bottom:6px}
+.pm-info .crumbs{font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);margin-bottom:14px}
+.pm-info .crumbs b{color:var(--pink-deep)}
+.pm-price{font-family:'Bagel Fat One',sans-serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black);margin-bottom:14px;line-height:1}
+.pm-price .currency{font-size:24px;margin-left:4px}
+.pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
+.pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.pm-spec{background:#fff;border:2.5px solid var(--black);border-radius:10px;padding:10px 12px;box-shadow:3px 3px 0 var(--black)}
+.pm-spec .lbl{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.14em;color:var(--silver-deep);text-transform:uppercase;margin-bottom:4px}
+.pm-spec .val{font-family:'Bowlby One',sans-serif;font-size:12px;line-height:1.2;color:var(--pink-deep);text-transform:uppercase}
+.pm-cta{display:block;width:100%;padding:18px;background:var(--lime);color:var(--black);border:3px solid var(--black);border-radius:14px;font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:5px 5px 0 var(--black);transition:transform .12s,box-shadow .12s;cursor:pointer}
+.pm-cta:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--black)}
+.pm-cta.added{background:var(--yellow)}
+
+@media (min-width:760px){
+  .pm-stage{aspect-ratio:auto;height:min(72vh,720px)}
+  .pm-arrow{width:54px;height:54px;font-size:24px}
+  .pm-info{padding:32px 24px 40px;max-width:760px;margin:0 auto}
+  .pm-info h1{font-size:72px;text-shadow:6px 6px 0 var(--yellow), 6px 6px 0 var(--black)}
+  .pm-price{font-size:54px}
+  .pm-specs{grid-template-columns:repeat(4,1fr)}
+  .pm-close{top:20px;right:24px;width:52px;height:52px;font-size:26px}
+  .pm-thumb{width:80px;height:80px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav scrolled">
+  <div class="container nav-row">
+    <button class="nav-burger" id="navBurger" aria-label="menu" aria-expanded="false" aria-controls="drawer">≡</button>
+    <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#top" class="nav-logo-img" aria-label="BabyGirl"><img src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/logo-mark.png" srcset="assets/logo-mark.png 1x, assets/logo-mark-hd.png 2x" alt="BabyGirl"></a>
+    <button class="nav-cart" id="navCart">Cart [0]</button>
+  </div>
+</nav>
+
+<!-- ===== BURGER DRAWER ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="site menu">
+  <div class="drawer-head">
+    <span class="title">menu ♥</span>
+    <button class="drawer-close" id="drawerClose" aria-label="close menu">×</button>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ shop the vibe</h6>
+    <a class="drawer-link pink" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop">all t-shirts <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="icons">90s icons <span class="arrow">→</span></a>
+    <a class="drawer-link lime" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="self-love">self-love <span class="arrow">→</span></a>
+    <a class="drawer-link blue" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="soft-rebel">soft rebel <span class="arrow">→</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ info</h6>
+    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#top">main page <span class="arrow">→</span></a>
+    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#about">about <span class="arrow">→</span></a>
+    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/admin.html">admin ✦ <span class="arrow">→</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ follow</h6>
+    <a class="drawer-link" href="https://www.instagram.com/loveyourhairshop/" target="_blank" rel="noopener">instagram <span class="arrow">↗</span></a>
+    <a class="drawer-link" href="mailto:hi@babygirl.shop">hi@babygirl.shop <span class="arrow">↗</span></a>
+  </div>
+
+  <div class="drawer-foot">
+    BabyGirl™ · pink hours 24/7
+  </div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section id="top" class="hero">
+  <video class="hero-video" src="assets/hero.mp4" autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="assets/logo-hd.png"></video>
+  <div class="hero-content">
+    <div class="hero-eyebrow">★ DROP N°1 · 2026 ★</div>
+    <div class="hero-sub">pink · soft<br><span class="pink">oversized</span></div>
+  </div>
+  <div class="hero-scroll">▼ scroll ▼</div>
+</section>
+
+<!-- ===== SLOT MACHINE ===== -->
+<section class="slot-section">
+  <div class="slot-stars"></div>
+  <div class="slot-head">
+    <span class="kicker">★ promo ★</span>
+    <h2>win pink</h2>
+    <p class="slot-tagline">Прокрути і отримай <b>промокод</b> ♥</p>
+  </div>
+
+  <div class="slot-machine">
+    <div class="slot-body">
+      <div class="slot-top-light" id="slotTopLight">PROMO ♥ ROLL ME</div>
+      <div class="slot-display">
+        <div class="reel">
+          <div class="reel-strip" id="reel1">
+            <div class="reel-item">🎀</div><div class="reel-item">♥</div><div class="reel-item">★</div><div class="reel-item">💋</div><div class="reel-item">🦋</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel2">
+            <div class="reel-item percent">5%</div><div class="reel-item percent">6%</div><div class="reel-item percent">7%</div><div class="reel-item percent">8%</div><div class="reel-item percent">10%</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel3">
+            <div class="reel-item word">OFF</div><div class="reel-item word">WIN</div><div class="reel-item word">PINK</div><div class="reel-item word">BABY</div><div class="reel-item word">DROP</div>
+          </div>
+        </div>
+      </div>
+      <button id="spinBtn" class="spin-btn">прокрутити ♥</button>
+    </div>
+    <div class="slot-lever" aria-hidden="true">
+      <div class="lever-rod"></div>
+      <div class="lever-ball"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section id="shop" class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">level up your <span class="alt">look</span></h2>
+      <span class="section-sub">~ обери своє альтер-его ~</span>
+    </div>
+
+    <!-- DATA: каталог. Парсить validate_deploy_js.py (id="DATA"). -->
+    <script id="DATA" type="application/json">
+{
+  "all": [
+    {
+      "uid": "pamela-90s",
+      "title": "Pamela 90s",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "featured": true,
+      "sort_order": 10,
+      "ribbon": "ICON",
+      "photo_main": "https://static.tildacdn.com/stor3233-6263-4437-b061-303964363736/d42dad8623d023c1e5d58c9d18077dc7.png",
+      "photos": [
+        "https://static.tildacdn.com/stor3233-6263-4437-b061-303964363736/d42dad8623d023c1e5d58c9d18077dc7.png",
+        "assets/showgirl/bf6ebd66af7043c611c1664b2cf60a2f.jpg",
+        "assets/showgirl/03c9d8da0bb00493ee79f4595c25d308.jpg",
+        "assets/showgirl/b2b66878d6d071d8ae5623fec7cb9e82.jpg",
+        "https://static.tildacdn.com/stor3735-3235-4534-b535-616139316231/c83761a79277f576e8cd13a907345a2a.webp",
+        "https://static.tildacdn.com/stor6563-3134-4838-b661-343530353230/05ebdcf479463e151b298f25200e453f.jpg",
+        "https://static.tildacdn.com/stor3134-3439-4633-a634-333835633936/6255eb8bc35e0fbe684d514a72c1ff55.jpg"
+      ],
+      "description": "OG babygirl. Скандал — це не баг, це фіча. Памела ніколи не пробачалась за те, що вона є.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "eminem",
+      "title": "Eminem",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 20,
+      "photo_main": "https://static.tildacdn.com/stor6639-6563-4937-b439-343732616138/009a092a5f6af533afafb5f574e23e49.png",
+      "photos": [
+        "https://static.tildacdn.com/stor6639-6563-4937-b439-343732616138/009a092a5f6af533afafb5f574e23e49.png",
+        "https://static.tildacdn.com/stor6531-6362-4735-b564-333132343132/f00fe1f20e503ad5b5638581855e7a02.png",
+        "https://static.tildacdn.com/stor6338-3132-4965-b865-393934336631/fb4f77b4b23004ec3df11902aa738d15.png"
+      ],
+      "description": "Без фільтрів. Принт для тих, хто не пом'якшує себе під ввічливість.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "britney",
+      "title": "Britney",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 30,
+      "ribbon": "ICON",
+      "photo_main": "https://static.tildacdn.com/stor3133-6566-4232-b036-646234366664/afa8020f615419bf454c6ce5d786d00e.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3133-6566-4232-b036-646234366664/afa8020f615419bf454c6ce5d786d00e.jpg",
+        "assets/showgirl/b2b66878d6d071d8ae5623fec7cb9e82.jpg",
+        "assets/showgirl/7cb5f7e1980b1ca1ff4c897cd188b031.jpg",
+        "https://static.tildacdn.com/stor6365-3638-4932-b932-663764653536/657a9c58b0df2f7b89347efb5c6c0834.jpg",
+        "https://static.tildacdn.com/stor6335-3465-4135-a661-636338346237/532da650f2f18738b0c1cd4762e93eaf.jpg",
+        "https://static.tildacdn.com/stor6563-3063-4638-a136-643563323139/e78e3e7d9cee0a2dd9081a573c594d0f.jpg",
+        "https://static.tildacdn.com/stor6564-6236-4439-b063-356462666661/523687cbaf52dba5fe2a8909ce41b005.jpg",
+        "https://static.tildacdn.com/stor3162-3035-4566-b864-326135616339/6cb9414552a05c18ed0b53bdad4e982f.jpg"
+      ],
+      "description": "Брітні — це baby у найкращому сенсі. Коли тобі 16 і ти повинна бути ідеальною, але танцюєш як хочеш.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "beavis-butthead",
+      "title": "Beavis & Butthead",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 40,
+      "photo_main": "https://static.tildacdn.com/stor3161-6661-4662-b330-333166656362/ff24f704418d99e312a111c3f4592efe.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3161-6661-4662-b330-333166656362/ff24f704418d99e312a111c3f4592efe.jpg",
+        "https://static.tildacdn.com/stor6335-6164-4861-a636-303233373836/25865b828f1d4756e6a8aa5438d54a21.jpg",
+        "https://static.tildacdn.com/stor6633-6663-4934-b438-346561646335/c0cd4d62f198b16464b9d1dc49a8a340.jpg"
+      ],
+      "description": "Heh heh. Найрозумніша філософія — від двох найдурніших.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "crush",
+      "title": "Crush",
+      "family": "self-love",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 50,
+      "photo_main": "https://static.tildacdn.com/stor3834-3262-4137-b064-336132643330/5608ea8d7945d750d8a506ac014822e4.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3834-3262-4137-b064-336132643330/5608ea8d7945d750d8a506ac014822e4.jpg"
+      ],
+      "description": "Любов проста: коли побачив — і пропав.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "why-britney-shaved",
+      "title": "Why Britney Shaved?",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 60,
+      "ribbon": "CULT",
+      "photo_main": "https://static.tildacdn.com/stor6663-3236-4566-a238-653361313438/b4ccf77f4377b064f7570623b298d238.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor6663-3236-4566-a238-653361313438/b4ccf77f4377b064f7570623b298d238.jpg",
+        "https://static.tildacdn.com/stor6632-6631-4435-b462-616632633934/95419d7f7f8f0802be73a3f7783d8c16.png"
+      ],
+      "description": "Бо їй так хотілось. Усе. Дискусія закінчена.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "lindsay-lohan",
+      "title": "Lindsay Lohan",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 70,
+      "photo_main": "https://static.tildacdn.com/stor3338-3038-4361-b065-393765366462/ef565e27b7ef6b4e72a12a91e8ee353e.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3338-3038-4361-b065-393765366462/ef565e27b7ef6b4e72a12a91e8ee353e.jpg",
+        "https://static.tildacdn.com/stor3537-6434-4631-b537-366465626234/38b5ace53e631bf121aa3f7c8ecc4d6e.png",
+        "https://static.tildacdn.com/stor3034-3261-4435-b066-323765613762/36df7f7762a457335f6742fd51b30f85.png",
+        "https://static.tildacdn.com/stor3563-3736-4131-b363-363137636534/7e322a9b0bc1f4530e88c19f44e659a0.png"
+      ],
+      "description": "Mean Girls forever. Pink Wednesdays включено.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "love-is",
+      "title": "Love is",
+      "family": "self-love",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 80,
+      "photo_main": "https://static.tildacdn.com/stor3732-6135-4364-b536-356439346364/cc2a0310becf8d3af6a8f829ca2a8167.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3732-6135-4364-b536-356439346364/cc2a0310becf8d3af6a8f829ca2a8167.jpg"
+      ],
+      "description": "На пам'ять про дитинство, яке ще не знало, що таке cringe.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "pam-tommy",
+      "title": "Pam & Tommy",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 90,
+      "ribbon": "LEGEND",
+      "photo_main": "https://static.tildacdn.com/stor3834-6530-4935-b539-343438643630/a778187c3152ec7c7fc9cc83faccfaf5.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3834-6530-4935-b539-343438643630/a778187c3152ec7c7fc9cc83faccfaf5.jpg",
+        "assets/showgirl/bf6ebd66af7043c611c1664b2cf60a2f.jpg",
+        "assets/showgirl/7cb5f7e1980b1ca1ff4c897cd188b031.jpg"
+      ],
+      "description": "Легенда 90-х на тілі. Той самий тейп — без фільтрів.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "playboy",
+      "title": "Playboy",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 100,
+      "photo_main": "https://static.tildacdn.com/stor6332-6538-4637-a337-393136393238/6d600b74f9601916befb952a030d41e3.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor6332-6538-4637-a337-393136393238/6d600b74f9601916befb952a030d41e3.jpg",
+        "assets/showgirl/b2b66878d6d071d8ae5623fec7cb9e82.jpg",
+        "https://static.tildacdn.com/stor6135-3539-4439-b732-623734643933/a7c0779dbb83a7ab7b7cb3ae9934e2da.jpg",
+        "https://static.tildacdn.com/stor3665-3034-4234-b666-323535366538/db86378c1a6db6f230e7a5a968ddae3a.jpg"
+      ],
+      "description": "Класика, що не іде. Bunny — символ свободи з 1953.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "never-broke-my-heart",
+      "title": "Never broke my heart",
+      "family": "self-love",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 110,
+      "photo_main": "https://static.tildacdn.com/stor3331-3433-4234-b039-633033303736/6c5f49474808b547cce332e987a8d7fc.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3331-3433-4234-b039-633033303736/6c5f49474808b547cce332e987a8d7fc.jpg",
+        "https://static.tildacdn.com/stor3065-3332-4561-b535-363431666239/a1bcce1175408ee29cf301b27bdae7dd.jpg",
+        "https://static.tildacdn.com/stor3464-3332-4438-b533-626663306438/3f31769150e47fbe579aee8f4b9f3cb2.jpg",
+        "https://static.tildacdn.com/stor6262-3364-4566-b835-653038616664/7994208206116fa46cbe1c9a8f64ad32.jpg"
+      ],
+      "description": "Іронія як броня. Жарт як декларація.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "snoop",
+      "title": "Snoop Dogg",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 120,
+      "photo_main": "https://static.tildacdn.com/stor3535-6236-4139-b530-633534613838/f1f84333c9055af58c20d2ed4c81f2de.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3535-6236-4139-b530-633534613838/f1f84333c9055af58c20d2ed4c81f2de.jpg"
+      ],
+      "description": "Smooth as. Drop it like it's hot.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "the-prodigy",
+      "title": "The Prodigy",
+      "family": "icons",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 130,
+      "photo_main": "https://static.tildacdn.com/stor6164-6162-4737-a464-366330623461/a6a2985e546b53b9bc34310af11fc36f.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor6164-6162-4737-a464-366330623461/a6a2985e546b53b9bc34310af11fc36f.jpg"
+      ],
+      "description": "Firestarter. Той самий drop, той самий vibe.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "soft-rebel",
+      "title": "Soft Rebel",
+      "family": "soft-rebel",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 140,
+      "ribbon": "NEW",
+      "photo_main": "https://static.tildacdn.com/stor3131-6134-4433-b266-326464303363/086002b3b8f3e264448149f8049df0d4.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor3131-6134-4433-b266-326464303363/086002b3b8f3e264448149f8049df0d4.jpg",
+        "assets/showgirl/03c9d8da0bb00493ee79f4595c25d308.jpg",
+        "https://static.tildacdn.com/stor3066-3264-4836-b132-373461623135/ad1b66c7cb47df509d4385fd31997413.jpg"
+      ],
+      "description": "Мʼяка ззовні, сталева всередині. Для тих, хто не воює — а просто живе як хоче.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    },
+    {
+      "uid": "giant-pussy",
+      "title": "Giant Pussy",
+      "family": "soft-rebel",
+      "price": 1400,
+      "in_grid": true,
+      "sort_order": 150,
+      "photo_main": "https://static.tildacdn.com/stor6364-3265-4637-b565-616462653131/d9947f2a12167f25e2093ba081642a92.jpg",
+      "photos": [
+        "https://static.tildacdn.com/stor6364-3265-4637-b565-616462653131/d9947f2a12167f25e2093ba081642a92.jpg",
+        "https://static.tildacdn.com/stor3530-6433-4038-a666-313566636331/5d7f692c0df798dcebaa10c457306523.jpg",
+        "https://static.tildacdn.com/stor3635-3161-4730-b665-333935633037/672aa3ae1b76dfc3cefadaeeae893003.jpg"
+      ],
+      "description": "Найкращий друг людини. Pink and proud.",
+      "sizes": [
+        "ONE SIZE"
+      ]
+    }
+  ],
+  "grid": [
+    "pamela-90s",
+    "eminem",
+    "britney",
+    "beavis-butthead",
+    "crush",
+    "why-britney-shaved",
+    "lindsay-lohan",
+    "love-is",
+    "pam-tommy",
+    "playboy",
+    "never-broke-my-heart",
+    "snoop",
+    "the-prodigy",
+    "soft-rebel",
+    "giant-pussy"
+  ],
+  "featured": [
+    "pamela-90s"
+  ]
+}
+    </script>
+
+    <div id="grid" class="grid"><article class="card" data-uid="pamela-90s" data-idx="0" data-count="7"><div class="card-window"><span>~/pamela-90s</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">ICON</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/d42dad8623d023c1e5d58c9d18077dc7.png" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/bf6ebd66af7043c611c1664b2cf60a2f.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/03c9d8da0bb00493ee79f4595c25d308.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/c83761a79277f576e8cd13a907345a2a.webp" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/05ebdcf479463e151b298f25200e453f.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6255eb8bc35e0fbe684d514a72c1ff55.jpg" alt="Pamela 90s"></div><div class="card-dots" data-uid="pamela-90s"><i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Pamela 90s</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="pamela-90s">Add to cart</button></div></article><article class="card" data-uid="eminem" data-idx="0" data-count="3"><div class="card-window"><span>~/eminem</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/009a092a5f6af533afafb5f574e23e49.png" alt="Eminem"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/f00fe1f20e503ad5b5638581855e7a02.png" alt="Eminem"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/fb4f77b4b23004ec3df11902aa738d15.png" alt="Eminem"></div><div class="card-dots" data-uid="eminem"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Eminem</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="eminem">Add to cart</button></div></article><article class="card" data-uid="britney" data-idx="0" data-count="8"><div class="card-window"><span>~/britney</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">ICON</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/afa8020f615419bf454c6ce5d786d00e.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7cb5f7e1980b1ca1ff4c897cd188b031.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/657a9c58b0df2f7b89347efb5c6c0834.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/532da650f2f18738b0c1cd4762e93eaf.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/e78e3e7d9cee0a2dd9081a573c594d0f.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/523687cbaf52dba5fe2a8909ce41b005.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6cb9414552a05c18ed0b53bdad4e982f.jpg" alt="Britney"></div><div class="card-dots" data-uid="britney"><i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Britney</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="britney">Add to cart</button></div></article><article class="card" data-uid="beavis-butthead" data-idx="0" data-count="3"><div class="card-window"><span>~/beavis-butthead</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ff24f704418d99e312a111c3f4592efe.jpg" alt="Beavis &amp; Butthead"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/25865b828f1d4756e6a8aa5438d54a21.jpg" alt="Beavis &amp; Butthead"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/c0cd4d62f198b16464b9d1dc49a8a340.jpg" alt="Beavis &amp; Butthead"></div><div class="card-dots" data-uid="beavis-butthead"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Beavis &amp; Butthead</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="beavis-butthead">Add to cart</button></div></article><article class="card" data-uid="crush" data-idx="0" data-count="1"><div class="card-window"><span>~/crush</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/5608ea8d7945d750d8a506ac014822e4.jpg" alt="Crush"></div></div><div class="card-body"><div class="card-title">Crush</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="crush">Add to cart</button></div></article><article class="card" data-uid="why-britney-shaved" data-idx="0" data-count="2"><div class="card-window"><span>~/why-britney-shaved</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">CULT</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b4ccf77f4377b064f7570623b298d238.jpg" alt="Why Britney Shaved?"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/95419d7f7f8f0802be73a3f7783d8c16.png" alt="Why Britney Shaved?"></div><div class="card-dots" data-uid="why-britney-shaved"><i class="active"></i><i></i></div></div><div class="card-body"><div class="card-title">Why Britney Shaved?</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="why-britney-shaved">Add to cart</button></div></article><article class="card" data-uid="lindsay-lohan" data-idx="0" data-count="4"><div class="card-window"><span>~/lindsay-lohan</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ef565e27b7ef6b4e72a12a91e8ee353e.jpg" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/38b5ace53e631bf121aa3f7c8ecc4d6e.png" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/36df7f7762a457335f6742fd51b30f85.png" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7e322a9b0bc1f4530e88c19f44e659a0.png" alt="Lindsay Lohan"></div><div class="card-dots" data-uid="lindsay-lohan"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Lindsay Lohan</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="lindsay-lohan">Add to cart</button></div></article><article class="card" data-uid="love-is" data-idx="0" data-count="1"><div class="card-window"><span>~/love-is</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/cc2a0310becf8d3af6a8f829ca2a8167.jpg" alt="Love is"></div></div><div class="card-body"><div class="card-title">Love is</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="love-is">Add to cart</button></div></article><article class="card" data-uid="pam-tommy" data-idx="0" data-count="3"><div class="card-window"><span>~/pam-tommy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">LEGEND</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a778187c3152ec7c7fc9cc83faccfaf5.jpg" alt="Pam &amp; Tommy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/bf6ebd66af7043c611c1664b2cf60a2f.jpg" alt="Pam &amp; Tommy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7cb5f7e1980b1ca1ff4c897cd188b031.jpg" alt="Pam &amp; Tommy"></div><div class="card-dots" data-uid="pam-tommy"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Pam &amp; Tommy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="pam-tommy">Add to cart</button></div></article><article class="card" data-uid="playboy" data-idx="0" data-count="4"><div class="card-window"><span>~/playboy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6d600b74f9601916befb952a030d41e3.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a7c0779dbb83a7ab7b7cb3ae9934e2da.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/db86378c1a6db6f230e7a5a968ddae3a.jpg" alt="Playboy"></div><div class="card-dots" data-uid="playboy"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Playboy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="playboy">Add to cart</button></div></article><article class="card" data-uid="never-broke-my-heart" data-idx="0" data-count="4"><div class="card-window"><span>~/never-broke-my-heart</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6c5f49474808b547cce332e987a8d7fc.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a1bcce1175408ee29cf301b27bdae7dd.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/3f31769150e47fbe579aee8f4b9f3cb2.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7994208206116fa46cbe1c9a8f64ad32.jpg" alt="Never broke my heart"></div><div class="card-dots" data-uid="never-broke-my-heart"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Never broke my heart</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="never-broke-my-heart">Add to cart</button></div></article><article class="card" data-uid="snoop" data-idx="0" data-count="1"><div class="card-window"><span>~/snoop</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/f1f84333c9055af58c20d2ed4c81f2de.jpg" alt="Snoop Dogg"></div></div><div class="card-body"><div class="card-title">Snoop Dogg</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="snoop">Add to cart</button></div></article><article class="card" data-uid="the-prodigy" data-idx="0" data-count="1"><div class="card-window"><span>~/the-prodigy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a6a2985e546b53b9bc34310af11fc36f.jpg" alt="The Prodigy"></div></div><div class="card-body"><div class="card-title">The Prodigy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="the-prodigy">Add to cart</button></div></article><article class="card" data-uid="soft-rebel" data-idx="0" data-count="3"><div class="card-window"><span>~/soft-rebel</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">NEW</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/086002b3b8f3e264448149f8049df0d4.jpg" alt="Soft Rebel"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/03c9d8da0bb00493ee79f4595c25d308.jpg" alt="Soft Rebel"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ad1b66c7cb47df509d4385fd31997413.jpg" alt="Soft Rebel"></div><div class="card-dots" data-uid="soft-rebel"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Soft Rebel</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="soft-rebel">Add to cart</button></div></article><article class="card" data-uid="giant-pussy" data-idx="0" data-count="3"><div class="card-window"><span>~/giant-pussy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/d9947f2a12167f25e2093ba081642a92.jpg" alt="Giant Pussy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/5d7f692c0df798dcebaa10c457306523.jpg" alt="Giant Pussy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/672aa3ae1b76dfc3cefadaeeae893003.jpg" alt="Giant Pussy"></div><div class="card-dots" data-uid="giant-pussy"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Giant Pussy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="giant-pussy">Add to cart</button></div></article></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="about">
+  <div class="container">
+    <h2>this is<br>a babygirl<br>thing</h2>
+
+    <div class="about-stage">
+      <div class="about-photo">
+        <span class="name-tag">★ Lera · founder</span>
+        <img src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/lera.png" alt="Лера — founder BabyGirl">
+        <div class="health">
+          <span>♥ HP</span>
+          <span class="bar-fill"><i></i></span>
+          <span>vibe</span>
+        </div>
+      </div>
+
+      <div class="gta-dialog">
+        <div class="bar">
+          <span class="speaker">Lera ♥</span>
+          <span class="pip"><i></i> live</span>
+        </div>
+        <div class="gta-screen" id="gtaScreen" data-played="1"><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Привіт! Я <em></em>Лера — та сама baby girl.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Обожнюю <em></em>двохтисячні, рожеве та все, що блищить.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Сама вигадую речі та <em></em>принти — для себе і таких, як я.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Впевнена, нас <em></em>багато — таких мʼяких і своїх.</span></div><div class="gta-line"><span class="who">★ Lera</span><span class="what">Якщо <em></em>вайб відгукується — вступай у клуб ♥</span></div><div class="gta-line me"><span class="who">★ You</span><span class="what"><em></em>я в клубі ✓</span></div></div>
+        <div class="gta-cta">
+          <span class="keys">tap to skip · <b>SPACE</b> <b>↵</b></span>
+          <button id="gtaJoinBtn" type="button">join club ♥</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Скрипт диалога Леры (typewriter, GTA-style) -->
+<script>
+(function(){
+  var screen = document.getElementById('gtaScreen');
+  if (!screen) return;
+
+  // Реплики диалога — украинский на основе наброску пользователя
+  var LINES = [
+    { who: 'Lera',  what: 'Привіт! Я <em>Лера</em> — та сама baby girl.' },
+    { who: 'Lera',  what: 'Обожнюю <em>двохтисячні</em>, рожеве та все, що блищить.' },
+    { who: 'Lera',  what: 'Сама вигадую речі та <em>принти</em> — для себе і таких, як я.' },
+    { who: 'Lera',  what: 'Впевнена, нас <em>багато</em> — таких мʼяких і своїх.' },
+    { who: 'Lera',  what: 'Якщо <em>вайб відгукується</em> — вступай у клуб ♥' },
+    { who: 'You',   what: '<em>я в клубі</em> ✓', me: true }
+  ];
+
+  var SPEED_CHAR   = 28;   // мс на букву
+  var BETWEEN_LINE = 600;  // мс между репликами
+  var running = false;
+  var stopRequested = false;
+  var $linesEl = null;
+
+  function escapeAllowedHtml(s){
+    // Allow <em> tags; escape everything else
+    return s.replace(/<(?!\/?em\b)[^>]*>/g, function(m){ return m.replace(/</g,'&lt;').replace(/>/g,'&gt;'); });
+  }
+
+  function appendLine(line){
+    var div = document.createElement('div');
+    div.className = 'gta-line' + (line.me ? ' me' : '');
+    var who = document.createElement('span');
+    who.className = 'who';
+    who.textContent = '★ ' + line.who;
+    var what = document.createElement('span');
+    what.className = 'what';
+    var cursor = document.createElement('span');
+    cursor.className = 'gta-cursor';
+    div.appendChild(who); div.appendChild(what); div.appendChild(cursor);
+    screen.appendChild(div);
+    return { div: div, what: what, cursor: cursor };
+  }
+
+  function typeText(target, html, done){
+    // Парсим html на токены: либо тэг <em>...</em>, либо одиночные символы
+    var tokens = [], i = 0;
+    while (i < html.length){
+      if (html[i] === '<') {
+        var close = html.indexOf('>', i);
+        if (close === -1) { tokens.push(html[i]); i++; continue; }
+        tokens.push(html.slice(i, close + 1));
+        i = close + 1;
+      } else { tokens.push(html[i]); i++; }
+    }
+    var idx = 0;
+    function step(){
+      if (stopRequested) return done();
+      if (idx >= tokens.length) return done();
+      target.what.innerHTML += tokens[idx++];
+      setTimeout(step, SPEED_CHAR);
+    }
+    step();
+  }
+
+  function runDialog(){
+    if (running) return;
+    running = true;
+    screen.dataset.played = '1';
+    screen.innerHTML = '';
+    var i = 0;
+    function nextLine(){
+      if (stopRequested) {
+        // Скип — мгновенно показать всё
+        screen.innerHTML = LINES.map(function(line){
+          return '<div class="gta-line' + (line.me ? ' me' : '') + '">'
+            + '<span class="who">★ ' + line.who + '</span>'
+            + '<span class="what">' + escapeAllowedHtml(line.what) + '</span>'
+            + '</div>';
+        }).join('');
+        running = false;
+        return;
+      }
+      if (i >= LINES.length) { running = false; return; }
+      var line = LINES[i++];
+      var t = appendLine(line);
+      typeText(t, escapeAllowedHtml(line.what), function(){
+        if (t.cursor && t.cursor.parentNode) t.cursor.parentNode.removeChild(t.cursor);
+        // Dim предыдущие
+        var prev = screen.querySelectorAll('.gta-line');
+        for (var j = 0; j < prev.length - 2; j++) prev[j].classList.add('dim');
+        setTimeout(nextLine, BETWEEN_LINE);
+      });
+    }
+    nextLine();
+  }
+
+  // Запуск когда блок появился в viewport
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting && screen.dataset.played === '0') {
+          runDialog();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(screen);
+  } else {
+    // fallback — сразу
+    setTimeout(runDialog, 400);
+  }
+
+  // Skip по клику/tap/space/enter
+  function skip(){ if (running) { stopRequested = true; } }
+  screen.addEventListener('click', skip);
+  document.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter') {
+      if (screen.dataset.played === '0') runDialog();
+      else skip();
+    }
+  });
+
+  // CTA join — скроллит к каталогу
+  var joinBtn = document.getElementById('gtaJoinBtn');
+  if (joinBtn) joinBtn.addEventListener('click', function(){
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
+
+
+<!-- ===== VIBE ===== -->
+<section class="vibe">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">the <span class="alt">vibe</span></h2>
+      <span class="section-sub">~ що ти отримаєш ~</span>
+    </div>
+    <div class="vibe-grid">
+      <div class="vibe-card">
+        <div class="num">1</div>
+        <h4>oversize або нічого</h4>
+        <p>Подовжений крій, можна носити як міні-сукню. Bavovna 95% + еластан 5%, дихає, не сідає.</p>
+      </div>
+      <div class="vibe-card">
+        <div class="num">2</div>
+        <h4>принт, що не іде</h4>
+        <p>Памела, Брітні, Snoop — не зникнуть з твоєї футболки після 50-ї прання. Ми перевіряли.</p>
+      </div>
+      <div class="vibe-card">
+        <div class="num">3</div>
+        <h4>one size fits all souls</h4>
+        <p>Універсальний — від XS до XL відчувають себе вдома. BabyGirl — про відчуття, не сантиметри.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="foot-logo">baby<span class="girl">girl</span><span style="color:var(--blue-deep)">.</span></div>
+    <div class="foot-tagline">Pink. Soft. Oversized. Forever.</div>
+    <div class="foot-grid">
+      <div>
+        <h5>Shop</h5>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop">All t-shirts</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="icons">90s icons</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="self-love">Self-love</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="soft-rebel">Soft rebel</a>
+      </div>
+      <div>
+        <h5>Info</h5>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#about">About</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Доставка</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Повернення</a>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <a href="https://www.instagram.com/loveyourhairshop/" target="_blank" rel="noopener">Instagram</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">TikTok</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Telegram</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="mailto:hi@babygirl.shop">hi@babygirl.shop</a>
+        <a href="file:///C:/Users/user/Downloads/BabyGirl/admin.html">Admin ✦</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      © 2026 BabyGirl™ · made with ♥ from Y2K · v2 · skeleton-powered
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-head">
+    <span class="title">cart ♥</span>
+    <button class="cart-close" id="cartClose" aria-label="close">×</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">кошик порожній<br>~ обери щось ~</div>
+  </div>
+  <div class="cart-total" id="cartTotal" hidden="">
+    <span>total</span><span class="num" id="cartTotalNum">0₴</span>
+  </div>
+  <form class="cart-form" id="cartForm" hidden="">
+    <label>імʼя та прізвище</label>
+    <input id="fld-fio" placeholder="Maria Ivanenko" required="" autocomplete="name">
+    <label>телефон</label>
+    <input id="fld-phone" type="tel" placeholder="+380..." required="" autocomplete="tel">
+    <label>email (для трек-номера)</label>
+    <input id="fld-email" type="email" placeholder="you@email.com" autocomplete="email">
+    <label>місто</label>
+    <input id="fld-city" placeholder="Київ" required="">
+    <label>відділення нової пошти</label>
+    <input id="fld-wh" placeholder="№ 12" required="">
+    <label>оплата</label>
+    <select id="fld-payment">
+      <option value="cod">наложений платіж (200₴ передоплата)</option>
+      <option value="card">оплата карткою повністю</option>
+    </select>
+    <button type="submit" class="cart-submit" id="cartSubmit">оформити ♥</button>
+    <div id="cartResult" class="cart-result"></div>
+  </form>
+</aside>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="pm-overlay" id="pmOverlay"></div>
+<div class="pm" id="pm" aria-hidden="true" role="dialog">
+  <button class="pm-close" id="pmClose" aria-label="close">×</button>
+  <div class="pm-hero">
+    <div class="pm-stage" id="pmStage">
+      <span class="pm-ribbon" id="pmRibbon" hidden=""></span>
+      <div class="pm-stage-track" id="pmTrack"></div>
+      <button class="pm-arrow prev" id="pmPrev" aria-label="prev">‹</button>
+      <button class="pm-arrow next" id="pmNext" aria-label="next">›</button>
+      <div class="pm-counter" id="pmCounter">1 / 1</div>
+    </div>
+    <div class="pm-thumbs" id="pmThumbs"></div>
+  </div>
+  <div class="pm-info">
+    <div class="crumbs" id="pmCrumbs">~/<b>shop</b>/icons/<b id="pmCrumbName"></b></div>
+    <h1 id="pmTitle">Title</h1>
+    <div class="pm-price"><span id="pmPrice">0</span><span class="currency">₴</span></div>
+    <p class="pm-descr" id="pmDescr"></p>
+    <div class="pm-specs">
+      <div class="pm-spec"><div class="lbl">★ size</div><div class="val">one size</div></div>
+      <div class="pm-spec"><div class="lbl">★ fabric</div><div class="val">95% bavovna<br>5% еластан</div></div>
+      <div class="pm-spec"><div class="lbl">★ fit</div><div class="val">oversize<br>подовжений</div></div>
+      <div class="pm-spec"><div class="lbl">★ print</div><div class="val">DTF<br>does not fade</div></div>
+    </div>
+    <button class="pm-cta" id="pmCta">Add to cart ♥</button>
+  </div>
+</div>
+
+<script>
+/* ========== BURGER DRAWER ========== */
+(function(){
+  var burger = document.getElementById('navBurger');
+  var drawer = document.getElementById('drawer');
+  var overlay = document.getElementById('drawerOverlay');
+  var close = document.getElementById('drawerClose');
+  if (!burger || !drawer || !overlay) return;
+  function open(){
+    drawer.classList.add('open'); overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true');
+    document.body.classList.add('drawer-open');
+  }
+  function shut(){
+    drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false');
+    document.body.classList.remove('drawer-open');
+  }
+  burger.addEventListener('click', open);
+  if (close) close.addEventListener('click', shut);
+  overlay.addEventListener('click', shut);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') shut(); });
+  // Auto-close on drawer link click
+  drawer.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click', shut); });
+})();
+
+/* ========== NAV SCROLL EFFECT ========== */
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  var THRESHOLD = 220;          // px после которого появляется фон
+  var ticking = false;
+  function onScroll(){
+    if (!ticking){
+      requestAnimationFrame(function(){
+        if (window.scrollY > THRESHOLD) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // init
+})();
+
+/* ========== SLOT MACHINE + AUTO-APPLY PROMO ========== */
+(function(){
+  var r1 = document.getElementById('reel1');
+  var r2 = document.getElementById('reel2');
+  var r3 = document.getElementById('reel3');
+  var btn = document.getElementById('spinBtn');
+  var topLight = document.getElementById('slotTopLight');
+  if (!r1 || !btn) return;
+
+  // Скидки 5—10% (без джекпотов на 15/20/25)
+  var WINS = [
+    {emoji:'🦋', percent:'5%',  word:'DROP', code:'SOFT5',  pct:5,  msg:'5% off'},
+    {emoji:'♥',  percent:'6%',  word:'WIN',  code:'BABY6',  pct:6,  msg:'6% off'},
+    {emoji:'★',  percent:'7%',  word:'PINK', code:'PINK7',  pct:7,  msg:'7% off'},
+    {emoji:'💋', percent:'8%',  word:'BABY', code:'BABY8',  pct:8,  msg:'8% off'},
+    {emoji:'🎀', percent:'10%', word:'OFF',  code:'BABY10', pct:10, msg:'10% off · max'}
+  ];
+  var EMOJIS  = ['🎀','♥','★','💋','🦋'];
+  var PERCENT = ['5%','6%','7%','8%','10%'];
+  var WORDS   = ['OFF','WIN','PINK','BABY','DROP'];
+
+  var spinning = false;
+
+  btn.addEventListener('click', function(){
+    if (spinning) return;
+    spinning = true;
+    btn.disabled = true; btn.textContent = '⌛ ...';
+    r1.classList.add('spinning'); r2.classList.add('spinning'); r3.classList.add('spinning');
+    r1.style.transition = 'none'; r2.style.transition = 'none'; r3.style.transition = 'none';
+
+    var win = WINS[Math.floor(Math.random() * WINS.length)];
+    var itemH = window.innerWidth >= 600 ? 110 : 90;
+
+    setTimeout(function(){ stopReel(r1, win.emoji,   EMOJIS,  itemH); }, 1400);
+    setTimeout(function(){ stopReel(r2, win.percent, PERCENT, itemH); }, 2000);
+    setTimeout(function(){
+      stopReel(r3, win.word, WORDS, itemH);
+      setTimeout(function(){
+        // Применить автоматически: сохранить в sessionStorage + пересчитать цены
+        try { sessionStorage.setItem('bg_promo_code', win.code); } catch(e){}
+        try { sessionStorage.setItem('bg_promo_pct',  String(win.pct)); } catch(e){}
+        if (window.applyPromo) window.applyPromo(win.code, win.pct);
+        if (topLight) topLight.textContent = '✓ ' + win.code + ' · −' + win.pct + '%';
+        btn.textContent = 'крутити ще ♥'; btn.disabled = false; spinning = false;
+      }, 700);
+    }, 2700);
+  });
+
+  function stopReel(reel, target, items, itemH){
+    reel.classList.remove('spinning');
+    var idx = items.indexOf(target);
+    reel.style.transition = 'transform 0.7s cubic-bezier(.15,.7,.25,1)';
+    reel.style.transform = 'translateY(-' + (idx * itemH) + 'px)';
+  }
+
+  // Если промо уже было применено (вернулся пользователь) — восстанавливаем UI
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0 && topLight) {
+      topLight.textContent = '✓ ' + savedCode + ' · −' + savedPct + '%';
+    }
+  } catch(e){}
+})();
+
+/* ========== STOREFRONT (catalog + cart + checkout) ========== */
+(function(){
+  // Read DATA
+  var D = { all: [], grid: [], featured: [] };
+  try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
+  catch(e){ console.error('[DATA] parse fail', e); }
+
+  var $grid = document.getElementById('grid');
+  var $overlay = document.getElementById('cartOverlay');
+  var $drawer  = document.getElementById('cartDrawer');
+  var $body    = document.getElementById('cartBody');
+  var $total   = document.getElementById('cartTotal');
+  var $totalN  = document.getElementById('cartTotalNum');
+  var $form    = document.getElementById('cartForm');
+  var $navCart = document.getElementById('navCart');
+
+  var familyFilter = null;
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function renderGrid(){
+    var list = (D.grid || []).map(function(uid){
+      return D.all.find(function(p){ return p.uid === uid; });
+    }).filter(Boolean);
+    if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
+    if (!list.length) {
+      $grid.innerHTML = '<div class="empty">~ нічого тут немає ~</div>';
+      return;
+    }
+    // Текущий применённый промо (читаем из sessionStorage — пишет slot machine)
+    var pct = 0;
+    try { pct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){}
+
+    $grid.innerHTML = list.map(function(p, i){
+      var altClass = (i % 2 === 1) ? ' alt' : '';
+      var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
+      var photos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : (p.photo_main ? [p.photo_main] : []);
+      var photoSlides = photos.map(function(url){
+        return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '">';
+      }).join('');
+      var dots = photos.length > 1
+        ? '<div class="card-dots" data-uid="' + escapeHtml(p.uid) + '">'
+            + photos.map(function(_, idx){ return '<i' + (idx === 0 ? ' class="active"' : '') + '></i>'; }).join('')
+          + '</div>'
+        : '';
+
+      // Цена: если есть промо, показываем зачёркнутую старую + новую
+      var priceHtml;
+      if (pct > 0) {
+        var newPrice = Math.round(p.price * (100 - pct) / 100);
+        priceHtml = '<span class="card-price-row">'
+          + '<span class="card-price old">' + p.price + '₴</span>'
+          + '<span class="card-price">' + newPrice + '₴</span>'
+          + '</span>';
+      } else {
+        priceHtml = '<span class="card-price">' + p.price + '₴</span>';
+      }
+
+      return ''
+        + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-idx="0" data-count="' + photos.length + '">'
+        +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
+        +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
+        +     '<div class="card-photos">' + photoSlides + '</div>'
+        +     dots
+        +   '</div>'
+        +   '<div class="card-body">'
+        +     '<div class="card-title">' + escapeHtml(p.title) + (p.color_name ? ' / ' + escapeHtml(p.color_name) : '') + '</div>'
+        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">ONE SIZE</span></div>'
+        +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '">Add to cart</button>'
+        +   '</div>'
+        + '</article>';
+    }).join('');
+
+    // Свайп фото в плитках грида (touch + dot-tap)
+    $grid.querySelectorAll('.card').forEach(function(card){
+      var count = parseInt(card.dataset.count, 10) || 1;
+      if (count <= 1) return;
+      var track = card.querySelector('.card-photos');
+      var dotsEl = card.querySelector('.card-dots');
+      var idx = 0;
+      function goTo(i){
+        if (i < 0) i = 0; if (i >= count) i = count - 1;
+        idx = i;
+        track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+        if (dotsEl) dotsEl.querySelectorAll('i').forEach(function(d, di){ d.classList.toggle('active', di === idx); });
+      }
+      var startX = null;
+      track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+      track.addEventListener('touchend', function(e){
+        if (startX == null) return;
+        var dx = (e.changedTouches[0].clientX - startX);
+        if (Math.abs(dx) > 30) goTo(dx < 0 ? idx + 1 : idx - 1);
+        startX = null;
+      });
+      if (dotsEl) dotsEl.addEventListener('click', function(e){
+        e.stopPropagation();
+        var dots = Array.prototype.slice.call(dotsEl.querySelectorAll('i'));
+        var di = dots.indexOf(e.target);
+        if (di >= 0) goTo(di);
+      });
+    });
+  }
+
+  // Family filter via [data-family] links (drawer + footer)
+  document.querySelectorAll('a[data-family]').forEach(function(a){
+    a.addEventListener('click', function(){ familyFilter = a.dataset.family || null; renderGrid(); });
+  });
+  document.querySelectorAll('a[href="#shop"]:not([data-family])').forEach(function(a){
+    a.addEventListener('click', function(){ familyFilter = null; renderGrid(); });
+  });
+
+  // ===== Applied promo =====
+  function showPromoBar(code, pct){
+    var existing = document.getElementById('promoBar');
+    if (existing) existing.parentNode.removeChild(existing);
+    var bar = document.createElement('div');
+    bar.id = 'promoBar';
+    bar.className = 'promo-applied-bar';
+    bar.innerHTML = '\u2605 promo applied: '
+      + '<span class="code">' + code + '</span>'
+      + '<span class="pct">\u2212' + pct + '%</span>'
+      + '<button type="button" data-action="clear-promo">\u00d7</button>';
+    document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector('[data-action="clear-promo"]').addEventListener('click', function(){
+      try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
+      bar.parentNode.removeChild(bar);
+      renderGrid();
+      var tl = document.getElementById('slotTopLight');
+      if (tl) tl.textContent = 'PROMO \u2665 ROLL ME';
+    });
+  }
+  window.applyPromo = function(code, pct){
+    showPromoBar(code, pct);
+    renderGrid();
+    setTimeout(function(){
+      document.querySelectorAll('#grid .card-price:not(.old)').forEach(function(el){
+        el.classList.add('price-flash');
+        setTimeout(function(){ el.classList.remove('price-flash'); }, 900);
+      });
+    }, 50);
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0) showPromoBar(savedCode, savedPct);
+  } catch(e){}
+
+  // Supabase bootstrap
+  function bootstrapFromSupabase(){
+    var SB = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY, TABLE = window.PRODUCTS_TABLE;
+    if (!SB || !KEY || !TABLE) return;
+    fetch(SB + '/rest/v1/' + TABLE + '?active=eq.true&select=*&order=sort_order.asc', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rows){
+      if (!Array.isArray(rows)) return;
+      var byUid = {}; D.all.forEach(function(p){ byUid[p.uid] = p; });
+      var featuredByFamily = {}, gridByFamily = {};
+      D.all.forEach(function(p){
+        if (p.featured) featuredByFamily[p.family] = p.uid;
+        if (D.grid && D.grid.indexOf(p.uid) >= 0) gridByFamily[p.family] = p.uid;
+      });
+      rows.forEach(function(row){
+        if (!byUid[row.uid]) {
+          D.all.push(row);
+          var fam = row.family || '';
+          if (!featuredByFamily[fam] && !gridByFamily[fam]) {
+            if (!Array.isArray(D.grid)) D.grid = [];
+            D.grid.push(row.uid);
+          }
+        } else { Object.assign(byUid[row.uid], row); }
+      });
+      renderGrid();
+    })
+    .catch(function(e){ console.warn('[SB inject]', e.message); });
+  }
+
+  // ===== Cart with bundle discount =====
+  var cart = [];
+  var BUNDLE_DISCOUNT_PCT = 20;   // -20% на кожен товар, починаючи з 2-го
+
+  function getSlotPct(){
+    try { return parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){ return 0; }
+  }
+
+  // Применяем slot-промо к unit-цене
+  function unitPriceWithSlot(basePrice){
+    var sp = getSlotPct();
+    return sp > 0 ? Math.round(basePrice * (100 - sp) / 100) : basePrice;
+  }
+
+  // Считает: subtotal (без bundle), bundleDiscount, total
+  function calcBreakdown(){
+    var slotPct = getSlotPct();
+    var subtotal = 0, bundleDiscount = 0, total = 0;
+    var unitIdx = 0;
+    cart.forEach(function(line){
+      var unitPrice = unitPriceWithSlot(line.price);
+      for (var i = 0; i < line.qty; i++){
+        subtotal += unitPrice;
+        if (unitIdx >= 1){
+          // bundle: −20% на каждый юнит начиная со второго
+          var disc = Math.round(unitPrice * BUNDLE_DISCOUNT_PCT / 100);
+          bundleDiscount += disc;
+          total += (unitPrice - disc);
+        } else {
+          total += unitPrice;
+        }
+        unitIdx++;
+      }
+    });
+    return { subtotal: subtotal, bundleDiscount: bundleDiscount, total: total, totalUnits: unitIdx, slotPct: slotPct };
+  }
+  function calcTotal(){ return calcBreakdown().total; }
+
+  function bundleBanner(totalUnits){
+    if (totalUnits >= 2){
+      return '<div class="bundle-banner active">🎁 знижка <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> на кожну річ з другої <span class="check">✓</span></div>';
+    } else {
+      return '<div class="bundle-banner">🎁 додай ще 1 річ — і отримай <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> на другу</div>';
+    }
+  }
+
+  function renderCart(){
+    if (!cart.length) {
+      $body.innerHTML = '<div class="cart-empty">кошик порожній<br>~ обери щось ~</div>';
+      $total.hidden = true; $form.hidden = true;
+    } else {
+      var b = calcBreakdown();
+      var lines = cart.map(function(i, idx){
+        var img = i.photo ? '<img src="' + escapeHtml(i.photo) + '" alt="">'
+          : '<div style="width:54px;height:54px;background:var(--pink-soft);border:2px solid var(--black);border-radius:8px"></div>';
+        var unitP = unitPriceWithSlot(i.price);
+        var priceStr;
+        if (b.slotPct > 0) {
+          priceStr = '<span class="old">' + i.price + '₴</span> ' + unitP + '₴ × ' + i.qty;
+        } else {
+          priceStr = i.price + '₴ × ' + i.qty;
+        }
+        return '<div class="cart-line">'
+          + img
+          + '<div class="info"><div class="name">' + escapeHtml(i.title) + '</div><div class="price">' + priceStr + '</div></div>'
+          + '<div class="qty"><button data-action="dec" data-idx="' + idx + '">−</button><span>' + i.qty + '</span><button data-action="inc" data-idx="' + idx + '">+</button></div>'
+          + '<button class="rm" data-action="rm" data-idx="' + idx + '" aria-label="remove">×</button>'
+          + '</div>';
+      }).join('');
+
+      $body.innerHTML = bundleBanner(b.totalUnits) + lines;
+
+      // Разбивка в total
+      var html = '';
+      if (b.bundleDiscount > 0 || b.slotPct > 0) {
+        html += '<div class="total-row sub"><span>разом за товари</span><span>' + b.subtotal + '₴</span></div>';
+      }
+      if (b.bundleDiscount > 0) {
+        html += '<div class="total-row disc"><span>− знижка на другу річ (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + b.bundleDiscount + '₴</span></div>';
+      }
+      html += '<div class="total-row main"><span>до сплати</span><span class="num">' + b.total + '₴</span></div>';
+      $total.innerHTML = html;
+      $total.hidden = false; $form.hidden = false;
+    }
+    if ($navCart) $navCart.textContent = 'Cart [' + cart.length + ']';
+  }
+
+  function openCart(){ $overlay.classList.add('open'); $drawer.classList.add('open'); document.body.classList.add('cart-open'); }
+  function closeCart(){ $overlay.classList.remove('open'); $drawer.classList.remove('open'); document.body.classList.remove('cart-open'); }
+
+  // Toast
+  function showToast(msg){
+    var t = document.createElement('div');
+    t.className = 'bg-toast';
+    t.innerHTML = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('hide'); setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 2400);
+  }
+
+  function totalUnits(){ return cart.reduce(function(s, l){ return s + l.qty; }, 0); }
+
+  function addToCart(uid){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    var was = totalUnits();
+    var ex = cart.find(function(c){ return c.uid === uid; });
+    if (ex) ex.qty += 1;
+    else cart.push({ uid: p.uid, title: p.title, color_name: p.color_name || '', price: p.price, qty: 1, photo: p.photo_main || (p.photos && p.photos[0]) || '' });
+    var now = totalUnits();
+    renderCart(); openCart();
+    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
+    // Если перешли через границу 1→2, показать toast
+    if (was < 2 && now >= 2){
+      showToast('🎁 застосовано <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> на другу річ ♥');
+    }
+  }
+
+  // ======== PRODUCT MODAL ========
+  var pmEl       = document.getElementById('pm');
+  var pmOverlay  = document.getElementById('pmOverlay');
+  var pmClose    = document.getElementById('pmClose');
+  var pmStage    = document.getElementById('pmStage');
+  var pmTrack    = document.getElementById('pmTrack');
+  var pmThumbs   = document.getElementById('pmThumbs');
+  var pmCounter  = document.getElementById('pmCounter');
+  var pmRibbon   = document.getElementById('pmRibbon');
+  var pmTitle    = document.getElementById('pmTitle');
+  var pmCrumb    = document.getElementById('pmCrumbName');
+  var pmPrice    = document.getElementById('pmPrice');
+  var pmDescr    = document.getElementById('pmDescr');
+  var pmCta      = document.getElementById('pmCta');
+  var pmPrev     = document.getElementById('pmPrev');
+  var pmNext     = document.getElementById('pmNext');
+
+  var pmCurrent = null;   // current product
+  var pmPhotos  = [];     // photos array
+  var pmIdx     = 0;
+
+  function pmGo(i){
+    if (!pmPhotos.length) return;
+    if (i < 0) i = 0; if (i >= pmPhotos.length) i = pmPhotos.length - 1;
+    pmIdx = i;
+    pmTrack.style.transform = 'translateX(-' + (pmIdx * 100) + '%)';
+    pmCounter.textContent = (pmIdx + 1) + ' / ' + pmPhotos.length;
+    pmThumbs.querySelectorAll('.pm-thumb').forEach(function(t, ti){ t.classList.toggle('active', ti === pmIdx); });
+    pmPrev.hidden = pmIdx === 0;
+    pmNext.hidden = pmIdx >= pmPhotos.length - 1;
+  }
+  function openProduct(uid){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    pmCurrent = p;
+    pmPhotos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : (p.photo_main ? [p.photo_main] : []);
+    pmTrack.innerHTML = pmPhotos.map(function(url){
+      return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '">';
+    }).join('');
+    pmThumbs.innerHTML = pmPhotos.map(function(url, idx){
+      return '<button class="pm-thumb' + (idx === 0 ? ' active' : '') + '" data-idx="' + idx + '"><img src="' + escapeHtml(url) + '" alt=""></button>';
+    }).join('');
+    pmThumbs.hidden = pmPhotos.length <= 1;
+    if (p.ribbon) { pmRibbon.textContent = p.ribbon; pmRibbon.hidden = false; }
+    else { pmRibbon.hidden = true; }
+    pmTitle.textContent = p.title;
+    pmCrumb.textContent = p.title.toLowerCase();
+    pmPrice.textContent = p.price;
+    pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversize · bavovna 95% + еластан 5% · DTF print';
+    pmCta.textContent = 'Add to cart ♥'; pmCta.classList.remove('added');
+    pmIdx = 0; pmGo(0);
+    pmOverlay.classList.add('open');
+    pmEl.classList.add('open');
+    pmEl.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('pm-open');
+    if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
+  }
+  function closeProduct(){
+    pmOverlay.classList.remove('open');
+    pmEl.classList.remove('open');
+    pmEl.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('pm-open');
+    pmCurrent = null;
+  }
+  pmClose.addEventListener('click', closeProduct);
+  pmOverlay.addEventListener('click', closeProduct);
+  pmPrev.addEventListener('click', function(){ pmGo(pmIdx - 1); });
+  pmNext.addEventListener('click', function(){ pmGo(pmIdx + 1); });
+  pmThumbs.addEventListener('click', function(e){
+    var t = e.target.closest('[data-idx]');
+    if (t) pmGo(parseInt(t.dataset.idx, 10));
+  });
+  // Swipe stage
+  var pmStartX = null;
+  pmStage.addEventListener('touchstart', function(e){ pmStartX = e.touches[0].clientX; }, {passive:true});
+  pmStage.addEventListener('touchend', function(e){
+    if (pmStartX == null) return;
+    var dx = e.changedTouches[0].clientX - pmStartX;
+    if (Math.abs(dx) > 40) pmGo(dx < 0 ? pmIdx + 1 : pmIdx - 1);
+    pmStartX = null;
+  });
+  // Esc closes modal, arrows navigate
+  document.addEventListener('keydown', function(e){
+    if (!pmEl.classList.contains('open')) return;
+    if (e.key === 'Escape') closeProduct();
+    else if (e.key === 'ArrowLeft')  pmGo(pmIdx - 1);
+    else if (e.key === 'ArrowRight') pmGo(pmIdx + 1);
+  });
+  pmCta.addEventListener('click', function(){
+    if (!pmCurrent) return;
+    addToCart(pmCurrent.uid);
+    pmCta.textContent = '✓ added';
+    pmCta.classList.add('added');
+    setTimeout(function(){ closeProduct(); }, 600);
+  });
+
+  // ======== GRID CLICK ROUTER ========
+  $grid.addEventListener('click', function(e){
+    // 1. Кнопка «Add to cart»
+    var buyBtn = e.target.closest('[data-action="buy"]');
+    if (buyBtn) { e.preventDefault(); e.stopPropagation(); addToCart(buyBtn.dataset.uid); return; }
+    // 2. Dots или photo-track — игнорировать (свайп уже обработан)
+    if (e.target.closest('.card-dots')) return;
+    // 3. Иначе — открыть product modal
+    var card = e.target.closest('.card');
+    if (card && card.dataset.uid) openProduct(card.dataset.uid);
+  });
+
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  $overlay.addEventListener('click', closeCart);
+  if ($navCart) $navCart.addEventListener('click', function(e){ e.preventDefault(); openCart(); });
+
+  $body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-action]'); if (!t) return;
+    var idx = parseInt(t.dataset.idx, 10);
+    if (t.dataset.action === 'inc') cart[idx].qty += 1;
+    else if (t.dataset.action === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty < 1) cart.splice(idx, 1); }
+    else if (t.dataset.action === 'rm') cart.splice(idx, 1);
+    renderCart();
+  });
+
+  // Checkout submit
+  $form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var $btn = document.getElementById('cartSubmit');
+    var $res = document.getElementById('cartResult');
+    var fio = document.getElementById('fld-fio').value.trim();
+    var phone = document.getElementById('fld-phone').value.trim();
+    var city = document.getElementById('fld-city').value.trim();
+    var wh = document.getElementById('fld-wh').value.trim();
+    if (!fio || !phone || !city || !wh || !cart.length) {
+      $res.textContent = 'заповни всі обовʼязкові поля'; $res.className = 'cart-result err';
+      return;
+    }
+    $btn.disabled = true; $btn.textContent = 'обробка…'; $res.textContent = ''; $res.className = 'cart-result';
+
+    var promo = null;
+    try { promo = sessionStorage.getItem('bg_promo_code'); } catch(e){}
+
+    var payload = {
+      stage: 'final', fio: fio, phone: phone,
+      email: document.getElementById('fld-email').value.trim(),
+      city: city, wh: wh,
+      payment: document.getElementById('fld-payment').value,
+      promo_code: promo,
+      bundle_discount_pct: BUNDLE_DISCOUNT_PCT,
+      items: cart.map(function(c){
+        return { uid: c.uid, qty: c.qty, title: c.title, color_name: c.color_name, price: c.price, photo: c.photo };
+      }),
+      session_id: window.SESSION_ID || null,
+      referrer: document.referrer || null,
+      landing_url: window.LANDING_URL || location.href
+    };
+
+    fetch('/api/order', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (!data.ok) throw new Error(data.error || 'Order failed');
+      $res.textContent = '✓ замовлення ' + (data.order_num || '...');
+      $res.className = 'cart-result ok';
+
+      if (payload.payment === 'card' || payload.payment === 'cod') {
+        return fetch('/api/wayforpay', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            orderReference: data.order_num,
+            items: cart.map(function(c){ return { uid: c.uid, qty: c.qty }; }),
+            payment_method: payload.payment,
+            clientFirstName: fio.split(' ')[0] || '',
+            clientLastName: fio.split(' ').slice(1).join(' ') || '',
+            clientEmail: payload.email, clientPhone: phone
+          })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(wfpData){
+          if (wfpData.ok) {
+            var form = document.createElement('form');
+            form.method = 'POST'; form.action = wfpData.paymentUrl; form.acceptCharset = 'utf-8';
+            Object.keys(wfpData.formData).forEach(function(k){
+              var v = wfpData.formData[k];
+              if (Array.isArray(v)) {
+                v.forEach(function(item){
+                  var inp = document.createElement('input');
+                  inp.type = 'hidden'; inp.name = k + '[]'; inp.value = item; form.appendChild(inp);
+                });
+              } else {
+                var inp = document.createElement('input');
+                inp.type = 'hidden'; inp.name = k; inp.value = v; form.appendChild(inp);
+              }
+            });
+            document.body.appendChild(form); form.submit();
+          } else {
+            $res.textContent = 'помилка платіжки: ' + (wfpData.error || '');
+            $res.className = 'cart-result err';
+            $btn.disabled = false; $btn.textContent = 'оформити ♥';
+          }
+        });
+      } else {
+        if (typeof fbq === 'function') fbq('track', 'Purchase', { value:data.authoritative_total, currency:'UAH', eventID:data.order_num });
+        $res.textContent = '✓ дякуємо! ми зателефонуємо.';
+        $res.className = 'cart-result ok';
+        cart = []; renderCart();
+        $btn.disabled = false; $btn.textContent = 'оформити ♥';
+      }
+    })
+    .catch(function(err){
+      $res.textContent = 'помилка: ' + err.message;
+      $res.className = 'cart-result err';
+      $btn.disabled = false; $btn.textContent = 'оформити ♥';
+    });
+  });
+
+  renderGrid();
+  bootstrapFromSupabase();
+})();
+</script>
+
+
+
+</body></html>
