@@ -50,6 +50,7 @@ window.BG_MEDIA_DEFAULTS = {
   logoMark:   "assets/logo-mark.webp",
   heroVideo:  "assets/hero.mp4",
   heroPoster: "",  // прибрано: щоб не дублювати nav-logo-img який має анімацію logo-land
+  heroVideoMobile: "assets/hero-mobile.mp4",  // 720p ~1.5MB для мобільних
   lera:       "assets/lera.webp"
 };
 </script>
@@ -63,6 +64,11 @@ window.BG_MEDIA_DEFAULTS = {
     if (s && typeof s.media === "object" && s.media) override = s.media;
   } catch(e){}
   var M = Object.assign({}, defaults, override);
+  // Mobile: тонке відео для швидкого autoplay на cellular
+  try {
+    var isMobile = window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile && M.heroVideoMobile) M.heroVideo = M.heroVideoMobile;
+  } catch(e){}
   window.BG_MEDIA = M;
   function apply(){
     document.querySelectorAll("[data-bg-media]").forEach(function(el){
