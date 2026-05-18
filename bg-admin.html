@@ -419,7 +419,8 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       </a>
       <a data-page="orders">
         <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Замовлення <span style="margin-left:auto;font-size:10px;background:#444;padding:1px 6px;border-radius:8px;color:#aaa">soon</span>
+        Замовлення
+        <span id="orders-nav-badge" style="margin-left:auto;font-size:10px;background:var(--pink-brand);padding:1px 6px;border-radius:8px;color:#fff;display:none"></span>
       </a>
       <a data-page="analytics">
         <svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 17l4-8 4 4 6-10"/></svg>
@@ -481,9 +482,98 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       </div>
     </div>
 
-    <!-- ORDERS PAGE (placeholder) -->
+    <!-- ORDERS PAGE -->
     <div class="page" id="page-orders" style="display:none">
-      <div class="page-head"><div><h1>Замовлення</h1><div class="meta">Coming soon — буде синхронізація з bg_orders</div></div></div>
+      <div class="page-head">
+        <div><h1>Замовлення</h1><div class="meta" id="ord-meta">— замовлень</div></div>
+        <div class="period-tabs" id="ord-tabs">
+          <button data-days="1">Сьогодні</button>
+          <button data-days="7" class="active">7 днів</button>
+          <button data-days="30">30 днів</button>
+          <button data-days="0">Усі</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <div class="kpi-card"><div class="l">Усього</div><div class="v" id="ord-kpi-total">—</div></div>
+        <div class="kpi-card"><div class="l">Нові</div><div class="v" id="ord-kpi-new" style="color:var(--pink-brand)">—</div></div>
+        <div class="kpi-card"><div class="l">У доставці</div><div class="v" id="ord-kpi-shipped">—</div></div>
+        <div class="kpi-card"><div class="l">Доставлені</div><div class="v" id="ord-kpi-delivered">—</div></div>
+        <div class="kpi-card"><div class="l">Виручка</div><div class="v small" id="ord-kpi-revenue">—</div></div>
+      </div>
+
+      <div class="prod-toolbar">
+        <input type="search" id="ord-search" placeholder="Пошук: ім'я, телефон, № замовлення...">
+        <select id="ord-status">
+          <option value="">Усі статуси</option>
+          <option value="new">new — нові</option>
+          <option value="confirmed">confirmed — підтверджені</option>
+          <option value="shipped">shipped — у доставці</option>
+          <option value="delivered">delivered — доставлені</option>
+          <option value="cancelled">cancelled — скасовані</option>
+          <option value="lead">lead — кинутий кошик</option>
+        </select>
+        <button class="btn ghost" id="ord-reload">↻ Оновити</button>
+      </div>
+
+      <div class="prod-table" id="ord-table">
+        <div class="prod-row head" style="grid-template-columns:120px 2fr 130px 90px 110px 90px">
+          <div>№</div><div>Клієнт</div><div>Доставка</div><div class="price">Сума</div><div class="status">Статус</div><div></div>
+        </div>
+        <div class="loading">Завантажую…</div>
+      </div>
+    </div>
+
+    <!-- ORDER DETAILS MODAL -->
+    <div class="modal-overlay" id="orderModal" style="display:none">
+      <div class="modal-card" style="max-width:680px">
+        <h2 id="ordTitle">Замовлення</h2>
+        <div class="meta" id="ordSubtitle" style="font-family:var(--font-mono);font-size:11px;color:var(--ink-60);margin-bottom:16px"></div>
+
+        <div class="grid2">
+          <div class="fld"><label>Клієнт</label><input id="ord-f-name"></div>
+          <div class="fld"><label>Телефон</label><input id="ord-f-phone"></div>
+        </div>
+        <div class="grid2">
+          <div class="fld"><label>Місто</label><input id="ord-f-city"></div>
+          <div class="fld"><label>Відділення НП</label><input id="ord-f-branch"></div>
+        </div>
+        <div class="grid2">
+          <div class="fld"><label>Статус</label>
+            <select id="ord-f-status">
+              <option value="new">new — нові</option>
+              <option value="confirmed">confirmed — підтверджені</option>
+              <option value="shipped">shipped — у доставці</option>
+              <option value="delivered">delivered — доставлені</option>
+              <option value="cancelled">cancelled — скасовані</option>
+              <option value="lead">lead — кинутий кошик</option>
+            </select>
+          </div>
+          <div class="fld"><label>Оплата</label>
+            <select id="ord-f-payment">
+              <option value="cod">cod — післяплата</option>
+              <option value="card">card — карткою</option>
+              <option value="paid">paid — оплачено</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld"><label>TTN</label><input id="ord-f-ttn" placeholder="напр. 2020XXXXXXXX"></div>
+        <div class="fld"><label>Нотатки</label><textarea id="ord-f-notes"></textarea></div>
+
+        <div class="fld">
+          <label>Товари</label>
+          <div id="ord-items-list" style="background:var(--bg-alt);border-radius:8px;padding:10px;font-size:13px"></div>
+        </div>
+
+        <div class="meta" id="ord-attribution" style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-60);margin-top:12px;padding:10px;background:var(--bg-alt);border-radius:8px"></div>
+
+        <div class="modal-actions">
+          <button class="btn ghost" id="ord-cancel-btn">Закрити</button>
+          <button class="btn danger" id="ord-del-btn">Видалити</button>
+          <button class="btn primary" id="ord-save-btn">Зберегти</button>
+        </div>
+      </div>
+    </div></div>
       <div class="empty">📦 Сторінка замовлень готується. Зараз заказы з сайту падають у Supabase <code>bg_orders</code>.</div>
     </div>
 
@@ -1028,6 +1118,189 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     var origClick = navAnalyticsBtn.onclick;
     navAnalyticsBtn.addEventListener('click', function(){ setTimeout(loadAnalytics, 50); });
   }
+
+
+  // ===== ORDERS =====
+  var ORD = { period: 7, all: [], editing: null };
+
+  function loadOrders(){
+    var days = ORD.period;
+    var url;
+    if (days === 0){
+      url = 'bg_orders?select=*&order=created_at.desc&limit=500';
+    } else {
+      var since = new Date(Date.now() - days * 86400000).toISOString();
+      url = 'bg_orders?created_at=gte.' + encodeURIComponent(since) + '&select=*&order=created_at.desc&limit=500';
+    }
+    sb(url).then(function(rows){
+      ORD.all = rows || [];
+      renderOrders();
+    }).catch(function(e){ toast(e.message, 'err'); });
+  }
+
+  function renderOrders(){
+    var q = (document.getElementById('ord-search').value || '').toLowerCase();
+    var st = document.getElementById('ord-status').value;
+    var rows = ORD.all.filter(function(o){
+      if (st && o.status !== st) return false;
+      if (q){
+        var hay = (o.customer_name + ' ' + o.customer_phone + ' ' + (o.number||'')).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+
+    // KPI
+    document.getElementById('ord-kpi-total').textContent     = rows.length;
+    document.getElementById('ord-kpi-new').textContent       = rows.filter(function(o){return o.status==='new';}).length;
+    document.getElementById('ord-kpi-shipped').textContent   = rows.filter(function(o){return o.status==='shipped';}).length;
+    document.getElementById('ord-kpi-delivered').textContent = rows.filter(function(o){return o.status==='delivered';}).length;
+    var rev = rows.filter(function(o){return o.status==='delivered'||o.status==='shipped'||o.payment_status==='paid';})
+                  .reduce(function(s,o){ return s + (Number(o.total)||0); }, 0);
+    document.getElementById('ord-kpi-revenue').textContent = Math.round(rev) + ' ₴';
+
+    document.getElementById('ord-meta').textContent = rows.length + ' замовлень';
+
+    // Badge in sidebar
+    var newCnt = ORD.all.filter(function(o){return o.status==='new';}).length;
+    var badge = document.getElementById('orders-nav-badge');
+    if (badge){
+      if (newCnt > 0){ badge.textContent = newCnt; badge.style.display = ''; }
+      else badge.style.display = 'none';
+    }
+
+    var table = document.getElementById('ord-table');
+    var head = table.querySelector('.head');
+    table.innerHTML = '';
+    table.appendChild(head);
+    if (!rows.length){
+      var div = document.createElement('div'); div.className='empty';
+      div.style.padding = '40px 20px'; div.style.textAlign = 'center'; div.style.color = 'var(--ink-60)';
+      div.textContent = 'Замовлень не знайдено';
+      table.appendChild(div);
+      return;
+    }
+
+    var statusColors = {
+      new:        '#FF4FA1',
+      confirmed:  '#3B82F6',
+      shipped:    '#F59E0B',
+      delivered:  '#10B981',
+      cancelled:  '#9CA3AF',
+      lead:       '#9CA3AF'
+    };
+
+    rows.forEach(function(o){
+      var color = statusColors[o.status] || '#9CA3AF';
+      var dateShort = (o.created_at || '').slice(5, 16).replace('T', ' ');
+      var row = document.createElement('div');
+      row.className = 'prod-row';
+      row.style.gridTemplateColumns = '120px 2fr 130px 90px 110px 90px';
+      row.innerHTML =
+        '<div><code style="font-size:11px">' + esc(o.number || ('#' + o.id)) + '</code><div class="sub" style="margin-top:2px">' + esc(dateShort) + '</div></div>' +
+        '<div><div class="title">' + esc(o.customer_name || '—') + '</div>' +
+          '<div class="sub">' + esc(o.customer_phone || '') +
+            (o.items && o.items.length ? ' · ' + o.items.length + ' позицій' : '') +
+          '</div></div>' +
+        '<div style="font-size:12px">' + esc(o.delivery_city || '—') + (o.delivery_branch ? ' · ' + esc(o.delivery_branch) : '') + '</div>' +
+        '<div class="price">' + (o.total || 0) + '₴</div>' +
+        '<div><span class="status" style="background:' + color + '14;color:' + color + ';padding:2px 8px;border-radius:6px;font-size:11px"><span class="dot" style="background:' + color + '"></span>' + esc(o.status || 'new') + '</span></div>' +
+        '<div class="acts"><button class="ord-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></div>';
+      row.querySelector('.ord-edit-btn').onclick = function(e){ e.stopPropagation(); openOrder(o); };
+      row.addEventListener('click', function(e){ if (!e.target.closest('button')) openOrder(o); });
+      table.appendChild(row);
+    });
+  }
+
+  function openOrder(o){
+    ORD.editing = o.id;
+    document.getElementById('ordTitle').textContent = o.number || ('#' + o.id);
+    document.getElementById('ordSubtitle').textContent = 'Створено: ' + (o.created_at || '').slice(0,16).replace('T',' ');
+    document.getElementById('ord-f-name').value    = o.customer_name || '';
+    document.getElementById('ord-f-phone').value   = o.customer_phone || '';
+    document.getElementById('ord-f-city').value    = o.delivery_city || '';
+    document.getElementById('ord-f-branch').value  = o.delivery_branch || '';
+    document.getElementById('ord-f-status').value  = o.status || 'new';
+    document.getElementById('ord-f-payment').value = o.payment_method || 'cod';
+    document.getElementById('ord-f-ttn').value     = '';
+    document.getElementById('ord-f-notes').value   = o.notes || '';
+
+    var items = Array.isArray(o.items) ? o.items : [];
+    document.getElementById('ord-items-list').innerHTML = items.length
+      ? items.map(function(it){
+          return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)">' +
+            '<span>' + esc(it.title || it.name || it.uid || '?') + (it.size ? ' · ' + esc(it.size) : '') + ' × ' + (it.qty || 1) + '</span>' +
+            '<span style="font-weight:600">' + (it.price || 0) + '₴</span>' +
+          '</div>';
+        }).join('') + '<div style="display:flex;justify-content:space-between;padding:8px 0 0;font-weight:700;font-size:15px"><span>Всього</span><span>' + (o.total || 0) + '₴</span></div>'
+      : '<div class="ana-empty" style="padding:10px">Без товарів</div>';
+
+    document.getElementById('ord-attribution').textContent =
+      'session: ' + (o.session_id || '—') +
+      ' · ref: ' + (o.referrer || 'direct') +
+      ' · landing: ' + (o.landing_url || '—');
+
+    document.getElementById('orderModal').style.display = '';
+  }
+
+  document.getElementById('ord-cancel-btn').onclick = function(){
+    document.getElementById('orderModal').style.display = 'none';
+  };
+
+  document.getElementById('ord-save-btn').onclick = function(){
+    if (!ORD.editing) return;
+    var update = {
+      customer_name:    document.getElementById('ord-f-name').value.trim(),
+      customer_phone:   document.getElementById('ord-f-phone').value.trim(),
+      delivery_city:    document.getElementById('ord-f-city').value.trim() || null,
+      delivery_branch:  document.getElementById('ord-f-branch').value.trim() || null,
+      status:           document.getElementById('ord-f-status').value,
+      payment_method:   document.getElementById('ord-f-payment').value,
+      notes:            document.getElementById('ord-f-notes').value.trim() || null,
+      updated_at:       new Date().toISOString()
+    };
+    sb('bg_orders?id=eq.' + ORD.editing, {
+      method: 'PATCH',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify(update)
+    }).then(function(){
+      toast('✓ Збережено', 'ok');
+      document.getElementById('orderModal').style.display = 'none';
+      loadOrders();
+    }).catch(function(e){ toast(e.message, 'err'); });
+  };
+
+  document.getElementById('ord-del-btn').onclick = function(){
+    if (!ORD.editing) return;
+    if (!confirm('Видалити замовлення? Воно зникне і з LYH CRM.')) return;
+    sb('bg_orders?id=eq.' + ORD.editing, { method: 'DELETE' })
+      .then(function(){
+        toast('✓ Видалено', 'ok');
+        document.getElementById('orderModal').style.display = 'none';
+        loadOrders();
+      }).catch(function(e){ toast(e.message, 'err'); });
+  };
+
+  document.querySelectorAll('#ord-tabs button').forEach(function(b){
+    b.onclick = function(){
+      document.querySelectorAll('#ord-tabs button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      ORD.period = parseInt(b.dataset.days, 10);
+      if (isNaN(ORD.period)) ORD.period = 7;
+      loadOrders();
+    };
+  });
+  document.getElementById('ord-search').addEventListener('input', renderOrders);
+  document.getElementById('ord-status').addEventListener('change', renderOrders);
+  document.getElementById('ord-reload').onclick = loadOrders;
+
+  var navOrdersBtn = document.querySelector('#nav a[data-page="orders"]');
+  if (navOrdersBtn){
+    navOrdersBtn.addEventListener('click', function(){ setTimeout(loadOrders, 50); });
+  }
+
+  // Initial badge load (so user sees new-orders count even before opening tab)
+  setTimeout(function(){ try { loadOrders(); } catch(e){} }, 1000);
 
 })();
 </script>
