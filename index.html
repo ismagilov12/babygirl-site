@@ -933,6 +933,58 @@ body.pm-open{overflow:hidden}
   opacity:0;transition:opacity .15s;
 }
 .pm-color:hover .pm-color-name,.pm-color.active .pm-color-name{opacity:1}
+
+/* grid section marquee — y2k bouncing band */
+.grid-section-marquee{
+  grid-column:1 / -1;
+  margin:34px 0 18px;
+  padding:14px 0;
+  background:var(--pink);
+  border-top:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);
+}
+.grid-section-marquee::before,
+.grid-section-marquee::after{
+  content:"";
+  position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+.grid-section-marquee::before{ left:0; background:linear-gradient(to right, var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee::after { right:0; background:linear-gradient(to left,  var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee .marquee-track{
+  display:flex;align-items:center;gap:36px;
+  white-space:nowrap;
+  animation:marquee-scroll 22s linear infinite;
+  width:max-content;
+}
+.grid-section-marquee .marquee-item{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:30px;line-height:1;
+  color:var(--cream);
+  -webkit-text-stroke:1.5px var(--black);
+  text-shadow:3px 3px 0 var(--yellow), 3px 3px 0 var(--black);
+  text-transform:uppercase;letter-spacing:.04em;
+  flex-shrink:0;
+}
+.grid-section-marquee .marquee-emoji{
+  font-size:28px;flex-shrink:0;
+  filter:drop-shadow(2px 2px 0 var(--black));
+}
+@keyframes marquee-scroll{
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+@media (max-width:560px){
+  .grid-section-marquee{padding:10px 0;margin:24px 0 14px}
+  .grid-section-marquee .marquee-item{font-size:22px;text-shadow:2px 2px 0 var(--yellow), 2px 2px 0 var(--black)}
+  .grid-section-marquee .marquee-emoji{font-size:22px}
+  .grid-section-marquee .marquee-track{gap:24px;animation-duration:16s}
+}
+@media (prefers-reduced-motion:reduce){
+  .grid-section-marquee .marquee-track{animation:none;justify-content:center}
+}
 </style>
 </head>
 <body>
