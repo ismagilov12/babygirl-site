@@ -1516,9 +1516,18 @@ body.pm-open{overflow:hidden}
       // Group: 'crop' is its own section, everything else = oversize
       var grp = (p.family === 'crop') ? 'crop' : 'oversize';
       if (grp !== lastFam){
-        var lbl = grp === 'crop' ? 'CROP TOPS' : 'OVERSIZE T-SHIRTS';
-        var sub = grp === 'crop' ? '~ short & sexy ~' : '~ y2k oversize legends ~';
-        parts.push('<div class="grid-section-divider" data-family="' + grp + '"><h3>' + escapeHtml(lbl) + '</h3><span class="sub">' + escapeHtml(sub) + '</span></div>');
+        // Marquee тільки на переході oversize -> crop (на початку гриду — нічого)
+        if (lastFam === 'oversize' && grp === 'crop'){
+          var items = '';
+          var unit = '<span class="marquee-item">CROP TOPS</span>'
+                   + '<span class="marquee-emoji">🎀</span>'
+                   + '<span class="marquee-item">SHORT &amp; SEXY</span>'
+                   + '<span class="marquee-emoji">✨</span>'
+                   + '<span class="marquee-item">BABYGIRL</span>'
+                   + '<span class="marquee-emoji">💗</span>';
+          for (var k=0; k<6; k++){ items += unit; }
+          parts.push('<div class="grid-section-marquee" data-from="oversize" data-to="crop"><div class="marquee-track">' + items + '</div></div>');
+        }
         lastFam = grp;
       }
 
