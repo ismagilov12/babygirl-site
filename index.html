@@ -1477,20 +1477,28 @@ body.pm-open{overflow:hidden}
     var pct = 0;
     try { pct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){}
 
-    $grid.innerHTML = list.map(function(p, i){
+    var FAMILY_LABEL = {icons:'90s ICONS', 'self-love':'SELF-LOVE', 'soft-rebel':'SOFT REBEL', 'crop':'CROP TOPS'};
+    var FAMILY_SUB   = {icons:'~ y2k legends ~', 'self-love':'~ soft & loud ~', 'soft-rebel':'~ pink revolution ~', 'crop':'~ short & sexy ~'};
+    var lastFam = null;
+    var parts = [];
+    list.forEach(function(p, i){
       var altClass = (i % 2 === 1) ? ' alt' : '';
       var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
       var photos = p.photo_main ? [p.photo_main] : [];
       var photoSlides = photos.map(function(url){
         return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="var c=this.closest(\'.card\');if(c)c.style.display=\'none\'">';
       }).join('');
-      var dots = photos.length > 1
-        ? '<div class="card-dots" data-uid="' + escapeHtml(p.uid) + '">'
-            + photos.map(function(_, idx){ return '<i' + (idx === 0 ? ' class="active"' : '') + '></i>'; }).join('')
-          + '</div>'
+      var swatches = (Array.isArray(p.colors) && p.colors.length > 1)
+        ? '<div class="card-swatches" data-uid="' + escapeHtml(p.uid) + '">' +
+            p.colors.map(function(c, ci){
+              return '<button type="button" class="card-swatch' + (ci===0?' active':'') + '" ' +
+                'data-photo="' + escapeHtml(c.photo) + '" ' +
+                'style="background:' + escapeHtml(c.hex) + '" ' +
+                'aria-label="' + escapeHtml(c.name) + '"></button>';
+            }).join('') + '</div>'
         : '';
+      var dots = '';
 
-      // Цена: если есть промо, показываем зачёркнутую старую + новую
       var priceHtml;
       if (pct > 0) {
         var newPrice = Math.round(p.price * (100 - pct) / 100);
@@ -1502,11 +1510,20 @@ body.pm-open{overflow:hidden}
         priceHtml = '<span class="card-price">' + p.price + '₴</span>';
       }
 
-      return ''
+      // Insert section divider when family changes
+      if (p.family !== lastFam){
+        var lbl = FAMILY_LABEL[p.family] || (p.family || '').toUpperCase();
+        var sub = FAMILY_SUB[p.family] || '';
+        parts.push('<div class="grid-section-divider" data-family="' + escapeHtml(p.family || '') + '"><h3>' + escapeHtml(lbl) + '</h3><span class="sub">' + escapeHtml(sub) + '</span></div>');
+        lastFam = p.family;
+      }
+
+      parts.push(''
         + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-idx="0" data-count="' + photos.length + '">'
         +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
         +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
         +     '<div class="card-photos">' + photoSlides + '</div>'
+        +     swatches
         +     dots
         +   '</div>'
         +   '<div class="card-body">'
@@ -1514,8 +1531,35 @@ body.pm-open{overflow:hidden}
         +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">ONE SIZE</span></div>'
         +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '">Add to cart</button>'
         +   '</div>'
-        + '</article>';
-    }).join('');
+        + '</article>');
+    });
+    $grid.innerHTML = parts.join('');
+
+    // Card swatch: click/hover → swap card img
+    $grid.querySelectorAll('.card-swatches').forEach(function(box){
+      box.addEventListener('click', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        e.stopPropagation();
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){ img.src = btn.dataset.photo; }
+        box.querySelectorAll('.card-swatch').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+      });
+      box.addEventListener('mouseover', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){
+          if (!img.dataset.origSrc) img.dataset.origSrc = img.src;
+          img.src = btn.dataset.photo;
+        }
+      });
+      box.addEventListener('mouseleave', function(){
+        var card = box.closest('.card');
+        var img = card.querySelector('.card-photos img');
+        var activeBtn = box.querySelector('.card-swatch.active');
+        if (img && activeBtn && activeBtn.dataset.photo){ img.src = activeBtn.dataset.photo; }
+      });
+    });
 
     // Свайп фото в плитках грида (touch + dot-tap)
     $grid.querySelectorAll('.card').forEach(function(card){
