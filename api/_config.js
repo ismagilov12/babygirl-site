@@ -1,0 +1,39 @@
+// api/_config.js — brand-specific values для BabyGirl v2.
+//
+// Этот файл коммитится; секреты — только в Vercel env (.env.example).
+
+module.exports = {
+  BRAND: 'bg',
+  SITE_DOMAIN: 'babygirl.example.com',
+  PROJECT_NAME: 'BabyGirl',
+
+  ALLOWED_ORIGINS_EXACT: [
+    'https://babygirl.example.com',
+    'https://www.babygirl.example.com',
+    'https://babygirl.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173',
+  ],
+  ALLOWED_ORIGIN_SUFFIX: ['.vercel.app'],
+
+  T: {
+    PRODUCTS: 'bg_products',
+    ORDERS: 'bg_orders',
+    PROMOS: 'bg_promos',
+    WAYFORPAY_EVENTS: 'bg_wayforpay_events',
+    ANALYTICS_EVENTS: 'bg_analytics_events',
+    SETTINGS: 'bg_settings',
+  },
+
+  RL: {
+    order: 10,
+    wayforpay: 30,
+    promo: 20,
+  },
+
+  KEYCRM: {
+    enabled: false,
+  },
+
+  COD_PREPAYMENT_AMOUNT_UAH: 200,
+};
