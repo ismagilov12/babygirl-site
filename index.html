@@ -2005,4 +2005,17 @@ body.pm-open{overflow:hidden}
       }
     })
     .catch(function(err){
-      $res.textContent = 'поми
+      $res.textContent = 'помилка: ' + err.message;
+      $res.className = 'cart-result err';
+      $btn.disabled = false; $btn.textContent = 'оформити ♥';
+    });
+  });
+
+  renderGrid();
+  bootstrapFromSupabase();
+})();
+</script>
+
+
+
+</body></html>
