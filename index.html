@@ -7,7 +7,7 @@
 <meta name="description" content="BabyGirl — pink, soft, oversized t-shirts. Y2K icons forever.">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/css2" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&amp;family=Bowlby+One&amp;family=Lilita+One&amp;family=Press+Start+2P&amp;family=VT323&amp;family=DM+Sans:wght@400;500;700;900&amp;family=Caveat:wght@500;700&amp;display=swap">
 
 <!-- 1. Attribution bootstrap (МУСИТЬ бути першим, перед усіма трекерами) -->
 <script id="attribution-bootstrap">
@@ -42,6 +42,38 @@
   } catch(e){}
 })();
 </script>
+<!-- bg-media-bootstrap -->
+<script id="bg-media-bootstrap">
+(function(){
+  var defaults = (window.BG_MEDIA_DEFAULTS) || { logoMark:"", heroVideo:"", heroPoster:"", lera:"" };
+  var override = {};
+  try {
+    var s = JSON.parse(localStorage.getItem("bg_settings") || "{}");
+    if (s && typeof s.media === "object" && s.media) override = s.media;
+  } catch(e){}
+  var M = Object.assign({}, defaults, override);
+  window.BG_MEDIA = M;
+  function apply(){
+    document.querySelectorAll("[data-bg-media]").forEach(function(el){
+      var key = el.getAttribute("data-bg-media");
+      var url = M[key];
+      if (!url) return;
+      if (el.tagName === "IMG") el.src = url;
+      else if (el.tagName === "VIDEO"){
+        el.src = url;
+        var pkey = el.getAttribute("data-bg-poster");
+        if (pkey && M[pkey]) el.poster = M[pkey];
+        try { el.load && el.load(); } catch(e){}
+      } else if (el.tagName === "A") el.href = url;
+      else el.setAttribute("src", url);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+  window.refreshBgMedia = apply;
+})();
+</script>
+
 
 <!-- 3. Meta Pixel placeholder -->
 <script>
@@ -871,7 +903,7 @@ body.pm-open{overflow:hidden}
 <nav class="nav scrolled">
   <div class="container nav-row">
     <button class="nav-burger" id="navBurger" aria-label="menu" aria-expanded="false" aria-controls="drawer">≡</button>
-    <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#top" class="nav-logo-img" aria-label="BabyGirl"><img src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/logo-mark.png" srcset="assets/logo-mark.png 1x, assets/logo-mark-hd.png 2x" alt="BabyGirl"></a>
+    <a href="#top" class="nav-logo-img" aria-label="BabyGirl"><img data-bg-media="logoMark" alt="BabyGirl"></a>
     <button class="nav-cart" id="navCart">Cart [0]</button>
   </div>
 </nav>
@@ -886,17 +918,17 @@ body.pm-open{overflow:hidden}
 
   <div class="drawer-section">
     <h6>★ shop the vibe</h6>
-    <a class="drawer-link pink" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop">all t-shirts <span class="arrow">→</span></a>
-    <a class="drawer-link yellow" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="icons">90s icons <span class="arrow">→</span></a>
-    <a class="drawer-link lime" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="self-love">self-love <span class="arrow">→</span></a>
-    <a class="drawer-link blue" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="soft-rebel">soft rebel <span class="arrow">→</span></a>
+    <a class="drawer-link pink" href="#shop">all t-shirts <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="#shop" data-family="icons">90s icons <span class="arrow">→</span></a>
+    <a class="drawer-link lime" href="#shop" data-family="self-love">self-love <span class="arrow">→</span></a>
+    <a class="drawer-link blue" href="#shop" data-family="soft-rebel">soft rebel <span class="arrow">→</span></a>
   </div>
 
   <div class="drawer-section">
     <h6>★ info</h6>
-    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#top">main page <span class="arrow">→</span></a>
-    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/index.html#about">about <span class="arrow">→</span></a>
-    <a class="drawer-link" href="file:///C:/Users/user/Downloads/BabyGirl/admin.html">admin ✦ <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#top">main page <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#about">about <span class="arrow">→</span></a>
+    <a class="drawer-link" href="/">admin ✦ <span class="arrow">→</span></a>
   </div>
 
   <div class="drawer-section">
@@ -912,7 +944,7 @@ body.pm-open{overflow:hidden}
 
 <!-- ===== HERO ===== -->
 <section id="top" class="hero">
-  <video class="hero-video" src="assets/hero.mp4" autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="assets/logo-hd.png"></video>
+  <video class="hero-video" data-bg-media="heroVideo" data-bg-poster="heroPoster" autoplay muted loop playsinline preload="metadata"></video>
   <div class="hero-content">
     <div class="hero-eyebrow">★ DROP N°1 · 2026 ★</div>
     <div class="hero-sub">pink · soft<br><span class="pink">oversized</span></div>
@@ -1273,7 +1305,7 @@ body.pm-open{overflow:hidden}
 }
     </script>
 
-    <div id="grid" class="grid"><article class="card" data-uid="pamela-90s" data-idx="0" data-count="7"><div class="card-window"><span>~/pamela-90s</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">ICON</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/d42dad8623d023c1e5d58c9d18077dc7.png" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/bf6ebd66af7043c611c1664b2cf60a2f.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/03c9d8da0bb00493ee79f4595c25d308.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/c83761a79277f576e8cd13a907345a2a.webp" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/05ebdcf479463e151b298f25200e453f.jpg" alt="Pamela 90s"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6255eb8bc35e0fbe684d514a72c1ff55.jpg" alt="Pamela 90s"></div><div class="card-dots" data-uid="pamela-90s"><i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Pamela 90s</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="pamela-90s">Add to cart</button></div></article><article class="card" data-uid="eminem" data-idx="0" data-count="3"><div class="card-window"><span>~/eminem</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/009a092a5f6af533afafb5f574e23e49.png" alt="Eminem"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/f00fe1f20e503ad5b5638581855e7a02.png" alt="Eminem"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/fb4f77b4b23004ec3df11902aa738d15.png" alt="Eminem"></div><div class="card-dots" data-uid="eminem"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Eminem</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="eminem">Add to cart</button></div></article><article class="card" data-uid="britney" data-idx="0" data-count="8"><div class="card-window"><span>~/britney</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">ICON</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/afa8020f615419bf454c6ce5d786d00e.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7cb5f7e1980b1ca1ff4c897cd188b031.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/657a9c58b0df2f7b89347efb5c6c0834.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/532da650f2f18738b0c1cd4762e93eaf.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/e78e3e7d9cee0a2dd9081a573c594d0f.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/523687cbaf52dba5fe2a8909ce41b005.jpg" alt="Britney"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6cb9414552a05c18ed0b53bdad4e982f.jpg" alt="Britney"></div><div class="card-dots" data-uid="britney"><i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Britney</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="britney">Add to cart</button></div></article><article class="card" data-uid="beavis-butthead" data-idx="0" data-count="3"><div class="card-window"><span>~/beavis-butthead</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ff24f704418d99e312a111c3f4592efe.jpg" alt="Beavis &amp; Butthead"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/25865b828f1d4756e6a8aa5438d54a21.jpg" alt="Beavis &amp; Butthead"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/c0cd4d62f198b16464b9d1dc49a8a340.jpg" alt="Beavis &amp; Butthead"></div><div class="card-dots" data-uid="beavis-butthead"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Beavis &amp; Butthead</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="beavis-butthead">Add to cart</button></div></article><article class="card" data-uid="crush" data-idx="0" data-count="1"><div class="card-window"><span>~/crush</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/5608ea8d7945d750d8a506ac014822e4.jpg" alt="Crush"></div></div><div class="card-body"><div class="card-title">Crush</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="crush">Add to cart</button></div></article><article class="card" data-uid="why-britney-shaved" data-idx="0" data-count="2"><div class="card-window"><span>~/why-britney-shaved</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">CULT</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b4ccf77f4377b064f7570623b298d238.jpg" alt="Why Britney Shaved?"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/95419d7f7f8f0802be73a3f7783d8c16.png" alt="Why Britney Shaved?"></div><div class="card-dots" data-uid="why-britney-shaved"><i class="active"></i><i></i></div></div><div class="card-body"><div class="card-title">Why Britney Shaved?</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="why-britney-shaved">Add to cart</button></div></article><article class="card" data-uid="lindsay-lohan" data-idx="0" data-count="4"><div class="card-window"><span>~/lindsay-lohan</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ef565e27b7ef6b4e72a12a91e8ee353e.jpg" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/38b5ace53e631bf121aa3f7c8ecc4d6e.png" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/36df7f7762a457335f6742fd51b30f85.png" alt="Lindsay Lohan"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7e322a9b0bc1f4530e88c19f44e659a0.png" alt="Lindsay Lohan"></div><div class="card-dots" data-uid="lindsay-lohan"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Lindsay Lohan</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="lindsay-lohan">Add to cart</button></div></article><article class="card" data-uid="love-is" data-idx="0" data-count="1"><div class="card-window"><span>~/love-is</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/cc2a0310becf8d3af6a8f829ca2a8167.jpg" alt="Love is"></div></div><div class="card-body"><div class="card-title">Love is</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="love-is">Add to cart</button></div></article><article class="card" data-uid="pam-tommy" data-idx="0" data-count="3"><div class="card-window"><span>~/pam-tommy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">LEGEND</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a778187c3152ec7c7fc9cc83faccfaf5.jpg" alt="Pam &amp; Tommy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/bf6ebd66af7043c611c1664b2cf60a2f.jpg" alt="Pam &amp; Tommy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7cb5f7e1980b1ca1ff4c897cd188b031.jpg" alt="Pam &amp; Tommy"></div><div class="card-dots" data-uid="pam-tommy"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Pam &amp; Tommy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="pam-tommy">Add to cart</button></div></article><article class="card" data-uid="playboy" data-idx="0" data-count="4"><div class="card-window"><span>~/playboy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6d600b74f9601916befb952a030d41e3.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/b2b66878d6d071d8ae5623fec7cb9e82.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a7c0779dbb83a7ab7b7cb3ae9934e2da.jpg" alt="Playboy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/db86378c1a6db6f230e7a5a968ddae3a.jpg" alt="Playboy"></div><div class="card-dots" data-uid="playboy"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Playboy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="playboy">Add to cart</button></div></article><article class="card" data-uid="never-broke-my-heart" data-idx="0" data-count="4"><div class="card-window"><span>~/never-broke-my-heart</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/6c5f49474808b547cce332e987a8d7fc.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a1bcce1175408ee29cf301b27bdae7dd.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/3f31769150e47fbe579aee8f4b9f3cb2.jpg" alt="Never broke my heart"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/7994208206116fa46cbe1c9a8f64ad32.jpg" alt="Never broke my heart"></div><div class="card-dots" data-uid="never-broke-my-heart"><i class="active"></i><i></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Never broke my heart</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="never-broke-my-heart">Add to cart</button></div></article><article class="card" data-uid="snoop" data-idx="0" data-count="1"><div class="card-window"><span>~/snoop</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/f1f84333c9055af58c20d2ed4c81f2de.jpg" alt="Snoop Dogg"></div></div><div class="card-body"><div class="card-title">Snoop Dogg</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="snoop">Add to cart</button></div></article><article class="card" data-uid="the-prodigy" data-idx="0" data-count="1"><div class="card-window"><span>~/the-prodigy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/a6a2985e546b53b9bc34310af11fc36f.jpg" alt="The Prodigy"></div></div><div class="card-body"><div class="card-title">The Prodigy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="the-prodigy">Add to cart</button></div></article><article class="card" data-uid="soft-rebel" data-idx="0" data-count="3"><div class="card-window"><span>~/soft-rebel</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="ribbon">NEW</span><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/086002b3b8f3e264448149f8049df0d4.jpg" alt="Soft Rebel"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/03c9d8da0bb00493ee79f4595c25d308.jpg" alt="Soft Rebel"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/ad1b66c7cb47df509d4385fd31997413.jpg" alt="Soft Rebel"></div><div class="card-dots" data-uid="soft-rebel"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Soft Rebel</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn alt" data-action="buy" data-uid="soft-rebel">Add to cart</button></div></article><article class="card" data-uid="giant-pussy" data-idx="0" data-count="3"><div class="card-window"><span>~/giant-pussy</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div class="card-img"><span class="heart-tag">♥</span><div class="card-photos"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/d9947f2a12167f25e2093ba081642a92.jpg" alt="Giant Pussy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/5d7f692c0df798dcebaa10c457306523.jpg" alt="Giant Pussy"><img loading="lazy" src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/672aa3ae1b76dfc3cefadaeeae893003.jpg" alt="Giant Pussy"></div><div class="card-dots" data-uid="giant-pussy"><i class="active"></i><i></i><i></i></div></div><div class="card-body"><div class="card-title">Giant Pussy</div><div class="card-meta"><span class="card-price">1400₴</span><span class="card-tag">ONE SIZE</span></div><button class="card-btn" data-action="buy" data-uid="giant-pussy">Add to cart</button></div></article></div>
+    <div id="grid" class="grid"></div>
   </div>
 </section>
 
@@ -1285,7 +1317,7 @@ body.pm-open{overflow:hidden}
     <div class="about-stage">
       <div class="about-photo">
         <span class="name-tag">★ Lera · founder</span>
-        <img src="./BabyGirl · v2 · Pink. Soft. Oversized. Forever._files/lera.png" alt="Лера — founder BabyGirl">
+        <img data-bg-media="lera" alt="Lera">
         <div class="health">
           <span>♥ HP</span>
           <span class="bar-fill"><i></i></span>
@@ -1475,27 +1507,27 @@ body.pm-open{overflow:hidden}
     <div class="foot-grid">
       <div>
         <h5>Shop</h5>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop">All t-shirts</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="icons">90s icons</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="self-love">Self-love</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#shop" data-family="soft-rebel">Soft rebel</a>
+        <a href="#shop">All t-shirts</a>
+        <a href="#shop" data-family="icons">90s icons</a>
+        <a href="#shop" data-family="self-love">Self-love</a>
+        <a href="#shop" data-family="soft-rebel">Soft rebel</a>
       </div>
       <div>
         <h5>Info</h5>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#about">About</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Доставка</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Повернення</a>
+        <a href="#about">About</a>
+        <a href="/">Доставка</a>
+        <a href="/">Повернення</a>
       </div>
       <div>
         <h5>Follow</h5>
         <a href="https://www.instagram.com/loveyourhairshop/" target="_blank" rel="noopener">Instagram</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">TikTok</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/index.html#">Telegram</a>
+        <a href="/">TikTok</a>
+        <a href="/">Telegram</a>
       </div>
       <div>
         <h5>Contact</h5>
         <a href="mailto:hi@babygirl.shop">hi@babygirl.shop</a>
-        <a href="file:///C:/Users/user/Downloads/BabyGirl/admin.html">Admin ✦</a>
+        <a href="/">Admin ✦</a>
       </div>
     </div>
     <div class="foot-bot">
@@ -1718,7 +1750,7 @@ body.pm-open{overflow:hidden}
     $grid.innerHTML = list.map(function(p, i){
       var altClass = (i % 2 === 1) ? ' alt' : '';
       var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
-      var photos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : (p.photo_main ? [p.photo_main] : []);
+      var photos = p.photo_main ? [p.photo_main] : [];
       var photoSlides = photos.map(function(url){
         return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '">';
       }).join('');
