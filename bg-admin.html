@@ -360,7 +360,37 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   .side{position:relative;height:auto}
   .grid2,.grid4{grid-template-columns:1fr}
 }
+
+/* ===== ANALYTICS ===== */
+.period-tabs{display:flex;gap:4px;background:var(--bg-alt);border-radius:10px;padding:3px}
+.period-tabs button{padding:8px 14px;border-radius:8px;background:transparent;font-size:12px;color:var(--ink-60);font-weight:600;letter-spacing:.02em;cursor:pointer}
+.period-tabs button.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.period-tabs button:hover:not(.active){color:var(--ink)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi-card .l{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px}
+.kpi-card .v{font-size:30px;font-weight:800;letter-spacing:-.015em;line-height:1}
+.kpi-card .v.small{font-size:22px}
+.kpi-card .delta{font-family:var(--font-mono);font-size:10.5px;margin-top:6px;color:var(--ink-40)}
+.ana-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.ana-block h3{font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:-.005em}
+.ana-block h3 .sub-muted{font-weight:400;color:var(--ink-60);font-size:12px;margin-left:6px}
+.chart-wrap{position:relative;height:300px}
+.ana-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media (max-width:760px){.ana-row{grid-template-columns:1fr}}
+.src-list{display:flex;flex-direction:column;gap:6px}
+.src-row{display:grid;grid-template-columns:100px 1fr 80px 80px;gap:10px;align-items:center;padding:6px 10px;border-radius:8px;background:var(--bg-alt);font-size:12.5px}
+.src-row .bar-track{height:8px;background:#fff;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.src-row .bar{height:100%;background:var(--pink-brand);border-radius:6px}
+.src-row .lbl{font-weight:600}
+.src-row .num{text-align:right;font-family:var(--font-mono);font-weight:600;font-size:11.5px}
+.ana-empty{padding:30px 20px;text-align:center;color:var(--ink-60);font-size:13px}
+.daily-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.daily-tbl th,.daily-tbl td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.daily-tbl th{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-60);background:var(--bg-alt)}
+.daily-tbl td.num,.daily-tbl th.num{text-align:right;font-family:var(--font-mono);font-weight:600}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -390,6 +420,10 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       <a data-page="orders">
         <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         Замовлення <span style="margin-left:auto;font-size:10px;background:#444;padding:1px 6px;border-radius:8px;color:#aaa">soon</span>
+      </a>
+      <a data-page="analytics">
+        <svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 17l4-8 4 4 6-10"/></svg>
+        Аналітика
       </a>
       <a data-page="settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -451,6 +485,48 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     <div class="page" id="page-orders" style="display:none">
       <div class="page-head"><div><h1>Замовлення</h1><div class="meta">Coming soon — буде синхронізація з bg_orders</div></div></div>
       <div class="empty">📦 Сторінка замовлень готується. Зараз заказы з сайту падають у Supabase <code>bg_orders</code>.</div>
+    </div>
+
+    
+    <!-- ANALYTICS PAGE -->
+    <div class="page" id="page-analytics" style="display:none">
+      <div class="page-head">
+        <div><h1>Аналітика</h1><div class="meta" id="ana-meta">— · — днів</div></div>
+        <div class="period-tabs" id="ana-tabs">
+          <button data-days="1">Сьогодні</button>
+          <button data-days="7" class="active">7 днів</button>
+          <button data-days="30">30 днів</button>
+          <button data-days="90">90 днів</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="l">Перегляди товарів</div><div class="v" id="kpi-view">—</div></div>
+        <div class="kpi-card"><div class="l">Додано в кошик</div><div class="v" id="kpi-cart">—</div></div>
+        <div class="kpi-card"><div class="l">Чекаут розпочато</div><div class="v" id="kpi-checkout">—</div></div>
+        <div class="kpi-card"><div class="l">Оплачено</div><div class="v" id="kpi-purchase">—</div></div>
+        <div class="kpi-card"><div class="l">Сесій</div><div class="v" id="kpi-sess">—</div></div>
+        <div class="kpi-card"><div class="l">Конверсія</div><div class="v small" id="kpi-cr">—</div><div class="delta">orders / sessions</div></div>
+      </div>
+
+      <div class="ana-block">
+        <h3>Активність по днях<span class="sub-muted" id="ana-chart-caption">останні 7 днів</span></h3>
+        <div class="chart-wrap"><canvas id="ch-daily"></canvas></div>
+      </div>
+
+      <div class="ana-row">
+        <div class="ana-block">
+          <h3>Джерела трафіку<span class="sub-muted">по замовленнях</span></h3>
+          <div class="src-list" id="src-list"><div class="ana-empty">Завантажую…</div></div>
+        </div>
+        <div class="ana-block">
+          <h3>Топ днів<span class="sub-muted">за виручкою</span></h3>
+          <table class="daily-tbl">
+            <thead><tr><th>Дата</th><th class="num">Замовлень</th><th class="num">Виручка</th></tr></thead>
+            <tbody id="topdays-tbody"><tr><td colspan="3" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- SETTINGS PAGE (placeholder) -->
@@ -822,6 +898,137 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   } else {
     showGate();
   }
+
+  // ===== ANALYTICS =====
+  var ANA = { period: 7, chart: null };
+
+  function fmtNum(n){
+    n = Number(n) || 0;
+    if (n >= 1000) return (n/1000).toFixed(n>=10000?0:1) + 'k';
+    return String(n);
+  }
+  function fmtUah(n){
+    n = Number(n) || 0;
+    if (n >= 1000) return Math.round(n/1000) + 'k ₴';
+    return Math.round(n) + ' ₴';
+  }
+
+  function loadAnalytics(){
+    var days = ANA.period;
+    var from = new Date(Date.now() - days * 86400000).toISOString();
+    var to   = new Date().toISOString();
+    document.getElementById('ana-meta').textContent = days + ' днів';
+    document.getElementById('ana-chart-caption').textContent = days === 1 ? 'сьогодні' : 'останні ' + days + ' днів';
+
+    // RPC bg_analytics_summary
+    fetch(SB_URL + '/rest/v1/rpc/bg_analytics_summary', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_from: from, p_to: to })
+    }).then(function(r){ return r.json(); }).then(function(j){
+      var totals = (j && j.totals) || {};
+      var daily  = (j && j.daily) || [];
+      document.getElementById('kpi-view').textContent     = fmtNum(totals.view_item);
+      document.getElementById('kpi-cart').textContent     = fmtNum(totals.add_to_cart);
+      document.getElementById('kpi-checkout').textContent = fmtNum(totals.begin_checkout);
+      document.getElementById('kpi-purchase').textContent = fmtNum(totals.purchase);
+      document.getElementById('kpi-sess').textContent     = fmtNum(totals.sessions);
+      var cr = (totals.sessions > 0) ? ((totals.purchase || 0) * 100 / totals.sessions).toFixed(1) + '%' : '—';
+      document.getElementById('kpi-cr').textContent = cr;
+      renderDailyChart(daily);
+    }).catch(function(e){ console.warn('summary', e); });
+
+    // RPC bg_analytics_sources_daily
+    fetch(SB_URL + '/rest/v1/rpc/bg_analytics_sources_daily', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_from: from, p_to: to })
+    }).then(function(r){ return r.json(); }).then(function(rows){
+      renderSources(rows || []);
+      renderTopDays(rows || []);
+    }).catch(function(e){ console.warn('sources', e); });
+  }
+
+  function renderDailyChart(daily){
+    if (!window.Chart){ return; }
+    daily = (daily || []).slice().sort(function(a,b){ return (a.day||'').localeCompare(b.day||''); });
+    var labels = daily.map(function(d){ return (d.day || '').slice(5, 10); });
+    var ctx = document.getElementById('ch-daily').getContext('2d');
+    if (ANA.chart) ANA.chart.destroy();
+    ANA.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Перегляди', data: daily.map(function(d){return d.view_item||0;}), borderColor: '#999', backgroundColor:'rgba(160,160,160,.1)', tension:.35, fill:true, borderWidth:1.5 },
+          { label: 'В кошик',   data: daily.map(function(d){return d.add_to_cart||0;}), borderColor: '#FF8DCD', backgroundColor:'rgba(255,141,205,.15)', tension:.35, fill:true, borderWidth:2 },
+          { label: 'Купівлі',   data: daily.map(function(d){return d.purchase||0;}), borderColor: '#FF4FA1', backgroundColor:'rgba(255,79,161,.2)', tension:.35, fill:true, borderWidth:2.5 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position:'bottom', labels:{boxWidth:12, font:{size:11}} } },
+        scales: { y: { beginAtZero:true, ticks:{precision:0,font:{size:10}} }, x:{ticks:{font:{size:10}}} }
+      }
+    });
+  }
+
+  function renderSources(rows){
+    var agg = {};
+    rows.forEach(function(r){
+      var s = r.source || 'other';
+      if (!agg[s]) agg[s] = { source: s, orders: 0, revenue: 0 };
+      agg[s].orders  += Number(r.orders) || 0;
+      agg[s].revenue += Number(r.revenue) || 0;
+    });
+    var arr = Object.values(agg).sort(function(a,b){ return b.orders - a.orders; });
+    var max = Math.max.apply(null, arr.map(function(x){ return x.orders; }).concat([1]));
+    var box = document.getElementById('src-list');
+    if (!arr.length){ box.innerHTML = '<div class="ana-empty">Замовлень за цей період ще не було</div>'; return; }
+    box.innerHTML = arr.map(function(s){
+      var pct = Math.round(s.orders / max * 100);
+      return '<div class="src-row">' +
+        '<div class="lbl">' + (s.source||'other') + '</div>' +
+        '<div class="bar-track"><div class="bar" style="width:' + pct + '%"></div></div>' +
+        '<div class="num">' + s.orders + '</div>' +
+        '<div class="num">' + fmtUah(s.revenue) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderTopDays(rows){
+    var byDay = {};
+    rows.forEach(function(r){
+      var d = (r.day || '').slice(0, 10);
+      if (!byDay[d]) byDay[d] = { day: d, orders: 0, revenue: 0 };
+      byDay[d].orders  += Number(r.orders) || 0;
+      byDay[d].revenue += Number(r.revenue) || 0;
+    });
+    var arr = Object.values(byDay).sort(function(a,b){ return b.revenue - a.revenue; }).slice(0, 7);
+    var tbody = document.getElementById('topdays-tbody');
+    if (!arr.length){ tbody.innerHTML = '<tr><td colspan="3" class="ana-empty">Немає даних</td></tr>'; return; }
+    tbody.innerHTML = arr.map(function(d){
+      return '<tr><td>' + d.day + '</td><td class="num">' + d.orders + '</td><td class="num">' + fmtUah(d.revenue) + '</td></tr>';
+    }).join('');
+  }
+
+  // Wire up period tabs
+  document.querySelectorAll('#ana-tabs button').forEach(function(b){
+    b.onclick = function(){
+      document.querySelectorAll('#ana-tabs button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      ANA.period = parseInt(b.dataset.days, 10) || 7;
+      loadAnalytics();
+    };
+  });
+
+  // Hook into nav: when analytics page activated, load data
+  var navAnalyticsBtn = document.querySelector('#nav a[data-page="analytics"]');
+  if (navAnalyticsBtn){
+    var origClick = navAnalyticsBtn.onclick;
+    navAnalyticsBtn.addEventListener('click', function(){ setTimeout(loadAnalytics, 50); });
+  }
+
 })();
 </script>
 
