@@ -36,6 +36,10 @@
 (function(){
   window.BRAND = 'bg';
   window.PRODUCTS_TABLE = 'bg_products';
+  // Defaults — Supabase shared project (fsihlzzjewhxpogvjapu)
+  window.SUPABASE_URL      = 'https://fsihlzzjewhxpogvjapu.supabase.co';
+  window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
+  // Overrides з admin → Setup (localStorage)
   try {
     var s = JSON.parse(localStorage.getItem('bg_settings') || '{}');
     if (s.SUPABASE_URL)      window.SUPABASE_URL      = s.SUPABASE_URL;
