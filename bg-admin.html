@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BabyGirl Admin · Товари</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 100 100%22%3E%3Ctext x%3D%2250%25%22 y%3D%2255%25%22 text-anchor%3D%22middle%22 dominant-baseline%3D%22middle%22 font-size%3D%2286%22%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --pink:#FF4FA1; --pink-deep:#E13A8C; --pink-bg:#FFE6F2;
+  --black:#0a0a0a; --cream:#FFF5EC; --bg:#FAFAFA;
+  --text:#1a1a1a; --text2:#666; --border:#e5e5e5; --shadow:0 2px 8px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;background:var(--bg);color:var(--text);font-size:14px}
+header{background:var(--black);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:20px;color:var(--pink)}
+header .meta{display:flex;gap:18px;align-items:center;color:#aaa;font-size:13px}
+header button{background:var(--pink);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer}
+header button:hover{background:var(--pink-deep)}
+main{max-width:1400px;margin:0 auto;padding:20px}
+.gate{max-width:380px;margin:60px auto;padding:30px;background:#fff;border-radius:14px;box-shadow:var(--shadow);text-align:center}
+.gate h2{margin:0 0 8px;font-size:24px}
+.gate input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:15px;margin:14px 0}
+.gate button{width:100%;padding:12px;background:var(--pink);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer}
+.gate .err{color:#c00;font-size:13px;margin-top:8px;min-height:18px}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.toolbar input,.toolbar select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px}
+.toolbar .grow{flex:1;min-width:200px}
+.btn{padding:8px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
+.btn-primary{background:var(--pink);color:#fff}
+.btn-secondary{background:#fff;color:var(--text);border:1px solid var(--border)}
+.btn-danger{background:#fee;color:#c00;border:1px solid #fbb}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+th{background:#fafafa;color:var(--text2);text-align:left;padding:12px 10px;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)}
+td{padding:10px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+tr:hover td{background:#fffafd}
+.thumb{width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:#f5f5f5}
+.thumb-placeholder{width:52px;height:52px;border-radius:8px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:20px}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge.icons{background:#fff3cd;color:#664500}
+.badge.soft-rebel{background:#cce5ff;color:#003e80}
+.badge.crop{background:#ffe0ec;color:#a01959}
+.badge.long{background:#e6f5e6;color:#1a6b1a}
+.badge.belt{background:#f0e6ff;color:#5226a3}
+.ribbon{font-family:'Press Start 2P',monospace;font-size:9px;padding:2px 5px;background:#000;color:#fff;border-radius:3px;letter-spacing:.05em}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;z-index:100;overflow-y:auto}
+.modal{background:#fff;border-radius:14px;max-width:760px;width:100%;padding:24px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.modal h2{margin:0 0 16px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:600}
+.fld input,.fld textarea,.fld select{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-family:inherit}
+.fld textarea{min-height:60px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:10px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--black);color:#fff;padding:14px 20px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:200;font-size:13px}
+.toast.err{background:#c00}
+.toast.ok{background:#1a6b1a}
+.color-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.color-row input{flex:1}
+.color-row .swatch{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--black);flex-shrink:0}
+.color-row .rm{padding:4px 8px;border:none;background:#fee;color:#c00;border-radius:6px;cursor:pointer}
+.photos-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.photos-list .ph{position:relative;width:60px;height:60px;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.photos-list .ph img{width:100%;height:100%;object-fit:cover}
+.photos-list .ph .x{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center}
+.muted{color:var(--text2);font-size:12px}
+.empty{text-align:center;padding:60px 20px;color:var(--text2)}
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <h2>BabyGirl Admin</h2>
+  <p class="muted">Введіть пароль адмінки</p>
+  <input id="gatePwd" type="password" placeholder="password" autocomplete="off">
+  <button id="gateBtn">Увійти</button>
+  <div class="err" id="gateErr"></div>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <h1>🎀 BabyGirl · Товари</h1>
+    <div class="meta">
+      <span id="countMeta">—</span>
+      <a href="https://babygirl-site-six.vercel.app/" target="_blank" style="color:#aaa">Відкрити сайт ↗</a>
+      <button id="logoutBtn">Вийти</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input id="searchInp" class="grow" placeholder="Пошук за назвою, UID...">
+      <select id="familyFilter">
+        <option value="">Усі категорії</option>
+        <option value="icons">2000s ICONS</option>
+        <option value="soft-rebel">SOFT REBEL</option>
+        <option value="crop">CROP TOPS</option>
+        <option value="long">LONG T-SHIRTS</option>
+        <option value="belt">BELTS</option>
+      </select>
+      <button class="btn btn-primary" id="addBtn">+ Додати товар</button>
+      <button class="btn btn-secondary" id="reloadBtn">↻ Оновити</button>
+    </div>
+
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th></th>
+          <th>UID</th>
+          <th>Назва</th>
+          <th>Категорія</th>
+          <th>Ціна</th>
+          <th>Активний</th>
+          <th>Sort</th>
+          <th>Ribbon</th>
+          <th>Кольори</th>
+          <th style="width:140px"></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="10" class="empty">Завантаження…</td></tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+
+<div id="modal" class="modal-overlay" hidden>
+  <div class="modal">
+    <h2 id="modalTitle">Новий товар</h2>
+    <div class="fld"><label>UID (унікальний)</label><input id="f_uid"></div>
+    <div class="grid2">
+      <div class="fld"><label>Назва</label><input id="f_title"></div>
+      <div class="fld"><label>Категорія (family)</label>
+        <select id="f_family">
+          <option value="icons">icons — 2000s ICONS</option>
+          <option value="soft-rebel">soft-rebel — SOFT REBEL</option>
+          <option value="crop">crop — CROP TOPS</option>
+          <option value="long">long — LONG T-SHIRTS</option>
+          <option value="belt">belt — BELTS</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid4">
+      <div class="fld"><label>Ціна (₴)</label><input id="f_price" type="number"></div>
+      <div class="fld"><label>Стара ціна</label><input id="f_price_old" type="number"></div>
+      <div class="fld"><label>Sort order</label><input id="f_sort_order" type="number"></div>
+      <div class="fld"><label>Ribbon</label><input id="f_ribbon" placeholder="NEW / ICON / LEGEND..."></div>
+    </div>
+    <div class="grid4">
+      <div class="fld"><label>Active</label><select id="f_active"><option value="true">так</option><option value="false">ні</option></select></div>
+      <div class="fld"><label>In grid</label><select id="f_in_grid"><option value="true">так</option><option value="false">ні</option></select></div>
+      <div class="fld"><label>Featured</label><select id="f_featured"><option value="false">ні</option><option value="true">так</option></select></div>
+      <div class="fld"><label>Sizes (CSV)</label><input id="f_sizes" placeholder="ONE SIZE, S, M"></div>
+    </div>
+    <div class="fld"><label>Photo main (URL)</label><input id="f_photo_main"></div>
+    <div class="fld">
+      <label>Photos (масив URL — по одному на рядок)</label>
+      <div class="photos-list" id="f_photos_preview"></div>
+      <textarea id="f_photos" placeholder="https://...&#10;https://..."></textarea>
+    </div>
+    <div class="fld">
+      <label>Кольори (для crop/belt)</label>
+      <div id="f_colors_list"></div>
+      <button class="btn btn-secondary" id="addColorBtn">+ додати колір</button>
+    </div>
+    <div class="fld"><label>Опис</label><textarea id="f_description"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cancelBtn">Скасувати</button>
+      <button class="btn btn-primary" id="saveBtn">Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var API = '/api/admin-products';
+  var pwd = sessionStorage.getItem('bg_admin_pwd') || '';
+  var allProducts = [];
+  var editing = null;
+
+  // ===== Gate =====
+  function showGate(err){
+    document.getElementById('app').hidden = true;
+    document.getElementById('gate').hidden = false;
+    if (err) document.getElementById('gateErr').textContent = err;
+  }
+  function showApp(){
+    document.getElementById('gate').hidden = true;
+    document.getElementById('app').hidden = false;
+    load();
+  }
+
+  document.getElementById('gateBtn').onclick = function(){
+    var v = document.getElementById('gatePwd').value.trim();
+    if (!v){ document.getElementById('gateErr').textContent = 'Введіть пароль'; return; }
+    pwd = v;
+    sessionStorage.setItem('bg_admin_pwd', pwd);
+    document.getElementById('gateErr').textContent = '…';
+    api('list').then(function(r){
+      if (r && r.ok){ showApp(); }
+      else { sessionStorage.removeItem('bg_admin_pwd'); showGate('Невірний пароль'); }
+    }).catch(function(e){ showGate(e.message); });
+  };
+  document.getElementById('gatePwd').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') document.getElementById('gateBtn').click();
+  });
+  document.getElementById('logoutBtn').onclick = function(){
+    sessionStorage.removeItem('bg_admin_pwd');
+    pwd = '';
+    showGate();
+  };
+
+  // ===== API =====
+  function api(action, payload){
+    return fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': pwd },
+      body: JSON.stringify({ action: action, payload: payload || {} })
+    }).then(function(r){
+      return r.json().then(function(j){
+        if (!r.ok){ throw new Error(j.error || ('HTTP ' + r.status)); }
+        return j;
+      });
+    });
+  }
+
+  function toast(msg, cls){
+    var t = document.createElement('div');
+    t.className = 'toast ' + (cls || '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 3000);
+  }
+
+  // ===== Load + render =====
+  function load(){
+    document.getElementById('tbody').innerHTML = '<tr><td colspan="10" class="empty">Завантаження…</td></tr>';
+    api('list').then(function(r){
+      allProducts = r.products || [];
+      render();
+    }).catch(function(e){ toast(e.message, 'err'); });
+  }
+
+  function render(){
+    var search = document.getElementById('searchInp').value.toLowerCase().trim();
+    var famF   = document.getElementById('familyFilter').value;
+    var rows = allProducts.filter(function(p){
+      if (famF && p.family !== famF) return false;
+      if (search && !((p.uid||'').toLowerCase().indexOf(search) >= 0 || (p.title||'').toLowerCase().indexOf(search) >= 0)) return false;
+      return true;
+    });
+    document.getElementById('countMeta').textContent = rows.length + ' / ' + allProducts.length + ' товарів';
+    if (!rows.length){
+      document.getElementById('tbody').innerHTML = '<tr><td colspan="10" class="empty">Нічого не знайдено</td></tr>';
+      return;
+    }
+    document.getElementById('tbody').innerHTML = rows.map(function(p){
+      var thumb = p.photo_main
+        ? '<img class="thumb" src="' + escAttr(p.photo_main) + '" onerror="this.outerHTML=&quot;<div class=\\&quot;thumb-placeholder\\&quot;>📦</div>&quot;">'
+        : '<div class="thumb-placeholder">📦</div>';
+      var colorsCount = Array.isArray(p.colors) ? p.colors.length : 0;
+      return '<tr data-uid="' + escAttr(p.uid) + '">'
+        + '<td>' + thumb + '</td>'
+        + '<td><code style="font-size:11px;color:#888">' + esc(p.uid) + '</code></td>'
+        + '<td style="font-weight:600">' + esc(p.title) + '</td>'
+        + '<td><span class="badge ' + escAttr(p.family || '') + '">' + esc(p.family || '—') + '</span></td>'
+        + '<td style="font-weight:700">' + (p.price || 0) + '₴</td>'
+        + '<td>' + (p.active ? '✅' : '❌') + '</td>'
+        + '<td>' + (p.sort_order || 0) + '</td>'
+        + '<td>' + (p.ribbon ? '<span class="ribbon">' + esc(p.ribbon) + '</span>' : '') + '</td>'
+        + '<td>' + (colorsCount ? colorsCount + ' 🎨' : '') + '</td>'
+        + '<td><button class="btn btn-secondary edit-btn" data-uid="' + escAttr(p.uid) + '">edit</button> '
+        +     '<button class="btn btn-danger del-btn" data-uid="' + escAttr(p.uid) + '">×</button></td>'
+        + '</tr>';
+    }).join('');
+    document.querySelectorAll('.edit-btn').forEach(function(b){ b.onclick = function(){ openEdit(b.dataset.uid); }; });
+    document.querySelectorAll('.del-btn').forEach(function(b){ b.onclick = function(){ doDelete(b.dataset.uid); }; });
+  }
+
+  function esc(s){ s = String(s == null ? '' : s); return s.replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function escAttr(s){ return esc(s).replace(/'/g, '&#39;'); }
+
+  document.getElementById('searchInp').addEventListener('input', render);
+  document.getElementById('familyFilter').addEventListener('change', render);
+  document.getElementById('reloadBtn').onclick = load;
+
+  // ===== Edit / new =====
+  function openEdit(uid){
+    var p = allProducts.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    editing = uid;
+    document.getElementById('modalTitle').textContent = 'Редагувати: ' + p.title;
+    fillForm(p);
+    document.getElementById('modal').hidden = false;
+  }
+  document.getElementById('addBtn').onclick = function(){
+    editing = null;
+    document.getElementById('modalTitle').textContent = 'Новий товар';
+    fillForm({ active: true, in_grid: true, featured: false, family: 'icons', sort_order: 999 });
+    document.getElementById('modal').hidden = false;
+  };
+  document.getElementById('cancelBtn').onclick = function(){
+    document.getElementById('modal').hidden = true;
+  };
+
+  function fillForm(p){
+    document.getElementById('f_uid').value         = p.uid || '';
+    document.getElementById('f_uid').disabled      = !!editing;
+    document.getElementById('f_title').value       = p.title || '';
+    document.getElementById('f_family').value      = p.family || 'icons';
+    document.getElementById('f_price').value       = p.price || '';
+    document.getElementById('f_price_old').value   = p.price_old || '';
+    document.getElementById('f_sort_order').value  = p.sort_order != null ? p.sort_order : 999;
+    document.getElementById('f_ribbon').value      = p.ribbon || '';
+    document.getElementById('f_active').value      = String(p.active !== false);
+    document.getElementById('f_in_grid').value     = String(p.in_grid !== false);
+    document.getElementById('f_featured').value    = String(!!p.featured);
+    document.getElementById('f_sizes').value       = Array.isArray(p.sizes) ? p.sizes.join(', ') : '';
+    document.getElementById('f_photo_main').value  = p.photo_main || '';
+    document.getElementById('f_photos').value      = Array.isArray(p.photos) ? p.photos.join('\n') : '';
+    document.getElementById('f_description').value = p.description || '';
+    renderColors(p.colors || []);
+    renderPhotosPreview(Array.isArray(p.photos) ? p.photos : []);
+  }
+
+  function renderPhotosPreview(arr){
+    var box = document.getElementById('f_photos_preview');
+    box.innerHTML = arr.map(function(u){
+      return '<div class="ph"><img src="' + escAttr(u) + '" onerror="this.style.display=&quot;none&quot;"></div>';
+    }).join('');
+  }
+  document.getElementById('f_photos').addEventListener('input', function(e){
+    var arr = e.target.value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    renderPhotosPreview(arr);
+  });
+
+  function renderColors(arr){
+    var box = document.getElementById('f_colors_list');
+    box.innerHTML = '';
+    arr.forEach(function(c, i){ box.appendChild(makeColorRow(c, i)); });
+  }
+  function makeColorRow(c, idx){
+    c = c || {};
+    var row = document.createElement('div');
+    row.className = 'color-row';
+    row.innerHTML =
+      '<div class="swatch" style="background:' + escAttr(c.hex || '#fff') + '"></div>'
+      + '<input placeholder="code (pink/black)" value="' + escAttr(c.code || '') + '" data-k="code">'
+      + '<input placeholder="name" value="' + escAttr(c.name || '') + '" data-k="name" style="max-width:120px">'
+      + '<input placeholder="#hex" value="' + escAttr(c.hex || '') + '" data-k="hex" style="max-width:90px">'
+      + '<input placeholder="photo URL" value="' + escAttr(c.photo || '') + '" data-k="photo">'
+      + '<button class="rm" type="button">×</button>';
+    row.querySelector('[data-k="hex"]').addEventListener('input', function(e){
+      row.querySelector('.swatch').style.background = e.target.value;
+    });
+    row.querySelector('.rm').onclick = function(){ row.remove(); };
+    return row;
+  }
+  document.getElementById('addColorBtn').onclick = function(){
+    document.getElementById('f_colors_list').appendChild(makeColorRow({}));
+  };
+
+  function collectColors(){
+    var rows = document.querySelectorAll('#f_colors_list .color-row');
+    var out = [];
+    rows.forEach(function(r){
+      var c = {};
+      r.querySelectorAll('input').forEach(function(i){ c[i.dataset.k] = i.value.trim(); });
+      if (c.code || c.name) out.push(c);
+    });
+    return out;
+  }
+
+  document.getElementById('saveBtn').onclick = function(){
+    var uid    = document.getElementById('f_uid').value.trim();
+    var title  = document.getElementById('f_title').value.trim();
+    var price  = parseInt(document.getElementById('f_price').value, 10) || 0;
+    if (!uid || !title || !price){ toast('UID, назва, ціна — обовʼязкові', 'err'); return; }
+    var sizes  = document.getElementById('f_sizes').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+    var photos = document.getElementById('f_photos').value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    var p = {
+      uid: uid,
+      title: title,
+      family: document.getElementById('f_family').value,
+      price: price,
+      price_old: parseInt(document.getElementById('f_price_old').value, 10) || null,
+      sort_order: parseInt(document.getElementById('f_sort_order').value, 10) || 999,
+      ribbon: document.getElementById('f_ribbon').value.trim() || null,
+      active: document.getElementById('f_active').value === 'true',
+      in_grid: document.getElementById('f_in_grid').value === 'true',
+      featured: document.getElementById('f_featured').value === 'true',
+      sizes: sizes,
+      photo_main: document.getElementById('f_photo_main').value.trim() || null,
+      photos: photos,
+      colors: collectColors(),
+      description: document.getElementById('f_description').value.trim() || null
+    };
+    api('upsert', p).then(function(){
+      toast('✓ Збережено', 'ok');
+      document.getElementById('modal').hidden = true;
+      load();
+    }).catch(function(e){ toast(e.message, 'err'); });
+  };
+
+  function doDelete(uid){
+    if (!confirm('Видалити товар "' + uid + '"?')) return;
+    api('delete', { uid: uid }).then(function(){
+      toast('✓ Видалено', 'ok');
+      load();
+    }).catch(function(e){ toast(e.message, 'err'); });
+  }
+
+  // ===== Init =====
+  if (pwd){
+    // Try cached password
+    api('list').then(function(r){
+      if (r && r.ok){ showApp(); }
+      else { sessionStorage.removeItem('bg_admin_pwd'); showGate(); }
+    }).catch(function(){ sessionStorage.removeItem('bg_admin_pwd'); showGate(); });
+  } else {
+    showGate();
+  }
+})();
+</script>
+</body>
+</html>
