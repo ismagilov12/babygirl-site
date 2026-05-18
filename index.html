@@ -1761,7 +1761,7 @@ body.pm-open{overflow:hidden}
       var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
       var photos = p.photo_main ? [p.photo_main] : [];
       var photoSlides = photos.map(function(url){
-        return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '">';
+        return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="var c=this.closest(\'.card\');if(c)c.style.display=\'none\'">';
       }).join('');
       var dots = photos.length > 1
         ? '<div class="card-dots" data-uid="' + escapeHtml(p.uid) + '">'
@@ -2055,14 +2055,37 @@ body.pm-open{overflow:hidden}
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;
     pmCurrent = p;
-    pmPhotos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : (p.photo_main ? [p.photo_main] : []);
-    pmTrack.innerHTML = pmPhotos.map(function(url){
-      return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '">';
-    }).join('');
-    pmThumbs.innerHTML = pmPhotos.map(function(url, idx){
-      return '<button class="pm-thumb' + (idx === 0 ? ' active' : '') + '" data-idx="' + idx + '"><img src="' + escapeHtml(url) + '" alt=""></button>';
-    }).join('');
-    pmThumbs.hidden = pmPhotos.length <= 1;
+    var candidates = (Array.isArray(p.photos) && p.photos.length) ? p.photos.slice() : (p.photo_main ? [p.photo_main] : []);
+    // Pre-validate: завантажуємо кожне фото через new Image() і лишаємо тільки робочі
+    pmTrack.innerHTML = '';
+    pmThumbs.innerHTML = '';
+    pmPhotos = [];
+    pmCounter.textContent = '…';
+    function _pmCheck(url){
+      return new Promise(function(resolve){
+        var im = new Image();
+        var done = false;
+        var t = setTimeout(function(){ if(!done){done=true;resolve(false);} }, 7000);
+        im.onload  = function(){ if(!done){done=true;clearTimeout(t);resolve(true);} };
+        im.onerror = function(){ if(!done){done=true;clearTimeout(t);resolve(false);} };
+        im.src = url;
+      });
+    }
+    Promise.all(candidates.map(_pmCheck)).then(function(ok){
+      pmPhotos = candidates.filter(function(_, i){ return ok[i]; });
+      if (!pmPhotos.length && p.photo_main) pmPhotos = [p.photo_main]; // last-resort
+      pmTrack.innerHTML = pmPhotos.map(function(url){
+        return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="this.style.visibility=\'hidden\'">';
+      }).join('');
+      pmThumbs.innerHTML = pmPhotos.map(function(url, idx){
+        return '<button class="pm-thumb' + (idx === 0 ? ' active' : '') + '" data-idx="' + idx + '"><img src="' + escapeHtml(url) + '" alt=""></button>';
+      }).join('');
+      pmThumbs.hidden = pmPhotos.length <= 1;
+      pmIdx = 0; pmGo(0);
+      // Кешуємо результат на продукті, щоб не повторювати валідацію
+      p.photos = pmPhotos.slice();
+      if (!pmPhotos.length || pmPhotos.indexOf(p.photo_main) < 0) p.photo_main = pmPhotos[0] || '';
+    });
     if (p.ribbon) { pmRibbon.textContent = p.ribbon; pmRibbon.hidden = false; }
     else { pmRibbon.hidden = true; }
     pmTitle.textContent = p.title;
