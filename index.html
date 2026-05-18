@@ -951,8 +951,7 @@ body.pm-open{overflow:hidden}
   <div class="drawer-section">
     <h6>★ shop the vibe</h6>
     <a class="drawer-link pink" href="#shop">all t-shirts <span class="arrow">→</span></a>
-    <a class="drawer-link yellow" href="#shop" data-family="icons">2000s icons <span class="arrow">→</span></a>
-    <a class="drawer-link blue" href="#shop" data-family="soft-rebel">soft rebel <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="#shop" data-family="oversize">oversize t-shirts <span class="arrow">→</span></a>
     <a class="drawer-link pink" href="#shop" data-family="crop">crop tops <span class="arrow">→</span></a>
   </div>
 
@@ -1236,8 +1235,7 @@ body.pm-open{overflow:hidden}
       <div>
         <h5>Shop</h5>
         <a href="#shop">All t-shirts</a>
-        <a href="#shop" data-family="icons">2000s icons</a>
-        <a href="#shop" data-family="soft-rebel">Soft rebel</a>
+        <a href="#shop" data-family="oversize">Oversize t-shirts</a>
         <a href="#shop" data-family="crop">Crop tops</a>
       </div>
       <div>
@@ -1466,7 +1464,8 @@ body.pm-open{overflow:hidden}
     var list = (D.grid || []).map(function(uid){
       return D.all.find(function(p){ return p.uid === uid; });
     }).filter(Boolean);
-    if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
+    if (familyFilter === 'oversize') list = list.filter(function(p){ return p.family !== 'crop'; });
+    else if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
     if (!list.length) {
       $grid.innerHTML = '<div class="empty">~ нічого тут немає ~</div>';
       return;
@@ -1508,12 +1507,13 @@ body.pm-open{overflow:hidden}
         priceHtml = '<span class="card-price">' + p.price + '₴</span>';
       }
 
-      // Insert section divider when family changes
-      if (p.family !== lastFam){
-        var lbl = FAMILY_LABEL[p.family] || (p.family || '').toUpperCase();
-        var sub = FAMILY_SUB[p.family] || '';
-        parts.push('<div class="grid-section-divider" data-family="' + escapeHtml(p.family || '') + '"><h3>' + escapeHtml(lbl) + '</h3><span class="sub">' + escapeHtml(sub) + '</span></div>');
-        lastFam = p.family;
+      // Group: 'crop' is its own section, everything else = oversize
+      var grp = (p.family === 'crop') ? 'crop' : 'oversize';
+      if (grp !== lastFam){
+        var lbl = grp === 'crop' ? 'CROP TOPS' : 'OVERSIZE T-SHIRTS';
+        var sub = grp === 'crop' ? '~ short & sexy ~' : '~ y2k oversize legends ~';
+        parts.push('<div class="grid-section-divider" data-family="' + grp + '"><h3>' + escapeHtml(lbl) + '</h3><span class="sub">' + escapeHtml(sub) + '</span></div>');
+        lastFam = grp;
       }
 
       parts.push(''
