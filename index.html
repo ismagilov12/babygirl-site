@@ -632,77 +632,12 @@ input,button{font-size:16px}
   box-shadow:2px 2px 0 var(--black);text-transform:uppercase;
 }
 
-/* Sims-style mood meters */
-.sims-mood{
-  position:absolute;left:10px;right:10px;bottom:10px;z-index:4;
-  display:grid;gap:5px;
-  background:rgba(14,14,18,.62);
-  border:2px solid var(--black);border-radius:9px;
-  padding:7px 8px 8px;
-  box-shadow:2px 2px 0 var(--black);
-  backdrop-filter:blur(2px);
-}
-.sims-mood .mood-row{
-  display:flex;align-items:center;gap:7px;
-  font-family:'Press Start 2P',monospace;font-size:7px;letter-spacing:.1em;
-  color:var(--yellow);
-}
-.sims-mood .mood-lbl{ min-width:54px; text-shadow:1px 1px 0 #000 }
-.sims-mood .mood-bar{
-  flex:1;height:9px;
-  background:#000;border:1.5px solid var(--yellow);border-radius:3px;
-  overflow:hidden;position:relative;
-}
-.sims-mood .mood-bar i{
-  display:block;height:100%;
-  background:linear-gradient(90deg,#FF4FA1,#FFD93D);
-  border-right:1px solid rgba(255,255,255,.6);
-  animation:hp 3.4s ease-in-out infinite;
-}
-.sims-mood .mood-bar.vibe i{
-  background:linear-gradient(90deg,#B6F500,#6FC4E9);
-  animation-duration:4.2s;
-}
-@keyframes hp{0%,100%{width:92%}50%{width:100%}}
+50%{width:100%}}
 
-/* Floating Sims action icons orbiting Lera */
-.sims-actions{
-  position:absolute;inset:0;z-index:3;pointer-events:none;
-}
-.sims-icon{
-  position:absolute;
-  width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;color:#fff;
-  background:linear-gradient(180deg,#ff7ab8,#e63b8a);
-  border:2.5px solid var(--black);
-  box-shadow:2px 2px 0 var(--black), 0 4px 10px rgba(230,60,140,.35);
-  text-shadow:1px 1px 0 rgba(0,0,0,.4);
-  animation:sims-pulse 2.6s ease-in-out infinite;
-}
-.sims-icon[data-icon="heart"]{ top:14%; right:-14px; animation-delay:.0s; background:linear-gradient(180deg,#ff7ab8,#e63b8a)}
-.sims-icon[data-icon="star"] { top:46%; right:-18px; animation-delay:.4s; background:linear-gradient(180deg,#FFD93D,#FF9A1A); color:#0E0E12 }
-.sims-icon[data-icon="zap"]  { top:78%; right:-12px; animation-delay:.8s; background:linear-gradient(180deg,#B6F500,#7AC400); color:#0E0E12 }
-@keyframes sims-pulse{
-  0%,100%{ transform:translateY(0) scale(1) }
-  50%    { transform:translateY(-5px) scale(1.08) }
+50%    { transform:translateY(-5px) scale(1.08) }
 }
 
-/* "+1 FRIENDSHIP" floating popup */
-.sims-popup{
-  position:absolute;top:18%;left:-14px;z-index:5;
-  background:#fff;color:var(--pink-deep);
-  border:2.5px solid var(--black);border-radius:8px;
-  padding:5px 9px;
-  font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.08em;
-  box-shadow:2px 2px 0 var(--black);
-  transform:rotate(-6deg);
-  animation:popup-bob 3.2s ease-in-out infinite;
-}
-.sims-popup b{ color:#5fbf12; -webkit-text-stroke:.5px var(--black); margin-right:2px }
-@keyframes popup-bob{
-  0%,100%{ transform:rotate(-6deg) translateY(0) }
-  50%    { transform:rotate(-2deg) translateY(-4px) }
+50%    { transform:rotate(-2deg) translateY(-4px) }
 }
 
 /* Scattered sparkles */
@@ -727,6 +662,29 @@ input,button{font-size:16px}
   50%    { opacity:1;  transform:scale(1)  rotate(45deg) }
 }
 
+
+/* === Clean accent: floating pink heart sticker in photo corner === */
+.about-photo .hero-sticker{
+  position:absolute;top:-18px;right:-14px;z-index:5;
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#FFD93D,#FF9A1A);
+  color:var(--pink-deep);
+  font-family:'Bagel Fat One',sans-serif;font-size:26px;line-height:1;
+  border:3px solid var(--black);
+  box-shadow:3px 3px 0 var(--black), 0 8px 18px rgba(255,79,161,.35);
+  transform:rotate(-12deg);
+  animation:sticker-bob 3.4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sticker-bob{
+  0%,100%{transform:rotate(-12deg) translateY(0)}
+  50%{transform:rotate(-6deg) translateY(-5px)}
+}
+@media (max-width:759px){
+  .about-photo .hero-sticker{width:46px;height:46px;font-size:22px;top:-14px;right:-10px}
+}
+
 /* === Right panel: Sims action menu / dialog === */
 .gta-dialog{
   position:relative;
@@ -735,24 +693,6 @@ input,button{font-size:16px}
   box-shadow:6px 6px 0 var(--black), 0 12px 28px rgba(20,40,80,.18);
   overflow:hidden;
 }
-.sims-pie{
-  display:flex;justify-content:center;gap:8px;
-  padding:10px 10px 4px;
-  background:linear-gradient(180deg,#fff5ec,#ffeaf3);
-  border-bottom:2px dashed rgba(0,0,0,.14);
-}
-.sims-pie .pie-btn{
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;line-height:1;
-  background:#fff;border:2.5px solid var(--black);
-  box-shadow:2px 2px 0 var(--black);
-  cursor:default;color:var(--pink-deep);
-  transition:transform .15s ease;
-}
-.sims-pie .pie-btn.on{ background:#B6F500; color:var(--black) }
-.sims-pie .pie-btn:hover{ transform:translateY(-2px) }
-
 .gta-dialog .bar{
   background:linear-gradient(90deg, var(--pink), var(--pink-deep));
   border-bottom:3px solid var(--black);
@@ -829,9 +769,11 @@ input,button{font-size:16px}
   content:'';position:absolute;top:-6px;right:-6px;
   width:14px;height:14px;background:#FFD93D;border:2px solid var(--black);border-radius:50%;
   box-shadow:1px 1px 0 var(--black);
-  animation:sims-pulse 1.8s ease-in-out infinite;
+  animation:btn-dot 1.8s ease-in-out infinite;
 }
 .gta-cta button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+
+@keyframes btn-dot{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.08)}}
 
 /* Mobile tuning */
 @media (max-width:759px){
@@ -843,15 +785,6 @@ input,button{font-size:16px}
     aspect-ratio:4/5;
   }
   .about-photo .plumbob{ width:28px; height:40px; top:-24px }
-  .sims-icon{ width:30px;height:30px;font-size:14px }
-  .sims-icon[data-icon="heart"]{ right:-12px }
-  .sims-icon[data-icon="star"] { right:-14px }
-  .sims-icon[data-icon="zap"]  { right:-10px }
-  .sims-popup{ font-size:7px; padding:4px 7px; left:-10px }
-  .sims-mood{ left:8px; right:8px; bottom:8px; padding:6px 7px 7px }
-  .sims-mood .mood-row{ font-size:6px }
-  .sims-mood .mood-lbl{ min-width:46px }
-  .sims-pie .pie-btn{ width:32px;height:32px;font-size:14px }
   .gta-screen{ min-height:200px; font-size:16px }
   .gta-cta button{ font-size:10px; padding:8px 12px }
   .about .cloud-puff.c1{ display:none }
@@ -865,16 +798,8 @@ input,button{font-size:16px}
   .about-stage{grid-template-columns:0.95fr 1.05fr;gap:32px}
   .about-photo{aspect-ratio:auto;height:100%;min-height:440px;max-height:560px}
   .about-photo .plumbob{ width:42px; height:60px; top:-38px }
-  .sims-icon{ width:42px;height:42px;font-size:20px }
-  .sims-icon[data-icon="heart"]{ right:-22px }
-  .sims-icon[data-icon="star"] { right:-26px }
-  .sims-icon[data-icon="zap"]  { right:-18px }
-  .sims-popup{ font-size:9px; left:-22px }
-  .sims-mood .mood-row{ font-size:8px }
-  .sims-mood .mood-lbl{ min-width:62px }
   .gta-screen{min-height:320px;font-size:22px}
   .gta-dialog .bar .speaker{font-size:16px}
-  .sims-pie .pie-btn{ width:42px;height:42px;font-size:18px }
 }
 
 /* ===== VIBE ===== */
@@ -1367,37 +1292,20 @@ body.pm-open{overflow:hidden}
       <div class="about-photo">
         <span class="plumbob" aria-hidden="true"></span>
         <span class="name-tag">★ Lera · founder</span>
+        <span class="hero-sticker" aria-hidden="true">♥</span>
         <img data-bg-media="lera" alt="Lera">
-        <div class="sims-popup" aria-hidden="true"><b>+1</b> FRIENDSHIP ♥</div>
-        <div class="sims-actions" aria-hidden="true">
-          <span class="sims-icon" data-icon="heart">♥</span>
-          <span class="sims-icon" data-icon="star">★</span>
-          <span class="sims-icon" data-icon="zap">⚡</span>
-        </div>
         <i class="sparkle s1" aria-hidden="true"></i>
         <i class="sparkle s2" aria-hidden="true"></i>
         <i class="sparkle s3" aria-hidden="true"></i>
-        <div class="sims-mood">
-          <div class="mood-row"><span class="mood-lbl">♥ MOOD</span><span class="mood-bar"><i></i></span></div>
-          <div class="mood-row"><span class="mood-lbl">★ VIBE</span><span class="mood-bar vibe"><i></i></span></div>
-        </div>
       </div>
 
       <div class="gta-dialog">
-        <div class="sims-pie" aria-hidden="true">
-          <span class="pie-btn on" title="Talk">💬</span>
-          <span class="pie-btn" title="Heart">♥</span>
-          <span class="pie-btn" title="Star">★</span>
-          <span class="pie-btn" title="Zap">⚡</span>
-          <span class="pie-btn" title="Shop">🛍</span>
-        </div>
         <div class="bar">
           <span class="speaker">Lera ♥</span>
           <span class="pip"><i></i> live</span>
         </div>
         <div class="gta-screen" id="gtaScreen" data-played="1"><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Привіт! Я <em></em>Лера — та сама baby girl.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Обожнюю <em></em>двохтисячні, рожеве та все, що блищить.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Сама вигадую речі та <em></em>принти — для себе і таких, як я.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Впевнена, нас <em></em>багато — таких мʼяких і своїх.</span></div><div class="gta-line"><span class="who">★ Lera</span><span class="what">Якщо <em></em>вайб відгукується — вступай у клуб ♥</span></div><div class="gta-line me"><span class="who">★ You</span><span class="what"><em></em>я в клубі ✓</span></div></div>
         <div class="gta-cta">
-          <span class="keys">tap to skip · <b>SPACE</b> <b>↵</b></span>
           <button id="gtaJoinBtn" type="button">join club ♥</button>
         </div>
       </div>
