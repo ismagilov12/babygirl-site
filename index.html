@@ -1731,19 +1731,31 @@ body.pm-open{overflow:hidden}
   function bootstrapFromSupabase(){
     var SB = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY, TABLE = window.PRODUCTS_TABLE;
     if (!SB || !KEY || !TABLE) return;
-    fetch(SB + '/rest/v1/' + TABLE + '?active=eq.true&select=*&order=sort_order.asc', {
+    // Беремо ВСІ рядки (без active фільтра), щоб мати змогу видалити з фронта
+    // ті товари, які адмін позначив active=false. Інакше локальний DATA містить їх назавжди.
+    fetch(SB + '/rest/v1/' + TABLE + '?select=*&order=sort_order.asc', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
     })
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(rows){
       if (!Array.isArray(rows)) return;
+      var inactiveUids = {};
+      var activeRows = [];
+      rows.forEach(function(row){
+        if (row.active === false) inactiveUids[row.uid] = true;
+        else activeRows.push(row);
+      });
+      // 1) Видаляємо з D.all + D.grid усі inactive
+      if (Array.isArray(D.all))  D.all  = D.all.filter(function(p){ return !inactiveUids[p.uid]; });
+      if (Array.isArray(D.grid)) D.grid = D.grid.filter(function(uid){ return !inactiveUids[uid]; });
+      // 2) Апсертимо active рядки
       var byUid = {}; D.all.forEach(function(p){ byUid[p.uid] = p; });
       var featuredByFamily = {}, gridByFamily = {};
       D.all.forEach(function(p){
         if (p.featured) featuredByFamily[p.family] = p.uid;
         if (D.grid && D.grid.indexOf(p.uid) >= 0) gridByFamily[p.family] = p.uid;
       });
-      rows.forEach(function(row){
+      activeRows.forEach(function(row){
         if (!byUid[row.uid]) {
           D.all.push(row);
           var fam = row.family || '';
