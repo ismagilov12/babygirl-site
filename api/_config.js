@@ -4,13 +4,14 @@
 
 module.exports = {
   BRAND: 'bg',
-  SITE_DOMAIN: 'babygirl.example.com',
+  SITE_DOMAIN: 'babygirl.com.ua',
   PROJECT_NAME: 'BabyGirl',
 
   ALLOWED_ORIGINS_EXACT: [
-    'https://babygirl.example.com',
-    'https://www.babygirl.example.com',
-    'https://babygirl.vercel.app',
+    'https://babygirl.com.ua',
+    'https://www.babygirl.com.ua',
+    'https://babygirl-site-six.vercel.app',
+    'https://babygirl-site-ismagilov12s-projects.vercel.app',
     'http://localhost:3000',
     'http://localhost:5173',
   ],
