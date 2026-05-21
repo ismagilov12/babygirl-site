@@ -1023,9 +1023,9 @@ body.pm-open{overflow:hidden}
 .pm-close:active{transform:rotate(90deg) translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
 
 .pm-hero{position:relative;background:var(--pink-soft);border-bottom:3px solid var(--black)}
-.pm-stage{position:relative;aspect-ratio:10/11;overflow:hidden;background:var(--pink-bg);touch-action:pan-y pinch-zoom}
+.pm-stage{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--pink-bg);touch-action:pan-y pinch-zoom}
 .pm-stage-track{display:flex;width:100%;height:100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-.pm-stage-track > img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;display:block;background:var(--pink-bg)}
+.pm-stage-track > img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;background:var(--pink-bg)}
 .pm-ribbon{position:absolute;top:18px;left:-30px;z-index:3;background:var(--yellow);color:var(--black);font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.08em;padding:6px 36px;transform:rotate(-25deg);border:2px solid var(--black);text-transform:uppercase}
 .pm-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--black);border:2.5px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;cursor:pointer;box-shadow:3px 3px 0 var(--black);transition:transform .12s,box-shadow .12s,background .15s}
 .pm-arrow:hover{background:var(--yellow)}
@@ -1040,7 +1040,7 @@ body.pm-open{overflow:hidden}
 .pm-thumbs::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px}
 .pm-thumb{flex-shrink:0;width:64px;height:64px;border:2.5px solid var(--black);border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:2px 2px 0 var(--black);background:#fff;transition:transform .12s,box-shadow .12s}
 .pm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.pm-stage-track > .pm-video{flex:0 0 100%;width:100%;height:100%;object-fit:contain;display:block;background:var(--pink-bg)}
+.pm-stage-track > .pm-video{flex:0 0 100%;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;background:var(--pink-bg)}
 .pm-thumb video{width:100%;height:100%;object-fit:cover;display:block;background:#fff}
 .pm-thumb .pm-thumb-play{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -1072,7 +1072,7 @@ body.pm-open{overflow:hidden}
 .pm-cta.added{background:var(--yellow)}
 
 @media (min-width:760px){
-  .pm-stage{aspect-ratio:auto;height:min(79vh,792px)}
+  .pm-stage{aspect-ratio:auto;height:min(90vh,900px)}
   .pm-arrow{width:54px;height:54px;font-size:24px}
   .pm-info{padding:32px 24px 40px;max-width:760px;margin:0 auto}
   .pm-info h1{font-size:72px;text-shadow:6px 6px 0 var(--yellow), 6px 6px 0 var(--black)}
@@ -1279,7 +1279,6 @@ body.pm-open{overflow:hidden}
 
     <div class="about-stage">
       <div class="about-photo">
-        <span class="plumbob" aria-hidden="true"></span>
         <span class="name-tag">★ Lera · founder</span>
         <span class="hero-sticker" aria-hidden="true">♥</span>
         <img data-bg-media="lera" alt="Lera">
@@ -1290,7 +1289,7 @@ body.pm-open{overflow:hidden}
           <span class="speaker">Lera ♥</span>
           <span class="pip"><i></i> live</span>
         </div>
-        <div class="gta-screen" id="gtaScreen" data-played="1"><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Привіт! Я <em></em>Лера — та сама baby girl.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Обожнюю <em></em>двохтисячні, рожеве та все, що блищить.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Сама вигадую речі та <em></em>принти — для себе і таких, як я.</span></div><div class="gta-line dim"><span class="who">★ Lera</span><span class="what">Впевнена, нас <em></em>багато — таких мʼяких і своїх.</span></div><div class="gta-line"><span class="who">★ Lera</span><span class="what">Якщо <em></em>вайб відгукується — вступай у клуб ♥</span></div><div class="gta-line me"><span class="who">★ You</span><span class="what"><em></em>я в клубі ✓</span></div></div>
+        <div class="gta-screen" id="gtaScreen" data-played="0"></div>
         <div class="gta-cta">
           <button id="gtaJoinBtn" type="button">join club ♥</button>
         </div>
