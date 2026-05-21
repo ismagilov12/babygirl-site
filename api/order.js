@@ -1,17 +1,5 @@
 // api/order.js — frontend → Supabase (+ optional KeyCRM proxy)
 // Скелет із досвіду ULTERA · v3 hardened
-//
-// Фічі:
-//   - CORS whitelist (з api/_config.js)
-//   - Rate limit per IP per minute (Supabase RPC check_and_increment_rate_limit)
-//   - Cloudflare Turnstile — якщо TURNSTILE_SECRET в env
-//   - Server-side amount recompute (RPC compute_order_total) — фронт не довіряємо
-//   - stage-aware: 'lead' (брошена корзина) → тільки Supabase; 'final' → +CRM
-//   - Attribution: session_id / referrer / landing_url пишемо у orders
-//
-// Required env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
-// Optional env: TURNSTILE_SECRET, KEYCRM_TOKEN, KEYCRM_SOURCE_ID,
-//               KEYCRM_PM_CARD, KEYCRM_PM_NP, KEYCRM_DS_NP
 
 const cfg = require('./_config');
 const T = cfg.T;
@@ -139,7 +127,6 @@ module.exports = async function handler(req, res) {
   const stage = String(body.stage || 'final').toLowerCase();
   const isLead = stage === 'lead';
 
-  // captcha — лише для final-stage
   if (!isLead) {
     const captcha = await verifyTurnstile(body.captchaToken, ip);
     if (!captcha.ok) {
@@ -147,8 +134,6 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // Server amount recompute. Якщо RPC недоступний — fallback на фронтові ціни
-  // тільки для lead/COD; для card обов'язково RPC.
   const priced = await recomputePrices(body.items);
   let total = null;
   if (priced && priced.ok) {
@@ -162,7 +147,12 @@ module.exports = async function handler(req, res) {
     );
   }
 
+  // BG-<base36-ts> — общий префикс для роутинга в shared Supabase Edge Function
+  // wayforpay-webhook. Лавюхер шлёт numeric id, BG отличается префиксом BG-.
+  const orderNum = (typeof body.num === 'string' && body.num) || ('BG-' + Date.now().toString(36).toUpperCase());
+
   const orderRow = await saveOrder({
+    number: orderNum,
     customer_name: body.fio,
     customer_phone: body.phone,
     customer_email: body.email || null,
@@ -175,7 +165,6 @@ module.exports = async function handler(req, res) {
     total: total,
     status: isLead ? 'lead' : 'new',
     notes: body.comment || (isLead ? 'abandoned-cart lead' : ''),
-    // Attribution
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
@@ -184,17 +173,16 @@ module.exports = async function handler(req, res) {
   if (isLead) {
     return res.status(200).json({
       ok: true, stage: 'lead',
-      order_num: body.num || (orderRow && orderRow.number),
+      order_num: orderNum,
       authoritative_total: total,
       message: 'Lead saved; CRM deferred until final stage.'
     });
   }
 
-  // KeyCRM proxy (optional)
   if (!cfg.KEYCRM.enabled || !process.env.KEYCRM_TOKEN) {
     return res.status(200).json({
       ok: true, stage: 'final', mock: !process.env.KEYCRM_TOKEN,
-      order_num: body.num || (orderRow && orderRow.number),
+      order_num: orderNum,
       authoritative_total: total
     });
   }
@@ -205,7 +193,7 @@ module.exports = async function handler(req, res) {
 
   const crmPayload = {
     source_id: parseInt(process.env.KEYCRM_SOURCE_ID || '1', 10),
-    manager_comment: cfg.PROJECT_NAME + ' · ' + (body.num || (orderRow && orderRow.number) || '') +
+    manager_comment: cfg.PROJECT_NAME + ' · ' + orderNum +
       (body.payment === 'np' ? ' · наложка' : ' · картка'),
     buyer: { full_name: body.fio, phone: body.phone },
     shipping: {
@@ -252,7 +240,7 @@ module.exports = async function handler(req, res) {
     }
     return res.status(200).json({
       ok: true, stage: 'final',
-      order_num: body.num || (orderRow && orderRow.number),
+      order_num: orderNum,
       keycrm_id: data.id || null,
       authoritative_total: total
     });
