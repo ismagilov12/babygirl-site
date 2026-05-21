@@ -659,11 +659,19 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       <div class="fld"><label>Featured</label><select id="f_featured"><option value="false">ні</option><option value="true">так</option></select></div>
       <div class="fld"></div>
     </div>
-    <div class="fld"><label>Photo main (URL)</label><input id="f_photo_main"></div>
     <div class="fld">
-      <label>Photos (масив URL — по одному на рядок)</label>
-      <div class="fld-photos" id="f_photos_preview"></div>
-      <textarea id="f_photos" placeholder="https://…&#10;https://…"></textarea>
+      <label>Фото товару <span style="font-weight:400;color:var(--ink-mute,#888);font-size:11px">(перетягуй для зміни порядку · ★ = головне · × = видалити)</span></label>
+      <div class="photo-grid" id="f_photo_grid"></div>
+      <div class="photo-actions">
+        <label class="btn uploader">
+          <input type="file" id="f_photo_upload" accept="image/*,video/mp4,video/webm,video/quicktime" multiple>
+          ⬆ Завантажити з компʼютера
+        </label>
+        <button class="btn ghost" id="f_photo_addurl" type="button">+ Додати за URL</button>
+        <span id="f_photo_status" style="font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute,#888);align-self:center"></span>
+      </div>
+      <input type="hidden" id="f_photo_main">
+      <textarea id="f_photos" style="display:none"></textarea>
     </div>
     <div class="fld">
       <label>Кольори (для crop / belt)</label>
@@ -873,10 +881,8 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     document.getElementById('f_in_grid').value     = String(data.in_grid !== false);
     document.getElementById('f_featured').value    = String(!!data.featured);
     document.getElementById('f_sizes').value       = Array.isArray(data.sizes) ? data.sizes.join(', ') : '';
-    document.getElementById('f_photo_main').value  = data.photo_main || '';
-    document.getElementById('f_photos').value      = Array.isArray(data.photos) ? data.photos.join('\n') : '';
     document.getElementById('f_description').value = data.description || '';
-    renderPhotosPreview(Array.isArray(data.photos) ? data.photos : []);
+    setPhotosState(Array.isArray(data.photos) ? data.photos : [], data.photo_main || '');
     renderColors(data.colors || []);
     document.getElementById('deleteBtn').style.display = p ? '' : 'none';
     document.getElementById('editorModal').style.display = '';
@@ -884,15 +890,174 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   document.getElementById('prod-add').onclick = function(){ openEditor(null); };
   document.getElementById('cancelBtn').onclick = function(){ document.getElementById('editorModal').style.display = 'none'; };
 
-  function renderPhotosPreview(arr){
-    var box = document.getElementById('f_photos_preview');
-    box.innerHTML = arr.map(function(u){
-      return '<div class="ph"><img src="' + esc(u) + '" onerror="this.style.display=&quot;none&quot;"></div>';
-    }).join('');
+  // ====== PHOTOS: state + visual grid with DnD / × / ★ / upload ======
+  var _photosState = [];     // array of URLs (порядок = порядок у photos[])
+  var _photoMainUrl = '';    // активний photo_main
+  var _dragIdx = null;
+
+  function isVideoUrl(u){ return /\.(mp4|webm|mov)(\?|$)/i.test(u || ''); }
+
+  function setPhotosState(photos, mainUrl){
+    _photosState = Array.isArray(photos) ? photos.slice() : [];
+    _photoMainUrl = mainUrl || (_photosState[0] || '');
+    // Якщо main не в photos — додамо першим
+    if (_photoMainUrl && _photosState.indexOf(_photoMainUrl) < 0) {
+      _photosState.unshift(_photoMainUrl);
+    }
+    syncHiddenInputs();
+    renderPhotoGrid();
   }
-  document.getElementById('f_photos').addEventListener('input', function(e){
-    var arr = e.target.value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
-    renderPhotosPreview(arr);
+
+  function syncHiddenInputs(){
+    document.getElementById('f_photos').value     = _photosState.join('\n');
+    document.getElementById('f_photo_main').value = _photoMainUrl || '';
+  }
+
+  function renderPhotoGrid(){
+    var box = document.getElementById('f_photo_grid');
+    if (!_photosState.length){
+      box.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--ink-mute,#888);font-family:var(--font-mono,monospace);font-size:12px">~ немає фото · завантаж або додай за URL ~</div>';
+      return;
+    }
+    box.innerHTML = _photosState.map(function(u, i){
+      var isMain = (u === _photoMainUrl);
+      var isVid  = isVideoUrl(u);
+      var media  = isVid
+        ? '<video src="' + esc(u) + '#t=0.1" muted playsinline preload="metadata"></video>'
+        : '<img src="' + esc(u) + '" loading="lazy" onerror="this.parentNode.style.background=&quot;#fdd&quot;;this.style.display=&quot;none&quot;">';
+      return '<div class="photo-card' + (isMain ? ' is-main' : '') + '" draggable="true" data-idx="' + i + '">'
+           + media
+           + '<span class="tag' + (isVid ? ' video' : '') + '">' + (isMain ? '★ main' : (isVid ? 'video' : (i+1))) + '</span>'
+           + '<button class="del" type="button" data-act="del" data-idx="' + i + '" title="Видалити">×</button>'
+           + (isMain ? '' : '<button class="del" type="button" data-act="main" data-idx="' + i + '" title="Зробити головним" style="opacity:1;right:auto;left:6px;background:rgba(255,200,50,.95);font-size:13px;color:#000">★</button>')
+           + '<span class="drag-handle" title="Перетягни">≡</span>'
+           + '</div>';
+    }).join('');
+    bindPhotoCardEvents();
+  }
+
+  function bindPhotoCardEvents(){
+    var cards = document.querySelectorAll('#f_photo_grid .photo-card');
+    cards.forEach(function(card){
+      // Drag-and-drop reorder
+      card.addEventListener('dragstart', function(e){
+        _dragIdx = +card.dataset.idx;
+        card.classList.add('dragging');
+        try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(_dragIdx)); } catch(_e){}
+      });
+      card.addEventListener('dragend', function(){ card.classList.remove('dragging'); _dragIdx = null;
+        document.querySelectorAll('#f_photo_grid .drag-over').forEach(function(n){ n.classList.remove('drag-over'); });
+      });
+      card.addEventListener('dragover', function(e){ e.preventDefault(); card.classList.add('drag-over'); });
+      card.addEventListener('dragleave', function(){ card.classList.remove('drag-over'); });
+      card.addEventListener('drop', function(e){
+        e.preventDefault();
+        var to = +card.dataset.idx;
+        if (_dragIdx == null || _dragIdx === to) return;
+        var moved = _photosState.splice(_dragIdx, 1)[0];
+        _photosState.splice(to, 0, moved);
+        syncHiddenInputs(); renderPhotoGrid();
+      });
+      // Click × delete / ★ make main
+      card.querySelectorAll('button[data-act]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          var i = +btn.dataset.idx;
+          if (btn.dataset.act === 'del'){
+            var url = _photosState[i];
+            _photosState.splice(i, 1);
+            if (url === _photoMainUrl) _photoMainUrl = _photosState[0] || '';
+            syncHiddenInputs(); renderPhotoGrid();
+          } else if (btn.dataset.act === 'main'){
+            _photoMainUrl = _photosState[i];
+            syncHiddenInputs(); renderPhotoGrid();
+          }
+        });
+      });
+    });
+  }
+
+  // ====== UPLOAD: client-side resize → upload to Supabase Storage ======
+  var BUCKET = 'product-photos';
+  function setPhotoStatus(msg){ document.getElementById('f_photo_status').textContent = msg || ''; }
+
+  function fileToWebp(file, maxSize, quality){
+    return new Promise(function(resolve, reject){
+      if (!file.type.startsWith('image/')) return resolve(file); // video as-is
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function(){
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var scale = Math.min(1, maxSize / Math.max(w, h));
+        var nw = Math.round(w*scale), nh = Math.round(h*scale);
+        var c = document.createElement('canvas'); c.width = nw; c.height = nh;
+        c.getContext('2d').drawImage(img, 0, 0, nw, nh);
+        c.toBlob(function(blob){
+          URL.revokeObjectURL(url);
+          if (!blob) return reject(new Error('canvas.toBlob failed'));
+          resolve(blob);
+        }, 'image/webp', quality);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('image load fail')); };
+      img.src = url;
+    });
+  }
+
+  function uploadToStorage(blob, ext){
+    // unique name: <uid>-<timestamp>-<rand>.<ext>
+    var uid = (document.getElementById('f_uid').value || 'item').trim().replace(/[^a-z0-9-]/gi,'').toLowerCase() || 'item';
+    var name = uid + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,7) + '.' + ext;
+    var url  = SB_URL + '/storage/v1/object/' + BUCKET + '/' + name;
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + SB_KEY,
+        'apikey': SB_KEY,
+        'Content-Type': blob.type || 'application/octet-stream',
+        'x-upsert': 'true'
+      },
+      body: blob
+    }).then(function(r){
+      if (!r.ok) return r.text().then(function(t){ throw new Error('upload ' + r.status + ': ' + t.slice(0,200)); });
+      return SB_URL + '/storage/v1/object/public/' + BUCKET + '/' + name;
+    });
+  }
+
+  document.getElementById('f_photo_upload').addEventListener('change', function(e){
+    var files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setPhotoStatus('завантаження ' + files.length + ' фото…');
+    var done = 0, fail = 0;
+    files.reduce(function(prev, file){
+      return prev.then(function(){
+        var isImg = file.type.startsWith('image/');
+        var ext = isImg ? 'webp' : (file.name.split('.').pop() || 'mp4').toLowerCase();
+        return (isImg ? fileToWebp(file, 1600, 0.86) : Promise.resolve(file))
+          .then(function(blob){ return uploadToStorage(blob, ext); })
+          .then(function(publicUrl){
+            _photosState.push(publicUrl);
+            if (!_photoMainUrl) _photoMainUrl = publicUrl;
+            done++;
+            setPhotoStatus('ok ' + done + '/' + files.length + (fail ? ' (err: ' + fail + ')' : ''));
+            syncHiddenInputs(); renderPhotoGrid();
+          })
+          .catch(function(err){ fail++; console.error(err); toast('upload fail: ' + err.message, 'err'); });
+      });
+    }, Promise.resolve()).then(function(){
+      setPhotoStatus(done ? ('завантажено ' + done + '/' + files.length) : 'не вдалось');
+      e.target.value = ''; // reset input
+      setTimeout(function(){ setPhotoStatus(''); }, 4000);
+    });
+  });
+
+  document.getElementById('f_photo_addurl').addEventListener('click', function(){
+    var u = prompt('URL фото або відео (https://…):');
+    if (!u) return;
+    u = u.trim();
+    if (!/^https?:\/\//.test(u) && !u.startsWith('assets/')) { toast('URL має починатись з http:// або assets/', 'err'); return; }
+    _photosState.push(u);
+    if (!_photoMainUrl) _photoMainUrl = u;
+    syncHiddenInputs(); renderPhotoGrid();
   });
 
   function renderColors(arr){
@@ -1148,162 +1313,4 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
         if (hay.indexOf(q) < 0) return false;
       }
       return true;
-    });
-
-    // KPI
-    document.getElementById('ord-kpi-total').textContent     = rows.length;
-    document.getElementById('ord-kpi-new').textContent       = rows.filter(function(o){return o.status==='new';}).length;
-    document.getElementById('ord-kpi-shipped').textContent   = rows.filter(function(o){return o.status==='shipped';}).length;
-    document.getElementById('ord-kpi-delivered').textContent = rows.filter(function(o){return o.status==='delivered';}).length;
-    var rev = rows.filter(function(o){return o.status==='delivered'||o.status==='shipped'||o.payment_status==='paid';})
-                  .reduce(function(s,o){ return s + (Number(o.total)||0); }, 0);
-    document.getElementById('ord-kpi-revenue').textContent = Math.round(rev) + ' ₴';
-
-    document.getElementById('ord-meta').textContent = rows.length + ' замовлень';
-
-    // Badge in sidebar
-    var newCnt = ORD.all.filter(function(o){return o.status==='new';}).length;
-    var badge = document.getElementById('orders-nav-badge');
-    if (badge){
-      if (newCnt > 0){ badge.textContent = newCnt; badge.style.display = ''; }
-      else badge.style.display = 'none';
     }
-
-    var table = document.getElementById('ord-table');
-    var head = table.querySelector('.head');
-    table.innerHTML = '';
-    table.appendChild(head);
-    if (!rows.length){
-      var div = document.createElement('div'); div.className='empty';
-      div.style.padding = '40px 20px'; div.style.textAlign = 'center'; div.style.color = 'var(--ink-60)';
-      div.textContent = 'Замовлень не знайдено';
-      table.appendChild(div);
-      return;
-    }
-
-    var statusColors = {
-      new:        '#FF4FA1',
-      confirmed:  '#3B82F6',
-      shipped:    '#F59E0B',
-      delivered:  '#10B981',
-      cancelled:  '#9CA3AF',
-      lead:       '#9CA3AF'
-    };
-
-    rows.forEach(function(o){
-      var color = statusColors[o.status] || '#9CA3AF';
-      var dateShort = (o.created_at || '').slice(5, 16).replace('T', ' ');
-      var row = document.createElement('div');
-      row.className = 'prod-row';
-      row.style.gridTemplateColumns = '120px 2fr 130px 90px 110px 90px';
-      row.innerHTML =
-        '<div><code style="font-size:11px">' + esc(o.number || ('#' + o.id)) + '</code><div class="sub" style="margin-top:2px">' + esc(dateShort) + '</div></div>' +
-        '<div><div class="title">' + esc(o.customer_name || '—') + '</div>' +
-          '<div class="sub">' + esc(o.customer_phone || '') +
-            (o.items && o.items.length ? ' · ' + o.items.length + ' позицій' : '') +
-          '</div></div>' +
-        '<div style="font-size:12px">' + esc(o.delivery_city || '—') + (o.delivery_branch ? ' · ' + esc(o.delivery_branch) : '') + '</div>' +
-        '<div class="price">' + (o.total || 0) + '₴</div>' +
-        '<div><span class="status" style="background:' + color + '14;color:' + color + ';padding:2px 8px;border-radius:6px;font-size:11px"><span class="dot" style="background:' + color + '"></span>' + esc(o.status || 'new') + '</span></div>' +
-        '<div class="acts"><button class="ord-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></div>';
-      row.querySelector('.ord-edit-btn').onclick = function(e){ e.stopPropagation(); openOrder(o); };
-      row.addEventListener('click', function(e){ if (!e.target.closest('button')) openOrder(o); });
-      table.appendChild(row);
-    });
-  }
-
-  function openOrder(o){
-    ORD.editing = o.id;
-    document.getElementById('ordTitle').textContent = o.number || ('#' + o.id);
-    document.getElementById('ordSubtitle').textContent = 'Створено: ' + (o.created_at || '').slice(0,16).replace('T',' ');
-    document.getElementById('ord-f-name').value    = o.customer_name || '';
-    document.getElementById('ord-f-phone').value   = o.customer_phone || '';
-    document.getElementById('ord-f-city').value    = o.delivery_city || '';
-    document.getElementById('ord-f-branch').value  = o.delivery_branch || '';
-    document.getElementById('ord-f-status').value  = o.status || 'new';
-    document.getElementById('ord-f-payment').value = o.payment_method || 'cod';
-    document.getElementById('ord-f-ttn').value     = '';
-    document.getElementById('ord-f-notes').value   = o.notes || '';
-
-    var items = Array.isArray(o.items) ? o.items : [];
-    document.getElementById('ord-items-list').innerHTML = items.length
-      ? items.map(function(it){
-          return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)">' +
-            '<span>' + esc(it.title || it.name || it.uid || '?') + (it.size ? ' · ' + esc(it.size) : '') + ' × ' + (it.qty || 1) + '</span>' +
-            '<span style="font-weight:600">' + (it.price || 0) + '₴</span>' +
-          '</div>';
-        }).join('') + '<div style="display:flex;justify-content:space-between;padding:8px 0 0;font-weight:700;font-size:15px"><span>Всього</span><span>' + (o.total || 0) + '₴</span></div>'
-      : '<div class="ana-empty" style="padding:10px">Без товарів</div>';
-
-    document.getElementById('ord-attribution').textContent =
-      'session: ' + (o.session_id || '—') +
-      ' · ref: ' + (o.referrer || 'direct') +
-      ' · landing: ' + (o.landing_url || '—');
-
-    document.getElementById('orderModal').style.display = '';
-  }
-
-  document.getElementById('ord-cancel-btn').onclick = function(){
-    document.getElementById('orderModal').style.display = 'none';
-  };
-
-  document.getElementById('ord-save-btn').onclick = function(){
-    if (!ORD.editing) return;
-    var update = {
-      customer_name:    document.getElementById('ord-f-name').value.trim(),
-      customer_phone:   document.getElementById('ord-f-phone').value.trim(),
-      delivery_city:    document.getElementById('ord-f-city').value.trim() || null,
-      delivery_branch:  document.getElementById('ord-f-branch').value.trim() || null,
-      status:           document.getElementById('ord-f-status').value,
-      payment_method:   document.getElementById('ord-f-payment').value,
-      notes:            document.getElementById('ord-f-notes').value.trim() || null,
-      updated_at:       new Date().toISOString()
-    };
-    sb('bg_orders?id=eq.' + ORD.editing, {
-      method: 'PATCH',
-      headers: { 'Prefer': 'return=minimal' },
-      body: JSON.stringify(update)
-    }).then(function(){
-      toast('✓ Збережено', 'ok');
-      document.getElementById('orderModal').style.display = 'none';
-      loadOrders();
-    }).catch(function(e){ toast(e.message, 'err'); });
-  };
-
-  document.getElementById('ord-del-btn').onclick = function(){
-    if (!ORD.editing) return;
-    if (!confirm('Видалити замовлення? Воно зникне і з LYH CRM.')) return;
-    sb('bg_orders?id=eq.' + ORD.editing, { method: 'DELETE' })
-      .then(function(){
-        toast('✓ Видалено', 'ok');
-        document.getElementById('orderModal').style.display = 'none';
-        loadOrders();
-      }).catch(function(e){ toast(e.message, 'err'); });
-  };
-
-  document.querySelectorAll('#ord-tabs button').forEach(function(b){
-    b.onclick = function(){
-      document.querySelectorAll('#ord-tabs button').forEach(function(x){ x.classList.remove('active'); });
-      b.classList.add('active');
-      ORD.period = parseInt(b.dataset.days, 10);
-      if (isNaN(ORD.period)) ORD.period = 7;
-      loadOrders();
-    };
-  });
-  document.getElementById('ord-search').addEventListener('input', renderOrders);
-  document.getElementById('ord-status').addEventListener('change', renderOrders);
-  document.getElementById('ord-reload').onclick = loadOrders;
-
-  var navOrdersBtn = document.querySelector('#nav a[data-page="orders"]');
-  if (navOrdersBtn){
-    navOrdersBtn.addEventListener('click', function(){ setTimeout(loadOrders, 50); });
-  }
-
-  // Initial badge load (so user sees new-orders count even before opening tab)
-  setTimeout(function(){ try { loadOrders(); } catch(e){} }, 1000);
-
-})();
-</script>
-
-</body>
-</html>
