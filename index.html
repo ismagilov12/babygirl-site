@@ -68,12 +68,46 @@ window.BG_MEDIA_DEFAULTS = {
     if (s && typeof s.media === "object" && s.media) override = s.media;
   } catch(e){}
   var M = Object.assign({}, defaults, override);
-  // Mobile: тонке відео для швидкого autoplay на cellular
+  // Mobile detection: вузький viewport АБО coarse pointer (тач без миші) АБО mobile UA.
+  // matchMedia(max-width:768px) сам по собі ловить не всі девайси (старі Android, landscape).
+  var isMobile = false;
   try {
-    var isMobile = window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
-    if (isMobile && M.heroVideoMobile) M.heroVideo = M.heroVideoMobile;
+    var mqNarrow = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+    var mqCoarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    var uaMobile = /Mobi|Android|iPhone|iPad|iPod|Mobile Safari/i.test(navigator.userAgent || "");
+    isMobile = mqNarrow || mqCoarse || uaMobile;
   } catch(e){}
+  if (isMobile && M.heroVideoMobile) M.heroVideo = M.heroVideoMobile;
   window.BG_MEDIA = M;
+
+  function bindAutoplayFallback(el){
+    // Якщо autoplay заблокований (low-power mode, data-saver), запускаємо на першому тапі.
+    var resume = function(){
+      try { el.play(); } catch(e){}
+      document.removeEventListener("touchstart", resume, true);
+      document.removeEventListener("click", resume, true);
+      document.removeEventListener("scroll", resume, true);
+    };
+    document.addEventListener("touchstart", resume, { capture:true, once:true, passive:true });
+    document.addEventListener("click",      resume, { capture:true, once:true });
+    document.addEventListener("scroll",     resume, { capture:true, once:true, passive:true });
+  }
+
+  function playVideo(el){
+    try {
+      // На iOS Safari autoplay-атрибут спрацьовує лише при першому призначенні джерела
+      // ще до того, як елемент потрапив у DOM. Коли ми ставимо src динамічно — потрібен явний play().
+      el.muted = true;          // iOS вимагає muted для autoplay
+      el.defaultMuted = true;
+      el.setAttribute("muted", "");
+      el.setAttribute("playsinline", "");
+      var p = el.play && el.play();
+      if (p && typeof p.then === "function") {
+        p.catch(function(){ bindAutoplayFallback(el); });
+      }
+    } catch(e){ bindAutoplayFallback(el); }
+  }
+
   function apply(){
     document.querySelectorAll("[data-bg-media]").forEach(function(el){
       var key = el.getAttribute("data-bg-media");
@@ -81,10 +115,18 @@ window.BG_MEDIA_DEFAULTS = {
       if (!url) return;
       if (el.tagName === "IMG") el.src = url;
       else if (el.tagName === "VIDEO"){
+        // Більш агресивний preload для мобільних, щоб не застрягати на HAVE_METADATA
+        try { el.setAttribute("preload", isMobile ? "auto" : "metadata"); } catch(e){}
         el.src = url;
         var pkey = el.getAttribute("data-bg-poster");
         if (pkey && M[pkey]) el.poster = M[pkey];
         try { el.load && el.load(); } catch(e){}
+        // Дочекаємось першого кадру і пробуємо play() — це найнадійніше для iOS
+        var tryPlay = function(){ playVideo(el); };
+        el.addEventListener("loadeddata", tryPlay, { once:true });
+        // На випадок якщо loadeddata вже минув або застряг — паралельно пробуємо одразу і з затримкою
+        playVideo(el);
+        setTimeout(function(){ if (el.paused) playVideo(el); }, 600);
       } else if (el.tagName === "A") el.href = url;
       else el.setAttribute("src", url);
     });
