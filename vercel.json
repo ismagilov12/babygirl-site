@@ -2,6 +2,5 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/thanks", "destination": "/api/thanks" }
-  ]
-}
+    { "source": "/thanks", "destination": "/api/thanks" },
+    {

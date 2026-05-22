@@ -2095,6 +2095,14 @@ body.pm-open{overflow:hidden}
         } else { Object.assign(byUid[row.uid], row); }
       });
       renderGrid();
+      // Deep link: ?p=<uid>&c=<color> → авто-открытие карточки
+      try {
+        var qp = new URLSearchParams(location.search);
+        var deepUid = qp.get('p'), deepColor = qp.get('c');
+        if (deepUid && (typeof openProduct === 'function')) {
+          setTimeout(function(){ openProduct(deepUid, deepColor || null); }, 150);
+        }
+      } catch(e){}
     })
     .catch(function(e){ console.warn('[SB inject]', e.message); });
   }
@@ -2250,9 +2258,16 @@ body.pm-open{overflow:hidden}
     pmPrev.hidden = pmIdx === 0;
     pmNext.hidden = pmIdx >= pmPhotos.length - 1;
   }
-  function openProduct(uid){
+  function openProduct(uid, colorCode){
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;
+    // Update URL → ?p=<uid>(&c=<color>) for FB catalog deep-links
+    try {
+      var u = new URL(location.href);
+      u.searchParams.set('p', uid);
+      if (colorCode) u.searchParams.set('c', colorCode); else u.searchParams.delete('c');
+      history.replaceState(null, '', u.toString());
+    } catch(e){}
     pmCurrent = p;
     var candidates = (Array.isArray(p.photos) && p.photos.length) ? p.photos.slice() : (p.photo_main ? [p.photo_main] : []);
     // Pre-validate: завантажуємо кожне фото через new Image() і лишаємо тільки робочі
@@ -2313,12 +2328,23 @@ body.pm-open{overflow:hidden}
         var thumbsEl = document.getElementById("pmThumbs");
         // Поставити color picker одразу після стрічки мініатюр
         thumbsEl.parentNode.insertBefore(cBox, thumbsEl.nextSibling);
-        pmSelectedColor = p.colors[0].code;
+        // Если URL имеет ?c=<colorCode> — открываем сразу нужный цвет
+        var _initColor = colorCode || (p.colors[0] && p.colors[0].code);
+        var _initIdx = -1;
+        for (var _ci=0; _ci<p.colors.length; _ci++){ if (p.colors[_ci].code === _initColor) { _initIdx = _ci; break; } }
+        if (_initIdx < 0) _initIdx = 0;
+        pmSelectedColor = p.colors[_initIdx].code;
+        // Активировать правильный pill
+        cBox.querySelectorAll(".pm-color").forEach(function(b, idx){ b.classList.toggle("active", idx === _initIdx); });
+        // Поставить фото этого цвета первым
+        try { var _ph = p.colors[_initIdx].photo; var _i = pmPhotos.indexOf(_ph); if (_i > 0) pmGo(_i); } catch(e){}
         cBox.addEventListener("click", function(e){
           var btn = e.target.closest(".pm-color"); if (!btn) return;
           cBox.querySelectorAll(".pm-color").forEach(function(b){b.classList.remove("active");});
           btn.classList.add("active");
           pmSelectedColor = btn.dataset.color;
+          try { var uu = new URL(location.href); uu.searchParams.set('c', pmSelectedColor); history.replaceState(null, '', uu.toString()); } catch(e){}
+          try { window.bgTrack && window.bgTrack('color_switch', { product_uid: pmCurrent && pmCurrent.uid, meta: { color_name: (btn.querySelector('.pm-color-name') && btn.querySelector('.pm-color-name').textContent) || pmSelectedColor }}); } catch(e){}
           // переставити перше фото в pmPhotos на вибраний колір
           var ph = btn.dataset.photo;
           var i = pmPhotos.indexOf(ph);
@@ -2354,6 +2380,7 @@ body.pm-open{overflow:hidden}
     if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
   }
   function closeProduct(){
+    try { var u = new URL(location.href); u.searchParams.delete('p'); u.searchParams.delete('c'); history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash); } catch(e){}
     pmOverlay.classList.remove('open');
     pmEl.classList.remove('open');
     pmEl.setAttribute('aria-hidden', 'true');
@@ -2512,6 +2539,16 @@ body.pm-open{overflow:hidden}
 
   renderGrid();
   bootstrapFromSupabase();
+  // Fallback deep-link если SB inject не отработал за 1.5с
+  setTimeout(function(){
+    try {
+      var qp = new URLSearchParams(location.search);
+      var deepUid = qp.get('p'); var deepColor = qp.get('c');
+      if (deepUid && typeof openProduct === 'function' && !document.body.classList.contains('pm-open')) {
+        openProduct(deepUid, deepColor || null);
+      }
+    } catch(e){}
+  }, 1500);
 })();
 </script>
 <!-- v118: info section + telegram bot + non-filtering menu nav -->
