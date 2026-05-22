@@ -4,12 +4,6 @@
 // Контракт від фронта (НОВИЙ — без amount):
 //   { orderReference, items: [{uid, qty, size?}], clientFirstName, clientLastName,
 //     clientEmail, clientPhone, payment_method? }
-//
-// Якщо payment_method === 'cod' і cfg.COD_PREPAYMENT_AMOUNT_UAH > 0 — сервер
-// замінює items на одну позицію "Передплата ..." з фіксованою сумою з env/config
-// (cf. ULTERA: для наложки беремо тільки 500₴ передоплати).
-//
-// Інакше — server amount recompute з RPC compute_order_total. Фронт ціни ігноруємо.
 
 const crypto = require('crypto');
 const cfg = require('./_config');
@@ -122,7 +116,6 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'items must be a non-empty array of {uid, qty}' });
   }
 
-  // === Branch: COD prepayment ===
   let productName, productCount, productPrice, authoritativeAmount;
   if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
     authoritativeAmount = Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
@@ -130,7 +123,6 @@ module.exports = async function handler(req, res) {
     productCount = ['1'];
     productPrice = [authoritativeAmount.toFixed(2)];
   } else {
-    // === Branch: full prepay — server amount recompute ===
     const priceResult = await computeTotal(items);
     if (!priceResult || !priceResult.ok) {
       return res.status(400).json({
@@ -167,8 +159,11 @@ module.exports = async function handler(req, res) {
     .digest('hex');
 
   const base = 'https://' + merchantDomainName;
-  const returnUrl  = base + '/?paid=1&order=' + encodeURIComponent(orderReference);
-  const serviceUrl = base + '/api/wayforpay-callback';
+  // Передаём approvedUrl + declinedUrl ОТДЕЛЬНЫМИ полями формы — это переопределяет
+  // approvedUrl/declinedUrl из ЛК WFP (там прибиты на чужой проект-лавюхер).
+  const approvedUrl = base + '/?paid=1&order=' + encodeURIComponent(orderReference);
+  const declinedUrl = base + '/?paid=0&order=' + encodeURIComponent(orderReference);
+  const serviceUrl  = base + '/api/wayforpay-callback';
 
   return res.status(200).json({
     ok: true,
@@ -187,7 +182,10 @@ module.exports = async function handler(req, res) {
       clientLastName: clientLastName || '',
       clientEmail: clientEmail || '',
       clientPhone: clientPhone || '',
-      returnUrl, serviceUrl,
+      returnUrl: approvedUrl,
+      serviceUrl,
+      approvedUrl,
+      declinedUrl,
       language: 'UA'
     },
     authoritativeAmount
