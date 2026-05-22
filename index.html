@@ -1115,8 +1115,10 @@ body.pm-open{overflow:hidden}
 .pm-info h1{font-family:'Bagel Fat One',sans-serif;font-weight:400;font-size:42px;line-height:.9;letter-spacing:-.02em;color:var(--pink);-webkit-text-stroke:2px var(--black);text-shadow:4px 4px 0 var(--yellow), 4px 4px 0 var(--black);text-transform:uppercase;margin-bottom:6px}
 .pm-info .crumbs{font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);margin-bottom:14px}
 .pm-info .crumbs b{color:var(--pink-deep)}
-.pm-price{font-family:'Bagel Fat One',sans-serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black);margin-bottom:14px;line-height:1}
+.pm-price{font-family:'Bagel Fat One',sans-serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black);margin-bottom:14px;line-height:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .pm-price .currency{font-size:24px;margin-left:4px}
+.pm-price .pm-price-old{font-size:22px;color:var(--black);opacity:.5;text-decoration:line-through;text-decoration-color:var(--pink-deep);text-decoration-thickness:3px;-webkit-text-stroke:0}
+.pm-price .pm-price-old .currency{font-size:16px;margin-left:2px}
 .pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
 .pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
 .pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
@@ -1694,11 +1696,11 @@ body.pm-open{overflow:hidden}
   overlay.addEventListener('click', shut);
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') shut(); });
   // Smooth scroll + auto-close on drawer hash-link click
-  // (для не data-family - data-family обробляє свій хендлер нижче)
+  // (для не data-family — data-family обробляє свій хендлер нижче)
   drawer.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click', function(e){
       shut();
-      if (a.hasAttribute('data-family')) return;
+      if (a.hasAttribute('data-family')) return; // family обробляє інший хендлер
       var href = a.getAttribute('href') || '';
       if (href.length < 2) return;
       var el = document.querySelector(href);
@@ -1984,14 +1986,17 @@ body.pm-open{overflow:hidden}
     if (!$grid) return;
     var target = null;
     if (fam === 'oversize' || !fam){
+      // oversize = всі що не crop/long/belt → перша картка взагалі
       target = $grid.querySelector('.card');
     } else {
+      // спершу шукаємо marquee-роздільник з цією групою
       target = $grid.querySelector('.grid-section-marquee[data-to="' + fam + '"]');
+      // інакше — першу картку з цим data-grp / data-family
       if (!target) target = $grid.querySelector('.card[data-grp="' + fam + '"]');
       if (!target) target = $grid.querySelector('.card[data-family="' + fam + '"]');
     }
     if (target){
-      var navH = 64;
+      var navH = 64; // компенсація на стікі-nav
       var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
       window.scrollTo({ top: top, behavior: 'smooth' });
     }
@@ -2000,6 +2005,7 @@ body.pm-open{overflow:hidden}
     a.addEventListener('click', function(e){
       e.preventDefault();
       var fam = a.dataset.family || null;
+      // drawer закриється сам через окремий хендлер
       setTimeout(function(){ scrollToFamily(fam); }, 50);
     });
   });
@@ -2026,6 +2032,7 @@ body.pm-open{overflow:hidden}
       try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
       bar.parentNode.removeChild(bar);
       renderGrid();
+      try { renderCart(); } catch(e){}
       var tl = document.getElementById('slotTopLight');
       if (tl) tl.textContent = 'PROMO \u2665 ROLL ME';
     });
@@ -2033,6 +2040,7 @@ body.pm-open{overflow:hidden}
   window.applyPromo = function(code, pct){
     showPromoBar(code, pct);
     renderGrid();
+    try { renderCart(); } catch(e){}
     setTimeout(function(){
       document.querySelectorAll('#grid .card-price:not(.old)').forEach(function(el){
         el.classList.add('price-flash');
@@ -2324,7 +2332,18 @@ body.pm-open{overflow:hidden}
     else { pmRibbon.hidden = true; }
     pmTitle.textContent = p.title;
     pmCrumb.textContent = p.title.toLowerCase();
-    pmPrice.textContent = p.price;
+    // Промо-цена: если активен slot-промо — показываем зачеркнутую + новую
+    var _slotPct = getSlotPct();
+    var _pmBlock = pmPrice.parentNode;
+    if (_slotPct > 0) {
+      var _newP = Math.round(p.price * (100 - _slotPct) / 100);
+      _pmBlock.innerHTML = '<span class="pm-price-old">' + p.price + '<span class="currency">₴</span></span>'
+        + '<span id="pmPrice">' + _newP + '</span><span class="currency">₴</span>';
+      pmPrice = document.getElementById('pmPrice');
+    } else {
+      _pmBlock.innerHTML = '<span id="pmPrice">' + p.price + '</span><span class="currency">₴</span>';
+      pmPrice = document.getElementById('pmPrice');
+    }
     pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversize · bavovna 95% + еластан 5% · DTF print';
     pmCta.textContent = 'Add to cart ♥'; pmCta.classList.remove('added');
     pmIdx = 0; pmGo(0);
@@ -2495,7 +2514,5 @@ body.pm-open{overflow:hidden}
   bootstrapFromSupabase();
 })();
 </script>
-
-
-
+<!-- v118: info section + telegram bot + non-filtering menu nav -->
 </body></html>
