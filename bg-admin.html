@@ -591,99 +591,30 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       </div>
 
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="l">Замовлення</div><div class="v" id="kpi-orders">—</div><div class="delta" id="kpi-orders-d"></div></div>
-        <div class="kpi-card"><div class="l">Виручка</div><div class="v" id="kpi-revenue">—</div><div class="delta" id="kpi-revenue-d"></div></div>
-        <div class="kpi-card"><div class="l">Середній чек</div><div class="v" id="kpi-aov">—</div></div>
-        <div class="kpi-card"><div class="l">Сесії</div><div class="v" id="kpi-sess">—</div></div>
-        <div class="kpi-card"><div class="l">Унікальні переходи</div><div class="v" id="kpi-pv">—</div></div>
-        <div class="kpi-card"><div class="l">CR (orders/sessions)</div><div class="v" id="kpi-cr">—</div></div>
-        <div class="kpi-card" title="Апрув = approved / (approved+rejected) на основі статусів"><div class="l">Апрув %</div><div class="v" id="kpi-approval">—</div><div class="delta" id="kpi-approval-d"></div></div>
+        <div class="kpi-card"><div class="l">Перегляди товарів</div><div class="v" id="kpi-view">—</div></div>
+        <div class="kpi-card"><div class="l">Додано в кошик</div><div class="v" id="kpi-cart">—</div></div>
+        <div class="kpi-card"><div class="l">Чекаут розпочато</div><div class="v" id="kpi-checkout">—</div></div>
+        <div class="kpi-card"><div class="l">Оплачено</div><div class="v" id="kpi-purchase">—</div></div>
+        <div class="kpi-card"><div class="l">Сесій</div><div class="v" id="kpi-sess">—</div></div>
+        <div class="kpi-card"><div class="l">Конверсія</div><div class="v small" id="kpi-cr">—</div><div class="delta">orders / sessions</div></div>
       </div>
 
       <div class="ana-block">
-        <h3>Замовлення та виручка по днях</h3>
-        <div class="chart-wrap" style="position:relative;height:340px"><canvas id="ch-orders"></canvas></div>
+        <h3>Активність по днях<span class="sub-muted" id="ana-chart-caption">останні 7 днів</span></h3>
+        <div class="chart-wrap"><canvas id="ch-daily"></canvas></div>
       </div>
 
       <div class="ana-row">
         <div class="ana-block">
-          <h3>Funnel конверсії</h3>
-          <div class="ana-funnel" id="funnel-rows"><div class="ana-empty">Завантажую…</div></div>
+          <h3>Джерела трафіку<span class="sub-muted">по замовленнях</span></h3>
+          <div class="src-list" id="src-list"><div class="ana-empty">Завантажую…</div></div>
         </div>
         <div class="ana-block">
-          <h3>Топ товарів (виручка)</h3>
-          <div class="ana-list" id="top-products"><div class="ana-empty">Завантажую…</div></div>
-        </div>
-      </div>
-
-      <div class="ana-row equal">
-        <div class="ana-block">
-          <h3>Статуси замовлень</h3>
-          <div class="chart-wrap" style="position:relative;height:260px"><canvas id="ch-status"></canvas></div>
-        </div>
-        <div class="ana-block">
-          <h3>Оплата</h3>
-          <div class="chart-wrap" style="position:relative;height:260px"><canvas id="ch-payment"></canvas></div>
-        </div>
-      </div>
-
-      <div class="ana-block">
-        <h3>Статистика по днях <span id="daily-caption" style="font-weight:400;color:#0e0e0e70;font-size:12px">· останні 7 днів</span></h3>
-        <div class="daily-wrap">
-          <table class="daily-tbl" id="daily-tbl">
-            <thead><tr>
-              <th data-sort="k">Дата<span class="sort-ar"></span></th>
-              <th class="num" data-sort="pv">Переходи<span class="sort-ar"></span></th>
-              <th class="num" data-sort="cnt">Замовлення<span class="sort-ar"></span></th>
-              <th class="num" data-sort="rev">Виручка<span class="sort-ar"></span></th>
-              <th class="num" data-sort="aov">Сер. чек<span class="sort-ar"></span></th>
-              <th class="num" data-sort="cr">Конверсія<span class="sort-ar"></span></th>
-            </tr></thead>
-            <tbody><tr><td colspan="6" class="ana-empty">Завантажую…</td></tr></tbody>
+          <h3>Топ днів<span class="sub-muted">за виручкою</span></h3>
+          <table class="daily-tbl">
+            <thead><tr><th>Дата</th><th class="num">Замовлень</th><th class="num">Виручка</th></tr></thead>
+            <tbody id="topdays-tbody"><tr><td colspan="3" class="ana-empty">Завантажую…</td></tr></tbody>
           </table>
-        </div>
-      </div>
-
-      <div class="ana-block" style="margin-top:14px">
-        <h3>Джерела по днях <span style="font-weight:400;color:#0e0e0e70;font-size:12px">· топ-8 + агрегат</span></h3>
-        <div id="sources-daily-wrap" style="display:flex;flex-direction:column;gap:8px"></div>
-      </div>
-
-      <div class="ana-block" style="margin-top:14px">
-        <h3>Перегляди товарів <span style="font-weight:400;color:#0e0e0e70;font-size:12px">· відкриття картки + перемикання кольору</span>
-          <span id="pv-chips" style="margin-left:12px;display:inline-flex;gap:6px;vertical-align:middle">
-            <button type="button" data-d="1"  class="pv-chip">Сьогодні</button>
-            <button type="button" data-d="7"  class="pv-chip active">7 днів</button>
-            <button type="button" data-d="30" class="pv-chip">30 днів</button>
-          </span>
-        </h3>
-        <div id="pv-totals" style="font-size:12px;color:#0e0e0e80;margin-bottom:8px">—</div>
-        <div style="overflow-x:auto">
-          <table class="daily-tbl" id="pv-tbl">
-            <thead><tr>
-              <th>Модель</th>
-              <th>Колір</th>
-              <th class="num">Перегляди</th>
-              <th class="num">Переключень кольору</th>
-              <th class="num">Унікальні сесії</th>
-            </tr></thead>
-            <tbody><tr><td colspan="5" class="ana-empty">Завантажую…</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="ana-row tri">
-        <div class="ana-block">
-          <h4>Топ сторінки</h4>
-          <div class="ana-list" id="top-pages"><div class="ana-empty">Завантажую…</div></div>
-        </div>
-        <div class="ana-block">
-          <h4>Джерела (referrer)</h4>
-          <div class="ana-list" id="top-refs"><div class="ana-empty">Завантажую…</div></div>
-        </div>
-        <div class="ana-block">
-          <h4>Девайси</h4>
-          <div class="chart-wrap" style="position:relative;height:220px"><canvas id="ch-devices"></canvas></div>
         </div>
       </div>
     </div>
@@ -1217,353 +1148,133 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     showGate();
   }
 
-  // ===== ANALYTICS (ULTERA-clone v1) =====
-  var ANA = { period: '7d', data: null, charts: {}, sort: { key:'k', dir:'desc' }, dailyRows: [], pvDays: 7 };
-  function periodToMs(p){ var d=86400000;
-    if(p==='today')return d; if(p==='7d')return 7*d; if(p==='30d')return 30*d; if(p==='90d')return 90*d; return 7*d;
+  // ===== ANALYTICS =====
+  var ANA = { period: 7, chart: null };
+
+  function fmtNum(n){
+    n = Number(n) || 0;
+    if (n >= 1000) return (n/1000).toFixed(n>=10000?0:1) + 'k';
+    return String(n);
   }
-  function periodSinceIso(p){
-    if (p==='today'){ var t=new Date(); t.setHours(0,0,0,0); return t.toISOString(); }
-    return new Date(Date.now() - periodToMs(p)).toISOString();
+  function fmtUah(n){
+    n = Number(n) || 0;
+    if (n >= 1000) return Math.round(n/1000) + 'k ₴';
+    return Math.round(n) + ' ₴';
   }
-  function fmtMoney(n){ return (Math.round(Number(n)||0)).toLocaleString('uk-UA') + ' ₴'; }
-  function fmtInt(n){ return (Math.round(Number(n)||0)).toLocaleString('uk-UA'); }
-  function dayKey(iso){
-    var d=new Date(iso); if (isNaN(d.getTime())) return String(iso).slice(0,10);
-    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  }
-  function _esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
   function loadAnalytics(){
-    var sinceIso = periodSinceIso(ANA.period);
-    var nowIso = new Date().toISOString();
-    var label = ANA.period==='today'?'сьогодні':ANA.period==='7d'?'7 днів':ANA.period==='30d'?'30 днів':'90 днів';
-    document.getElementById('ana-meta').textContent = label;
+    var days = ANA.period;
+    var from = new Date(Date.now() - days * 86400000).toISOString();
+    var to   = new Date().toISOString();
+    document.getElementById('ana-meta').textContent = days + ' днів';
+    document.getElementById('ana-chart-caption').textContent = days === 1 ? 'сьогодні' : 'останні ' + days + ' днів';
 
-    var ordersUrl = 'bg_orders?select=id,number,customer_name,customer_phone,payment_method,status,items,total,referrer,created_at&order=created_at.desc&limit=2000&created_at=gte.' + encodeURIComponent(sinceIso);
-    var pOrders = sb(ordersUrl).catch(function(){ return []; });
-    var pSummary = fetch(SB_URL+'/rest/v1/rpc/bg_analytics_summary', {
-      method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' },
-      body: JSON.stringify({ p_from: sinceIso, p_to: nowIso })
-    }).then(function(r){ return r.json(); }).catch(function(){ return null; });
-    var pSources = fetch(SB_URL+'/rest/v1/rpc/bg_analytics_sources_daily', {
-      method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' },
-      body: JSON.stringify({ p_from: sinceIso, p_to: nowIso, top_n: 8 })
-    }).then(function(r){ return r.json(); }).catch(function(){ return null; });
+    // RPC bg_analytics_summary
+    fetch(SB_URL + '/rest/v1/rpc/bg_analytics_summary', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_from: from, p_to: to })
+    }).then(function(r){ return r.json(); }).then(function(j){
+      var totals = (j && j.totals) || {};
+      var daily  = (j && j.daily) || [];
+      document.getElementById('kpi-view').textContent     = fmtNum(totals.view_item);
+      document.getElementById('kpi-cart').textContent     = fmtNum(totals.add_to_cart);
+      document.getElementById('kpi-checkout').textContent = fmtNum(totals.begin_checkout);
+      document.getElementById('kpi-purchase').textContent = fmtNum(totals.purchase);
+      document.getElementById('kpi-sess').textContent     = fmtNum(totals.sessions);
+      var cr = (totals.sessions > 0) ? ((totals.purchase || 0) * 100 / totals.sessions).toFixed(1) + '%' : '—';
+      document.getElementById('kpi-cr').textContent = cr;
+      renderDailyChart(daily);
+    }).catch(function(e){ console.warn('summary', e); });
 
-    Promise.all([pOrders, pSummary, pSources]).then(function(arr){
-      var orders = arr[0] || [];
-      var summary = arr[1] || { totals:{}, daily:[], top_pages:[], referrers:[], devices:[], evt_counts:[], kpi:{} };
-      var sources = arr[2] || { by_day:[] };
-      ANA.data = { orders: orders, ordersReal: orders, analytics: summary, sourcesDaily: (sources && sources.by_day) || [] };
-      renderKPI(); renderOrdersChart(); renderFunnel(); renderTopProducts();
-      renderStatusChart(); renderPaymentChart();
-      renderTopPages(); renderTopReferrers(); renderDevicesChart();
-      renderDailyTable(); renderSourcesDaily();
-      loadProductViews();
-    });
+    // RPC bg_analytics_sources_daily
+    fetch(SB_URL + '/rest/v1/rpc/bg_analytics_sources_daily', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_from: from, p_to: to })
+    }).then(function(r){ return r.json(); }).then(function(rows){
+      renderSources(rows || []);
+      renderTopDays(rows || []);
+    }).catch(function(e){ console.warn('sources', e); });
   }
 
-  function _destroyChart(id){ if(ANA.charts[id]){ try{ANA.charts[id].destroy();}catch(_){} delete ANA.charts[id]; } }
-
-  function renderKPI(){
-    var o = ANA.data.ordersReal || [];
-    var kpi = (ANA.data.analytics && ANA.data.analytics.kpi) || {};
-    var totalRevenue = o.reduce(function(s,x){ return s + Number(x.total||0); }, 0);
-    var aov = o.length ? totalRevenue/o.length : 0;
-    var sessions = Number(kpi.unique_sessions) || 0;
-    var cr = sessions ? (o.length/sessions*100).toFixed(2)+'%' : '—';
-    document.getElementById('kpi-orders').textContent  = fmtInt(o.length);
-    document.getElementById('kpi-revenue').textContent = fmtMoney(totalRevenue);
-    document.getElementById('kpi-aov').textContent     = fmtMoney(aov);
-    document.getElementById('kpi-sess').textContent    = fmtInt(sessions);
-    document.getElementById('kpi-pv').textContent      = fmtInt(kpi.page_views || sessions);
-    document.getElementById('kpi-cr').textContent      = cr;
-    var ar = (kpi.approval_rate!=null ? Number(kpi.approval_rate) : null);
-    document.getElementById('kpi-approval').textContent = ar==null ? '—' : ar.toFixed(2)+'%';
-    var ap=Number(kpi.approved_orders||0), rj=Number(kpi.rejected_orders||0), pn=Number(kpi.pending_orders||0);
-    document.getElementById('kpi-approval-d').textContent = ap+' прийн · '+rj+' відмов · '+pn+' в обр';
-  }
-
-  function renderOrdersChart(){
-    _destroyChart('orders');
-    var days = {};
-    ANA.data.ordersReal.forEach(function(o){
-      var k = dayKey(o.created_at);
-      if(!days[k]) days[k]={cnt:0, rev:0};
-      days[k].cnt++; days[k].rev += Number(o.total)||0;
-    });
-    var end = new Date(); end.setHours(23,59,59,999);
-    var start;
-    if (ANA.period==='today'){ start = new Date(); start.setHours(0,0,0,0); }
-    else { start = new Date(end.getTime() - periodToMs(ANA.period)); }
-    var points=[];
-    for(var t=new Date(start); t<=end; t.setDate(t.getDate()+1)){
-      var k=dayKey(t); points.push({k:k, cnt:(days[k]&&days[k].cnt)||0, rev:(days[k]&&days[k].rev)||0});
-    }
-    var ctx = document.getElementById('ch-orders').getContext('2d');
-    ANA.charts.orders = new Chart(ctx, {
-      type:'bar',
-      data:{
-        labels: points.map(function(p){return p.k.slice(5);}),
-        datasets:[
-          {label:'Замовлення', data:points.map(function(p){return p.cnt;}), backgroundColor:'#FFC0DE', borderRadius:4, yAxisID:'y'},
-          {label:'Виручка, ₴', data:points.map(function(p){return p.rev;}), type:'line', borderColor:'#FF4FA1', backgroundColor:'rgba(255,79,161,.18)', tension:.25, yAxisID:'y1', pointRadius:3}
+  function renderDailyChart(daily){
+    if (!window.Chart){ return; }
+    daily = (daily || []).slice().sort(function(a,b){ return (a.day||'').localeCompare(b.day||''); });
+    var labels = daily.map(function(d){ return (d.day || '').slice(5, 10); });
+    var ctx = document.getElementById('ch-daily').getContext('2d');
+    if (ANA.chart) ANA.chart.destroy();
+    ANA.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Перегляди', data: daily.map(function(d){return d.view_item||0;}), borderColor: '#999', backgroundColor:'rgba(160,160,160,.1)', tension:.35, fill:true, borderWidth:1.5 },
+          { label: 'В кошик',   data: daily.map(function(d){return d.add_to_cart||0;}), borderColor: '#FF8DCD', backgroundColor:'rgba(255,141,205,.15)', tension:.35, fill:true, borderWidth:2 },
+          { label: 'Купівлі',   data: daily.map(function(d){return d.purchase||0;}), borderColor: '#FF4FA1', backgroundColor:'rgba(255,79,161,.2)', tension:.35, fill:true, borderWidth:2.5 },
         ]
       },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom'}},
-        scales:{
-          y:{beginAtZero:true, position:'left', ticks:{precision:0}, title:{display:true,text:'Кількість'}},
-          y1:{beginAtZero:true, position:'right', grid:{display:false}, title:{display:true,text:'₴'}}
-        }
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position:'bottom', labels:{boxWidth:12, font:{size:11}} } },
+        scales: { y: { beginAtZero:true, ticks:{precision:0,font:{size:10}} }, x:{ticks:{font:{size:10}}} }
       }
     });
   }
 
-  function renderFunnel(){
-    var totals = (ANA.data.analytics && ANA.data.analytics.totals) || {};
-    var steps = [
-      {k:'view_item',      label:'Перегляди товарів', v: totals.view_item||0},
-      {k:'add_to_cart',    label:'Додано в кошик',    v: totals.add_to_cart||0},
-      {k:'begin_checkout', label:'Чекаут розпочато',  v: totals.begin_checkout||0},
-      {k:'purchase',       label:'Покупки',           v: totals.purchase||0}
-    ];
-    var base = steps[0].v || 0;
-    var orders = (ANA.data.ordersReal||[]).length;
-    var rows = document.getElementById('funnel-rows');
-    rows.innerHTML='';
-    steps.forEach(function(s){
-      var pct = base ? Math.round(s.v/base*100) : 0;
-      rows.insertAdjacentHTML('beforeend',
-        '<div class="f-step"><span>'+s.label+'</span><div class="f-bar"><div class="f-fill" style="width:'+(base?Math.min(100,pct):0)+'%"></div></div><span class="f-pct">'+fmtInt(s.v)+' · '+pct+'%</span></div>');
-    });
-    var opct = base ? Math.round(orders/base*100*100)/100 : 0;
-    rows.insertAdjacentHTML('beforeend',
-      '<div class="f-step"><span>Замовлення (БД)</span><div class="f-bar"><div class="f-fill" style="width:'+(base?Math.min(100,Math.round(orders/base*100)):0)+'%;background:linear-gradient(90deg,#FF8DCD,#FF4FA1)"></div></div><span class="f-pct">'+fmtInt(orders)+' · '+opct+'%</span></div>');
-  }
-
-  function renderTopProducts(){
+  function renderSources(rows){
     var agg = {};
-    ANA.data.ordersReal.forEach(function(o){
-      (o.items||[]).forEach(function(it){
-        var uid = String(it.uid || it.productId || '');
-        if (!uid) return;
-        var unit = parseFloat(it.price)||0, qty = parseInt(it.qty||1,10);
-        if (!agg[uid]) agg[uid] = { uid:uid, qty:0, rev:0, title: it.title || it.name || '' };
-        agg[uid].qty += qty; agg[uid].rev += unit*qty;
-        if (!agg[uid].title && (it.title || it.name)) agg[uid].title = it.title || it.name;
-      });
+    rows.forEach(function(r){
+      var s = r.source || 'other';
+      if (!agg[s]) agg[s] = { source: s, orders: 0, revenue: 0 };
+      agg[s].orders  += Number(r.orders) || 0;
+      agg[s].revenue += Number(r.revenue) || 0;
     });
-    var arr = Object.values(agg).sort(function(a,b){ return b.rev - a.rev; }).slice(0,10);
-    var wrap = document.getElementById('top-products');
-    if(!arr.length){ wrap.innerHTML = '<div class="ana-empty">Немає даних за період</div>'; return; }
-    wrap.innerHTML = arr.map(function(p){
-      var title = (p.title||'') || p.uid;
-      return '<div class="li"><div><div>'+_esc(title)+'</div><div class="meta">'+p.qty+' шт · uid '+_esc(p.uid)+'</div></div><div class="count">'+fmtMoney(p.rev)+'</div></div>';
+    var arr = Object.values(agg).sort(function(a,b){ return b.orders - a.orders; });
+    var max = Math.max.apply(null, arr.map(function(x){ return x.orders; }).concat([1]));
+    var box = document.getElementById('src-list');
+    if (!arr.length){ box.innerHTML = '<div class="ana-empty">Замовлень за цей період ще не було</div>'; return; }
+    box.innerHTML = arr.map(function(s){
+      var pct = Math.round(s.orders / max * 100);
+      return '<div class="src-row">' +
+        '<div class="lbl">' + (s.source||'other') + '</div>' +
+        '<div class="bar-track"><div class="bar" style="width:' + pct + '%"></div></div>' +
+        '<div class="num">' + s.orders + '</div>' +
+        '<div class="num">' + fmtUah(s.revenue) + '</div>' +
+      '</div>';
     }).join('');
   }
 
-  function renderStatusChart(){
-    _destroyChart('status');
-    var cnt={};
-    ANA.data.ordersReal.forEach(function(o){ var k=o.status||'—'; cnt[k]=(cnt[k]||0)+1; });
-    var labels=Object.keys(cnt);
-    var ctx=document.getElementById('ch-status').getContext('2d');
-    ANA.charts.status = new Chart(ctx, {
-      type:'doughnut',
-      data:{ labels:labels, datasets:[{ data: labels.map(function(k){return cnt[k];}), backgroundColor:['#FFC0DE','#FF8DCD','#FFB5B5','#FF4FA1','#E44E9C','#7a7a7a','#bdbdbd'] }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
+  function renderTopDays(rows){
+    var byDay = {};
+    rows.forEach(function(r){
+      var d = (r.day || '').slice(0, 10);
+      if (!byDay[d]) byDay[d] = { day: d, orders: 0, revenue: 0 };
+      byDay[d].orders  += Number(r.orders) || 0;
+      byDay[d].revenue += Number(r.revenue) || 0;
     });
-  }
-  function renderPaymentChart(){
-    _destroyChart('payment');
-    var cnt={};
-    ANA.data.ordersReal.forEach(function(o){
-      var k = o.payment_method || '—';
-      if (k==='card') k='Картка'; else if (k==='cod') k='Наложка';
-      cnt[k]=(cnt[k]||0)+1;
-    });
-    var labels=Object.keys(cnt);
-    var ctx=document.getElementById('ch-payment').getContext('2d');
-    ANA.charts.payment = new Chart(ctx, {
-      type:'doughnut',
-      data:{ labels:labels, datasets:[{ data: labels.map(function(k){return cnt[k];}), backgroundColor:['#FF4FA1','#FFC0DE','#bdbdbd'] }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
-    });
-  }
-
-  function renderTopPages(){
-    var rows = (ANA.data.analytics && ANA.data.analytics.top_pages) || [];
-    var wrap = document.getElementById('top-pages');
-    if(!rows.length){ wrap.innerHTML='<div class="ana-empty">Немає даних</div>'; return; }
-    wrap.innerHTML = rows.slice(0,8).map(function(r){
-      return '<div class="li"><div><div class="meta" style="color:#0e0e0e;font-weight:500">'+_esc(r.path||'/')+'</div></div><div class="count">'+fmtInt(r.cnt)+'</div></div>';
-    }).join('');
-  }
-  function renderTopReferrers(){
-    var rows = (ANA.data.analytics && ANA.data.analytics.referrers) || [];
-    var wrap = document.getElementById('top-refs');
-    if(!rows.length){ wrap.innerHTML='<div class="ana-empty">Немає даних</div>'; return; }
-    wrap.innerHTML = rows.slice(0,8).map(function(r){
-      return '<div class="li"><div><div class="meta" style="color:#0e0e0e;font-weight:500">'+_esc(r.ref_host||'(direct)')+'</div></div><div class="count">'+fmtInt(r.cnt)+'</div></div>';
-    }).join('');
-  }
-  function renderDevicesChart(){
-    _destroyChart('devices');
-    var cnt={mobile:0,tablet:0,desktop:0,other:0};
-    var rows = (ANA.data.analytics && ANA.data.analytics.devices) || [];
-    rows.forEach(function(r){ var d=String(r.device||'').toLowerCase(); var n=Number(r.cnt)||0; if (d in cnt) cnt[d]+=n; else cnt.other+=n; });
-    var ctx=document.getElementById('ch-devices').getContext('2d');
-    ANA.charts.devices = new Chart(ctx, {
-      type:'doughnut',
-      data:{ labels:['Mobile','Tablet','Desktop','Other'], datasets:[{ data:[cnt.mobile,cnt.tablet,cnt.desktop,cnt.other], backgroundColor:['#FF4FA1','#FFC0DE','#0e0e0e','#bdbdbd'] }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
-    });
-  }
-
-  function renderDailyTable(){
-    var pvDay = {};
-    var daily = (ANA.data.analytics && ANA.data.analytics.daily) || [];
-    daily.forEach(function(d){ pvDay[String(d.day)] = Number(d.unique_sessions) || 0; });
-    var ordDay = {};
-    ANA.data.ordersReal.forEach(function(o){
-      var k=dayKey(o.created_at);
-      if(!ordDay[k]) ordDay[k]={cnt:0,rev:0};
-      ordDay[k].cnt++; ordDay[k].rev += Number(o.total)||0;
-    });
-    var lastDay = new Date(); lastDay.setHours(0,0,0,0);
-    var firstDay = new Date(lastDay.getTime() - (periodToMs(ANA.period) - 86400000));
-    var rows = [];
-    for (var t=new Date(lastDay); t>=firstDay; t.setDate(t.getDate()-1)){
-      var k=dayKey(t);
-      var pv = pvDay[k]||0, cnt=(ordDay[k]&&ordDay[k].cnt)||0, rev=(ordDay[k]&&ordDay[k].rev)||0;
-      var aov = cnt?rev/cnt:0; var cr = pv?(cnt/pv*100):0;
-      rows.push({k:k, pv:pv, cnt:cnt, rev:rev, aov:aov, cr:cr});
-    }
-    ANA.dailyRows = rows;
-    var cap = document.getElementById('daily-caption'); if (cap) cap.textContent = '· останні '+rows.length+' днів';
-    renderDailyTableRows();
-  }
-  function renderDailyTableRows(){
-    var rows = (ANA.dailyRows||[]).slice();
-    var sort = ANA.sort || {key:'k',dir:'desc'};
-    rows.sort(function(a,b){
-      var av=a[sort.key], bv=b[sort.key];
-      if(sort.key==='k'){av=String(av); bv=String(bv);} else {av=Number(av)||0; bv=Number(bv)||0;}
-      if(av<bv) return sort.dir==='asc'?-1:1;
-      if(av>bv) return sort.dir==='asc'?1:-1;
-      return 0;
-    });
-    var todayK = dayKey(new Date());
-    var tbody = document.querySelector('#daily-tbl tbody');
-    if (!tbody) return;
-    tbody.innerHTML = rows.map(function(r){
-      var date = r.k.slice(8,10)+'.'+r.k.slice(5,7)+'.'+r.k.slice(2,4);
-      var crStr = r.pv?(r.cr.toFixed(2)+'%'):'—';
-      return '<tr><td>'+date+(r.k===todayK?' (сьогодні)':'')+'</td>'+
-        '<td class="num">'+fmtInt(r.pv)+'</td>'+
-        '<td class="num">'+fmtInt(r.cnt)+'</td>'+
-        '<td class="num">'+fmtMoney(r.rev)+'</td>'+
-        '<td class="num">'+(r.cnt?fmtMoney(r.aov):'—')+'</td>'+
-        '<td class="num">'+crStr+'</td></tr>';
+    var arr = Object.values(byDay).sort(function(a,b){ return b.revenue - a.revenue; }).slice(0, 7);
+    var tbody = document.getElementById('topdays-tbody');
+    if (!arr.length){ tbody.innerHTML = '<tr><td colspan="3" class="ana-empty">Немає даних</td></tr>'; return; }
+    tbody.innerHTML = arr.map(function(d){
+      return '<tr><td>' + d.day + '</td><td class="num">' + d.orders + '</td><td class="num">' + fmtUah(d.revenue) + '</td></tr>';
     }).join('');
   }
 
-  function renderSourcesDaily(){
-    var wrap = document.getElementById('sources-daily-wrap'); if(!wrap) return;
-    var rows = (ANA.data.sourcesDaily)||[];
-    if(!rows.length){ wrap.innerHTML='<div style="color:#0e0e0e80;font-size:12.5px;padding:8px 0">Немає даних</div>'; return; }
-    wrap.innerHTML = rows.map(function(d,i){
-      var totalCR = d.day_sessions>0 ? ((d.day_orders||0)*100/d.day_sessions).toFixed(2)+'%' : '—';
-      var revFmt = fmtMoney(d.day_revenue||0);
-      var srcRows = (d.sources||[]).map(function(s){
-        var crFmt = (s.cr!=null ? Number(s.cr).toFixed(2)+'%' : (s.sessions>0 ? (s.orders*100/s.sessions).toFixed(2)+'%' : '—'));
-        var apFmt = (s.approval_rate!=null ? Number(s.approval_rate).toFixed(2)+'%' : (s.approved||s.rejected ? '—' : ''));
-        return '<tr>'+
-          '<td style="padding:6px 8px;border-bottom:1px dashed #ecebe5">'+_esc(s.ref_host)+'</td>'+
-          '<td style="padding:6px 8px;text-align:right;border-bottom:1px dashed #ecebe5">'+fmtInt(s.sessions)+'</td>'+
-          '<td style="padding:6px 8px;text-align:right;border-bottom:1px dashed #ecebe5">'+fmtInt(s.orders)+'</td>'+
-          '<td style="padding:6px 8px;text-align:right;border-bottom:1px dashed #ecebe5">'+fmtMoney(s.revenue||0)+'</td>'+
-          '<td style="padding:6px 8px;text-align:right;border-bottom:1px dashed #ecebe5">'+crFmt+'</td>'+
-          '<td style="padding:6px 8px;text-align:right;border-bottom:1px dashed #ecebe5">'+apFmt+'</td></tr>';
-      }).join('');
-      var openAttr = (i===0?' open':'');
-      return '<details'+openAttr+' style="border:1px solid #ecebe5;border-radius:10px;background:#fff;margin-bottom:8px">'+
-        '<summary style="padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;gap:16px;font-weight:600;font-size:13px;list-style:none">'+
-          '<span>'+_esc(d.day)+'</span>'+
-          '<span style="color:#0e0e0e80;font-weight:400">'+fmtInt(d.day_sessions||0)+' переходів · '+fmtInt(d.day_orders||0)+' замовлень · '+revFmt+' · CR '+totalCR+'</span>'+
-        '</summary>'+
-        '<div style="padding:4px 14px 14px"><table style="width:100%;border-collapse:collapse;font-size:12.5px">'+
-          '<thead><tr style="color:#0e0e0e80">'+
-            '<th style="padding:6px 8px;text-align:left;font-weight:500;border-bottom:1px solid #ecebe5">Джерело</th>'+
-            '<th style="padding:6px 8px;text-align:right;font-weight:500;border-bottom:1px solid #ecebe5">Переходи</th>'+
-            '<th style="padding:6px 8px;text-align:right;font-weight:500;border-bottom:1px solid #ecebe5">Замовлення</th>'+
-            '<th style="padding:6px 8px;text-align:right;font-weight:500;border-bottom:1px solid #ecebe5">Виручка</th>'+
-            '<th style="padding:6px 8px;text-align:right;font-weight:500;border-bottom:1px solid #ecebe5">CR</th>'+
-            '<th style="padding:6px 8px;text-align:right;font-weight:500;border-bottom:1px solid #ecebe5">Апрув %</th>'+
-          '</tr></thead><tbody>'+srcRows+'</tbody></table></div></details>';
-    }).join('');
-  }
-
-  function loadProductViews(){
-    fetch(SB_URL+'/rest/v1/rpc/bg_product_views_summary', {
-      method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' },
-      body: JSON.stringify({ p_days: ANA.pvDays })
-    }).then(function(r){ return r.json(); }).then(function(j){
-      var rows = (j && j.rows) || [];
-      var totView = (j && j.total_views) || 0;
-      var totSwitch = (j && j.total_switches) || 0;
-      var uniqS = (j && j.unique_sessions) || 0;
-      document.getElementById('pv-totals').textContent =
-        'Всього переглядів: '+fmtInt(totView)+' · Перемикань кольору: '+fmtInt(totSwitch)+' · Унікальних сесій: '+fmtInt(uniqS);
-      // map uid → title из PRODUCTS
-      var titleByUid = {};
-      try { (PRODUCTS||[]).forEach(function(p){ titleByUid[p.uid] = p.title; }); } catch(e){}
-      var tbody = document.querySelector('#pv-tbl tbody');
-      if (!rows.length){ tbody.innerHTML = '<tr><td colspan="5" class="ana-empty">Немає даних за період</td></tr>'; return; }
-      tbody.innerHTML = rows.map(function(r){
-        return '<tr><td>'+_esc(titleByUid[r.uid] || r.uid)+'</td><td>'+_esc(r.color_name||'—')+'</td><td class="num">'+fmtInt(r.views)+'</td><td class="num">'+fmtInt(r.color_switches)+'</td><td class="num">'+fmtInt(r.unique_sessions)+'</td></tr>';
-      }).join('');
-    }).catch(function(){
-      var tbody = document.querySelector('#pv-tbl tbody'); if (tbody) tbody.innerHTML='<tr><td colspan="5" class="ana-empty">Помилка завантаження</td></tr>';
-    });
-  }
-
-  // Period tabs (top of page)
+  // Wire up period tabs
   document.querySelectorAll('#ana-tabs button').forEach(function(b){
     b.onclick = function(){
       document.querySelectorAll('#ana-tabs button').forEach(function(x){ x.classList.remove('active'); });
       b.classList.add('active');
-      var days = parseInt(b.dataset.days, 10) || 7;
-      ANA.period = days===1?'today': (days===7?'7d':(days===30?'30d':'90d'));
+      ANA.period = parseInt(b.dataset.days, 10) || 7;
       loadAnalytics();
     };
-  });
-  // pv-chips
-  document.addEventListener('click', function(e){
-    var c = e.target.closest && e.target.closest('.pv-chip');
-    if (!c) return;
-    document.querySelectorAll('.pv-chip').forEach(function(x){ x.classList.remove('active'); });
-    c.classList.add('active');
-    ANA.pvDays = parseInt(c.dataset.d, 10) || 7;
-    loadProductViews();
-  });
-  // daily table sort
-  document.addEventListener('click', function(e){
-    var th = e.target.closest && e.target.closest('#daily-tbl thead th[data-sort]');
-    if (!th) return;
-    var key = th.getAttribute('data-sort');
-    var cur = ANA.sort || {key:'k',dir:'desc'};
-    var dir = (cur.key===key && cur.dir==='asc') ? 'desc' : (cur.key===key ? 'asc' : 'desc');
-    ANA.sort = {key:key, dir:dir};
-    renderDailyTableRows();
   });
 
   // Hook into nav: when analytics page activated, load data
   var navAnalyticsBtn = document.querySelector('#nav a[data-page="analytics"]');
   if (navAnalyticsBtn){
+    var origClick = navAnalyticsBtn.onclick;
     navAnalyticsBtn.addEventListener('click', function(){ setTimeout(loadAnalytics, 50); });
   }
 
