@@ -3,4 +3,6 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/thanks", "destination": "/api/thanks" },
-    {
+    { "source": "/feed.xml", "destination": "/api/feed" }
+  ]
+}
