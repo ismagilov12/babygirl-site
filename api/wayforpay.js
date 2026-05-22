@@ -1,9 +1,4 @@
 // api/wayforpay.js — створює payment intent у WayForPay.
-// Скелет із досвіду ULTERA · SECURITY v2.
-//
-// Контракт від фронта (НОВИЙ — без amount):
-//   { orderReference, items: [{uid, qty, size?}], clientFirstName, clientLastName,
-//     clientEmail, clientPhone, payment_method? }
 
 const crypto = require('crypto');
 const cfg = require('./_config');
@@ -159,10 +154,10 @@ module.exports = async function handler(req, res) {
     .digest('hex');
 
   const base = 'https://' + merchantDomainName;
-  // Передаём approvedUrl + declinedUrl ОТДЕЛЬНЫМИ полями формы — это переопределяет
-  // approvedUrl/declinedUrl из ЛК WFP (там прибиты на чужой проект-лавюхер).
-  const approvedUrl = base + '/?paid=1&order=' + encodeURIComponent(orderReference);
-  const declinedUrl = base + '/?paid=0&order=' + encodeURIComponent(orderReference);
+  // approvedUrl/declinedUrl ведут на /thanks (cleanUrls=true → thanks.html)
+  // — переопределяют значения из ЛК WFP, которые прибиты на чужой проект.
+  const approvedUrl = base + '/thanks?paid=1&order=' + encodeURIComponent(orderReference);
+  const declinedUrl = base + '/thanks?paid=0&order=' + encodeURIComponent(orderReference);
   const serviceUrl  = base + '/api/wayforpay-callback';
 
   return res.status(200).json({
