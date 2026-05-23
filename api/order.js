@@ -3,6 +3,7 @@
 
 const cfg = require('./_config');
 const T = cfg.T;
+const tg = require('./_tg');
 const ALLOWED_ORIGINS_EXACT = new Set(cfg.ALLOWED_ORIGINS_EXACT);
 
 function setCors(req, res) {
@@ -178,6 +179,21 @@ module.exports = async function handler(req, res) {
       message: 'Lead saved; CRM deferred until final stage.'
     });
   }
+
+  // Telegram admin notify — fire-and-forget, не блокує response
+  tg.fireAndForget(tg.notifyAdminNewOrder({
+    stage: 'final',
+    order_num: orderNum,
+    fio: body.fio,
+    phone: body.phone,
+    city: body.city,
+    wh: body.wh,
+    payment: body.payment,
+    total: total,
+    items: body.items,
+    comment: body.comment,
+    referrer: body.referrer
+  }));
 
   if (!cfg.KEYCRM.enabled || !process.env.KEYCRM_TOKEN) {
     return res.status(200).json({
