@@ -1626,8 +1626,6 @@ body.pm-open{overflow:hidden}
     <input id="fld-fio" placeholder="Maria Ivanenko" required="" autocomplete="name">
     <label>телефон</label>
     <input id="fld-phone" type="tel" placeholder="+380..." required="" autocomplete="tel">
-    <label>email (для трек-номера)</label>
-    <input id="fld-email" type="email" placeholder="you@email.com" autocomplete="email">
     <label>місто</label>
     <input id="fld-city" placeholder="Київ" required="">
     <label>відділення нової пошти</label>
@@ -2418,7 +2416,6 @@ body.pm-open{overflow:hidden}
 
     var payload = {
       stage: 'final', fio: fio, phone: phone,
-      email: document.getElementById('fld-email').value.trim(),
       city: city, wh: wh,
       payment: document.getElementById('fld-payment').value,
       promo_code: promo,
@@ -2449,7 +2446,7 @@ body.pm-open{overflow:hidden}
             payment_method: payload.payment,
             clientFirstName: fio.split(' ')[0] || '',
             clientLastName: fio.split(' ').slice(1).join(' ') || '',
-            clientEmail: payload.email, clientPhone: phone
+            clientEmail: '', clientPhone: phone
           })
         })
         .then(function(r){ return r.json(); })
