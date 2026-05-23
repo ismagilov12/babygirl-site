@@ -6,7 +6,8 @@
 const cfg = require('./_config');
 const T = cfg.T;
 
-const SITE = 'https://' + cfg.SITE_DOMAIN;
+// Фид всегда указывает на www-домен (apex отдаёт 307 → FB scraper не всегда следует за redirect, image_link → 0 байт)
+const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
 
@@ -129,11 +130,4 @@ module.exports = async function handler(req, res) {
     '    <description>' + xmlEscape(BRAND) + ' product feed for Facebook Catalog / Google Merchant Center</description>\n' +
     '    <lastBuildDate>' + now + '</lastBuildDate>\n' +
     items.join('\n') + '\n' +
-    '  </channel>\n' +
-    '</rss>\n';
-
-  res.status(200);
-  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=600'); // CDN cache 10 min
-  res.send(xml);
-};
+    '  
