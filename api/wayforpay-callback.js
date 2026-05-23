@@ -15,7 +15,6 @@
 const crypto = require('crypto');
 const cfg = require('./_config');
 const T = cfg.T;
-const tg = require('./_tg');
 
 const SIG_FIELDS_ORDER = [
   'merchantAccount', 'orderReference', 'amount', 'currency',
@@ -112,10 +111,6 @@ module.exports = async function handler(req, res) {
       method: 'PATCH',
       body: JSON.stringify({ payment_status: 'paid', paid_at: new Date().toISOString() })
     });
-    // Telegram admin notify — fire-and-forget
-    tg.fireAndForget(tg.notifyAdminPaymentApproved({
-      orderReference, amount, cardPan, authCode
-    }));
   }
 
   // Signed response
