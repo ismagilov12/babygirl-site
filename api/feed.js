@@ -1,12 +1,13 @@
 // api/feed.js — Facebook/Google Shopping XML product feed for BabyGirl
-// URL: https://babygirl.com.ua/api/feed.xml (rewrite в vercel.json) или /api/feed
+// URL: https://babygirl.com.ua/feed.xml (rewrite в vercel.json) → /api/feed
 // Тянет из bg_products (active=true), генерит XML в формате Google Shopping (RSS 2.0 + g:* namespace).
 // Multi-color товары -> отдельный SKU на цвет + общий g:item_group_id.
 
 const cfg = require('./_config');
 const T = cfg.T;
 
-// Фид всегда указывает на www-домен (apex отдаёт 307 → FB scraper не всегда следует за redirect, image_link → 0 байт)
+// Все ссылки в фиде ведут на www-домен. Apex (babygirl.com.ua) отдаёт 307 на www,
+// FB scraper за redirect не всегда следует, отсюда пустые фото у некоторых товаров.
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
@@ -42,14 +43,13 @@ function makeItem(p, color) {
   const mainPhoto = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
   if (!mainPhoto) return null;
 
-  // additional images: все фото из p.photos, исключая видео и текущий main, до 20 шт
   const allPhotos = Array.isArray(p.photos) ? p.photos : [];
   const extras = allPhotos
     .filter(u => isImage(u) && u !== mainPhoto)
     .slice(0, 20);
 
   const desc = p.description
-    || ((BRAND + ' · ' + p.title + (isVariant ? ' (' + (color.name || color.code) + ')' : '')));
+    || (BRAND + ' · ' + p.title + (isVariant ? ' (' + (color.name || color.code) + ')' : ''));
 
   const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(', ') : 'ONE SIZE';
   const price = (Number(p.price) || 0).toFixed(2) + ' UAH';
@@ -77,7 +77,6 @@ function makeItem(p, color) {
   lines.push('      <g:gender>female</g:gender>');
   lines.push('      <g:age_group>adult</g:age_group>');
   lines.push('      <g:google_product_category>' + xmlEscape(CATEGORY) + '</g:google_product_category>');
-  // FB-specific
   lines.push('      <g:identifier_exists>no</g:identifier_exists>');
   lines.push('      <g:custom_label_0>' + xmlEscape(p.family || '') + '</g:custom_label_0>');
   if (p.ribbon) lines.push('      <g:custom_label_1>' + xmlEscape(p.ribbon) + '</g:custom_label_1>');
@@ -85,23 +84,26 @@ function makeItem(p, color) {
   return lines.join('\n');
 }
 
+function fail(res, code, msg) {
+  res.status(code);
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.send(String(msg || 'error'));
+}
+
 module.exports = async function handler(req, res) {
-  const url = process.env.SUPABASE_URL;
+  const sbUrl = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) {
-    res.status(500).setHeader('Content-Type', 'text/plain; charset=utf-8').send('Supabase env not configured');
-    return;
-  }
+  if (!sbUrl || !key) { fail(res, 500, 'Supabase env not configured'); return; }
 
   let rows;
   try {
-    const r = await fetch(url + '/rest/v1/' + T.PRODUCTS + '?select=uid,title,family,price,price_old,ribbon,photo_main,photos,sizes,colors,description,active,in_grid&active=eq.true&order=sort_order.asc', {
+    const r = await fetch(sbUrl + '/rest/v1/' + T.PRODUCTS + '?select=uid,title,family,price,price_old,ribbon,photo_main,photos,sizes,colors,description,active,in_grid&active=eq.true&order=sort_order.asc', {
       headers: { apikey: key, Authorization: 'Bearer ' + key }
     });
-    if (!r.ok) { res.status(502).setHeader('Content-Type', 'text/plain; charset=utf-8').send('Supabase fetch failed: ' + r.status); return; }
+    if (!r.ok) { fail(res, 502, 'Supabase fetch failed: ' + r.status); return; }
     rows = await r.json();
   } catch (e) {
-    res.status(500).setHeader('Content-Type', 'text/plain; charset=utf-8').send('fetch err: ' + (e && e.message));
+    fail(res, 500, 'fetch err: ' + (e && e.message));
     return;
   }
 
@@ -130,4 +132,8 @@ module.exports = async function handler(req, res) {
     '    <description>' + xmlEscape(BRAND) + ' product feed for Facebook Catalog / Google Merchant Center</description>\n' +
     '    <lastBuildDate>' + now + '</lastBuildDate>\n' +
     items.join('\n') + '\n' +
-    '  
+    '  </channel>\n' +
+    '</rss>\n';
+
+  res.status(200);
+  res.setHeader('Content-Type', 'application/xml; c
