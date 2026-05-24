@@ -31,6 +31,41 @@
 })();
 </script>
 
+<!-- 1b. bg_tracker_v2 — fire-and-forget POST /api/track. Не дублирует Meta Pixel. -->
+<script id="bg-tracker">
+(function(){
+  if (window.bgTrack) return;
+  function readCookie(n){ try { var m = document.cookie.match('(?:^|; )'+n+'=([^;]+)'); return m ? decodeURIComponent(m[1]) : null; } catch(e){ return null; } }
+  var lastSent = {};
+  window.bgTrack = function(event_name, data){
+    try {
+      var k = event_name + '|' + ((data && data.product_uid) || '') + '|' + ((data && data.meta && data.meta.color_name) || '');
+      var now = Date.now();
+      if (lastSent[k] && (now - lastSent[k]) < 400) return;
+      lastSent[k] = now;
+      var payload = Object.assign({
+        event_name: event_name,
+        session_id: window.SESSION_ID,
+        landing_url: window.LANDING_URL,
+        referrer: document.referrer || null,
+        page_url: location.href,
+        fbp: readCookie('_fbp'),
+        fbc: readCookie('_fbc')
+      }, data || {});
+      var body = JSON.stringify(payload);
+      // Endpoint всегда через www (apex 307 → POST не повторяется при redirect)
+      var endpoint = (location.host === 'babygirl.com.ua') ? 'https://www.babygirl.com.ua/api/track' : '/api/track';
+      if (navigator.sendBeacon) {
+        try { navigator.sendBeacon(endpoint, new Blob([body], { type:'application/json' })); return; } catch(e){}
+      }
+      fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body: body, keepalive: true }).catch(function(){});
+    } catch(e){}
+  };
+  if (document.readyState !== 'loading') { window.bgTrack('page_view'); }
+  else document.addEventListener('DOMContentLoaded', function(){ window.bgTrack('page_view'); });
+})();
+</script>
+
 <!-- 2. Brand config — admin → Setup пишет в localStorage 'bg_settings' -->
 <script id="brand-config">
 (function(){
@@ -2202,6 +2237,7 @@ body.pm-open{overflow:hidden}
     var now = totalUnits();
     renderCart(); openCart();
     if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
     // Если перешли через границу 1→2, показать toast
     if (was < 2 && now >= 2){
       showToast('🎁 застосовано <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> на другу річ ♥');
@@ -2331,6 +2367,7 @@ body.pm-open{overflow:hidden}
     pmEl.setAttribute('aria-hidden', 'false');
     document.body.classList.add('pm-open');
     if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('view_item', { product_uid: uid, value: p.price }); } catch(e){}
   }
   function closeProduct(){
     pmOverlay.classList.remove('open');
@@ -2475,6 +2512,7 @@ body.pm-open{overflow:hidden}
         });
       } else {
         if (typeof fbq === 'function') fbq('track', 'Purchase', { value:data.authoritative_total, currency:'UAH', eventID:data.order_num });
+        try { window.bgTrack && window.bgTrack('purchase', { event_id: data.order_num, value: data.authoritative_total }); } catch(e){}
         $res.textContent = '✓ дякуємо! ми зателефонуємо.';
         $res.className = 'cart-result ok';
         cart = []; renderCart();
