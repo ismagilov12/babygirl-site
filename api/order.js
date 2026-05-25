@@ -87,6 +87,38 @@ async function recomputePrices(items) {
   });
 }
 
+// Серверна валідація промо-коду — повертає { valid, percent }.
+async function validatePromoServer(code, subtotalUAH) {
+  if (!code) return { valid: false, percent: 0 };
+  const safe = String(code).toUpperCase().trim();
+  if (!safe) return { valid: false, percent: 0 };
+  const rows = await sb(T.PROMOS + '?code=eq.' + encodeURIComponent(safe) + '&active=eq.true&limit=1');
+  if (!Array.isArray(rows) || !rows.length) return { valid: false, percent: 0 };
+  const row = rows[0];
+  if (row.expires_at && new Date(row.expires_at) < new Date()) return { valid: false, percent: 0 };
+  if (row.min_total && Number(subtotalUAH) < Number(row.min_total)) return { valid: false, percent: 0 };
+  return { valid: true, percent: Math.max(0, Math.min(100, parseInt(row.percent || 0, 10))) };
+}
+
+// Реплікує клієнтську логіку BUNDLE + PROMO.
+function applyDiscounts(breakdown, bundlePct, promoPct) {
+  bundlePct = Math.max(0, Math.min(100, Number(bundlePct) || 0));
+  promoPct  = Math.max(0, Math.min(100, Number(promoPct)  || 0));
+  let unitIdx = 0, total = 0;
+  for (const line of breakdown) {
+    const qty  = parseInt(line.qty || 1, 10);
+    const unit = Number(line.unit_price);
+    for (let i = 0; i < qty; i++) {
+      unitIdx++;
+      let u = unit;
+      if (unitIdx >= 2 && bundlePct > 0) u = unit * (100 - bundlePct) / 100;
+      if (promoPct > 0)                  u = u    * (100 - promoPct)  / 100;
+      total += u;
+    }
+  }
+  return Math.round(total * 100) / 100;
+}
+
 async function saveOrder(order) {
   const rows = await sb(T.ORDERS, {
     method: 'POST',
@@ -137,8 +169,20 @@ module.exports = async function handler(req, res) {
 
   const priced = await recomputePrices(body.items);
   let total = null;
+  let subtotal = null;
+  let appliedPromoCode = null;
+  let appliedPromoPct  = 0;
+  const bundlePctIn = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
   if (priced && priced.ok) {
-    total = Number(priced.total);
+    subtotal = Number(priced.total);
+    // Серверно валідуємо промо (не довіряємо percent з фронту).
+    const promo = await validatePromoServer(body.promo_code, subtotal);
+    if (promo.valid) {
+      appliedPromoCode = String(body.promo_code || '').toUpperCase().trim();
+      appliedPromoPct  = promo.percent;
+    }
+    total = applyDiscounts(priced.breakdown, bundlePctIn, appliedPromoPct);
+    if (!(total > 0)) total = subtotal;
   } else {
     if (!isLead && body.payment === 'card') {
       return res.status(400).json({ ok: false, error: 'Price verification failed' });
@@ -146,11 +190,21 @@ module.exports = async function handler(req, res) {
     total = (body.items || []).reduce(
       (s, it) => s + (parseFloat(it.price) || 0) * (parseInt(it.qty || 1, 10)), 0
     );
+    subtotal = total;
   }
 
   // BG-<base36-ts> — общий префикс для роутинга в shared Supabase Edge Function
   // wayforpay-webhook. Лавюхер шлёт numeric id, BG отличается префиксом BG-.
   const orderNum = (typeof body.num === 'string' && body.num) || ('BG-' + Date.now().toString(36).toUpperCase());
+
+  // У notes коротко фіксуємо застосовану знижку для аудиту (без зміни схеми таблиці).
+  const discountNote = (appliedPromoCode || bundlePctIn > 0)
+    ? ' [discount: ' + (appliedPromoCode ? appliedPromoCode + '−' + appliedPromoPct + '%' : '')
+        + (bundlePctIn > 0 ? (appliedPromoCode ? ' + ' : '') + 'bundle−' + bundlePctIn + '%' : '')
+        + (subtotal ? ' · subtotal=' + subtotal + ' → total=' + total : '')
+        + ']'
+    : '';
+  const baseNotes = body.comment || (isLead ? 'abandoned-cart lead' : '');
 
   const orderRow = await saveOrder({
     number: orderNum,
@@ -165,7 +219,7 @@ module.exports = async function handler(req, res) {
     items: body.items,
     total: total,
     status: isLead ? 'lead' : 'new',
-    notes: body.comment || (isLead ? 'abandoned-cart lead' : ''),
+    notes: baseNotes + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
