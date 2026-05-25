@@ -204,7 +204,13 @@ module.exports = async function handler(req, res) {
         + (subtotal ? ' · subtotal=' + subtotal + ' → total=' + total : '')
         + ']'
     : '';
-  const baseNotes = body.comment || (isLead ? 'abandoned-cart lead' : '');
+  // Префикс "САЙТ" нужен CRM (loveyourhaire.vercel.app) — таблица orders.comment
+  // мапится из bg_orders.notes через триггер bg_orders_mirror_to_orders.
+  // CRM считает заказ сайтовым только если comment.startsWith("САЙТ"). Лиды не помечаем.
+  const userComment = (body.comment || '').trim();
+  const baseNotes = isLead
+    ? 'abandoned-cart lead'
+    : ('САЙТ' + (userComment ? ' · ' + userComment : ''));
 
   const orderRow = await saveOrder({
     number: orderNum,
