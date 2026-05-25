@@ -1,8 +1,4 @@
-// api/thanks.js — serves embedded thanks page on any method (GET/POST).
-// WFP делает POST на approvedUrl/declinedUrl → Vercel static вернёт 405,
-// поэтому отдаём через serverless handler. vercel.json: rewrite /thanks → /api/thanks.
-
-const HTML = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
@@ -212,7 +208,7 @@ fbq('track','PageView');
     document.getElementById('title').textContent = 'Не оплачено';
     document.getElementById('sub').textContent = 'Платіж не пройшов';
     document.getElementById('status-list').innerHTML =
-      '<li>можливо ти натиснула \\"Назад\\"</li>'+
+      '<li>можливо ти натиснула \"Назад\"</li>'+
       '<li>або картка не підтвердила платіж</li>'+
       '<li>спробуй ще раз або обери накладений платіж</li>';
     document.getElementById('tiny').innerHTML = 'Можеш повторити замовлення з кошика — він збережений.';
@@ -239,20 +235,3 @@ fbq('track','PageView');
 })();
 </script>
 </body></html>
-`;
-
-module.exports = async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(204).end();
-  }
-  if (req.method !== 'GET' && req.method !== 'POST') {
-    res.setHeader('Allow', 'GET, POST');
-    return res.status(405).send('Method Not Allowed');
-  }
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=60, must-revalidate');
-  return res.status(200).send(HTML);
-};

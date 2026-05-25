@@ -231,8 +231,15 @@ module.exports = async function handler(req, res) {
   const base = 'https://' + merchantDomainName;
   // approvedUrl/declinedUrl ведут на /thanks (cleanUrls=true → thanks.html)
   // — переопределяют значения из ЛК WFP, которые прибиты на чужой проект.
-  const approvedUrl = base + '/thanks?paid=1&order=' + encodeURIComponent(orderReference);
-  const declinedUrl = base + '/thanks?paid=0&order=' + encodeURIComponent(orderReference);
+  // Pass amount + num_items so thanks page can fire browser Pixel Purchase with
+  // accurate value. Note: for COD this is the prepayment (200), full order total
+  // goes via CAPI from wayforpay-callback (bg_orders.total).
+  const numItems = items.reduce(function(s, it){ return s + (parseInt((it && it.qty) || 1, 10)); }, 0);
+  const thanksQs = '&order=' + encodeURIComponent(orderReference) +
+                   '&amount=' + encodeURIComponent(amountStr) +
+                   '&n=' + encodeURIComponent(String(numItems));
+  const approvedUrl = base + '/thanks?paid=1' + thanksQs;
+  const declinedUrl = base + '/thanks?paid=0' + thanksQs;
   const serviceUrl  = base + '/api/wayforpay-callback';
 
   return res.status(200).json({

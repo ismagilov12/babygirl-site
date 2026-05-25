@@ -2,12 +2,11 @@
 // Скелет із досвіду ULTERA · SECURITY v2.
 //
 // Що робить:
-//   1. STRICT signature verify (без подпису = відмова, не "якщо не співпало")
+//   1. STRICT signature verify (без подпису = відмова)
 //   2. Idempotency: INSERT у {brand}_wayforpay_events з unique(order_ref, status)
-//      → повтори не виконують side-effects двічі.
 //   3. Логує raw_payload, source_ip — для аудиту.
-//   4. На першій події 'Approved' можна оновити orders.payment_status='paid'
-//      та дернути CRM. (TODO у Phase 2 — як на ULTERA.)
+//   4. На першій події 'Approved' оновлює orders.payment_status='paid' і
+//      шле Meta CAPI Purchase (server-side mirror браузерного Pixel).
 //   5. Відповідає WayForPay підписаним JSON {orderReference,status,time,signature}.
 //
 // CORS навмисно НЕ виставляємо — це server-to-server.
@@ -15,11 +14,7 @@
 const crypto = require('crypto');
 const cfg = require('./_config');
 const T = cfg.T;
-
-const SIG_FIELDS_ORDER = [
-  'merchantAccount', 'orderReference', 'amount', 'currency',
-  'authCode', 'cardPan', 'transactionStatus', 'reasonCode'
-];
+const capi = require('./_fb_capi');
 
 async function sb(path, opts) {
   opts = opts || {};
@@ -111,6 +106,48 @@ module.exports = async function handler(req, res) {
       method: 'PATCH',
       body: JSON.stringify({ payment_status: 'paid', paid_at: new Date().toISOString() })
     });
+
+    // Meta CAPI Purchase — server-side mirror of browser Pixel.
+    // event_id == orderReference -> Meta deduplicates with browser fbq Purchase.
+    try {
+      const selectCols = 'customer_name,customer_phone,customer_email,items,total,delivery_city,fbp,fbc,landing_url';
+      const orderRows = await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference) + '&select=' + selectCols + '&limit=1');
+      const order = (Array.isArray(orderRows) && orderRows[0]) ? orderRows[0] : {};
+      const items = Array.isArray(order.items) ? order.items : [];
+      const contentIds = items.map(function(it){ return String((it && it.uid) || ''); }).filter(Boolean);
+      const contents = items.map(function(it){
+        return {
+          id: String((it && it.uid) || ''),
+          quantity: parseInt((it && it.qty) || 1, 10),
+          item_price: Number(it && it.price) || 0
+        };
+      }).filter(function(c){ return !!c.id; });
+      const numItems = items.reduce(function(s, it){ return s + (parseInt((it && it.qty) || 1, 10)); }, 0);
+      capi.sendPurchaseFireAndForget({
+        event_id: orderReference,
+        order_id: orderReference,
+        // Prefer bg_orders.total (full order amount) over WFP amount, because for COD
+        // prepayment WFP amount=200 but actual purchase value is the full order total.
+        // For full card payment they are equal, so this is safe in both flows.
+        value: Number(order.total) || (amount != null ? Number(amount) : 0),
+        currency: currency || 'UAH',
+        content_ids: contentIds,
+        contents: contents,
+        num_items: numItems,
+        email: order.customer_email,
+        phone: order.customer_phone,
+        fio: order.customer_name,
+        city: order.delivery_city,
+        country: 'ua',
+        fbp: order.fbp || null,
+        fbc: order.fbc || null,
+        client_ip: clientIp,
+        client_ua: req.headers['user-agent'] || '',
+        event_source_url: order.landing_url || ('https://' + cfg.SITE_DOMAIN + '/')
+      });
+    } catch (e) {
+      console.warn('[wfp-callback] capi prep threw', e && e.message);
+    }
   }
 
   // Signed response
@@ -123,6 +160,6 @@ module.exports = async function handler(req, res) {
 
   res.setHeader('Content-Type', 'application/json');
   return res.status(200).json({
-    orderReference, status, time: responseTime, signature: responseSig
+    orderReference: orderReference, status: status, time: responseTime, signature: responseSig
   });
 };
