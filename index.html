@@ -2448,6 +2448,16 @@ body.pm-open{overflow:hidden}
       return;
     }
     $btn.disabled = true; $btn.textContent = 'обробка…'; $res.textContent = ''; $res.className = 'cart-result';
+    // Meta InitiateCheckout — начало оформления заказа (срабатывает на сайте, ДО редиректа в оплату,
+    // поэтому Facebook его получает независимо от проблемы с возвратом из WayForPay).
+    try {
+      var icItems = cart.map(function(c){ return String(c.uid); });
+      var icValue = Math.round(cart.reduce(function(s,c){ return s + (Number(c.price)||0)*(parseInt(c.qty,10)||1); },0)*100)/100;
+      var icNum = cart.reduce(function(s,c){ return s + (parseInt(c.qty,10)||1); },0);
+      var icEventId = 'ic-' + (window.SESSION_ID||'') + '-' + Date.now().toString(36);
+      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'UAH', num_items: icNum, content_ids: icItems, content_type:'product' }, { eventID: icEventId });
+      window.bgTrack && window.bgTrack('begin_checkout',{ value: icValue, event_id: icEventId, meta:{ num_items: icNum } });
+    } catch(e){}
 
     var promo = null;
     try { promo = sessionStorage.getItem('bg_promo_code'); } catch(e){}
