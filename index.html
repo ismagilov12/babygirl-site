@@ -1885,6 +1885,7 @@ body.pm-open{overflow:hidden}
         ? '<div class="card-swatches" data-uid="' + escapeHtml(p.uid) + '">' +
             p.colors.map(function(c, ci){
               return '<button type="button" class="card-swatch' + (ci===0?' active':'') + '" ' +
+                'data-code="' + escapeHtml(c.code) + '" ' +
                 'data-photo="' + escapeHtml(c.photo) + '" ' +
                 'style="background:' + escapeHtml(c.hex) + '" ' +
                 'aria-label="' + escapeHtml(c.name) + '"></button>';
@@ -2226,11 +2227,14 @@ body.pm-open{overflow:hidden}
 
   function totalUnits(){ return cart.reduce(function(s, l){ return s + l.qty; }, 0); }
 
-  function addToCart(uid){
+  function addToCart(uid, colorCode){
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;
     var was = totalUnits();
-    var col = (Array.isArray(p.colors) && pmSelectedColor) ? p.colors.find(function(c){return c.code===pmSelectedColor;}) : null;
+    // Resolve color: explicit arg (from grid swatch) -> modal selection -> first color (never empty for multi-color items)
+    var sel = colorCode || ((Array.isArray(p.colors) && pmSelectedColor) ? pmSelectedColor : null);
+    if (Array.isArray(p.colors) && p.colors.length && !sel) sel = p.colors[0].code;
+    var col = (Array.isArray(p.colors) && sel) ? p.colors.find(function(c){return c.code===sel;}) : null;
     var cartUid = p.uid + (col ? '|' + col.code : '');
     var ex = cart.find(function(c){ return c.uid === cartUid; });
     if (ex) ex.qty += 1;
@@ -2413,7 +2417,11 @@ body.pm-open{overflow:hidden}
   $grid.addEventListener('click', function(e){
     // 1. Кнопка «Add to cart»
     var buyBtn = e.target.closest('[data-action="buy"]');
-    if (buyBtn) { e.preventDefault(); e.stopPropagation(); addToCart(buyBtn.dataset.uid); return; }
+    if (buyBtn) { e.preventDefault(); e.stopPropagation();
+      var _card = buyBtn.closest('.card');
+      var _sw = _card ? _card.querySelector('.card-swatch.active') : null;
+      addToCart(buyBtn.dataset.uid, _sw ? _sw.dataset.code : '');
+      return; }
     // 2. Dots или photo-track — игнорировать (свайп уже обработан)
     if (e.target.closest('.card-dots')) return;
     // 3. Иначе — открыть product modal
