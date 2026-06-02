@@ -2122,6 +2122,7 @@ body.pm-open{overflow:hidden}
         } else { Object.assign(byUid[row.uid], row); }
       });
       renderGrid();
+      handleDeepLink();
     })
     .catch(function(e){ console.warn('[SB inject]', e.message); });
   }
@@ -2547,7 +2548,35 @@ body.pm-open{overflow:hidden}
     });
   });
 
+  // ======== DEEP-LINK (?p=uid&c=color) — открытие карточки по ссылке из фида/рекламы ========
+  var _deepLinkDone = false;
+  function handleDeepLink(){
+    if (_deepLinkDone) return;
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch(e){ return; }
+    var uid = params.get('p');
+    if (!uid) { _deepLinkDone = true; return; }
+    var p = (D.all || []).find(function(x){ return x.uid === uid; });
+    if (!p) return; // продукт ще не підвантажений — спробуємо після Supabase inject
+    _deepLinkDone = true;
+    var color = params.get('c');
+    openProduct(uid);
+    if (color) {
+      var tries = 0;
+      var iv = setInterval(function(){
+        tries++;
+        var box = document.getElementById('pmColors');
+        if (box) {
+          var btn = box.querySelector('.pm-color[data-color="' + color + '"]');
+          if (btn) { btn.click(); clearInterval(iv); return; }
+        }
+        if (tries > 40) clearInterval(iv);
+      }, 200);
+    }
+  }
+
   renderGrid();
+  handleDeepLink();
   bootstrapFromSupabase();
 })();
 </script>
