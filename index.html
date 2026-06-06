@@ -1695,7 +1695,7 @@ body.pm-open{overflow:hidden}
     <h1 id="pmTitle">Title</h1>
     <div class="pm-price"><span id="pmPrice">0</span><span class="currency">₴</span></div>
     <p class="pm-descr" id="pmDescr"></p>
-    <div class="pm-specs">
+    <div class="pm-specs" id="pmSpecs">
       <div class="pm-spec"><div class="lbl">★ size</div><div class="val">one size</div></div>
       <div class="pm-spec"><div class="lbl">★ fabric</div><div class="val">95% bavovna<br>5% еластан</div></div>
       <div class="pm-spec"><div class="lbl">★ fit</div><div class="val">oversize<br>подовжений</div></div>
@@ -2366,6 +2366,20 @@ body.pm-open{overflow:hidden}
     pmCrumb.textContent = p.title.toLowerCase();
     pmPrice.textContent = p.price;
     pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversize · bavovna 95% + еластан 5% · DTF print';
+    // ==== Specs (динамічні; фолбек — футболкові) ====
+    (function(){
+      var specsEl = document.getElementById('pmSpecs');
+      if (!specsEl) return;
+      var sp = (p.attrs && Array.isArray(p.attrs.specs) && p.attrs.specs.length) ? p.attrs.specs : [
+        {l:'size',   v:'one size'},
+        {l:'fabric', v:'95% bavovna<br>5% еластан'},
+        {l:'fit',    v:'oversize<br>подовжений'},
+        {l:'print',  v:'DTF<br>does not fade'}
+      ];
+      specsEl.innerHTML = sp.map(function(s){
+        return '<div class="pm-spec"><div class="lbl">★ ' + escapeHtml(String(s.l||'')) + '</div><div class="val">' + String(s.v||'') + '</div></div>';
+      }).join('');
+    })();
     pmCta.textContent = 'Add to cart ♥'; pmCta.classList.remove('added');
     pmIdx = 0; pmGo(0);
     pmOverlay.classList.add('open');
