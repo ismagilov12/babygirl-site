@@ -1355,6 +1355,40 @@ nav.nav.scrolled{background:rgba(13,10,12,.86);border-bottom:1px solid rgba(201,
 .info-card .legal{color:#6F625C}
 /* footer */
 footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
+
+/* ===== brand philosophy ===== */
+.sg-philo{
+  position:relative;
+  background:radial-gradient(120% 120% at 50% 0%, #14100F 0%, #0A0809 70%);
+  border-top:1px solid rgba(201,163,95,.2);
+  padding:84px 0 92px;
+  text-align:center;
+  overflow:hidden;
+}
+.sg-philo .container{ position:relative; z-index:2; max-width:760px; }
+.sg-philo-eyebrow{
+  font-size:12px; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--yellow); opacity:.85; margin-bottom:26px;
+}
+.sg-philo-title{
+  font-family:'Playfair Display',serif; font-weight:400;
+  font-size:clamp(34px,6vw,56px); line-height:1.02; letter-spacing:-.02em;
+  text-transform:uppercase; color:#F2ECE6; margin:0 0 28px;
+}
+.sg-philo-lead{
+  font-size:clamp(17px,2.4vw,21px); line-height:1.75; color:#E8DED6;
+  margin:0 auto; max-width:640px; font-weight:300;
+}
+.sg-philo-rule{
+  width:54px; height:1px; margin:38px auto;
+  background:linear-gradient(90deg, transparent, var(--yellow), transparent);
+}
+.sg-philo-body{
+  font-size:clamp(14px,1.9vw,16px); line-height:1.85; color:#A89A92;
+  margin:0 auto; max-width:600px; font-weight:300;
+}
+@media(max-width:640px){ .sg-philo{ padding:64px 0 70px; } }
+
 .foot-logo{font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#F2ECE6}
 .foot-logo .girl{color:#D92344}
 .foot-tagline{color:#A89A92;font-style:italic;font-family:'Playfair Display',serif;font-size:15px}
@@ -1716,6 +1750,25 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         </div>
       </article>
     </div>
+  </div>
+</section>
+
+<!-- ===== BRAND PHILOSOPHY ===== -->
+<section class="sg-philo">
+  <div class="container">
+    <div class="sg-philo-eyebrow">філософія бренду</div>
+    <h2 class="sg-philo-title">Майже нічого.<br>Не для всіх.</h2>
+    <p class="sg-philo-lead">
+      Інтимні комплекти для твого приватного шоу.
+      Вона не роздягається — вона грає.
+      І лише вона вирішує, що тобі дозволено побачити.
+    </p>
+    <div class="sg-philo-rule"></div>
+    <p class="sg-philo-body">
+      Створене для твоїх моментів, якими б вони не були.
+      Для себе, для когось, хто дивиться, або для моменту,
+      коли ти входиш у свою роль — воно підлаштовується під твій настрій.
+    </p>
   </div>
 </section>
 
