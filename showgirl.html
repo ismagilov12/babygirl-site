@@ -1198,6 +1198,17 @@ body.pm-open{overflow:hidden}
 }
 .pm-color:hover .pm-color-name,.pm-color.active .pm-color-name{opacity:1}
 
+/* ===== photo zoom lightbox ===== */
+.pm-stage-track > img{cursor:zoom-in}
+.pmz{position:fixed;inset:0;z-index:1000;background:rgba(10,10,14,.94);display:none;align-items:center;justify-content:center;touch-action:none}
+.pmz.open{display:flex}
+.pmz-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pmz-media{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .2s ease;cursor:zoom-in;user-select:none;-webkit-user-drag:none;touch-action:none}
+.pmz-close{position:fixed;top:16px;right:18px;z-index:1002;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--black);border:3px solid var(--black);font-size:26px;font-weight:900;cursor:pointer;box-shadow:3px 3px 0 var(--black);display:flex;align-items:center;justify-content:center;line-height:1}
+.pmz-close:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.pmz-hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1002;background:rgba(14,14,18,.7);color:#fff;font-family:'VT323',monospace;font-size:14px;letter-spacing:.05em;padding:5px 14px;border-radius:999px;border:1.5px solid var(--black);pointer-events:none}
+body.pmz-open{overflow:hidden}
+
 /* grid section marquee — y2k bouncing band */
 .grid-section-marquee{
   grid-column:1 / -1;
@@ -1514,7 +1525,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     </div>
 
     <!-- DATA: каталог. Парсить validate_deploy_js.py (id="DATA"). -->
-    <script id="DATA" type="application/json">{"all": [{"uid": "sg-leo-black", "title": "Showgirl leopard/black straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 10, "ribbon": "ICON", "photo_main": "assets/showgirl/sg-leo-black-1.webp", "photos": ["assets/showgirl/sg-leo-black-1.webp", "assets/showgirl/sg-leo-black-2.webp", "assets/showgirl/sg-leo-black-3.webp", "assets/showgirl/sg-leo-black-4.webp", "assets/showgirl/sg-leo-black-5.webp", "assets/showgirl/sg-leo-black-6.webp", "assets/showgirl/sg-leo-black-7.webp", "assets/showgirl/sg-leo-black-8.webp"], "description": "Леопардовий настрій у темному звучанні. Чорні лінії тримають форму, але майже нічого не приховують. Ніжний тонкий сатин м'яко лягає на тіло — легке, майже невагоме відчуття, а деталі-серця притягують і утримують погляд. One size, повністю регулюється під твоє тіло і настрій. У комплекті чокер у формі серця. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "ніжний сатин"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "featured": true}, {"uid": "sg-leo-red", "title": "Showgirl leopard/red straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 20, "ribbon": "HOT", "photo_main": "assets/showgirl/sg-leo-red-1.webp", "photos": ["assets/showgirl/sg-leo-red-1.webp", "assets/showgirl/sg-leo-red-2.webp", "assets/showgirl/sg-leo-red-3.webp", "assets/showgirl/sg-leo-red-4.webp", "assets/showgirl/sg-leo-red-5.webp", "assets/showgirl/sg-leo-red-6.webp", "assets/showgirl/sg-leo-red-7.webp"], "description": "Більш смілива версія showgirl. Леопардовий інстинкт із червоними лініями, які додають напруги кожному руху. Ніжний сатин, деталі-серця, one size з повним регулюванням. У комплекті чокер-серце. Грайливо, трохи небезпечно і неможливо відірвати погляд.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "ніжний сатин"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-cow-pink", "title": "Showgirl cow/pink straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 30, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-cow-pink-1.webp", "photos": ["assets/showgirl/sg-cow-pink-1.webp", "assets/showgirl/sg-cow-pink-2.webp", "assets/showgirl/sg-cow-pink-3.webp", "assets/showgirl/sg-cow-pink-4.webp", "assets/showgirl/sg-cow-pink-5.webp", "assets/showgirl/sg-cow-pink-6.webp"], "description": "М'який, грайливий і трохи неочікуваний. Контраст принта з ніжними рожевими лініями виглядає невинно, але відчувається зовсім інакше. Сатин, чіткі лінії, one size з повним регулюванням. У комплекті ніжний рожевий чокер-серце. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "ніжний сатин"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-tension", "title": "Tension", "family": "sg-bikini", "price": 3800, "in_grid": true, "sort_order": 40, "ribbon": "BOLD", "photo_main": "assets/showgirl/sg-tension-1.webp", "photos": ["assets/showgirl/sg-tension-1.webp", "assets/showgirl/sg-tension-2.webp", "assets/showgirl/sg-tension-3.webp", "assets/showgirl/sg-tension-4.webp", "assets/showgirl/sg-tension-5.webp", "assets/showgirl/sg-tension-6.webp", "assets/showgirl/sg-tension-7.webp"], "description": "Мікро-комплект, побудований на напрузі. Майже нічого — але неможливо не дивитись: тонкі лінії, глянцева текстура і грайливі серця-акценти. Естетика ретро-стрипу, де мінімум — це намір. One size, повністю регулюється. Сміливо, трохи зухвало. Не для всіх.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "глянцева текстура"}, {"l": "details", "v": "серця-акценти"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-bunny", "title": "Soft bunny", "family": "sg-bikini", "price": 3900, "in_grid": true, "sort_order": 50, "ribbon": "SOFT", "photo_main": "assets/showgirl/sg-bunny-1.webp", "photos": ["assets/showgirl/sg-bunny-1.webp", "assets/showgirl/sg-bunny-2.webp", "assets/showgirl/sg-bunny-3.webp", "assets/showgirl/sg-bunny-4.webp", "assets/showgirl/sg-bunny-5.webp"], "description": "М'який, пухнастий і майже невагомий комплект, що передає настрій з першого дотику. Виглядає мило, майже невинно… ніби ти готова добре себе поводити. One size, повністю регулюється, відкриваючи рівно стільки, скільки потрібно. Неможливо забути.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "soft fluffy"}, {"l": "details", "v": "серце-підвіска"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-neck", "title": "Neck Pieces", "family": "sg-neck", "price": 1490, "in_grid": true, "sort_order": 60, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-neck-1.webp", "photos": ["assets/showgirl/sg-neck-1.webp", "assets/showgirl/sg-neck-2.webp", "assets/showgirl/sg-neck-3.webp"], "description": "Маленька деталь, яка змінює все. М'які лінії ніжно облягають шию, а серце притягує і утримує погляд. Мінімалістичний, регульований — під твій настрій. Делікатний акцент або головний елемент образу. Колір: рожевий або чорний.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>регулюється"}, {"l": "colors", "v": "pink / black"}, {"l": "details", "v": "срібне серце"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "colors": [{"code": "pink", "name": "Pink", "hex": "#FF8DB8", "photo": "assets/showgirl/sg-neck-1.webp"}, {"code": "black", "name": "Black", "hex": "#0A0A0A", "photo": "assets/showgirl/sg-neck-1.webp"}]}], "grid": ["sg-leo-black", "sg-leo-red", "sg-cow-pink", "sg-tension", "sg-bunny", "sg-neck"], "featured": ["sg-leo-black"]}</script>
+    <script id="DATA" type="application/json">{"all": [{"uid": "sg-leo-black", "title": "Showgirl leopard/black straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 10, "ribbon": "ICON", "photo_main": "assets/showgirl/sg-leo-black-1.webp", "photos": ["assets/showgirl/sg-leo-black-1.webp", "assets/showgirl/sg-leo-black-2.webp", "assets/showgirl/sg-leo-black-3.webp", "assets/showgirl/sg-leo-black-4.webp", "assets/showgirl/sg-leo-black-5.webp", "assets/showgirl/sg-leo-black-6.webp", "assets/showgirl/sg-leo-black-7.webp", "assets/showgirl/sg-leo-black-8.webp"], "description": "Леопардовий настрій у темному звучанні. Чорні лінії тримають форму, але майже нічого не приховують. Ніжний тонкий сатин м'яко лягає на тіло — легке, майже невагоме відчуття, а деталі-серця притягують і утримують погляд. One size, повністю регулюється під твоє тіло і настрій. У комплекті чокер у формі серця. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "featured": true}, {"uid": "sg-leo-red", "title": "Showgirl leopard/red straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 20, "ribbon": "HOT", "photo_main": "assets/showgirl/sg-leo-red-1.webp", "photos": ["assets/showgirl/sg-leo-red-1.webp", "assets/showgirl/sg-leo-red-2.webp", "assets/showgirl/sg-leo-red-3.webp", "assets/showgirl/sg-leo-red-4.webp", "assets/showgirl/sg-leo-red-5.webp", "assets/showgirl/sg-leo-red-6.webp", "assets/showgirl/sg-leo-red-7.webp"], "description": "Більш смілива версія showgirl. Леопардовий інстинкт із червоними лініями, які додають напруги кожному руху. Ніжний сатин, деталі-серця, one size з повним регулюванням. У комплекті чокер-серце. Грайливо, трохи небезпечно і неможливо відірвати погляд.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-cow-pink", "title": "Showgirl cow/pink straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 30, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-cow-pink-1.webp", "photos": ["assets/showgirl/sg-cow-pink-1.webp", "assets/showgirl/sg-cow-pink-2.webp", "assets/showgirl/sg-cow-pink-3.webp", "assets/showgirl/sg-cow-pink-4.webp", "assets/showgirl/sg-cow-pink-5.webp", "assets/showgirl/sg-cow-pink-6.webp"], "description": "М'який, грайливий і трохи неочікуваний. Контраст принта з ніжними рожевими лініями виглядає невинно, але відчувається зовсім інакше. Сатин, чіткі лінії, one size з повним регулюванням. У комплекті ніжний рожевий чокер-серце. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-tension", "title": "Tension", "family": "sg-bikini", "price": 3800, "in_grid": true, "sort_order": 40, "ribbon": "BOLD", "photo_main": "assets/showgirl/sg-tension-1.webp", "photos": ["assets/showgirl/sg-tension-1.webp", "assets/showgirl/sg-tension-2.webp", "assets/showgirl/sg-tension-3.webp", "assets/showgirl/sg-tension-4.webp", "assets/showgirl/sg-tension-5.webp", "assets/showgirl/sg-tension-6.webp", "assets/showgirl/sg-tension-7.webp"], "description": "Мікро-комплект, побудований на напрузі. Майже нічого — але неможливо не дивитись: тонкі лінії, глянцева текстура і грайливі серця-акценти. Естетика ретро-стрипу, де мінімум — це намір. One size, повністю регулюється. Сміливо, трохи зухвало. Не для всіх.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "глянцева текстура"}, {"l": "details", "v": "серця-акценти"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-bunny", "title": "Soft bunny", "family": "sg-bikini", "price": 3900, "in_grid": true, "sort_order": 50, "ribbon": "SOFT", "photo_main": "assets/showgirl/sg-bunny-1.webp", "photos": ["assets/showgirl/sg-bunny-1.webp", "assets/showgirl/sg-bunny-2.webp", "assets/showgirl/sg-bunny-3.webp", "assets/showgirl/sg-bunny-4.webp", "assets/showgirl/sg-bunny-5.webp"], "description": "М'який, пухнастий і майже невагомий комплект, що передає настрій з першого дотику. Виглядає мило, майже невинно… ніби ти готова добре себе поводити. One size, повністю регулюється, відкриваючи рівно стільки, скільки потрібно. Неможливо забути.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "fabric", "v": "soft fluffy"}, {"l": "details", "v": "серце-підвіска"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-neck", "title": "Neck Pieces", "family": "sg-neck", "price": 1490, "in_grid": true, "sort_order": 60, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-neck-1.webp", "photos": ["assets/showgirl/sg-neck-1.webp", "assets/showgirl/sg-neck-2.webp", "assets/showgirl/sg-neck-3.webp"], "description": "Маленька деталь, яка змінює все. М'які лінії ніжно облягають шию, а серце притягує і утримує погляд. Мінімалістичний, регульований — під твій настрій. Делікатний акцент або головний елемент образу. Колір: рожевий або чорний.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>регулюється"}, {"l": "colors", "v": "pink / black"}, {"l": "details", "v": "срібне серце"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "colors": [{"code": "pink", "name": "Pink", "hex": "#FF8DB8", "photo": "assets/showgirl/sg-neck-1.webp"}, {"code": "black", "name": "Black", "hex": "#0A0A0A", "photo": "assets/showgirl/sg-neck-1.webp"}]}], "grid": ["sg-leo-black", "sg-leo-red", "sg-cow-pink", "sg-tension", "sg-bunny", "sg-neck"], "featured": ["sg-leo-black"]}</script>
 
     <div id="grid" class="grid"></div>
   </div>
@@ -1893,6 +1904,13 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     </div>
     <button class="pm-cta" id="pmCta">Add to cart ♥</button>
   </div>
+</div>
+
+<!-- ===== PHOTO ZOOM LIGHTBOX ===== -->
+<div class="pmz" id="pmZoom" aria-hidden="true">
+  <button class="pmz-close" id="pmZoomClose" aria-label="close">×</button>
+  <div class="pmz-stage" id="pmZoomStage"></div>
+  <div class="pmz-hint" id="pmZoomHint">tap to zoom · drag to move</div>
 </div>
 
 <script>
@@ -2595,17 +2613,94 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     var t = e.target.closest('[data-idx]');
     if (t) pmGo(parseInt(t.dataset.idx, 10));
   });
-  // Swipe stage
-  var pmStartX = null;
-  pmStage.addEventListener('touchstart', function(e){ pmStartX = e.touches[0].clientX; }, {passive:true});
+  // Swipe stage + tap-to-zoom
+  var pmStartX = null, pmStartY = null, pmStageMoved = false, pmLastTouch = 0;
+  pmStage.addEventListener('touchstart', function(e){ pmStartX = e.touches[0].clientX; pmStartY = e.touches[0].clientY; pmStageMoved = false; }, {passive:true});
+  pmStage.addEventListener('touchmove', function(e){
+    if (pmStartX == null) return;
+    if (Math.abs(e.touches[0].clientX - pmStartX) > 8 || Math.abs(e.touches[0].clientY - pmStartY) > 8) pmStageMoved = true;
+  }, {passive:true});
   pmStage.addEventListener('touchend', function(e){
     if (pmStartX == null) return;
     var dx = e.changedTouches[0].clientX - pmStartX;
     if (Math.abs(dx) > 40) pmGo(dx < 0 ? pmIdx + 1 : pmIdx - 1);
+    else if (!pmStageMoved) openZoomCurrent();
+    pmLastTouch = Date.now();
     pmStartX = null;
   });
+  pmStage.addEventListener('click', function(e){
+    if (e.target.closest('.pm-arrow') || e.target.closest('.pm-counter') || e.target.closest('.pm-ribbon')) return;
+    if (Date.now() - pmLastTouch < 600) return; // touch already handled
+    openZoomCurrent();
+  });
+
+  // ======== PHOTO ZOOM LIGHTBOX ========
+  var pmZoom      = document.getElementById('pmZoom');
+  var pmZoomStage = document.getElementById('pmZoomStage');
+  var pmZoomClose = document.getElementById('pmZoomClose');
+  var pmZoomHint  = document.getElementById('pmZoomHint');
+  function _pmzIsVideo(url){ return /\.(mp4|webm|mov)(\?|$)/i.test(url||''); }
+  function openZoomCurrent(){
+    if (!pmPhotos.length) return;
+    openZoom(pmPhotos[pmIdx]);
+  }
+  function openZoom(url){
+    if (!url) return;
+    var isVid = _pmzIsVideo(url);
+    if (isVid){
+      pmZoomStage.innerHTML = '<video class="pmz-media" src="' + escapeHtml(url) + '" autoplay loop playsinline controls></video>';
+      pmZoomHint.style.display = 'none';
+    } else {
+      pmZoomStage.innerHTML = '<img class="pmz-media" src="' + escapeHtml(url) + '" alt="">';
+      pmZoomHint.style.display = '';
+      setupImgZoom(pmZoomStage.querySelector('.pmz-media'));
+    }
+    pmZoom.classList.add('open');
+    pmZoom.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('pmz-open');
+  }
+  function closeZoom(){
+    pmZoom.classList.remove('open');
+    pmZoom.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('pmz-open');
+    pmZoomStage.innerHTML = '';
+  }
+  function setupImgZoom(img){
+    var scale = 1, tx = 0, ty = 0, dragging = false, sx = 0, sy = 0, moved = false;
+    function apply(){ img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'; }
+    img.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (moved){ moved = false; return; }
+      if (scale === 1){
+        scale = 2.4;
+        var r = img.getBoundingClientRect();
+        var cx = e.clientX - (r.left + r.width / 2);
+        var cy = e.clientY - (r.top + r.height / 2);
+        tx = -cx * (scale - 1); ty = -cy * (scale - 1);
+        img.style.cursor = 'grab';
+      } else {
+        scale = 1; tx = 0; ty = 0;
+        img.style.cursor = 'zoom-in';
+      }
+      apply();
+    });
+    img.addEventListener('pointerdown', function(e){
+      if (scale === 1) return;
+      dragging = true; moved = false;
+      sx = e.clientX - tx; sy = e.clientY - ty;
+      img.setPointerCapture(e.pointerId); img.style.cursor = 'grabbing';
+    });
+    img.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      tx = e.clientX - sx; ty = e.clientY - sy; moved = true; apply();
+    });
+    img.addEventListener('pointerup', function(){ if (dragging){ dragging = false; img.style.cursor = 'grab'; } });
+  }
+  pmZoomClose.addEventListener('click', closeZoom);
+  pmZoom.addEventListener('click', function(e){ if (e.target === pmZoom || e.target === pmZoomStage) closeZoom(); });
   // Esc closes modal, arrows navigate
   document.addEventListener('keydown', function(e){
+    if (pmZoom.classList.contains('open')){ if (e.key === 'Escape') closeZoom(); return; }
     if (!pmEl.classList.contains('open')) return;
     if (e.key === 'Escape') closeProduct();
     else if (e.key === 'ArrowLeft')  pmGo(pmIdx - 1);
