@@ -90,7 +90,8 @@ window.BG_MEDIA_DEFAULTS = {
   heroVideo:  "assets/showgirl/sg-hero.mp4",
   heroPoster: "",  // прибрано: щоб не дублювати nav-logo-img який має анімацію logo-land
   heroVideoMobile: "assets/showgirl/sg-hero.mp4",
-  lera:       "assets/showgirl/sg-about.webp"
+  lera:       "assets/showgirl/sg-about.webp",
+  leraVideo:  "assets/showgirl/sg-about.mp4"
 };
 </script>
 <!-- bg-media-bootstrap -->
@@ -654,7 +655,8 @@ input,button{font-size:16px}
   aspect-ratio:4/5;
   max-height:none;
 }
-.about-photo > img{
+.about-photo > img,
+.about-photo > video{
   width:100%;height:100%;object-fit:cover;display:block;
   border-radius:15px;
 }
@@ -1547,7 +1549,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       <div class="about-photo">
         <span class="name-tag">Lera · founder</span>
         <span class="hero-sticker" aria-hidden="true">♥</span>
-        <img data-bg-media="lera" alt="Lera">
+        <video data-bg-media="leraVideo" data-bg-poster="lera" autoplay muted loop playsinline preload="metadata" aria-label="Lera"></video>
       </div>
 
       <div class="gta-dialog">
