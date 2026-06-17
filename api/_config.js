@@ -10,6 +10,8 @@ module.exports = {
   ALLOWED_ORIGINS_EXACT: [
     'https://babygirl.com.ua',
     'https://www.babygirl.com.ua',
+    'https://showgirl.world',
+    'https://www.showgirl.world',
     'https://babygirl-site-six.vercel.app',
     'https://babygirl-site-ismagilov12s-projects.vercel.app',
     'http://localhost:3000',

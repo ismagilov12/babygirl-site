@@ -2,6 +2,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/", "has": [{ "type": "host", "value": "showgirl.world" }], "destination": "/showgirl" },
+    { "source": "/", "has": [{ "type": "host", "value": "www.showgirl.world" }], "destination": "/showgirl" },
     { "source": "/thanks", "destination": "/api/thanks" },
     { "source": "/feed.xml", "destination": "/api/feed" }
   ]
