@@ -233,15 +233,15 @@ fbq('track','PageView');
   <div class="steps" id="steps">
     <div class="step"><span class="ic">💬</span><span class="tx"><b>Менеджер напише</b> — підтвердимо замовлення та деталі</span></div>
     <div class="step"><span class="ic">💳</span><span class="tx">Оплата підтверджується <b>автоматично</b></span></div>
-    <div class="step"><span class="ic">🚚</span><span class="tx">Відправка з Києва — <b>Нова Пошта</b>, 1–3 дні</span></div>
+    <div class="step"><span class="ic">🚚</span><span class="tx">Відправка з Харкова — <b>Нова Пошта</b>, 1–3 дні</span></div>
   </div>
 
-  <a id="tgLink" class="tg-btn" href="#" target="_blank" rel="noopener">
+  <a id="tgLink" class="tg-btn" href="#" target="_blank" rel="noopener" style="display:none">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.022c.243-.213-.054-.334-.373-.121l-6.871 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.566-4.458c.535-.196 1.006.128.832.938z"/></svg>
     <span>Відстежити в Telegram</span>
   </a>
 
-  <p class="tiny" id="tiny">У боті побачиш склад замовлення, статус оплати та зможеш зв'язатись з менеджером.</p>
+  <p class="tiny" id="tiny">Менеджер зв'яжеться з тобою найближчим часом, щоб підтвердити замовлення ♥</p>
 
   <a class="back" href="https://babygirl.com.ua/">← повернутись на сайт</a>
 </div>
@@ -272,14 +272,10 @@ fbq('track','PageView');
       '<div class="step"><span class="ic">🛒</span><span class="tx">Кошик <b>збережено</b> — можеш повторити замовлення</span></div>'+
       '<div class="step"><span class="ic">📦</span><span class="tx">Або обери <b>накладений платіж</b> на пошті</span></div>';
     document.getElementById('tiny').innerHTML = 'Потрібна допомога? Напиши нам — все вирішимо ♥';
-    var tg = document.getElementById('tgLink');
-    tg.href = 'https://t.me/' + BOT;
-    tg.querySelector('span').textContent = 'Написати менеджеру';
   } else {
-    var startPayload = order ? ('?start=order_' + encodeURIComponent(order)) : '';
-    document.getElementById('tgLink').href = 'https://t.me/' + BOT + startPayload;
     fireConfetti();
   }
+  // Telegram-бот тимчасово вимкнено — кнопку не показуємо.
 
   // Meta Pixel Purchase (paid=1, есть order). eventID == order для дедупа
   // с серверным Purchase из api/wayforpay-callback.
