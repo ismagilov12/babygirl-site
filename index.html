@@ -2287,6 +2287,7 @@ body.pm-open{overflow:hidden}
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;
     pmCurrent = p;
+    pmUpdateURL(uid, (Array.isArray(p.colors) && p.colors.length) ? p.colors[0].code : null);
     var candidates = (Array.isArray(p.photos) && p.photos.length) ? p.photos.slice() : (p.photo_main ? [p.photo_main] : []);
     // Pre-validate: завантажуємо кожне фото через new Image() і лишаємо тільки робочі
     pmTrack.innerHTML = '';
@@ -2352,6 +2353,7 @@ body.pm-open{overflow:hidden}
           cBox.querySelectorAll(".pm-color").forEach(function(b){b.classList.remove("active");});
           btn.classList.add("active");
           pmSelectedColor = btn.dataset.color;
+          pmUpdateURL(pmCurrent && pmCurrent.uid, btn.dataset.color);
           // переставити перше фото в pmPhotos на вибраний колір
           var ph = btn.dataset.photo;
           var i = pmPhotos.indexOf(ph);
@@ -2390,12 +2392,21 @@ body.pm-open{overflow:hidden}
     if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
     try { window.bgTrack && window.bgTrack('view_item', { product_uid: uid, value: p.price }); } catch(e){}
   }
+  function pmUpdateURL(uid, color){
+    try{
+      var u = new URL(window.location.href);
+      if(uid){ u.searchParams.set('p', uid); if(color){ u.searchParams.set('c', color); } else { u.searchParams.delete('c'); } }
+      else { u.searchParams.delete('p'); u.searchParams.delete('c'); }
+      history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + (u.hash||''));
+    }catch(e){}
+  }
   function closeProduct(){
     pmOverlay.classList.remove('open');
     pmEl.classList.remove('open');
     pmEl.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('pm-open');
     pmCurrent = null;
+    pmUpdateURL(null, null);
   }
   pmClose.addEventListener('click', closeProduct);
   pmOverlay.addEventListener('click', closeProduct);
