@@ -1860,8 +1860,8 @@ body.pm-open{overflow:hidden}
   var D = { all: [], grid: [], featured: [] };
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
-  var EUR_RATE = 54; window.EUR_RATE = EUR_RATE;  // держать в синхроне с env WB_FX_UAH_PER_UNIT
-  var EN_MARKUP = 2.5; window.EN_MARKUP = EN_MARKUP; // наценка EN-версии; синхронно с WB_PRICE_MARKUP в api/westernbid.js
+  var EUR_RATE = 53.43; window.EUR_RATE = EUR_RATE;  // держать в синхроне с env WB_FX_UAH_PER_UNIT (=53.43: tee 1790x2 = ровно 67)
+  var EN_MARKUP = 2; window.EN_MARKUP = EN_MARKUP; // наценка EN-версии; синхронно с WB_PRICE_MARKUP в api/westernbid.js
   function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
 
   var $grid = document.getElementById('grid');

@@ -227,9 +227,10 @@ module.exports = async function handler(req, res) {
   }
   if (!(uahTotal > 0)) return res.status(400).json({ ok: false, error: 'Invalid total' });
 
-  // Наценка EN-версії (×2.5 за замовчуванням). Синхронно з EN_MARKUP в en.html!
+  // Наценка EN-версії (×2 за замовчуванням). Синхронно з EN_MARKUP в en.html!
   // Застосовується ДО конвертації і зберігається в bg_orders.total (реальна виручка в UAH).
-  const markup = Number(process.env.WB_PRICE_MARKUP || 2.5);
+  // Курс WB_FX_UAH_PER_UNIT=53.43 підібрано так, щоб tee 1790₴ ×2 = рівно €67.
+  const markup = Number(process.env.WB_PRICE_MARKUP || 2);
   uahTotal = Math.round(uahTotal * markup * 100) / 100;
 
   // Конвертація (env-driven).
