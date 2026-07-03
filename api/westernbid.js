@@ -227,6 +227,11 @@ module.exports = async function handler(req, res) {
   }
   if (!(uahTotal > 0)) return res.status(400).json({ ok: false, error: 'Invalid total' });
 
+  // Наценка EN-версії (×2.5 за замовчуванням). Синхронно з EN_MARKUP в en.html!
+  // Застосовується ДО конвертації і зберігається в bg_orders.total (реальна виручка в UAH).
+  const markup = Number(process.env.WB_PRICE_MARKUP || 2.5);
+  uahTotal = Math.round(uahTotal * markup * 100) / 100;
+
   // Конвертація (env-driven).
   const currency = String(process.env.WB_CURRENCY || 'EUR').toUpperCase();
   const fx = Number(process.env.WB_FX_UAH_PER_UNIT || 0);
@@ -264,7 +269,7 @@ module.exports = async function handler(req, res) {
     total: uahTotal,
     status: 'new',
     notes: 'САЙТ EN · WB ' + currency + ' goods ' + amount + ' + ship ' + shipEur.toFixed(2) +
-      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit' + discountNote,
+      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · x' + markup + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null
@@ -328,7 +333,7 @@ module.exports = async function handler(req, res) {
   (body.items || []).forEach(function (it, i) {
     const n = i + 1;
     const line = lineByUid ? lineByUid.find(function (b) { return b.uid === String(it.uid || ''); }) : null;
-    const unitUah = line ? Number(line.unitPriceAfter) : (parseFloat(it.price) || 0);
+    const unitUah = (line ? Number(line.unitPriceAfter) : (parseFloat(it.price) || 0)) * markup;
     const unitCur = Math.round((unitUah / fx) * 100) / 100;
     const baseUid = String(it.uid || '').split('|')[0];
     const label = (it.title || 'BabyGirl item') + (it.color_name ? ' / ' + it.color_name : '') + (it.size ? ' / ' + it.size : '');

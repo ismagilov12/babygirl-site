@@ -1861,7 +1861,8 @@ body.pm-open{overflow:hidden}
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
   var EUR_RATE = 54; window.EUR_RATE = EUR_RATE;  // держать в синхроне с env WB_FX_UAH_PER_UNIT
-  function euro(u){ return '€' + (Number(u||0)/EUR_RATE).toFixed(2); }
+  var EN_MARKUP = 2.5; window.EN_MARKUP = EN_MARKUP; // наценка EN-версии; синхронно с WB_PRICE_MARKUP в api/westernbid.js
+  function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
 
   var $grid = document.getElementById('grid');
   var $overlay = document.getElementById('cartOverlay');
@@ -2393,7 +2394,7 @@ body.pm-open{overflow:hidden}
     else { pmRibbon.hidden = true; }
     pmTitle.textContent = p.title;
     pmCrumb.textContent = p.title.toLowerCase();
-    pmPrice.textContent = (Number(p.price||0)/EUR_RATE).toFixed(2);
+    pmPrice.textContent = (Number(p.price||0)*EN_MARKUP/EUR_RATE).toFixed(2);
     var _dEn = (window.EN_DESCR || {})[p.uid];
     pmDescr.innerHTML = _dEn ? escapeHtml(_dEn) : (p.description ? escapeHtml(p.description) : 'Y2K oversize · 95% cotton + 5% elastane · DTF print');
     // ==== Specs (динамічні; фолбек — футболкові) ====
@@ -2535,7 +2536,7 @@ body.pm-open{overflow:hidden}
     var $btn=document.getElementById('cartSubmit');
     if(info && cart.length){
       var b=calcBreakdown();
-      var tot=b.total/EUR_RATE + info.eur;
+      var tot=b.total*EN_MARKUP/EUR_RATE + info.eur;
       elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
       if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
       if($btn && !$btn.disabled) $btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal ♥';
