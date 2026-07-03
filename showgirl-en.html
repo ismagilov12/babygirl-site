@@ -1,0 +1,2918 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D0A0C">
+<title>Showgirl · Intimate looks & Micro bikinis</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%92%8B%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%92%8B%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Showgirl — intimate looks & micro bikinis. BabyGirl’s sister brand. Satin, hearts and almost nothing else. Handmade in Ukraine. Worldwide shipping, checkout in EUR.">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+
+<!-- 1. Attribution bootstrap (МУСИТЬ бути першим, перед усіма трекерами) -->
+<script id="attribution-bootstrap">
+/* attribution_bootstrap_v1 — sets window.SESSION_ID + LANDING_URL.
+   Read CLAUDE.md §7 before touching this. */
+(function(){
+  try {
+    var key = 'bg_session_id';
+    var sid = sessionStorage.getItem(key);
+    if(!sid){
+      sid = 's-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10);
+      sessionStorage.setItem(key, sid);
+    }
+    if(!window.SESSION_ID) window.SESSION_ID = sid;
+    var lkey = 'bg_landing_url';
+    if(!sessionStorage.getItem(lkey)) sessionStorage.setItem(lkey, location.href);
+    if(!window.LANDING_URL) window.LANDING_URL = sessionStorage.getItem(lkey);
+  } catch(e){}
+})();
+</script>
+
+<!-- 1b. bg_tracker_v2 — fire-and-forget POST /api/track. Не дублирует Meta Pixel. -->
+<script id="bg-tracker">
+(function(){
+  if (window.bgTrack) return;
+  function readCookie(n){ try { var m = document.cookie.match('(?:^|; )'+n+'=([^;]+)'); return m ? decodeURIComponent(m[1]) : null; } catch(e){ return null; } }
+  var lastSent = {};
+  window.bgTrack = function(event_name, data){
+    try {
+      var k = event_name + '|' + ((data && data.product_uid) || '') + '|' + ((data && data.meta && data.meta.color_name) || '');
+      var now = Date.now();
+      if (lastSent[k] && (now - lastSent[k]) < 400) return;
+      lastSent[k] = now;
+      var payload = Object.assign({
+        event_name: event_name,
+        session_id: window.SESSION_ID,
+        landing_url: window.LANDING_URL,
+        referrer: document.referrer || null,
+        page_url: location.href,
+        fbp: readCookie('_fbp'),
+        fbc: readCookie('_fbc')
+      }, data || {});
+      var body = JSON.stringify(payload);
+      // Endpoint всегда через www (apex 307 → POST не повторяется при redirect)
+      var endpoint = (location.host === 'babygirl.com.ua') ? 'https://www.babygirl.com.ua/api/track' : '/api/track';
+      if (navigator.sendBeacon) {
+        try { navigator.sendBeacon(endpoint, new Blob([body], { type:'application/json' })); return; } catch(e){}
+      }
+      fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body: body, keepalive: true }).catch(function(){});
+    } catch(e){}
+  };
+  if (document.readyState !== 'loading') { window.bgTrack('page_view'); }
+  else document.addEventListener('DOMContentLoaded', function(){ window.bgTrack('page_view'); });
+})();
+</script>
+
+<!-- 2. Brand config — admin → Setup пишет в localStorage 'bg_settings' -->
+<script id="brand-config">
+(function(){
+  window.BRAND = 'bg';
+  window.PRODUCTS_TABLE = 'bg_products';
+  // Defaults — Supabase shared project (fsihlzzjewhxpogvjapu)
+  window.SUPABASE_URL      = 'https://fsihlzzjewhxpogvjapu.supabase.co';
+  window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
+  // Overrides з admin → Setup (localStorage)
+  try {
+    var s = JSON.parse(localStorage.getItem('bg_settings') || '{}');
+    if (s.SUPABASE_URL)      window.SUPABASE_URL      = s.SUPABASE_URL;
+    if (s.SUPABASE_ANON_KEY) window.SUPABASE_ANON_KEY = s.SUPABASE_ANON_KEY;
+    if (s.PIXEL_ID)          window.PIXEL_ID          = s.PIXEL_ID;
+  } catch(e){}
+})();
+</script>
+<!-- bg-media-defaults: дефолтні URL для медіа -->
+<script id="bg-media-defaults">
+window.BG_MEDIA_DEFAULTS = {
+  logoMark:   "assets/logo-mark.webp",
+  heroVideo:  "assets/showgirl/sg-hero.mp4",
+  heroPoster: "",  // прибрано: щоб не дублювати nav-logo-img який має анімацію logo-land
+  heroVideoMobile: "assets/showgirl/sg-hero.mp4",
+  lera:       "assets/showgirl/sg-about.webp",
+  leraVideo:  "assets/showgirl/sg-about.mp4"
+};
+</script>
+<!-- bg-media-bootstrap -->
+<script id="bg-media-bootstrap">
+(function(){
+  var defaults = (window.BG_MEDIA_DEFAULTS) || { logoMark:"", heroVideo:"", heroPoster:"", lera:"" };
+  var override = {};
+  try {
+    var s = JSON.parse(localStorage.getItem("bg_settings") || "{}");
+    if (s && typeof s.media === "object" && s.media) override = s.media;
+  } catch(e){}
+  var M = Object.assign({}, defaults, override);
+  // Mobile detection: вузький viewport АБО coarse pointer (тач без миші) АБО mobile UA.
+  // matchMedia(max-width:768px) сам по собі ловить не всі девайси (старі Android, landscape).
+  var isMobile = false;
+  try {
+    var mqNarrow = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+    var mqCoarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    var uaMobile = /Mobi|Android|iPhone|iPad|iPod|Mobile Safari/i.test(navigator.userAgent || "");
+    isMobile = mqNarrow || mqCoarse || uaMobile;
+  } catch(e){}
+  if (isMobile && M.heroVideoMobile) M.heroVideo = M.heroVideoMobile;
+  window.BG_MEDIA = M;
+
+  function bindAutoplayFallback(el){
+    // Якщо autoplay заблокований (low-power mode, data-saver), запускаємо на першому тапі.
+    var resume = function(){
+      try { el.play(); } catch(e){}
+      document.removeEventListener("touchstart", resume, true);
+      document.removeEventListener("click", resume, true);
+      document.removeEventListener("scroll", resume, true);
+    };
+    document.addEventListener("touchstart", resume, { capture:true, once:true, passive:true });
+    document.addEventListener("click",      resume, { capture:true, once:true });
+    document.addEventListener("scroll",     resume, { capture:true, once:true, passive:true });
+  }
+
+  function playVideo(el){
+    try {
+      // На iOS Safari autoplay-атрибут спрацьовує лише при першому призначенні джерела
+      // ще до того, як елемент потрапив у DOM. Коли ми ставимо src динамічно — потрібен явний play().
+      el.muted = true;          // iOS вимагає muted для autoplay
+      el.defaultMuted = true;
+      el.setAttribute("muted", "");
+      el.setAttribute("playsinline", "");
+      var p = el.play && el.play();
+      if (p && typeof p.then === "function") {
+        p.catch(function(){ bindAutoplayFallback(el); });
+      }
+    } catch(e){ bindAutoplayFallback(el); }
+  }
+
+  function apply(){
+    document.querySelectorAll("[data-bg-media]").forEach(function(el){
+      var key = el.getAttribute("data-bg-media");
+      var url = M[key];
+      if (!url) return;
+      if (el.tagName === "IMG") el.src = url;
+      else if (el.tagName === "VIDEO"){
+        // Більш агресивний preload для мобільних, щоб не застрягати на HAVE_METADATA
+        try { el.setAttribute("preload", isMobile ? "auto" : "metadata"); } catch(e){}
+        el.src = url;
+        var pkey = el.getAttribute("data-bg-poster");
+        if (pkey && M[pkey]) el.poster = M[pkey];
+        try { el.load && el.load(); } catch(e){}
+        // Дочекаємось першого кадру і пробуємо play() — це найнадійніше для iOS
+        var tryPlay = function(){ playVideo(el); };
+        el.addEventListener("loadeddata", tryPlay, { once:true });
+        // На випадок якщо loadeddata вже минув або застряг — паралельно пробуємо одразу і з затримкою
+        playVideo(el);
+        setTimeout(function(){ if (el.paused) playVideo(el); }, 600);
+      } else if (el.tagName === "A") el.href = url;
+      else el.setAttribute("src", url);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+  window.refreshBgMedia = apply;
+})();
+</script>
+
+
+<!-- 3. Meta Pixel — BabyGirl 1636827497584775 -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+window.PIXEL_ID = window.PIXEL_ID || '1636827497584775';
+fbq('init', window.PIXEL_ID);
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1636827497584775&ev=PageView&noscript=1" alt=""/></noscript>
+<!-- End Meta Pixel -->
+
+<style>
+:root{
+  --bubblegum:#FFB8D9;
+  --pink:#FF4FA1;
+  --pink-deep:#E63B8A;
+  --pink-soft:#FFD7E8;
+  --pink-bg:#FFEAF3;
+  --yellow:#FFD93D;
+  --blue:#6FC4E9;
+  --blue-deep:#4A6FFF;
+  --lime:#B6F500;
+  --cream:#FFF5EC;
+  --black:#0E0E12;
+  --silver:#D5D8DD;
+  --silver-deep:#8B8F96;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  color:var(--black);
+  background:var(--cream);
+  overflow-x:hidden;
+  font-size:16px;line-height:1.5;
+}
+img,video{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,button{font-size:16px}
+
+/* ===== BASE: MOBILE FIRST ===== */
+.container{width:100%;padding:0 16px}
+
+/* ===== NAV ===== */
+.nav{
+  background:transparent;
+  padding:10px 0;
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  pointer-events:none;
+  transition:background .25s ease, backdrop-filter .25s ease, border-color .25s ease, padding .2s ease;
+}
+.nav.scrolled{
+  background:rgba(255,245,236,.78);
+  backdrop-filter:blur(12px) saturate(140%);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  border-bottom:1px solid rgba(242,236,230,.14);
+  padding:8px 0;
+  box-shadow:0 4px 0 rgba(0,0,0,.06);
+}
+.nav.scrolled .nav-logo-img{height:30px}
+.nav.scrolled .nav-logo-img img{filter:none}
+.nav .nav-row > *{pointer-events:auto}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo-img{
+  display:inline-flex;align-items:center;
+  height:34px;
+  pointer-events:auto;
+  transform-origin:center center;
+  will-change:transform,opacity;
+  animation:logo-land 1.7s cubic-bezier(.55,.05,.2,1) both;
+}
+.nav-logo-img img{
+  height:100%;width:auto;display:block;
+  filter:none;
+}
+@keyframes logo-land{
+  0%   { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:0; }
+  14%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  55%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  100% { transform:translateY(0) scale(1) rotate(0); opacity:1; }
+}
+.hero-content{ opacity:0; animation:hero-fade .55s ease 1.45s forwards; }
+.hero-scroll{ opacity:0; animation:scroll-fade .5s ease 1.55s forwards, scrollHint 1.6s ease-in-out 2.05s infinite; }
+@keyframes hero-fade{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scroll-fade{ from{opacity:0} to{opacity:.8} }
+@media (prefers-reduced-motion:reduce){
+  .nav-logo-img,.hero-content{animation:none;opacity:1}
+  .hero-scroll{opacity:.8;animation:scrollHint 1.6s ease-in-out infinite}
+}
+.nav-cart{
+  background:var(--yellow);color:var(--black);
+  padding:8px 12px;
+  border:1px solid rgba(242,236,230,.14);border-radius:999px;
+  font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  cursor:pointer;
+}
+.nav-burger{
+  background:#fff;color:var(--black);
+  width:40px;height:40px;
+  border:1px solid rgba(242,236,230,.14);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  cursor:pointer;
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  height:min(88vh,720px);
+  min-height:540px;
+  border-bottom:1px solid rgba(242,236,230,.14);
+  background:#0E0E12;
+  overflow:hidden;
+}
+.hero-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  z-index:0;background:#0E0E12;
+}
+.hero-content{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  height:58%;min-height:280px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;
+  padding:0 16px 26px;
+  text-align:center;
+}
+.hero-eyebrow{
+  display:inline-block;
+  font-family:'Manrope',sans-serif;
+  font-size:8px;letter-spacing:.22em;color:#fff;
+  text-shadow:none;
+  margin:8px 0 0;
+}
+.hero-sub{
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:34px;line-height:.9;letter-spacing:-.02em;
+  color:#fff;
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  text-transform:uppercase;
+  margin:0;
+  transform:rotate(-2deg);
+}
+.hero-sub .pink{color:var(--yellow)}
+.hero-scroll{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:3;
+  font-family:'Manrope',sans-serif;font-size:13px;color:#fff;letter-spacing:.12em;
+  opacity:.8;pointer-events:none;
+}
+@keyframes scrollHint{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
+
+/* ===== SLOT MACHINE ===== */
+.slot-section{
+  background:radial-gradient(ellipse at 50% 0%, var(--pink) 0%, var(--pink-deep) 50%, #B82A6E 100%);
+  padding:32px 0 40px;
+  border-bottom:1px solid rgba(242,236,230,.14);
+  position:relative;overflow:hidden;
+}
+.slot-stars{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 12% 18%, #FFD93D 2px, transparent 3px),
+    radial-gradient(circle at 88% 12%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 25% 78%, #FFD93D 1.5px, transparent 2.5px),
+    radial-gradient(circle at 75% 88%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 50% 50%, #FFD93D 1px, transparent 2px);
+}
+.slot-head{ text-align:center;color:#fff; margin-bottom:18px;padding:0 16px; position:relative;z-index:2; }
+.slot-head .kicker{
+  display:inline-block;
+  background:var(--yellow);color:var(--black);
+  padding:5px 12px;
+  border:1px solid rgba(242,236,230,.14);border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.08em;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  margin-bottom:12px;
+}
+.slot-head h2{
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:42px;line-height:.95;letter-spacing:-.01em;
+  color:var(--yellow);
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  text-transform:uppercase;
+}
+.slot-tagline{
+  margin-top:10px;
+  font-family:'Manrope',sans-serif;font-size:18px;color:#fff;letter-spacing:.04em;
+  text-shadow:none;
+}
+.slot-tagline b{
+  background:var(--yellow);color:var(--black);
+  padding:1px 8px;border:1px solid rgba(242,236,230,.14);border-radius:6px;
+  font-family:'Manrope',sans-serif;font-size:13px;letter-spacing:.06em;
+  text-shadow:none;text-transform:uppercase;
+}
+
+/* Применённый промо: бейдж на карточке + анимированный пересчёт цены */
+.promo-applied-bar{
+  position:sticky;top:0;z-index:55;
+  background:var(--lime);color:var(--black);
+  border-bottom:1px solid rgba(242,236,230,.14);
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  animation:promoSlide .4s ease-out;
+}
+@keyframes promoSlide{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.promo-applied-bar .code{
+  background:var(--pink);color:#fff;
+  padding:2px 10px;border:1px solid rgba(242,236,230,.14);border-radius:6px;
+  font-family:'Manrope',sans-serif;font-size:14px;letter-spacing:.08em;
+}
+.promo-applied-bar .pct{
+  background:var(--yellow);color:var(--black);
+  padding:2px 8px;border:1px solid rgba(242,236,230,.14);border-radius:6px;
+}
+.promo-applied-bar [data-action="clear-promo"]{
+  background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:6px;
+  font-family:'Manrope',sans-serif;font-size:14px;color:var(--black);
+  padding:1px 8px;cursor:pointer;
+}
+
+.card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
+.card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.price-flash{animation:priceFlash .8s ease-out}
+@keyframes priceFlash{
+  0%{transform:scale(1);color:var(--pink-deep)}
+  30%{transform:scale(1.25) rotate(-3deg);color:var(--lime)}
+  60%{transform:scale(.95) rotate(2deg)}
+  100%{transform:scale(1) rotate(0);color:var(--pink-deep)}
+}
+.slot-machine{ max-width:340px;margin:0 auto; position:relative;z-index:2; }
+.slot-body{
+  background:linear-gradient(180deg,#EAEDF1 0%,#B7BBC2 50%,#8B8F96 100%);
+  border:1px solid rgba(242,236,230,.14);
+  border-radius:24px 24px 18px 18px;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  padding:18px 14px 18px;position:relative;
+}
+.slot-top-light{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--pink);color:#fff;
+  padding:5px 16px;
+  border:1px solid rgba(242,236,230,.14);border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.1em;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  z-index:3;
+}
+.slot-display{
+  background:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  padding:8px;
+  display:flex;gap:6px;
+  box-shadow:inset 0 0 0 2px #fff;
+}
+.reel{
+  flex:1;background:#fff;border-radius:8px;
+  height:90px;overflow:hidden;position:relative;
+  border:2px solid var(--silver-deep);
+}
+.reel::before,.reel::after{ content:"";position:absolute;left:0;right:0;height:18px;z-index:2;pointer-events:none; }
+.reel::before{top:0;background:linear-gradient(180deg,rgba(255,255,255,.95),transparent)}
+.reel::after{bottom:0;background:linear-gradient(0deg,rgba(255,255,255,.95),transparent)}
+.reel-strip{ display:flex;flex-direction:column; transition:transform 2.4s cubic-bezier(.15,.7,.25,1); }
+.reel-strip.spinning{ animation:spin .12s linear infinite; }
+@keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-90px)} }
+.reel-item{
+  height:90px;display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:42px;
+  color:var(--pink-deep);
+  -webkit-text-stroke:0;
+}
+.reel-item.word{font-size:22px}
+.reel-item.percent{
+  font-family:'Manrope',sans-serif;font-size:32px;
+  color:var(--pink);
+  -webkit-text-stroke:0;
+}
+.slot-lever{ position:absolute;top:32px;right:-22px;width:22px;z-index:1; }
+.lever-rod{ width:8px;height:80px; background:linear-gradient(180deg,#EAEDF1,#8B8F96); border:1px solid rgba(242,236,230,.14);border-radius:4px;margin:0 auto; }
+.lever-ball{ width:28px;height:28px; background:radial-gradient(circle at 30% 30%,#FF8FB8,#E63B8A 60%,#9C1E5B); border:1px solid rgba(242,236,230,.14);border-radius:50%;margin-top:-8px; box-shadow:0 12px 28px rgba(0,0,0,.35); }
+.slot-result{
+  margin:18px auto 0;max-width:340px;
+  background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  padding:14px 16px;text-align:center;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  position:relative;z-index:2;
+  min-height:84px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.slot-result .placeholder{ font-family:'Manrope',sans-serif;font-size:14px;color:var(--silver-deep);text-transform:uppercase;letter-spacing:.06em; }
+.slot-result .win-line{ font-family:'Playfair Display';font-size:22px;color:var(--pink-deep); -webkit-text-stroke:0; margin-bottom:4px;text-transform:uppercase; }
+.slot-result .code{ font-family:'Manrope',sans-serif;font-size:18px; background:var(--yellow); border:1px solid rgba(242,236,230,.14);border-radius:8px; padding:3px 10px;letter-spacing:.1em; }
+.spin-btn{
+  display:block;margin:12px auto 0;width:100%;
+  background:var(--lime);color:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:12px;
+  padding:12px 18px;
+  font-family:'Manrope',sans-serif;font-size:16px;letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  position:relative;z-index:2;
+  transition:transform .12s,box-shadow .12s,background .15s;
+}
+.spin-btn:hover{background:#9DDB00}
+.spin-btn:active{transform:translate(1px,1px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.spin-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== PRODUCTS ===== */
+.section{padding:36px 0}
+.section-title-wrap{ margin-bottom:18px;text-align:center;padding:0 4px; }
+.section-title{
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:46px;line-height:.85;letter-spacing:-.02em;
+  color:var(--pink);
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.section-title .alt{color:var(--blue-deep)}
+.section-sub{font-family:'Playfair Display';font-size:22px;color:var(--pink-deep);display:inline-block;transform:rotate(-2deg)}
+.grid{ display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 4px; }
+.card{
+  background:#fff;
+  border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  cursor:pointer;
+}
+.card-window{
+  background:var(--pink-soft);
+  border-bottom:1px solid rgba(242,236,230,.14);
+  padding:4px 7px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:'Manrope',sans-serif;font-size:11px;color:var(--black);
+}
+.card-window .dots{display:flex;gap:3px}
+.card-window .dot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(242,236,230,.14);background:var(--pink)}
+.card-window .dot:nth-child(2){background:var(--yellow)}
+.card-window .dot:nth-child(3){background:var(--lime)}
+.card-img{
+  aspect-ratio:4/5;
+  background:#fff;
+  border-bottom:1px solid rgba(242,236,230,.14);
+  overflow:hidden;
+  position:relative;
+}
+.card-img img{width:100%;height:100%;object-fit:contain;background:#fff}
+.card-img .ribbon{
+  position:absolute;top:6px;left:-22px;
+  background:var(--yellow);color:var(--black);
+  font-family:'Manrope';font-size:9px;letter-spacing:.08em;
+  padding:3px 24px;transform:rotate(-25deg);
+  border:1px solid rgba(242,236,230,.14);
+}
+.card-img .heart-tag{
+  position:absolute;top:6px;right:6px;
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;border:1px solid rgba(242,236,230,.14);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--pink);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+}
+.card-body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:5px;flex:1}
+.card-title{
+  font-family:'Manrope',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.01em;line-height:1.05;
+  min-height:28px;
+}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.card-price{ font-family:'Playfair Display';font-size:22px;color:var(--pink-deep); -webkit-text-stroke:0; }
+.card-tag{
+  font-family:'Manrope',sans-serif;font-size:11px;
+  background:var(--lime);border:1px solid rgba(242,236,230,.14);border-radius:999px;
+  padding:0 6px;
+}
+.card-btn{
+  margin-top:auto;
+  background:var(--pink);color:#fff;
+  border:1px solid rgba(242,236,230,.14);border-radius:8px;
+  padding:8px;
+  font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.06em;
+  text-align:center;text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  cursor:pointer;
+}
+.card-btn.alt{background:var(--blue-deep)}
+.card-btn:active{transform:translate(1px,1px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.empty{ padding:40px;text-align:center;color:var(--silver-deep);font-family:'Manrope',sans-serif;font-size:18px; grid-column:1/-1; border:2px dashed var(--silver);border-radius:14px; }
+
+/* ===== ABOUT (Sims-style hero) ===== */
+.about{
+  position:relative;
+  background:#7ec5ed;
+  border-top:1px solid rgba(242,236,230,.14);border-bottom:1px solid rgba(242,236,230,.14);
+  color:#fff;padding:48px 0 56px;
+  overflow:hidden;
+  isolation:isolate;
+}
+.about-bg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('assets/baby-hero-clouds.webp') center center / cover no-repeat;
+}
+.about-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(126,197,237,0) 55%, rgba(126,197,237,.35) 100%);
+}
+.about .cloud-puff{
+  position:absolute;z-index:0;pointer-events:none;
+  width:90px;height:36px;border-radius:50%;
+  background:#fff;opacity:.85;
+  filter:blur(.5px) drop-shadow(0 6px 10px rgba(40,80,140,.12));
+}
+.about .cloud-puff::before,.about .cloud-puff::after{
+  content:'';position:absolute;background:#fff;border-radius:50%;
+}
+.about .cloud-puff::before{ width:50px;height:50px; top:-22px; left:14px; }
+.about .cloud-puff::after { width:36px;height:36px; top:-14px; right:14px; }
+.about .cloud-puff.c1{ top:8%;  right:6%;  transform:scale(1.1); animation:cloud-drift 22s linear infinite }
+.about .cloud-puff.c2{ top:54%; right:14%; transform:scale(.75); animation:cloud-drift 30s linear infinite reverse }
+.about .cloud-puff.c3{ bottom:8%; left:6%; transform:scale(.9);  animation:cloud-drift 26s linear infinite }
+@keyframes cloud-drift{
+  0%{ margin-left:-16px } 50%{ margin-left:16px } 100%{ margin-left:-16px }
+}
+
+.about-wrap{ position:relative; z-index:2 }
+
+.about-title{
+  position:relative;
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:38px;line-height:.9;letter-spacing:-.02em;
+  color:var(--yellow);
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  text-transform:uppercase;
+  margin:0 0 22px;text-align:center;
+  padding-top:6px;
+}
+.about-title .plumbob{ margin:0 auto 6px; display:block }
+
+/* The Sims green plumbob — animated floating diamond */
+.plumbob{
+  position:relative;
+  width:34px;height:48px;
+  background:
+    radial-gradient(ellipse 50% 30% at 50% 22%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%),
+    linear-gradient(180deg, #d9ff7a 0%, #9ee83a 38%, #5fbf12 78%, #3a8e08 100%);
+  clip-path:polygon(50% 0%, 100% 36%, 100% 62%, 50% 100%, 0% 62%, 0% 36%);
+  filter:drop-shadow(0 3px 6px rgba(40,90,10,.45)) drop-shadow(0 0 12px rgba(185,255,90,.7));
+  animation:plumbob-float 2.4s ease-in-out infinite;
+}
+.plumbob::after{
+  content:'';position:absolute; left:18%; top:6%; width:24%; height:18%;
+  background:rgba(255,255,255,.85); border-radius:50%; filter:blur(1px);
+}
+@keyframes plumbob-float{
+  0%,100%{ transform:translateY(0) rotate(-2deg) }
+  50%    { transform:translateY(-7px) rotate(2deg) }
+}
+
+.about-stage{
+  display:grid;grid-template-columns:1fr;gap:18px;
+  align-items:start;
+}
+
+/* === Lera card (Sims-style sim portrait) === */
+.about-photo{
+  position:relative;
+  border:1px solid rgba(242,236,230,.14);border-radius:18px;
+  background:linear-gradient(180deg, #cfe9fb, #ffd7e8);
+  overflow:visible;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  aspect-ratio:4/5;
+  max-height:none;
+}
+.about-photo > img,
+.about-photo > video{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:15px;
+}
+.about-photo .plumbob{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  z-index:5;
+}
+.about-photo .name-tag{
+  position:absolute;top:10px;left:10px;z-index:4;
+  background:linear-gradient(180deg,#ff7ab8,#ff4fa1);
+  color:#fff;
+  font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.12em;
+  padding:5px 9px;border:1px solid rgba(242,236,230,.14);border-radius:7px;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);text-transform:uppercase;
+}
+
+50%{width:100%}}
+
+50%    { transform:translateY(-5px) scale(1.08) }
+}
+
+50%    { transform:rotate(-2deg) translateY(-4px) }
+}
+
+/* === Clean accent: floating pink heart sticker in photo corner === */
+.about-photo .hero-sticker{
+  position:absolute;top:-18px;right:-14px;z-index:5;
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#FFD93D,#FF9A1A);
+  color:var(--pink-deep);
+  font-family:'Playfair Display',serif;font-size:26px;line-height:1;
+  border:1px solid rgba(242,236,230,.14);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  transform:rotate(-12deg);
+  animation:sticker-bob 3.4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sticker-bob{
+  0%,100%{transform:rotate(-12deg) translateY(0)}
+  50%{transform:rotate(-6deg) translateY(-5px)}
+}
+@media (max-width:759px){
+  .about-photo .hero-sticker{width:46px;height:46px;font-size:22px;top:-14px;right:-10px}
+}
+
+/* === Right panel: Sims action menu / dialog === */
+.gta-dialog{
+  position:relative;
+  background:var(--cream);color:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:18px;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.gta-dialog .bar{
+  background:linear-gradient(90deg, var(--pink), var(--pink-deep));
+  border-bottom:1px solid rgba(242,236,230,.14);
+  padding:9px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:#fff;
+}
+.gta-dialog .bar .speaker{
+  font-family:'Manrope',sans-serif;font-size:13px;letter-spacing:.05em;
+  text-transform:uppercase;text-shadow:none;
+  display:flex;align-items:center;gap:6px;
+}
+.gta-dialog .bar .speaker::before{
+  content:''; width:10px; height:14px;
+  background:linear-gradient(180deg,#d9ff7a,#5fbf12);
+  clip-path:polygon(50% 0%,100% 36%,100% 62%,50% 100%,0% 62%,0% 36%);
+  filter:drop-shadow(0 0 4px rgba(180,255,80,.8));
+  animation:plumbob-float 2.4s ease-in-out infinite;
+}
+.gta-dialog .bar .pip{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.12em;
+  color:var(--yellow);text-shadow:none;
+}
+.gta-dialog .bar .pip i{width:7px;height:7px;background:var(--yellow);border:1px solid rgba(242,236,230,.14);border-radius:50%;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.gta-screen{
+  padding:14px 14px 16px;
+  font-family:'Manrope',sans-serif;font-size:17px;line-height:1.45;
+  min-height:220px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 1px, transparent 1px 3px),
+    var(--cream);
+}
+.gta-line{margin-bottom:8px}
+.gta-line.dim{opacity:.55}
+.gta-line .who{
+  display:block;
+  font-family:'Manrope',sans-serif;font-size:8px;
+  color:var(--pink-deep);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:2px;
+}
+.gta-line .what{color:#1a1a1a}
+.gta-line .what em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.gta-line.me .who{color:var(--blue-deep)}
+.gta-cursor{display:inline-block;width:7px;height:15px;background:var(--pink-deep);vertical-align:-2px;animation:caret 1s steps(2) infinite;margin-left:2px}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+.gta-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(180deg,var(--pink-bg),#ffd7e8);
+  border-top:2px dashed rgba(0,0,0,.18);
+  padding:11px 14px;
+  font-family:'Manrope',sans-serif;font-size:13px;color:var(--silver-deep);
+}
+.gta-cta .keys b{
+  display:inline-block;padding:1px 5px;
+  background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:4px;
+  font-family:'Manrope',sans-serif;font-size:8px;
+  color:var(--black);margin:0 2px;
+}
+.gta-cta button{
+  background:linear-gradient(180deg,#D6FF4A,#9ED600);
+  color:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:10px;
+  padding:9px 14px;
+  font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);cursor:pointer;
+  flex-shrink:0;
+  position:relative;
+}
+.gta-cta button::after{
+  content:'';position:absolute;top:-6px;right:-6px;
+  width:14px;height:14px;background:#FFD93D;border:1px solid rgba(242,236,230,.14);border-radius:50%;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  animation:btn-dot 1.8s ease-in-out infinite;
+}
+.gta-cta button:active{transform:translate(2px,2px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+
+@keyframes btn-dot{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.08)}}
+
+/* Mobile tuning */
+@media (max-width:759px){
+  .about{ padding:42px 0 48px }
+  .about-title{ font-size:32px; margin-bottom:18px }
+  .about-stage{ gap:22px }
+  .about-photo{
+    max-width:340px;margin:0 auto;
+    aspect-ratio:4/5;
+  }
+  .about-photo .plumbob{ width:28px; height:40px; top:-24px }
+  .gta-screen{ min-height:200px; font-size:16px }
+  .gta-cta button{ font-size:10px; padding:8px 12px }
+  .about .cloud-puff.c1{ display:none }
+  .about .cloud-puff.c2{ top:38%; right:6%; transform:scale(.6) }
+  .about .cloud-puff.c3{ bottom:14%; left:4%; transform:scale(.7) }
+}
+
+@media (min-width:760px){
+  .about{ padding:64px 0 72px }
+  .about-title{ font-size:54px; margin-bottom:32px }
+  .about-stage{grid-template-columns:0.95fr 1.05fr;gap:32px}
+  .about-photo{aspect-ratio:auto;height:100%;min-height:440px;max-height:560px}
+  .about-photo .plumbob{ width:42px; height:60px; top:-38px }
+  .gta-screen{min-height:320px;font-size:22px}
+  .gta-dialog .bar .speaker{font-size:16px}
+}
+
+/* ===== VIBE ===== */
+.vibe{padding:36px 0;background:var(--pink-bg)}
+.vibe-grid{display:grid;grid-template-columns:1fr;gap:14px;padding:0 4px}
+.vibe-card{
+  background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  padding:18px 16px;box-shadow:0 12px 28px rgba(0,0,0,.35);
+  position:relative;
+}
+.vibe-card .num{
+  position:absolute;top:-14px;left:14px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--pink);color:#fff;
+  border:1px solid rgba(242,236,230,.14);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display';font-size:16px;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+}
+.vibe-card h4{
+  margin-top:6px;font-family:'Manrope',sans-serif;font-weight:400;
+  font-size:18px;color:var(--pink-deep);text-transform:uppercase;line-height:1.05;
+}
+.vibe-card p{margin-top:6px;font-size:14px;line-height:1.5;color:#2a2a2a}
+
+/* ===== NEWSLETTER ===== */
+
+
+/* ===== INFO / DELIVERY / CONTACTS (v118) ===== */
+.info-section{padding:48px 0 56px;background:var(--cream);border-top:1px solid rgba(242,236,230,.14);border-bottom:1px solid rgba(242,236,230,.14)}
+.info-grid{display:grid;grid-template-columns:1fr;gap:18px;padding:0 4px;margin-top:18px}
+.info-card{
+  background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  padding:22px 20px;box-shadow:0 12px 28px rgba(0,0,0,.35);
+  position:relative;
+}
+.info-card.pink{background:var(--pink-bg)}
+.info-card.yellow{background:var(--yellow)}
+.info-card h3{
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:24px;line-height:1.05;color:var(--pink-deep);
+  -webkit-text-stroke:0;
+  margin-bottom:14px;letter-spacing:-.01em;
+}
+.info-card p{font-size:14.5px;line-height:1.55;color:#2a2a2a;margin-bottom:8px}
+.info-card p b{color:var(--black)}
+.info-card p.muted{font-size:12.5px;color:var(--silver-deep);font-style:italic}
+.info-card a{color:var(--pink-deep);font-weight:700;text-decoration:underline}
+.info-card a:hover{color:var(--black)}
+.info-card .legal{
+  margin-top:14px;padding-top:12px;
+  border-top:2px dashed rgba(0,0,0,.15);
+  font-family:'Manrope',sans-serif;font-size:14px;color:var(--silver-deep);
+}
+.tg-button{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:14px;padding:12px 18px;
+  background:#229ED9;color:#fff !important;
+  border:1px solid rgba(242,236,230,.14);border-radius:12px;
+  font-family:'Manrope',sans-serif;font-weight:400;
+  font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+  text-decoration:none !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  transition:transform .12s,box-shadow .12s;
+}
+.tg-button:hover{transform:translate(-1px,-1px);box-shadow:0 12px 28px rgba(0,0,0,.35);color:#fff !important}
+.tg-button:active{transform:translate(2px,2px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.tg-button .tg-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;
+  background:#fff;color:#229ED9;
+  font-size:14px;font-weight:900;
+}
+.drawer-link.tg{background:#229ED9;color:#fff}
+@media(min-width:760px){
+  .info-grid{grid-template-columns:1fr 1fr;gap:22px}
+  .info-card.wide{grid-column:1/-1}
+  .info-card h3{font-size:28px}
+}
+@media(min-width:1024px){
+  .info-grid{grid-template-columns:1fr 1fr 1fr}
+  .info-card.wide{grid-column:1/-1}
+}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--pink);color:#fff;
+  padding:32px 0 20px;
+  border-top:1px solid rgba(242,236,230,.14);
+}
+.foot-logo{
+  font-family:'Playfair Display',serif;font-size:36px;line-height:1;
+  color:var(--yellow);
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  letter-spacing:-.02em;text-align:center;margin-bottom:8px;
+}
+.foot-logo .girl{color:var(--cream)}
+.foot-tagline{text-align:center;font-size:13px;margin-bottom:20px}
+.foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 4px}
+.foot-grid h5{
+  font-family:'Manrope',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:6px;
+}
+.foot-grid a{display:block;padding:3px 0;font-weight:500;color:#fff;font-size:14px}
+.foot-bot{
+  margin-top:20px;padding-top:14px;border-top:2px dashed rgba(255,255,255,.4);
+  font-size:11px;text-align:center;
+}
+
+/* ===== BURGER DRAWER ===== */
+.drawer-overlay{
+  position:fixed;inset:0;
+  background:rgba(14,14,18,.55);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease;
+  z-index:60;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(86vw,360px);
+  background:var(--cream);
+  border-right:1px solid rgba(242,236,230,.14);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  transform:translateX(-110%);
+  transition:transform .26s cubic-bezier(.2,.8,.2,1);
+  z-index:70;
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-head{
+  background:var(--pink);
+  border-bottom:1px solid rgba(242,236,230,.14);
+  padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:2;
+}
+.drawer-head .title{
+  font-family:'Playfair Display',serif;font-size:24px;color:#fff;
+  text-shadow:none;
+  letter-spacing:-.01em;
+}
+.drawer-close{
+  width:38px;height:38px;
+  background:var(--yellow);
+  border:1px solid rgba(242,236,230,.14);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:var(--black);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  cursor:pointer;
+}
+.drawer-section{ padding:18px 16px 6px; border-bottom:2px dashed rgba(0,0,0,.12); }
+.drawer-section:last-of-type{border-bottom:none}
+.drawer-section h6{
+  font-family:'Manrope',sans-serif;
+  font-size:9px;letter-spacing:.08em;
+  color:var(--silver-deep);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.drawer-link{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:11px 14px;margin-bottom:8px;
+  background:#fff;color:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:10px;
+  font-family:'Manrope',sans-serif;font-weight:400;
+  font-size:14px;letter-spacing:.04em;
+  text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  transition:transform .12s,box-shadow .12s;
+}
+.drawer-link:active{transform:translate(2px,2px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.drawer-link.pink{background:var(--pink);color:#fff}
+.drawer-link.yellow{background:var(--yellow);color:var(--black)}
+.drawer-link.lime{background:var(--lime);color:var(--black)}
+.drawer-link.blue{background:var(--blue-deep);color:#fff}
+.drawer-link .arrow{ font-family:'Manrope',sans-serif;font-size:18px;font-weight:400; opacity:.85; }
+.drawer-foot{
+  padding:18px 16px 24px;margin-top:auto;
+  background:var(--pink-bg);
+  border-top:1px solid rgba(242,236,230,.14);
+  text-align:center;
+  font-family:'Manrope',sans-serif;font-size:14px;color:var(--silver-deep);
+}
+body.drawer-open{overflow:hidden}
+
+/* ===== CART DRAWER ===== */
+.cart-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:80}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(92vw,420px);background:var(--cream);border-left:1px solid rgba(242,236,230,.14);box-shadow:0 12px 28px rgba(0,0,0,.35);transform:translateX(110%);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:90;display:flex;flex-direction:column;overflow-y:auto}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{background:var(--pink);border-bottom:1px solid rgba(242,236,230,.14);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.cart-head .title{font-family:'Playfair Display',serif;font-size:24px;color:#fff;text-shadow:none;letter-spacing:-.01em}
+.cart-close{width:38px;height:38px;background:var(--yellow);border:1px solid rgba(242,236,230,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--black);box-shadow:0 12px 28px rgba(0,0,0,.35);cursor:pointer}
+.cart-body{padding:16px;flex:1}
+.cart-empty{text-align:center;padding:40px 20px;color:var(--silver-deep);font-family:'Manrope',sans-serif;font-size:18px}
+.cart-line{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:2px dashed rgba(0,0,0,.12)}
+.cart-line img{width:54px;height:54px;border-radius:8px;border:1px solid rgba(242,236,230,.14);background:#fff;object-fit:cover}
+.cart-line .info{flex:1;min-width:0}
+.cart-line .name{font-family:'Manrope',sans-serif;font-size:13px;line-height:1.1}
+.cart-line .price{font-family:'Playfair Display';font-size:14px;color:var(--pink-deep);-webkit-text-stroke:0;margin-top:2px}
+.cart-line .qty{display:flex;align-items:center;gap:6px;font-family:'Manrope',sans-serif;font-size:14px}
+.cart-line .qty button{width:24px;height:24px;border:1px solid rgba(242,236,230,.14);background:var(--yellow);border-radius:6px;font-weight:900;cursor:pointer}
+.cart-line .rm{background:none;border:none;color:var(--pink-deep);font-size:18px;cursor:pointer;padding:0 4px}
+.cart-line .price .old{text-decoration:line-through;opacity:.55;font-size:11px;margin-right:4px;color:var(--silver-deep)}
+
+.bundle-banner{
+  background:var(--pink-bg);border:1px solid rgba(242,236,230,.14);border-radius:10px;
+  padding:9px 12px;margin-bottom:12px;
+  font-family:'Manrope',sans-serif;font-size:14px;color:var(--pink-deep);line-height:1.3;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.bundle-banner b{font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:var(--yellow);padding:1px 6px;border:1px solid rgba(242,236,230,.14);border-radius:4px}
+.bundle-banner.active{background:var(--lime);color:var(--black);border-color:var(--black);animation:bundleIn .35s ease-out}
+.bundle-banner.active .check{background:var(--pink);color:#fff;border:1px solid rgba(242,236,230,.14);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+@keyframes bundleIn{from{transform:scale(.9);opacity:.6}50%{transform:scale(1.05)}to{transform:scale(1);opacity:1}}
+
+.cart-total{flex-direction:column;align-items:stretch;gap:4px}
+.cart-total .total-row{display:flex;align-items:center;justify-content:space-between;font-family:"Manrope",sans-serif;font-size:14px;text-transform:none}
+.cart-total .total-row.sub{color:var(--silver-deep)}
+.cart-total .total-row.disc{color:var(--pink-deep);font-weight:700}
+.cart-total .total-row.main{font-family:"Manrope",sans-serif;font-size:14px;text-transform:uppercase;margin-top:4px;padding-top:6px;border-top:2px dashed rgba(0,0,0,.12)}
+.cart-total .total-row.main .num{font-family:"Playfair Display",serif;font-size:24px;color:var(--pink-deep);-webkit-text-stroke:0}
+
+.bg-toast{
+  position:fixed;bottom:24px;left:50%;transform:translate(-50%, 0);z-index:200;
+  background:var(--lime);color:var(--black);
+  border:1px solid rgba(242,236,230,.14);border-radius:14px;
+  padding:12px 18px;
+  font-family:"Manrope",sans-serif;font-size:13px;letter-spacing:.04em;text-transform:lowercase;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+  animation:toastIn .4s cubic-bezier(.2,.8,.2,1);
+  max-width:90vw;text-align:center;
+}
+.bg-toast b{background:var(--pink);color:#fff;padding:1px 8px;border:1px solid rgba(242,236,230,.14);border-radius:6px;margin:0 2px}
+.bg-toast.hide{animation:toastOut .35s ease-in forwards}
+@keyframes toastIn{from{transform:translate(-50%, 60px);opacity:0}to{transform:translate(-50%, 0);opacity:1}}
+@keyframes toastOut{to{transform:translate(-50%, 60px);opacity:0}}
+.cart-total{padding:14px 16px;background:var(--pink-bg);border-top:1px solid rgba(242,236,230,.14);border-bottom:1px solid rgba(242,236,230,.14);display:flex;align-items:center;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:16px;text-transform:uppercase}
+.cart-total .num{font-family:'Playfair Display';font-size:24px;color:var(--pink-deep);-webkit-text-stroke:0}
+.cart-form{padding:16px;display:flex;flex-direction:column;gap:8px}
+.cart-form label{font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;color:var(--silver-deep);text-transform:uppercase;margin-top:4px}
+.cart-form input,.cart-form select{padding:12px;background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.cart-form input:focus,.cart-form select:focus{outline:none;border-color:var(--pink);box-shadow:3px 3px 0 var(--pink)}
+.cart-submit{margin-top:12px;width:100%;padding:16px;background:var(--lime);color:var(--black);border:1px solid rgba(242,236,230,.14);border-radius:12px;font-family:'Manrope',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 12px 28px rgba(0,0,0,.35);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.cart-submit:active{transform:translate(2px,2px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.cart-submit:disabled{opacity:.5;cursor:not-allowed}
+.cart-result{padding:12px 16px;font-family:'Manrope',sans-serif;font-size:15px;color:var(--silver-deep);min-height:38px}
+.cart-result.ok{color:var(--pink-deep);font-weight:bold}
+.cart-result.err{color:#d00}
+body.cart-open{overflow:hidden}
+
+/* ===== TABLET / DESKTOP ===== */
+@media (min-width:600px){
+  .container{max-width:1280px;margin:0 auto;padding:0 24px}
+  .hero{height:min(92vh,820px);min-height:640px}
+  .hero-content{height:62%;min-height:380px;padding:0 32px 36px}
+  .hero-eyebrow{font-size:10px;margin-top:14px}
+  .hero-sub{font-size:64px;text-shadow:none}
+  .grid{grid-template-columns:repeat(3,1fr);gap:18px}
+  .vibe-grid{grid-template-columns:repeat(3,1fr)}
+  .section-title{font-size:72px;text-shadow:none}
+  .foot-grid{grid-template-columns:1.2fr 1fr 1fr 1fr}
+  .nav-logo-img{height:44px}
+  .slot-machine{max-width:420px}
+  .reel{height:110px}
+  .reel-item{height:110px;font-size:54px}
+  .reel-item.percent{font-size:42px}
+  .reel-item.word{font-size:28px}
+  @keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-110px)} }
+  .slot-head h2{font-size:54px}
+}
+@media (min-width:900px){ .grid{grid-template-columns:repeat(4,1fr)} }
+
+/* ===== CARD MINI-CAROUSEL (фото внутри плитки грида) ===== */
+.card-img{position:relative;touch-action:pan-y}
+.card-photos{display:flex;width:100%;height:100%;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.card-photos > img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;background:#fff}
+.card-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:4px;background:rgba(14,14,18,.55);padding:3px 6px;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.card-dots i{display:block;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.5;transition:opacity .15s}
+.card-dots i.active{opacity:1;background:var(--yellow)}
+.card-swatches{display:flex;gap:6px;padding:8px 10px 0;align-items:center;flex-wrap:wrap}
+.card-swatch{width:18px;height:18px;border-radius:50%;border:1px solid rgba(242,236,230,.14);box-shadow:0 12px 28px rgba(0,0,0,.35);cursor:pointer;padding:0;flex-shrink:0;transition:transform .15s;background-clip:padding-box}
+.card-swatch:hover{transform:scale(1.15)}
+.card-swatch.active{outline:2px solid var(--pink-deep);outline-offset:1px}
+
+/* ===== PRODUCT MODAL ===== */
+.pm-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}
+.pm-overlay.open{opacity:1;pointer-events:auto}
+.pm{position:fixed;top:0;left:0;right:0;bottom:0;z-index:110;background:var(--cream);overflow-y:auto;overflow-x:hidden;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.pm.open{transform:translateY(0)}
+body.pm-open{overflow:hidden}
+
+.pm-close{position:fixed;top:12px;right:12px;z-index:115;width:44px;height:44px;background:var(--yellow);border:1px solid rgba(242,236,230,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--black);box-shadow:0 12px 28px rgba(0,0,0,.35);cursor:pointer;transition:transform .15s}
+.pm-close:hover{transform:rotate(90deg)}
+.pm-close:active{transform:rotate(90deg) translate(1px,1px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+
+.pm-hero{position:relative;background:var(--pink-soft);border-bottom:1px solid rgba(242,236,230,.14)}
+.pm-stage{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--pink-bg);touch-action:pan-y pinch-zoom}
+.pm-stage-track{display:flex;width:100%;height:100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pm-stage-track > img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:var(--pink-bg)}
+.pm-ribbon{position:absolute;top:18px;left:-30px;z-index:3;background:var(--yellow);color:var(--black);font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.08em;padding:6px 36px;transform:rotate(-25deg);border:1px solid rgba(242,236,230,.14);text-transform:uppercase}
+.pm-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--black);border:1px solid rgba(242,236,230,.14);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s,background .15s}
+.pm-arrow:hover{background:var(--yellow)}
+.pm-arrow:active{transform:translateY(-50%) translate(1px,1px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.pm-arrow.prev{left:10px}
+.pm-arrow.next{right:10px}
+.pm-arrow[hidden]{display:none}
+.pm-counter{position:absolute;bottom:14px;right:14px;z-index:3;background:rgba(14,14,18,.7);color:#fff;font-family:'Manrope',sans-serif;font-size:13px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;border:1px solid rgba(242,236,230,.14)}
+
+.pm-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:#fff;border-bottom:1px solid rgba(242,236,230,.14);-webkit-overflow-scrolling:touch}
+.pm-thumbs::-webkit-scrollbar{height:6px}
+.pm-thumbs::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px}
+.pm-thumb{flex-shrink:0;width:64px;height:64px;border:1px solid rgba(242,236,230,.14);border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.35);background:#fff;transition:transform .12s,box-shadow .12s}
+.pm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pm-stage-track > .pm-video{flex:0 0 100%;width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:var(--pink-bg)}
+.pm-thumb video{width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+.pm-thumb .pm-thumb-play{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(255,79,161,.92);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;border:1px solid rgba(242,236,230,.14);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);pointer-events:none;
+}
+.pm-thumb{position:relative}
+
+.pm-thumb.active{outline:3px solid var(--pink);outline-offset:2px}
+.pm-thumb:active{transform:translate(1px,1px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+
+.pm-info{padding:24px 16px 28px}
+.pm-info h1{font-family:'Playfair Display',serif;font-weight:400;font-size:42px;line-height:.9;letter-spacing:-.02em;color:var(--pink);-webkit-text-stroke:0;text-shadow:none;text-transform:uppercase;margin-bottom:6px}
+.pm-info .crumbs{font-family:'Manrope',sans-serif;font-size:14px;color:var(--silver-deep);margin-bottom:14px}
+.pm-info .crumbs b{color:var(--pink-deep)}
+.pm-price{font-family:'Playfair Display',serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:0;margin-bottom:14px;line-height:1}
+.pm-price .currency{font-size:24px;margin-left:4px}
+.pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
+.pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.pm-spec{background:#fff;border:1px solid rgba(242,236,230,.14);border-radius:10px;padding:10px 12px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.pm-spec .lbl{font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.14em;color:var(--silver-deep);text-transform:uppercase;margin-bottom:4px}
+.pm-spec .val{font-family:'Manrope',sans-serif;font-size:12px;line-height:1.2;color:var(--pink-deep);text-transform:uppercase}
+.pm-cta{display:block;width:100%;padding:18px;background:var(--lime);color:var(--black);border:1px solid rgba(242,236,230,.14);border-radius:14px;font-family:'Manrope',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 12px 28px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s;cursor:pointer}
+.pm-cta:active{transform:translate(2px,2px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.pm-cta.added{background:var(--yellow)}
+
+@media (min-width:760px){
+  .pm-stage{aspect-ratio:auto;height:min(90vh,900px)}
+  .pm-arrow{width:54px;height:54px;font-size:24px}
+  .pm-info{padding:32px 24px 40px;max-width:760px;margin:0 auto}
+  .pm-info h1{font-size:72px;text-shadow:none}
+  .pm-price{font-size:54px}
+  .pm-specs{grid-template-columns:repeat(4,1fr)}
+  .pm-close{top:20px;right:24px;width:52px;height:52px;font-size:26px}
+  .pm-thumb{width:80px;height:80px}
+}
+
+/* color pills для product modal — під стрічкою мініатюр */
+.pm-colors{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:#fff;border-bottom:1px solid rgba(242,236,230,.14);margin:0}
+.pm-colors-label{font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.1em;color:var(--pink-deep);text-transform:uppercase;margin-right:6px}
+.pm-color{
+  position:relative;
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(242,236,230,.14);
+  cursor:pointer;
+  transition:transform .12s ease;
+  padding:0;
+}
+.pm-color:hover{transform:scale(1.06)}
+.pm-color.active{box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.pm-color-name{
+  position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);
+  font-family:'Manrope',sans-serif;font-size:8px;
+  color:var(--silver-deep);white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .15s;
+}
+.pm-color:hover .pm-color-name,.pm-color.active .pm-color-name{opacity:1}
+
+/* ===== photo zoom lightbox ===== */
+.pm-stage-track > img{cursor:zoom-in}
+.pmz{position:fixed;inset:0;z-index:1000;background:rgba(10,10,14,.94);display:none;align-items:center;justify-content:center;touch-action:none}
+.pmz.open{display:flex}
+.pmz-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pmz-media{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .2s ease;cursor:zoom-in;user-select:none;-webkit-user-drag:none;touch-action:none}
+.pmz-close{position:fixed;top:16px;right:18px;z-index:1002;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--black);border:3px solid var(--black);font-size:26px;font-weight:900;cursor:pointer;box-shadow:3px 3px 0 var(--black);display:flex;align-items:center;justify-content:center;line-height:1}
+.pmz-close:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.pmz-hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1002;background:rgba(14,14,18,.7);color:#fff;font-family:'VT323',monospace;font-size:14px;letter-spacing:.05em;padding:5px 14px;border-radius:999px;border:1.5px solid var(--black);pointer-events:none}
+body.pmz-open{overflow:hidden}
+
+/* grid section marquee — y2k bouncing band */
+.grid-section-marquee{
+  grid-column:1 / -1;
+  margin:34px 0 18px;
+  padding:14px 0;
+  background:var(--pink);
+  border-top:1px solid rgba(242,236,230,.14);
+  border-bottom:1px solid rgba(242,236,230,.14);
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);
+}
+.grid-section-marquee::before,
+.grid-section-marquee::after{
+  content:"";
+  position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+.grid-section-marquee::before{ left:0; background:linear-gradient(to right, var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee::after { right:0; background:linear-gradient(to left,  var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee .marquee-track{
+  display:flex;align-items:center;gap:36px;
+  white-space:nowrap;
+  animation:marquee-scroll 22s linear infinite;
+  width:max-content;
+}
+.grid-section-marquee .marquee-item{
+  font-family:'Playfair Display',serif;font-weight:400;
+  font-size:30px;line-height:1;
+  color:var(--cream);
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  text-transform:uppercase;letter-spacing:.04em;
+  flex-shrink:0;
+}
+.grid-section-marquee .marquee-emoji{
+  font-size:28px;flex-shrink:0;
+  filter:none;
+}
+@keyframes marquee-scroll{
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+@media (max-width:560px){
+  .grid-section-marquee{padding:10px 0;margin:24px 0 14px}
+  .grid-section-marquee .marquee-item{font-size:22px;text-shadow:none}
+  .grid-section-marquee .marquee-emoji{font-size:22px}
+  .grid-section-marquee .marquee-track{gap:24px;animation-duration:16s}
+}
+@media (prefers-reduced-motion:reduce){
+  .grid-section-marquee .marquee-track{animation:none;justify-content:center}
+}
+</style>
+
+<style id="sg-identity">
+:root{
+  --bubblegum:#241318; --pink:#D92344; --pink-deep:#E8516B; --pink-soft:#1E1418; --pink-bg:#191014;
+  --yellow:#C9A35F; --blue:#6B5546; --blue-deep:#C9A35F; --lime:#C9A35F;
+  --cream:#0D0A0C; --silver:#5E544F; --silver-deep:#A89A92;
+}
+body{color:#F2ECE6;background:#0D0A0C}
+/* nav */
+nav.nav.scrolled{background:rgba(13,10,12,.86);border-bottom:1px solid rgba(201,163,95,.28);box-shadow:none}
+.sg-logo{font-family:'Playfair Display',serif;font-weight:600;font-size:18px;letter-spacing:.34em;color:#F2ECE6;text-transform:uppercase;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.sg-logo .sg-g{color:#D92344}
+.nav-cart,.nav-burger{background:transparent;color:#F2ECE6;border:1px solid rgba(201,163,95,.5);border-radius:2px;box-shadow:none;font-family:'Manrope',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+/* hero */
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.42em;color:#C9A35F;text-transform:uppercase}
+.hero-sub{transform:none;font-weight:500;font-size:38px;letter-spacing:.01em;line-height:1.02}
+.hero-sub .pink{color:#D92344;font-style:italic}
+.hero-scroll{letter-spacing:.34em;font-size:10px;text-transform:uppercase}
+/* sections */
+.section-title{font-weight:600;letter-spacing:.02em;color:#F2ECE6}
+.section-title .alt{color:#D92344;font-style:italic}
+.section-sub{font-style:italic;transform:none;color:#C9A35F;font-size:19px}
+/* slot */
+.slot-section{background:radial-gradient(ellipse at 50% 0%,#2A1117 0%,#190D11 55%,#0D0A0C 100%);border-top:1px solid rgba(201,163,95,.22);border-bottom:1px solid rgba(201,163,95,.22)}
+.slot-head .kicker{background:transparent;color:#C9A35F;border:1px solid rgba(201,163,95,.5);letter-spacing:.34em;text-transform:uppercase;font-weight:600}
+.slot-head h2{color:#F2ECE6;font-weight:600}
+.slot-tagline{color:#A89A92;font-size:15px}
+.slot-tagline b{background:transparent;color:#C9A35F;border:none;padding:0}
+.slot-body{background:#15100F;border:1px solid rgba(201,163,95,.45);border-radius:10px}
+.slot-top-light{background:#0D0A0C;color:#C9A35F;border:1px solid rgba(201,163,95,.4);letter-spacing:.3em;font-size:10px;font-weight:600}
+.spin-btn{background:#D92344;color:#fff;border:none;border-radius:2px;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.slot-result .win-line{color:#C9A35F}
+/* cards */
+.card{background:#15100F;border:1px solid rgba(242,236,230,.10);border-radius:6px;box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.card-window{display:none}
+.card-img{background:#171113;border-bottom:1px solid rgba(242,236,230,.08)}
+.card-img img,.card-photos > img{background:#171113}
+.card-img .ribbon{left:0;top:12px;transform:none;background:#D92344;color:#fff;border:none;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;letter-spacing:.22em;padding:4px 12px;border-radius:0 2px 2px 0}
+.card-img .heart-tag{display:none}
+.card-title{font-family:'Playfair Display',serif;font-weight:600;font-size:15px;color:#F2ECE6}
+.card-price{font-family:'Manrope',sans-serif;font-weight:700;font-size:18px;color:#C9A35F}
+.card-tag{background:transparent;color:#A89A92;border:1px solid rgba(168,154,146,.4);border-radius:2px;font-size:10px;letter-spacing:.08em}
+.card-btn{background:#D92344;color:#fff;border:none;border-radius:2px;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.card-btn:hover{background:#B11731}
+.card-dots i{background:#C9A35F}
+/* drawer & cart */
+.drawer,.cart-drawer{background:#120D10;color:#F2ECE6}
+.drawer-head .title,.cart-head .title{font-family:'Playfair Display',serif;font-style:italic;font-size:20px;color:#F2ECE6}
+.drawer-section h6{color:#C9A35F;letter-spacing:.3em;text-transform:uppercase;font-size:10px}
+.drawer-link,.drawer-link.pink,.drawer-link.yellow,.drawer-link.lime{background:transparent;border:1px solid rgba(242,236,230,.14);color:#F2ECE6;border-radius:2px;box-shadow:none}
+.drawer-link:hover{border-color:#C9A35F;color:#C9A35F}
+.drawer-link.tg{background:transparent;border:1px solid #229ED9;color:#229ED9}
+.drawer-foot{color:#6F625C}
+.cart-form input,.cart-form select{background:#171113;color:#F2ECE6;border:1px solid rgba(242,236,230,.18);border-radius:2px;box-shadow:none}
+.cart-form input::placeholder{color:#6F625C}
+.cart-form label{color:#A89A92;letter-spacing:.1em;text-transform:uppercase;font-size:11px}
+.cart-submit{background:#D92344;color:#fff;border:none;border-radius:2px;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.cart-total .num{color:#C9A35F}
+.cart-line img{background:#171113;border:1px solid rgba(242,236,230,.12)}
+.cart-empty{color:#6F625C}
+/* promo bar */
+.promo-applied-bar{background:#15100F;border:1px solid rgba(201,163,95,.4);color:#F2ECE6;box-shadow:none}
+.promo-applied-bar .code{background:#D92344;border:none}
+.promo-applied-bar .pct{background:transparent;color:#C9A35F;border:1px solid rgba(201,163,95,.5)}
+.promo-applied-bar [data-action="clear-promo"]{background:transparent;color:#A89A92;border:1px solid rgba(168,154,146,.4)}
+/* product modal */
+.pm{background:#0D0A0C}
+.pm-info h1{font-weight:600;color:#F2ECE6}
+.pm-info .crumbs{color:#6F625C;letter-spacing:.08em}
+.pm-info .crumbs b{color:#C9A35F}
+.pm-price,.pm-price .currency{color:#C9A35F;font-family:'Manrope',sans-serif;font-weight:700}
+.pm-descr{color:#CDBFB7}
+.pm-spec{background:#15100F;border:1px solid rgba(242,236,230,.10);border-radius:4px;box-shadow:none}
+.pm-spec .lbl{color:#C9A35F;letter-spacing:.18em;text-transform:uppercase;font-size:10px}
+.pm-cta{background:#D92344;color:#fff;border:none;border-radius:2px;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.pm-arrow{background:rgba(13,10,12,.72);color:#F2ECE6;border:1px solid rgba(242,236,230,.25);box-shadow:none}
+.pm-stage,.pm-stage-track,.pm-hero{background:#171113}
+.pm-ribbon{background:#D92344;color:#fff;border:none;letter-spacing:.22em;font-family:'Manrope',sans-serif;font-weight:700}
+/* about */
+.about{background:#120D10;border-top:1px solid rgba(201,163,95,.2);border-bottom:1px solid rgba(201,163,95,.2)}
+.about-bg,.about .cloud-puff,.plumbob,.hero-sticker{display:none}
+.about-title{font-weight:600;color:#F2ECE6}
+.name-tag{background:#0D0A0C;color:#C9A35F;border:1px solid rgba(201,163,95,.4);letter-spacing:.12em;font-family:'Manrope',sans-serif}
+.gta-dialog{background:#15100F;color:#F2ECE6;border:1px solid rgba(242,236,230,.12);border-radius:8px;box-shadow:0 16px 36px rgba(0,0,0,.4)}
+.gta-dialog .bar{background:#0D0A0C;border-bottom:1px solid rgba(201,163,95,.3)}
+.gta-dialog .bar .speaker{color:#C9A35F}
+.gta-screen{color:#E6D9CF}
+.gta-line .what{color:#E6D9CF}
+.gta-cta{background:#120D10;color:#A89A92;border-top:1px dashed rgba(201,163,95,.25)}
+.gta-cta .keys b{background:#171113;color:#C9A35F;border:1px solid rgba(201,163,95,.4)}
+.gta-cta button{background:#D92344;color:#fff;border:none;border-radius:2px;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+/* vibe */
+.vibe-card{background:#15100F;border:1px solid rgba(242,236,230,.10);border-radius:6px;box-shadow:none}
+.vibe-card .num{background:transparent;color:#C9A35F;border:1px solid rgba(201,163,95,.5);font-family:'Playfair Display',serif}
+.vibe-card h4{font-family:'Playfair Display',serif;font-weight:600;color:#F2ECE6}
+.vibe-card p{color:#BCAFA8}
+/* info */
+.info-card,.info-card.pink,.info-card.yellow{background:#15100F;border:1px solid rgba(242,236,230,.10);border-radius:6px;box-shadow:none}
+.info-card h3{font-family:'Playfair Display',serif;font-weight:600;color:#F2ECE6}
+.info-card p{color:#BCAFA8}
+.info-card p b{color:#F2ECE6}
+.info-card a{color:#C9A35F}
+.info-card a:hover{color:#F2ECE6}
+.info-card .legal{color:#6F625C}
+/* footer */
+footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
+
+/* ===== brand philosophy ===== */
+.sg-philo{
+  position:relative;
+  background:radial-gradient(120% 120% at 50% 0%, #14100F 0%, #0A0809 70%);
+  border-top:1px solid rgba(201,163,95,.2);
+  padding:84px 0 92px;
+  text-align:center;
+  overflow:hidden;
+}
+.sg-philo .container{ position:relative; z-index:2; max-width:760px; }
+.sg-philo-eyebrow{
+  font-size:12px; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--yellow); opacity:.85; margin-bottom:26px;
+}
+.sg-philo-title{
+  font-family:'Playfair Display',serif; font-weight:400;
+  font-size:clamp(34px,6vw,56px); line-height:1.02; letter-spacing:-.02em;
+  text-transform:uppercase; color:#F2ECE6; margin:0 0 28px;
+}
+.sg-philo-lead{
+  font-size:clamp(17px,2.4vw,21px); line-height:1.75; color:#E8DED6;
+  margin:0 auto; max-width:640px; font-weight:300;
+}
+.sg-philo-rule{
+  width:54px; height:1px; margin:38px auto;
+  background:linear-gradient(90deg, transparent, var(--yellow), transparent);
+}
+.sg-philo-body{
+  font-size:clamp(14px,1.9vw,16px); line-height:1.85; color:#A89A92;
+  margin:0 auto; max-width:600px; font-weight:300;
+}
+.sg-philo-en{
+  font-family:'Playfair Display',serif; font-style:italic; font-weight:400;
+  font-size:clamp(18px,2.6vw,23px); line-height:1.7; letter-spacing:.01em;
+  color:#F2ECE6; margin:0 auto; max-width:640px;
+}
+.sg-philo-en.body{ font-size:clamp(16px,2.1vw,19px); color:#D8CCC2; }
+.sg-philo-uk{
+  font-size:clamp(13px,1.7vw,15px); line-height:1.8; color:#A89A92;
+  margin:14px auto 0; max-width:600px; font-weight:300; letter-spacing:.01em;
+}
+@media(max-width:640px){ .sg-philo{ padding:64px 0 70px; } }
+
+.foot-logo{font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#F2ECE6}
+.foot-logo .girl{color:#D92344}
+.foot-tagline{color:#A89A92;font-style:italic;font-family:'Playfair Display',serif;font-size:15px}
+.foot-grid h5{color:#C9A35F;letter-spacing:.26em;text-transform:uppercase;font-size:10px}
+.foot-grid a{color:#BCAFA8}
+.foot-grid a:hover{color:#F2ECE6}
+.foot-bot{color:#6F625C}
+</style>
+<style id="en-css">
+.en-cbx{position:relative}
+.en-cbx-list{position:absolute;left:0;right:0;top:100%;z-index:60;background:#171114;border:1px solid rgba(242,236,230,.25);border-radius:10px;max-height:180px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.en-cbx-list button{display:block;width:100%;text-align:left;padding:8px 10px;background:none;border:0;font:inherit;color:#F2ECE6;cursor:pointer}
+.en-cbx-list button:hover{background:rgba(217,35,68,.25)}
+.en-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 0;font-size:14px}
+.en-row small{opacity:.65;font-weight:400}
+.en-row .d{opacity:.55}
+.en-row.main{font-weight:800;font-size:16px;border-top:1px dashed rgba(242,236,230,.3);padding-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav scrolled">
+  <div class="container nav-row">
+    <button class="nav-burger" id="navBurger" aria-label="menu" aria-expanded="false" aria-controls="drawer">≡</button>
+    <a href="#top" class="nav-logo-img sg-logo" aria-label="Showgirl">SHOW<span class="sg-g">GIRL</span></a>
+    <button class="nav-cart" id="navCart">Cart [0]</button>
+  </div>
+</nav>
+
+<!-- ===== BURGER DRAWER ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="site menu">
+  <div class="drawer-head">
+    <span class="title">menu</span>
+    <button class="drawer-close" id="drawerClose" aria-label="close menu">×</button>
+  </div>
+
+  <div class="drawer-section">
+    <h6>shop</h6>
+    <a class="drawer-link pink" href="#shop">all pieces <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="#shop" data-family="sg-look">intimate looks <span class="arrow">→</span></a>
+    <a class="drawer-link pink" href="#shop" data-family="sg-bikini">micro bikinis <span class="arrow">→</span></a>
+    <a class="drawer-link lime" href="#shop" data-family="sg-neck">neck pieces <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="https://www.babygirl.com.ua/en">← babygirl shop <span class="arrow">↗</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>info</h6>
+    <a class="drawer-link" href="#top">main page <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#about">about <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#delivery">shipping & payment <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#returns">returns <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#contacts">contacts <span class="arrow">→</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>follow</h6>
+    <a class="drawer-link tg" href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">telegram bot ✈ <span class="arrow">↗</span></a>
+    <a class="drawer-link" href="https://www.instagram.com/showgirl.world/" target="_blank" rel="noopener">instagram <span class="arrow">↗</span></a>
+  </div>
+
+  <div class="drawer-foot">
+    Showgirl™ · BabyGirl’s sister · after dark 24/7
+  </div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section id="top" class="hero">
+  <video class="hero-video" data-bg-media="heroVideo" data-bg-poster="heroPoster" autoplay muted loop playsinline preload="metadata"></video>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SHOWGIRL — DROP N°01</div>
+    <div class="hero-sub">intimate looks<br><span class="pink">&amp; micro bikinis</span></div>
+  </div>
+  <div class="hero-scroll">▼ scroll ▼</div>
+</section>
+
+<!-- ===== SLOT MACHINE ===== -->
+<section class="slot-section">
+  <div class="slot-stars"></div>
+  <div class="slot-head">
+    <span class="kicker">promo</span>
+    <h2>win heat</h2>
+    <p class="slot-tagline">Spin & get a <b>promo code</b> ♥</p>
+  </div>
+
+  <div class="slot-machine">
+    <div class="slot-body">
+      <div class="slot-top-light" id="slotTopLight">PROMO · ROLL ME</div>
+      <div class="slot-display">
+        <div class="reel">
+          <div class="reel-strip" id="reel1">
+            <div class="reel-item">🥂</div><div class="reel-item">♥</div><div class="reel-item">★</div><div class="reel-item">💋</div><div class="reel-item">🍒</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel2">
+            <div class="reel-item percent">10%</div><div class="reel-item percent">12%</div><div class="reel-item percent">15%</div><div class="reel-item percent">18%</div><div class="reel-item percent">20%</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel3">
+            <div class="reel-item word">OFF</div><div class="reel-item word">WIN</div><div class="reel-item word">HOT</div><div class="reel-item word">SHOW</div><div class="reel-item word">DROP</div>
+          </div>
+        </div>
+      </div>
+      <button id="spinBtn" class="spin-btn">spin</button>
+    </div>
+    <div class="slot-lever" aria-hidden="true">
+      <div class="lever-rod"></div>
+      <div class="lever-ball"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section id="shop" class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">almost <span class="alt">nothing</span></h2>
+      <span class="section-sub">barely anything extra</span>
+    </div>
+
+    <!-- DATA: каталог. Парсить validate_deploy_js.py (id="DATA"). -->
+    <script id="DATA" type="application/json">{"all": [{"uid": "sg-leo-black", "title": "Showgirl leopard/black straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 10, "ribbon": "ICON", "photo_main": "assets/showgirl/sg-leo-black-1.webp", "photos": ["assets/showgirl/sg-leo-black-1.webp", "assets/showgirl/sg-leo-black-2.webp", "assets/showgirl/sg-leo-black-3.webp", "assets/showgirl/sg-leo-black-4.webp", "assets/showgirl/sg-leo-black-5.webp", "assets/showgirl/sg-leo-black-6.webp", "assets/showgirl/sg-leo-black-7.webp", "assets/showgirl/sg-leo-black-8.webp"], "description": "Леопардовий настрій у темному звучанні. Чорні лінії тримають форму, але майже нічого не приховують. Деталі у формі сердець притягують і утримують погляд. One size, повністю регулюється під твоє тіло і настрій. У комплекті чокер у формі серця. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "featured": true}, {"uid": "sg-leo-red", "title": "Showgirl leopard/red straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 20, "ribbon": "HOT", "photo_main": "assets/showgirl/sg-leo-red-1.webp", "photos": ["assets/showgirl/sg-leo-red-1.webp", "assets/showgirl/sg-leo-red-2.webp", "assets/showgirl/sg-leo-red-3.webp", "assets/showgirl/sg-leo-red-4.webp", "assets/showgirl/sg-leo-red-5.webp", "assets/showgirl/sg-leo-red-6.webp", "assets/showgirl/sg-leo-red-7.webp"], "description": "Більш смілива версія showgirl. Леопардовий інстинкт із червоними лініями, які додають напруги кожному руху. Деталі-серця, one size з повним регулюванням. У комплекті чокер-серце. Грайливо, трохи небезпечно і неможливо відірвати погляд.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-cow-pink", "title": "Showgirl cow/pink straps", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 30, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-cow-pink-1.webp", "photos": ["assets/showgirl/sg-cow-pink-1.webp", "assets/showgirl/sg-cow-pink-2.webp", "assets/showgirl/sg-cow-pink-3.webp", "assets/showgirl/sg-cow-pink-4.webp", "assets/showgirl/sg-cow-pink-5.webp", "assets/showgirl/sg-cow-pink-6.webp"], "description": "М'який, грайливий і трохи неочікуваний. Контраст принта з ніжними рожевими лініями виглядає невинно, але відчувається зовсім інакше. Сатин, чіткі лінії, one size з повним регулюванням. У комплекті ніжний рожевий чокер-серце. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-red-velvet", "title": "Red star", "family": "sg-look", "price": 3990, "in_grid": true, "sort_order": 35, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-red-star-7.webp", "photos": ["assets/showgirl/sg-red-star-7.webp", "assets/showgirl/sg-red-star-1.webp", "assets/showgirl/sg-red-star-2.webp", "assets/showgirl/sg-red-star-3.webp", "assets/showgirl/sg-red-star-4.webp", "assets/showgirl/sg-red-star-5.webp", "assets/showgirl/sg-red-star-6.webp"], "description": "Червоне світло. Пізня ніч. Енергія головної героїні.\n\nНатхненний естетикою приватних шоу та сяйвом червоного прожектора, який супроводжує кожен твій рух.\n\nМерехтлива червона тканина красиво ловить світло, а деталь у формі серця додає образу грайливої ніжності.\n\nОдин розмір, що повністю регулюється під твоє тіло та вигини. Комплект підлаштовується під тебе, відкриваючи рівно стільки, скільки ти захочеш.\n\nСтворений для ночей, коли ти не залишаєшся в тіні — ти сяєш.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серце + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-tension", "title": "Tension", "family": "sg-bikini", "price": 3800, "in_grid": true, "sort_order": 40, "ribbon": "BOLD", "photo_main": "assets/showgirl/sg-tension-1.webp", "photos": ["assets/showgirl/sg-tension-1.webp", "assets/showgirl/sg-tension-2.webp", "assets/showgirl/sg-tension-3.webp", "assets/showgirl/sg-tension-4.webp", "assets/showgirl/sg-tension-5.webp", "assets/showgirl/sg-tension-6.webp", "assets/showgirl/sg-tension-7.webp"], "description": "Мікро-комплект, побудований на напрузі. Майже нічого — але неможливо не дивитись: тонкі лінії і грайливі серця-акценти. Естетика ретро-стрипу, де мінімум — це намір. One size, повністю регулюється. Сміливо, трохи зухвало. Не для всіх.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця-акценти"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-bunny", "title": "Soft bunny", "family": "sg-bikini", "price": 3900, "in_grid": true, "sort_order": 50, "ribbon": "SOFT", "photo_main": "assets/showgirl/sg-bunny-1.webp", "photos": ["assets/showgirl/sg-bunny-1.webp", "assets/showgirl/sg-bunny-2.webp", "assets/showgirl/sg-bunny-3.webp", "assets/showgirl/sg-bunny-4.webp", "assets/showgirl/sg-bunny-5.webp"], "description": "М'який, пухнастий і майже невагомий комплект, що передає настрій з першого дотику. Виглядає мило, майже невинно… ніби ти готова добре себе поводити. One size, повністю регулюється, відкриваючи рівно стільки, скільки потрібно. Неможливо забути.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серце-підвіска"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-pink-kiss", "title": "Pink kiss", "family": "sg-bikini", "price": 3990, "in_grid": true, "sort_order": 55, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-pink-kiss-1.webp", "photos": ["assets/showgirl/sg-pink-kiss-1.webp"], "description": "Класичний мікро-крій на завʼязках, що повністю регулюється під твоє тіло. Виглядає солодко, але відчувається зовсім інакше. У комплекті чокер у формі серця. One size. Handmade з любов'ю до кожної деталі.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>повністю регулюється"}, {"l": "details", "v": "серця + чокер<br>у комплекті"}, {"l": "made", "v": "handmade<br>в Україні"}]}}, {"uid": "sg-neck", "title": "Neck Pieces", "family": "sg-neck", "price": 1490, "in_grid": true, "sort_order": 60, "ribbon": "NEW", "photo_main": "assets/showgirl/sg-neck-1.webp", "photos": ["assets/showgirl/sg-neck-1.webp", "assets/showgirl/sg-neck-2.webp", "assets/showgirl/sg-neck-3.webp"], "description": "Маленька деталь, яка змінює все. М'які лінії ніжно облягають шию, а серце притягує і утримує погляд. Мінімалістичний, регульований — під твій настрій. Делікатний акцент або головний елемент образу. Колір: рожевий або чорний.", "sizes": ["ONE SIZE"], "attrs": {"brand": "showgirl", "specs": [{"l": "size", "v": "one size<br>регулюється"}, {"l": "colors", "v": "pink / black"}, {"l": "details", "v": "срібне серце"}, {"l": "made", "v": "handmade<br>в Україні"}]}, "colors": [{"code": "pink", "name": "Pink", "hex": "#FF8DB8", "photo": "assets/showgirl/sg-neck-1.webp"}, {"code": "black", "name": "Black", "hex": "#0A0A0A", "photo": "assets/showgirl/sg-neck-1.webp"}]}], "grid": ["sg-leo-black", "sg-leo-red", "sg-cow-pink", "sg-red-velvet", "sg-tension", "sg-bunny", "sg-pink-kiss", "sg-neck"], "featured": ["sg-leo-black"]}</script>
+
+    <div id="grid" class="grid"></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="about">
+  <div class="about-bg" aria-hidden="true"></div>
+  <span class="cloud-puff c1" aria-hidden="true"></span>
+  <span class="cloud-puff c2" aria-hidden="true"></span>
+  <span class="cloud-puff c3" aria-hidden="true"></span>
+  <div class="container about-wrap">
+    <h2 class="about-title">
+      <span class="plumbob" aria-hidden="true"></span>
+      this is<br>a showgirl<br>thing
+    </h2>
+
+    <div class="about-stage">
+      <div class="about-photo">
+        <span class="name-tag">Lera · founder</span>
+        <span class="hero-sticker" aria-hidden="true">♥</span>
+        <video data-bg-media="leraVideo" data-bg-poster="lera" autoplay muted loop playsinline preload="metadata" aria-label="Lera"></video>
+      </div>
+
+      <div class="gta-dialog">
+        <div class="bar">
+          <span class="speaker">Lera ♥</span>
+          <span class="pip"><i></i> live</span>
+        </div>
+        <div class="gta-screen" id="gtaScreen" data-played="0"></div>
+        <div class="gta-cta">
+          <button id="gtaJoinBtn" type="button">join the club</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Скрипт диалога Леры (typewriter, GTA-style) -->
+<script>
+(function(){
+  var screen = document.getElementById('gtaScreen');
+  if (!screen) return;
+
+  // Реплики диалога — украинский на основе наброску пользователя
+  var LINES = [
+    { who: 'Lera',  what: "Hi! It's <em>Lera</em> again." },
+    { who: 'Lera',  what: "Showgirl is BabyGirl's <em>little sister</em>." },
+    { who: 'Lera',  what: "Almost nothing is hidden here — <em>that's the point</em>." },
+    { who: 'Lera',  what: 'All fabrics are <em>light and pleasant</em> to the touch.' },
+    { who: 'Lera',  what: 'And <em>weightless on the body</em> — like a second skin.' },
+    { who: 'Lera',  what: 'Every set is <em>handmade</em>, with love for detail.' },
+    { who: 'You',   what: "<em>i'm ready</em> ✓", me: true }
+  ];
+
+  var SPEED_CHAR   = 28;   // мс на букву
+  var BETWEEN_LINE = 600;  // мс между репликами
+  var running = false;
+  var stopRequested = false;
+  var $linesEl = null;
+
+  function escapeAllowedHtml(s){
+    // Allow <em> tags; escape everything else
+    return s.replace(/<(?!\/?em\b)[^>]*>/g, function(m){ return m.replace(/</g,'&lt;').replace(/>/g,'&gt;'); });
+  }
+
+  function appendLine(line){
+    var div = document.createElement('div');
+    div.className = 'gta-line' + (line.me ? ' me' : '');
+    var who = document.createElement('span');
+    who.className = 'who';
+    who.textContent = '★ ' + line.who;
+    var what = document.createElement('span');
+    what.className = 'what';
+    var cursor = document.createElement('span');
+    cursor.className = 'gta-cursor';
+    div.appendChild(who); div.appendChild(what); div.appendChild(cursor);
+    screen.appendChild(div);
+    return { div: div, what: what, cursor: cursor };
+  }
+
+  function typeText(target, html, done){
+    // Парсим html на токены: либо тэг <em>...</em>, либо одиночные символы
+    var tokens = [], i = 0;
+    while (i < html.length){
+      if (html[i] === '<') {
+        var close = html.indexOf('>', i);
+        if (close === -1) { tokens.push(html[i]); i++; continue; }
+        tokens.push(html.slice(i, close + 1));
+        i = close + 1;
+      } else { tokens.push(html[i]); i++; }
+    }
+    var idx = 0;
+    function step(){
+      if (stopRequested) return done();
+      if (idx >= tokens.length) return done();
+      target.what.innerHTML += tokens[idx++];
+      setTimeout(step, SPEED_CHAR);
+    }
+    step();
+  }
+
+  function runDialog(){
+    if (running) return;
+    running = true;
+    screen.dataset.played = '1';
+    screen.innerHTML = '';
+    var i = 0;
+    function nextLine(){
+      if (stopRequested) {
+        // Скип — мгновенно показать всё
+        screen.innerHTML = LINES.map(function(line){
+          return '<div class="gta-line' + (line.me ? ' me' : '') + '">'
+            + '<span class="who">' + line.who + '</span>'
+            + '<span class="what">' + escapeAllowedHtml(line.what) + '</span>'
+            + '</div>';
+        }).join('');
+        running = false;
+        return;
+      }
+      if (i >= LINES.length) { running = false; return; }
+      var line = LINES[i++];
+      var t = appendLine(line);
+      typeText(t, escapeAllowedHtml(line.what), function(){
+        if (t.cursor && t.cursor.parentNode) t.cursor.parentNode.removeChild(t.cursor);
+        // Dim предыдущие
+        var prev = screen.querySelectorAll('.gta-line');
+        for (var j = 0; j < prev.length - 2; j++) prev[j].classList.add('dim');
+        setTimeout(nextLine, BETWEEN_LINE);
+      });
+    }
+    nextLine();
+  }
+
+  // Запуск когда блок появился в viewport
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting && screen.dataset.played === '0') {
+          runDialog();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(screen);
+  } else {
+    // fallback — сразу
+    setTimeout(runDialog, 400);
+  }
+
+  // Skip по клику/tap/space/enter
+  function skip(){ if (running) { stopRequested = true; } }
+  screen.addEventListener('click', skip);
+  document.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter') {
+      if (screen.dataset.played === '0') runDialog();
+      else skip();
+    }
+  });
+
+  // CTA join — скроллит к каталогу
+  var joinBtn = document.getElementById('gtaJoinBtn');
+  if (joinBtn) joinBtn.addEventListener('click', function(){
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
+
+
+<!-- ===== VIBE ===== -->
+<section class="vibe">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">the <span class="alt">vibe</span></h2>
+      <span class="section-sub">what you get</span>
+    </div>
+    <div class="vibe-grid">
+      <div class="vibe-card">
+        <div class="num">1</div>
+        <h4>handmade with love</h4>
+        <p>Every set is made by hand, with attention to every heart and every line.</p>
+      </div>
+      <div class="vibe-card">
+        <div class="num">2</div>
+        <h4>one size fits all moods</h4>
+        <p>Fully adjustable to your body, your lines and your mood. Reveals exactly as much as needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INFO / DELIVERY / CONTACTS ===== -->
+<section id="info" class="info-section">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">info <span class="alt">&amp; care</span></h2>
+      <span class="section-sub">shipping · contacts · terms</span>
+    </div>
+
+    <div class="info-grid">
+      <article class="info-card pink" id="delivery">
+        <h3>🚚 Worldwide shipping</h3>
+        <p>We ship worldwide with <b>Nova Global</b> (Nova Poshta international).</p>
+        <p>— Central Europe (PL · SK · HU · RO · CZ · MD): <b>€7</b> · 3–6 business days<br>
+        — Western Europe &amp; Scandinavia: <b>€9</b> · 4–8 business days<br>
+        — United Kingdom: <b>€11</b> · 5–9 business days<br>
+        — USA &amp; Canada: <b>€15</b> · 7–14 business days<br>
+        — Rest of the world: <b>€22</b> · 10–20 business days</p>
+        <p class="muted">Shipping is calculated at checkout by destination country. Your tracking number arrives by email.</p>
+      </article>
+
+      <article class="info-card yellow" id="payment">
+        <h3>💳 Payment</h3>
+        <p><b>— Visa / MasterCard or PayPal</b><br>secure checkout in EUR via Western Bid</p>
+        <p>The full amount (items + shipping) is charged at checkout. No cash on delivery for international orders.</p>
+        <p class="muted">All payments are SSL-encrypted. Discreet packaging, always.</p>
+      </article>
+
+      <article class="info-card" id="returns">
+        <h3>↩ Returns &amp; exchange</h3>
+        <p>You can exchange or return an item within <b>14 days</b> of delivery if it doesn’t fit or isn’t what you expected.</p>
+        <p>Return conditions:</p>
+        <p>— item unworn, in original condition<br>— tags preserved<br>— proof of purchase preserved</p>
+        <p class="muted">For hygiene reasons intimate pieces may be non-returnable by law. Return shipping is paid by the customer.</p>
+      </article>
+
+      <article class="info-card wide" id="contacts">
+        <h3>💌 Contacts · Questions? Text us</h3>
+        <p>We’re here — soft &amp; ready. The fastest way is our Telegram bot. ♥</p>
+
+        <p style="margin-top:12px"><b>📞 Phone:</b> <a href="tel:+380958766756">+380 95 876 67 56</a></p>
+        <p><b>📸 Instagram:</b> <a href="https://www.instagram.com/showgirl.world/" target="_blank" rel="noopener">@showgirl.world</a></p>
+
+        <a class="tg-button" href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">
+          <span class="tg-icon">✈</span> Message us on Telegram
+        </a>
+
+        <div class="legal">
+          FOP Kodatska Valeriia Vadymivna · USREOU 3569012146<br>
+          65039, Odesa, Ukraine, Serednofontanska St. 19
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRAND PHILOSOPHY ===== -->
+<section class="sg-philo">
+  <div class="container">
+    <div class="sg-philo-eyebrow">brand philosophy</div>
+    <h2 class="sg-philo-title">Almost nothing.<br>Not for everyone.</h2>
+    <p class="sg-philo-en">
+      Intimate sets for your private show.<br>
+      Barely there. Not for everyone.<br>
+      She doesn't undress — she performs.<br>
+      And she decides what you get to see.
+    </p>
+    
+    <div class="sg-philo-rule"></div>
+    <p class="sg-philo-en body">
+      Made for your own moments, whatever they look like.<br>
+      For yourself, for someone watching, or for the moment
+      you step into your role — it adapts to your mood.<br>
+      You decide how far it goes.
+    </p>
+    
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="foot-logo">show<span class="girl">girl</span><span style="color:var(--blue-deep)">.</span></div>
+    <div class="foot-tagline">Almost nothing. Everything. · BabyGirl’s sister</div>
+    <div class="foot-grid">
+      <div>
+        <h5>Shop</h5>
+        <a href="#shop">All pieces</a>
+        <a href="#shop" data-family="sg-look">Intimate looks</a>
+        <a href="#shop" data-family="sg-bikini">Micro bikinis</a>
+        <a href="#shop" data-family="sg-neck">Neck pieces</a>
+        <a href="https://www.babygirl.com.ua/en">BabyGirl shop ↗</a>
+      </div>
+      <div>
+        <h5>Info</h5>
+        <a href="#about">About</a>
+        <a href="#delivery">Shipping</a>
+        <a href="#payment">Payment</a>
+        <a href="#returns">Returns</a>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <a href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">Telegram bot ✈</a>
+        <a href="https://www.instagram.com/showgirl.world/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="#contacts">All contacts</a>
+        <a href="tel:+380958766756">+380 95 876 67 56</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      © 2026 Showgirl™ · a BabyGirl sister brand · handmade in Ukraine
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-head">
+    <span class="title">cart</span>
+    <button class="cart-close" id="cartClose" aria-label="close">×</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">cart is empty</div>
+  </div>
+  <div class="cart-total" id="cartTotal" hidden="">
+    <span>total</span><span class="num" id="cartTotalNum">€0</span>
+  </div>
+  <form class="cart-form" id="cartForm" hidden="">
+    <label>full name</label>
+    <input id="fld-fio" placeholder="Maria Smith" required="" autocomplete="name">
+    <label>phone</label>
+    <input id="fld-phone" type="tel" placeholder="+1 ..." required="" autocomplete="tel">
+    <label>email</label>
+    <input id="fld-email" type="email" placeholder="your@email.com" required="" autocomplete="email">
+    <label>country</label>
+    <div class="en-cbx">
+      <input id="fld-country-in" placeholder="start typing…" autocomplete="off" required="">
+      <input type="hidden" id="fld-country">
+      <div class="en-cbx-list" id="enCountryList" hidden=""></div>
+    </div>
+    <label>city</label>
+    <input id="fld-city" placeholder="Berlin" required="">
+    <label>zip / postal code</label>
+    <input id="fld-zip" placeholder="10115" autocomplete="postal-code">
+    <label>address · street, house, apt</label>
+    <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
+    <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
+    <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
+    <button type="submit" class="cart-submit" id="cartSubmit">pay by card / paypal</button>
+    <div id="cartResult" class="cart-result"></div>
+  </form>
+</aside>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="pm-overlay" id="pmOverlay"></div>
+<div class="pm" id="pm" aria-hidden="true" role="dialog">
+  <button class="pm-close" id="pmClose" aria-label="close">×</button>
+  <div class="pm-hero">
+    <div class="pm-stage" id="pmStage">
+      <span class="pm-ribbon" id="pmRibbon" hidden=""></span>
+      <div class="pm-stage-track" id="pmTrack"></div>
+      <button class="pm-arrow prev" id="pmPrev" aria-label="prev">‹</button>
+      <button class="pm-arrow next" id="pmNext" aria-label="next">›</button>
+      <div class="pm-counter" id="pmCounter">1 / 1</div>
+    </div>
+    <div class="pm-thumbs" id="pmThumbs"></div>
+  </div>
+  <div class="pm-info">
+    <div class="crumbs" id="pmCrumbs">~/<b>showgirl</b>/<b id="pmCrumbName"></b></div>
+    <h1 id="pmTitle">Title</h1>
+    <div class="pm-price"><span class="currency">€</span><span id="pmPrice">0</span></div>
+    <p class="pm-descr" id="pmDescr"></p>
+    <div class="pm-specs" id="pmSpecs">
+      <div class="pm-spec"><div class="lbl">size</div><div class="val">one size</div></div>
+      <div class="pm-spec"><div class="lbl">fabric</div><div class="val">satin &amp;<br>lace</div></div>
+      <div class="pm-spec"><div class="lbl">fit</div><div class="val">one size<br>fully adjustable</div></div>
+      <div class="pm-spec"><div class="lbl">print</div><div class="val">DTF<br>does not fade</div></div>
+    </div>
+    <button class="pm-cta" id="pmCta">Add to cart ♥</button>
+  </div>
+</div>
+
+<!-- ===== PHOTO ZOOM LIGHTBOX ===== -->
+<div class="pmz" id="pmZoom" aria-hidden="true">
+  <button class="pmz-close" id="pmZoomClose" aria-label="close">×</button>
+  <div class="pmz-stage" id="pmZoomStage"></div>
+  <div class="pmz-hint" id="pmZoomHint">tap to zoom · drag to move</div>
+</div>
+
+<script id="en-i18n">window.EN_DESCR={"sg-leo-black": "Leopard mood in a darker key. Black lines hold the shape yet hide almost nothing. Heart-shaped details catch and keep the gaze. One size, fully adjustable to your body and mood. Heart choker included. Handmade with love for every detail.", "sg-leo-red": "The bolder take on showgirl. Leopard instinct with red lines that add tension to every move. Heart details, one size, fully adjustable. Heart choker included. Playful, a little dangerous — impossible to look away.", "sg-cow-pink": "Soft, playful and a little unexpected. The print against tender pink lines looks innocent — but feels entirely different. Satin, clean lines, one size, fully adjustable. A soft pink heart choker included. Handmade with love for every detail.", "sg-red-velvet": "Red light. Late night. Main-character energy. Inspired by the aesthetics of private shows and the glow of a red spotlight following your every move. Shimmering red fabric catches the light beautifully, and a heart-shaped detail adds playful tenderness. One size, fully adjustable to your body and curves — revealing exactly as much as you want. Made for nights when you don't stay in the shadows — you shine.", "sg-tension": "A micro set built on tension. Almost nothing — yet impossible not to stare: thin lines and playful heart accents. Retro-strip aesthetics, where minimum means intent. One size, fully adjustable. Bold, a little defiant. Not for everyone.", "sg-bunny": "Soft, fluffy and almost weightless — a set that sets the mood at first touch. Looks cute, almost innocent… as if you're ready to behave. One size, fully adjustable, revealing exactly as much as needed. Impossible to forget.", "sg-pink-kiss": "A classic micro cut with ties, fully adjustable to your body. Looks sweet — feels entirely different. Heart-shaped choker included. One size. Handmade with love for every detail.", "sg-neck": "A small detail that changes everything. Soft lines hug the neck while the heart catches and keeps the gaze. Minimalist, adjustable — to match your mood. A delicate accent or the main piece of the look. Colors: pink or black."};window.EN_SPECS={"sg-leo-black": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "hearts + choker<br>included"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-leo-red": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "hearts + choker<br>included"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-cow-pink": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "hearts + choker<br>included"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-pink-kiss": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "hearts + choker<br>included"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-red-velvet": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "heart + choker<br>included"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-tension": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "heart accents"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-bunny": [{"l": "size", "v": "one size<br>fully adjustable"}, {"l": "details", "v": "heart pendant"}, {"l": "made", "v": "handmade<br>in Ukraine"}], "sg-neck": [{"l": "size", "v": "one size<br>adjustable"}, {"l": "colors", "v": "pink / black"}, {"l": "details", "v": "silver heart"}, {"l": "made", "v": "handmade<br>in Ukraine"}]};</script>
+
+<script>
+/* ========== BURGER DRAWER ========== */
+(function(){
+  var burger = document.getElementById('navBurger');
+  var drawer = document.getElementById('drawer');
+  var overlay = document.getElementById('drawerOverlay');
+  var close = document.getElementById('drawerClose');
+  if (!burger || !drawer || !overlay) return;
+  function open(){
+    drawer.classList.add('open'); overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true');
+    document.body.classList.add('drawer-open');
+  }
+  function shut(){
+    drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false');
+    document.body.classList.remove('drawer-open');
+  }
+  burger.addEventListener('click', open);
+  if (close) close.addEventListener('click', shut);
+  overlay.addEventListener('click', shut);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') shut(); });
+  // Smooth scroll + auto-close on drawer hash-link click
+  // (для не data-family - data-family обробляє свій хендлер нижче)
+  drawer.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      shut();
+      if (a.hasAttribute('data-family')) return;
+      var href = a.getAttribute('href') || '';
+      if (href.length < 2) return;
+      var el = document.querySelector(href);
+      if (!el) return;
+      e.preventDefault();
+      setTimeout(function(){
+        var navH = 64;
+        var top = el.getBoundingClientRect().top + window.pageYOffset - navH;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }, 60);
+    });
+  });
+})();
+
+/* ========== NAV SCROLL EFFECT ========== */
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  var THRESHOLD = 220;          // px после которого появляется фон
+  var ticking = false;
+  function onScroll(){
+    if (!ticking){
+      requestAnimationFrame(function(){
+        if (window.scrollY > THRESHOLD) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // init
+})();
+
+/* ========== SLOT MACHINE + AUTO-APPLY PROMO ========== */
+(function(){
+  var r1 = document.getElementById('reel1');
+  var r2 = document.getElementById('reel2');
+  var r3 = document.getElementById('reel3');
+  var btn = document.getElementById('spinBtn');
+  var topLight = document.getElementById('slotTopLight');
+  if (!r1 || !btn) return;
+
+  // Скидки 10—20% (showgirl-промокоды)
+  var WINS = [
+    {emoji:'🦋', percent:'10%', word:'DROP', code:'SHOW10', pct:10, msg:'10% off'},
+    {emoji:'♥',  percent:'12%', word:'WIN',  code:'SHOW12', pct:12, msg:'12% off'},
+    {emoji:'★',  percent:'15%', word:'STAR', code:'SHOW15', pct:15, msg:'15% off'},
+    {emoji:'💋', percent:'18%', word:'SHOW', code:'SHOW18', pct:18, msg:'18% off'},
+    {emoji:'🎀', percent:'20%', word:'OFF',  code:'SHOW20', pct:20, msg:'20% off · max'}
+  ];
+  var EMOJIS  = ['🎀','♥','★','💋','🦋'];
+  var PERCENT = ['10%','12%','15%','18%','20%'];
+  var WORDS   = ['OFF','WIN','STAR','SHOW','DROP'];
+
+  var spinning = false;
+
+  btn.addEventListener('click', function(){
+    if (spinning) return;
+    spinning = true;
+    btn.disabled = true; btn.textContent = '⌛ ...';
+    r1.classList.add('spinning'); r2.classList.add('spinning'); r3.classList.add('spinning');
+    r1.style.transition = 'none'; r2.style.transition = 'none'; r3.style.transition = 'none';
+
+    var win = WINS[Math.floor(Math.random() * WINS.length)];
+    var itemH = window.innerWidth >= 600 ? 110 : 90;
+
+    setTimeout(function(){ stopReel(r1, win.emoji,   EMOJIS,  itemH); }, 1400);
+    setTimeout(function(){ stopReel(r2, win.percent, PERCENT, itemH); }, 2000);
+    setTimeout(function(){
+      stopReel(r3, win.word, WORDS, itemH);
+      setTimeout(function(){
+        // Применить автоматически: сохранить в sessionStorage + пересчитать цены
+        try { sessionStorage.setItem('bg_promo_code', win.code); } catch(e){}
+        try { sessionStorage.setItem('bg_promo_pct',  String(win.pct)); } catch(e){}
+        if (window.applyPromo) window.applyPromo(win.code, win.pct);
+        if (topLight) topLight.textContent = '✓ ' + win.code + ' · −' + win.pct + '%';
+        btn.textContent = 'spin again'; btn.disabled = false; spinning = false;
+      }, 700);
+    }, 2700);
+  });
+
+  function stopReel(reel, target, items, itemH){
+    reel.classList.remove('spinning');
+    var idx = items.indexOf(target);
+    reel.style.transition = 'transform 0.7s cubic-bezier(.15,.7,.25,1)';
+    reel.style.transform = 'translateY(-' + (idx * itemH) + 'px)';
+  }
+
+  // Если промо уже было применено (вернулся пользователь) — восстанавливаем UI
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0 && topLight) {
+      topLight.textContent = '✓ ' + savedCode + ' · −' + savedPct + '%';
+    }
+  } catch(e){}
+})();
+
+/* ========== STOREFRONT (catalog + cart + checkout) ========== */
+(function(){
+  // Read DATA
+  var D = { all: [], grid: [], featured: [] };
+  try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
+  catch(e){ console.error('[DATA] parse fail', e); }
+  var EUR_RATE = 53.43; window.EUR_RATE = EUR_RATE;  // синхронно с env WB_FX_UAH_PER_UNIT
+  var EN_MARKUP = 2; window.EN_MARKUP = EN_MARKUP;   // синхронно с WB_PRICE_MARKUP в api/westernbid.js
+  function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
+
+  var $grid = document.getElementById('grid');
+  var $overlay = document.getElementById('cartOverlay');
+  var $drawer  = document.getElementById('cartDrawer');
+  var $body    = document.getElementById('cartBody');
+  var $total   = document.getElementById('cartTotal');
+  var $totalN  = document.getElementById('cartTotalNum');
+  var $form    = document.getElementById('cartForm');
+  var $navCart = document.getElementById('navCart');
+
+  var familyFilter = null;
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function renderGrid(){
+    var list = (D.grid || []).map(function(uid){
+      return D.all.find(function(p){ return p.uid === uid; });
+    }).filter(Boolean);
+    if (familyFilter === 'oversize') list = list.filter(function(p){ return p.family !== 'crop'; });
+    else if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
+    if (!list.length) {
+      $grid.innerHTML = '<div class="empty">~ nothing here ~</div>';
+      return;
+    }
+    // Текущий применённый промо (читаем из sessionStorage — пишет slot machine)
+    var pct = 0;
+    try { pct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){}
+
+    var FAMILY_LABEL = {icons:'2000s ICONS', 'self-love':'SELF-LOVE', 'soft-rebel':'SOFT REBEL', 'crop':'CROP TOPS'};
+    var FAMILY_SUB   = {icons:'~ y2k legends ~', 'self-love':'~ soft & loud ~', 'soft-rebel':'~ pink revolution ~', 'crop':'~ short & sexy ~'};
+    var lastFam = null;
+    var parts = [];
+    list.forEach(function(p, i){
+      var altClass = (i % 2 === 1) ? ' alt' : '';
+      var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
+      var photos = p.photo_main ? [p.photo_main] : [];
+      var photoSlides = photos.map(function(url){
+        return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="var c=this.closest(\'.card\');if(c)c.style.display=\'none\'">';
+      }).join('');
+      var swatches = (Array.isArray(p.colors) && p.colors.length > 1)
+        ? '<div class="card-swatches" data-uid="' + escapeHtml(p.uid) + '">' +
+            p.colors.map(function(c, ci){
+              return '<button type="button" class="card-swatch' + (ci===0?' active':'') + '" ' +
+                'data-code="' + escapeHtml(c.code) + '" ' +
+                'data-photo="' + escapeHtml(c.photo) + '" ' +
+                'style="background:' + escapeHtml(c.hex) + '" ' +
+                'aria-label="' + escapeHtml(c.name) + '"></button>';
+            }).join('') + '</div>'
+        : '';
+      var dots = '';
+
+      var priceHtml;
+      if (pct > 0) {
+        var newPrice = Math.round(p.price * (100 - pct) / 100);
+        priceHtml = '<span class="card-price-row">'
+          + '<span class="card-price old">' + euro(p.price) + '</span>'
+          + '<span class="card-price">' + euro(newPrice) + '</span>'
+          + '</span>';
+      } else {
+        priceHtml = '<span class="card-price">' + euro(p.price) + '</span>';
+      }
+
+      // Group: oversize / crop / long / belt
+      var grp = (p.family === 'crop') ? 'crop' : (p.family === 'long') ? 'long' : (p.family === 'belt') ? 'belt' : 'oversize';
+      if (grp !== lastFam){
+        // Marquee на переходах між групами (на початку гриду — нічого)
+        var unit = null;
+        if (lastFam === 'oversize' && grp === 'crop'){
+          unit = '<span class="marquee-item">CROP TOPS</span>'
+               + '<span class="marquee-emoji">🎀</span>'
+               + '<span class="marquee-item">SHORT &amp; SEXY</span>'
+               + '<span class="marquee-emoji">✨</span>'
+               + '<span class="marquee-item">BABYGIRL</span>'
+               + '<span class="marquee-emoji">💗</span>';
+        } else if ((lastFam === 'crop' || lastFam === 'oversize') && grp === 'long'){
+          unit = '<span class="marquee-item">LONG TEES</span>'
+               + '<span class="marquee-emoji">🌸</span>'
+               + '<span class="marquee-item">LAYERED VIBE</span>'
+               + '<span class="marquee-emoji">⭐</span>'
+               + '<span class="marquee-item">DRESS-LIKE FIT</span>'
+               + '<span class="marquee-emoji">🔥</span>';
+        } else if (grp === 'belt' && lastFam){
+          unit = '<span class="marquee-item">BELTS</span>'
+               + '<span class="marquee-emoji">⛓️</span>'
+               + '<span class="marquee-item">FINISH THE LOOK</span>'
+               + '<span class="marquee-emoji">🎀</span>'
+               + '<span class="marquee-item">CHOOSE YOUR COLOR</span>'
+               + '<span class="marquee-emoji">💄</span>';
+        }
+        if (unit){
+          var items = '';
+          for (var k=0; k<6; k++){ items += unit; }
+          parts.push('<div class="grid-section-marquee" data-from="' + (lastFam||'') + '" data-to="' + grp + '"><div class="marquee-track">' + items + '</div></div>');
+        }
+        lastFam = grp;
+      }
+
+      parts.push(''
+        + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-family="' + escapeHtml(p.family || '') + '" data-grp="' + escapeHtml(grp) + '" data-idx="0" data-count="' + photos.length + '">'
+        +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
+        +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
+        +     '<div class="card-photos">' + photoSlides + '</div>'
+        +     dots
+        +   '</div>'
+        +   swatches
+        +   '<div class="card-body">'
+        +     '<div class="card-title">' + escapeHtml(p.title) + (p.color_name ? ' / ' + escapeHtml(p.color_name) : '') + '</div>'
+        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">ONE SIZE</span></div>'
+        +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '">Add to cart</button>'
+        +   '</div>'
+        + '</article>');
+    });
+    $grid.innerHTML = parts.join('');
+
+    // Card swatch: click/hover → swap card img
+    $grid.querySelectorAll('.card-swatches').forEach(function(box){
+      box.addEventListener('click', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        e.stopPropagation();
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){ img.src = btn.dataset.photo; }
+        box.querySelectorAll('.card-swatch').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+      });
+      box.addEventListener('mouseover', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){
+          if (!img.dataset.origSrc) img.dataset.origSrc = img.src;
+          img.src = btn.dataset.photo;
+        }
+      });
+      box.addEventListener('mouseleave', function(){
+        var card = box.closest('.card');
+        var img = card.querySelector('.card-photos img');
+        var activeBtn = box.querySelector('.card-swatch.active');
+        if (img && activeBtn && activeBtn.dataset.photo){ img.src = activeBtn.dataset.photo; }
+      });
+    });
+
+    // Свайп фото в плитках грида (touch + dot-tap)
+    $grid.querySelectorAll('.card').forEach(function(card){
+      var count = parseInt(card.dataset.count, 10) || 1;
+      if (count <= 1) return;
+      var track = card.querySelector('.card-photos');
+      var dotsEl = card.querySelector('.card-dots');
+      var idx = 0;
+      function goTo(i){
+        if (i < 0) i = 0; if (i >= count) i = count - 1;
+        idx = i;
+        track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+        if (dotsEl) dotsEl.querySelectorAll('i').forEach(function(d, di){ d.classList.toggle('active', di === idx); });
+      }
+      var startX = null;
+      track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+      track.addEventListener('touchend', function(e){
+        if (startX == null) return;
+        var dx = (e.changedTouches[0].clientX - startX);
+        if (Math.abs(dx) > 30) goTo(dx < 0 ? idx + 1 : idx - 1);
+        startX = null;
+      });
+      if (dotsEl) dotsEl.addEventListener('click', function(e){
+        e.stopPropagation();
+        var dots = Array.prototype.slice.call(dotsEl.querySelectorAll('i'));
+        var di = dots.indexOf(e.target);
+        if (di >= 0) goTo(di);
+      });
+    });
+  }
+
+  // Family navigation via [data-family] links (drawer + footer):
+  // не фільтруємо грід (всі товари лишаються видимими), просто скролимо
+  // до першої картки відповідної групи. v118: змінено поведінку за запитом.
+  function scrollToFamily(fam){
+    if (!$grid) return;
+    var target = null;
+    if (fam === 'oversize' || !fam){
+      target = $grid.querySelector('.card');
+    } else {
+      target = $grid.querySelector('.grid-section-marquee[data-to="' + fam + '"]');
+      if (!target) target = $grid.querySelector('.card[data-grp="' + fam + '"]');
+      if (!target) target = $grid.querySelector('.card[data-family="' + fam + '"]');
+    }
+    if (target){
+      var navH = 64;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+  document.querySelectorAll('a[data-family]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var fam = a.dataset.family || null;
+      setTimeout(function(){ scrollToFamily(fam); }, 50);
+    });
+  });
+  document.querySelectorAll('a[href="#shop"]:not([data-family])').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      setTimeout(function(){ scrollToFamily(null); }, 50);
+    });
+  });
+
+  // ===== Applied promo =====
+  function showPromoBar(code, pct){
+    var existing = document.getElementById('promoBar');
+    if (existing) existing.parentNode.removeChild(existing);
+    var bar = document.createElement('div');
+    bar.id = 'promoBar';
+    bar.className = 'promo-applied-bar';
+    bar.innerHTML = '\u2605 promo applied: '
+      + '<span class="code">' + code + '</span>'
+      + '<span class="pct">\u2212' + pct + '%</span>'
+      + '<button type="button" data-action="clear-promo">\u00d7</button>';
+    document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector('[data-action="clear-promo"]').addEventListener('click', function(){
+      try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
+      bar.parentNode.removeChild(bar);
+      renderGrid();
+      var tl = document.getElementById('slotTopLight');
+      if (tl) tl.textContent = 'PROMO · ROLL ME';
+    });
+  }
+  window.applyPromo = function(code, pct){
+    showPromoBar(code, pct);
+    renderGrid();
+    setTimeout(function(){
+      document.querySelectorAll('#grid .card-price:not(.old)').forEach(function(el){
+        el.classList.add('price-flash');
+        setTimeout(function(){ el.classList.remove('price-flash'); }, 900);
+      });
+    }, 50);
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0) showPromoBar(savedCode, savedPct);
+  } catch(e){}
+
+  // Supabase bootstrap
+  function bootstrapFromSupabase(){
+    var SB = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY, TABLE = window.PRODUCTS_TABLE;
+    if (!SB || !KEY || !TABLE) return;
+    // Беремо ВСІ рядки (без active фільтра), щоб мати змогу видалити з фронта
+    // ті товари, які адмін позначив active=false. Інакше локальний DATA містить їх назавжди.
+    fetch(SB + '/rest/v1/' + TABLE + '?select=*&order=sort_order.asc', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rows){
+      if (!Array.isArray(rows)) return;
+      rows = rows.filter(function(r){ return String(r.family||'').indexOf('sg-') === 0; });
+      var inactiveUids = {};
+      var activeRows = [];
+      rows.forEach(function(row){
+        if (row.active === false) inactiveUids[row.uid] = true;
+        else activeRows.push(row);
+      });
+      // 1) Видаляємо з D.all + D.grid усі inactive
+      if (Array.isArray(D.all))  D.all  = D.all.filter(function(p){ return !inactiveUids[p.uid]; });
+      if (Array.isArray(D.grid)) D.grid = D.grid.filter(function(uid){ return !inactiveUids[uid]; });
+      // 2) Апсертимо active рядки
+      var byUid = {}; D.all.forEach(function(p){ byUid[p.uid] = p; });
+      var featuredByFamily = {}, gridByFamily = {};
+      D.all.forEach(function(p){
+        if (p.featured) featuredByFamily[p.family] = p.uid;
+        if (D.grid && D.grid.indexOf(p.uid) >= 0) gridByFamily[p.family] = p.uid;
+      });
+      activeRows.forEach(function(row){
+        if (!byUid[row.uid]) {
+          D.all.push(row);
+          var fam = row.family || '';
+          if (!featuredByFamily[fam] && !gridByFamily[fam]) {
+            if (!Array.isArray(D.grid)) D.grid = [];
+            D.grid.push(row.uid);
+          }
+        } else { Object.assign(byUid[row.uid], row); }
+      });
+      renderGrid();
+      handleDeepLink();
+    })
+    .catch(function(e){ console.warn('[SB inject]', e.message); });
+  }
+
+  // ===== Cart with bundle discount =====
+  var cart = [];
+  var BUNDLE_DISCOUNT_PCT = 20;   // -20% на кожен товар, починаючи з 2-го
+
+  function getSlotPct(){
+    try { return parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){ return 0; }
+  }
+
+  // Применяем slot-промо к unit-цене
+  function unitPriceWithSlot(basePrice){
+    var sp = getSlotPct();
+    return sp > 0 ? Math.round(basePrice * (100 - sp) / 100) : basePrice;
+  }
+
+  // Считает: subtotal (без bundle), bundleDiscount, total
+  function calcBreakdown(){
+    var slotPct = getSlotPct();
+    var subtotal = 0, bundleDiscount = 0, total = 0;
+    var unitIdx = 0;
+    cart.forEach(function(line){
+      var unitPrice = unitPriceWithSlot(line.price);
+      for (var i = 0; i < line.qty; i++){
+        subtotal += unitPrice;
+        if (unitIdx >= 1){
+          // bundle: −20% на каждый юнит начиная со второго
+          var disc = Math.round(unitPrice * BUNDLE_DISCOUNT_PCT / 100);
+          bundleDiscount += disc;
+          total += (unitPrice - disc);
+        } else {
+          total += unitPrice;
+        }
+        unitIdx++;
+      }
+    });
+    return { subtotal: subtotal, bundleDiscount: bundleDiscount, total: total, totalUnits: unitIdx, slotPct: slotPct };
+  }
+  function calcTotal(){ return calcBreakdown().total; }
+
+  function bundleBanner(totalUnits){
+    if (totalUnits >= 2){
+      return '<div class="bundle-banner active">🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> off every item from the 2nd one <span class="check">✓</span></div>';
+    } else {
+      return '<div class="bundle-banner">🎁 add 1 more item — get <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> off the 2nd</div>';
+    }
+  }
+
+  function renderCart(){
+    if (!cart.length) {
+      $body.innerHTML = '<div class="cart-empty">cart is empty</div>';
+      $total.hidden = true; $form.hidden = true;
+    } else {
+      var b = calcBreakdown();
+      var lines = cart.map(function(i, idx){
+        var img = i.photo ? '<img src="' + escapeHtml(i.photo) + '" alt="">'
+          : '<div style="width:54px;height:54px;background:var(--pink-soft);border:1px solid rgba(242,236,230,.14);border-radius:8px"></div>';
+        var unitP = unitPriceWithSlot(i.price);
+        var priceStr;
+        if (b.slotPct > 0) {
+          priceStr = '<span class="old">' + euro(i.price) + '</span> ' + euro(unitP) + ' × ' + i.qty;
+        } else {
+          priceStr = euro(i.price) + ' × ' + i.qty;
+        }
+        return '<div class="cart-line">'
+          + img
+          + '<div class="info"><div class="name">' + escapeHtml(i.title) + '</div><div class="price">' + priceStr + '</div></div>'
+          + '<div class="qty"><button data-action="dec" data-idx="' + idx + '">−</button><span>' + i.qty + '</span><button data-action="inc" data-idx="' + idx + '">+</button></div>'
+          + '<button class="rm" data-action="rm" data-idx="' + idx + '" aria-label="remove">×</button>'
+          + '</div>';
+      }).join('');
+
+      $body.innerHTML = bundleBanner(b.totalUnits) + lines;
+
+      // Разбивка в total
+      var html = '';
+      if (b.bundleDiscount > 0 || b.slotPct > 0) {
+        html += '<div class="total-row sub"><span>items</span><span>' + euro(b.subtotal) + '</span></div>';
+      }
+      if (b.bundleDiscount > 0) {
+        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + euro(b.bundleDiscount) + '</span></div>';
+      }
+      html += '<div class="total-row main"><span>items total</span><span class="num">' + euro(b.total) + '</span></div>';
+      $total.innerHTML = html;
+      $total.hidden = false; $form.hidden = false;
+    }
+    if ($navCart) $navCart.textContent = 'Cart [' + cart.length + ']';
+    try { if (typeof updateEnShip === 'function') updateEnShip(); } catch(e){}
+  }
+
+  function openCart(){ $overlay.classList.add('open'); $drawer.classList.add('open'); document.body.classList.add('cart-open'); }
+  function closeCart(){ $overlay.classList.remove('open'); $drawer.classList.remove('open'); document.body.classList.remove('cart-open'); }
+
+  // Toast
+  function showToast(msg){
+    var t = document.createElement('div');
+    t.className = 'bg-toast';
+    t.innerHTML = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('hide'); setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 2400);
+  }
+
+  function totalUnits(){ return cart.reduce(function(s, l){ return s + l.qty; }, 0); }
+
+  function addToCart(uid, colorCode){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    var was = totalUnits();
+    // Resolve color: explicit arg (from grid swatch) -> modal selection -> first color (never empty for multi-color items)
+    var sel = colorCode || ((Array.isArray(p.colors) && pmSelectedColor) ? pmSelectedColor : null);
+    if (Array.isArray(p.colors) && p.colors.length && !sel) sel = p.colors[0].code;
+    var col = (Array.isArray(p.colors) && sel) ? p.colors.find(function(c){return c.code===sel;}) : null;
+    var cartUid = p.uid + (col ? '|' + col.code : '');
+    var ex = cart.find(function(c){ return c.uid === cartUid; });
+    if (ex) ex.qty += 1;
+    else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), price: p.price, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
+    var now = totalUnits();
+    renderCart(); openCart();
+    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
+    // Если перешли через границу 1→2, показать toast
+    if (was < 2 && now >= 2){
+      showToast('🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> applied to your 2nd item ♥');
+    }
+  }
+
+  // ======== PRODUCT MODAL ========
+  var pmEl       = document.getElementById('pm');
+  var pmOverlay  = document.getElementById('pmOverlay');
+  var pmClose    = document.getElementById('pmClose');
+  var pmStage    = document.getElementById('pmStage');
+  var pmTrack    = document.getElementById('pmTrack');
+  var pmThumbs   = document.getElementById('pmThumbs');
+  var pmCounter  = document.getElementById('pmCounter');
+  var pmRibbon   = document.getElementById('pmRibbon');
+  var pmTitle    = document.getElementById('pmTitle');
+  var pmCrumb    = document.getElementById('pmCrumbName');
+  var pmPrice    = document.getElementById('pmPrice');
+  var pmDescr    = document.getElementById('pmDescr');
+  var pmCta      = document.getElementById('pmCta');
+  var pmPrev     = document.getElementById('pmPrev');
+  var pmNext     = document.getElementById('pmNext');
+
+  var pmCurrent = null;
+  var pmSelectedColor = null;   // current product
+  var pmPhotos  = [];     // photos array
+  var pmIdx     = 0;
+
+  function pmGo(i){
+    if (!pmPhotos.length) return;
+    if (i < 0) i = 0; if (i >= pmPhotos.length) i = pmPhotos.length - 1;
+    pmIdx = i;
+    pmTrack.style.transform = 'translateX(-' + (pmIdx * 100) + '%)';
+    pmCounter.textContent = (pmIdx + 1) + ' / ' + pmPhotos.length;
+    pmThumbs.querySelectorAll('.pm-thumb').forEach(function(t, ti){ t.classList.toggle('active', ti === pmIdx); });
+    pmPrev.hidden = pmIdx === 0;
+    pmNext.hidden = pmIdx >= pmPhotos.length - 1;
+  }
+  function openProduct(uid){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    pmCurrent = p;
+    var candidates = (Array.isArray(p.photos) && p.photos.length) ? p.photos.slice() : (p.photo_main ? [p.photo_main] : []);
+    // Pre-validate: завантажуємо кожне фото через new Image() і лишаємо тільки робочі
+    pmTrack.innerHTML = '';
+    pmThumbs.innerHTML = '';
+    pmPhotos = [];
+    pmCounter.textContent = '…';
+    function _pmIsVideo(url){ return /\.(mp4|webm|mov)(\?|$)/i.test(url||""); }
+    function _pmCheck(url){
+      // Відео не валідуємо через new Image() — вважаємо доступним; <video> сам сховається при помилці
+      if (_pmIsVideo(url)) return Promise.resolve(true);
+      return new Promise(function(resolve){
+        var im = new Image();
+        var done = false;
+        var t = setTimeout(function(){ if(!done){done=true;resolve(false);} }, 7000);
+        im.onload  = function(){ if(!done){done=true;clearTimeout(t);resolve(true);} };
+        im.onerror = function(){ if(!done){done=true;clearTimeout(t);resolve(false);} };
+        im.src = url;
+      });
+    }
+    Promise.all(candidates.map(_pmCheck)).then(function(ok){
+      pmPhotos = candidates.filter(function(_, i){ return ok[i]; });
+      if (!pmPhotos.length && p.photo_main) pmPhotos = [p.photo_main]; // last-resort
+      pmTrack.innerHTML = pmPhotos.map(function(url){
+        if (_pmIsVideo(url)) {
+          return '<video class="pm-video" src="' + escapeHtml(url) + '" muted loop playsinline autoplay preload="metadata" controls="false" onerror="this.style.visibility=\'hidden\'"></video>';
+        }
+        return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="this.style.visibility=\'hidden\'">';
+      }).join('');
+      pmThumbs.innerHTML = pmPhotos.map(function(url, idx){
+        var inner;
+        if (_pmIsVideo(url)) {
+          inner = '<video src="' + escapeHtml(url) + '#t=0.1" muted playsinline preload="metadata"></video><span class="pm-thumb-play">▶</span>';
+        } else {
+          inner = '<img src="' + escapeHtml(url) + '" alt="">';
+        }
+        return '<button class="pm-thumb' + (idx === 0 ? ' active' : '') + '" data-idx="' + idx + '">' + inner + '</button>';
+      }).join('');
+      pmThumbs.hidden = pmPhotos.length <= 1;
+      pmIdx = 0; pmGo(0);
+      // Кешуємо результат на продукті, щоб не повторювати валідацію
+      p.photos = pmPhotos.slice();
+      if (!pmPhotos.length || pmPhotos.indexOf(p.photo_main) < 0) p.photo_main = pmPhotos[0] || '';
+      // ==== Color pills ====
+      var existingC = document.getElementById("pmColors");
+      if (existingC) existingC.remove();
+      if (Array.isArray(p.colors) && p.colors.length > 1){
+        var cBox = document.createElement("div");
+        cBox.className = "pm-colors";
+        cBox.id = "pmColors";
+        cBox.innerHTML = '<span class="pm-colors-label">color</span>' + p.colors.map(function(c, i){
+          return '<button type="button" class="pm-color' + (i===0?' active':'') + '" ' +
+            'data-color="' + escapeHtml(c.code) + '" data-photo="' + escapeHtml(c.photo) + '" ' +
+            'style="background:' + escapeHtml(c.hex) + '" aria-label="' + escapeHtml(c.name) + '">' +
+            '<span class="pm-color-name">' + escapeHtml(c.name) + '</span></button>';
+        }).join("");
+        // Вставляємо перед pm-cta
+        var thumbsEl = document.getElementById("pmThumbs");
+        // Поставити color picker одразу після стрічки мініатюр
+        thumbsEl.parentNode.insertBefore(cBox, thumbsEl.nextSibling);
+        pmSelectedColor = p.colors[0].code;
+        cBox.addEventListener("click", function(e){
+          var btn = e.target.closest(".pm-color"); if (!btn) return;
+          cBox.querySelectorAll(".pm-color").forEach(function(b){b.classList.remove("active");});
+          btn.classList.add("active");
+          pmSelectedColor = btn.dataset.color;
+          // переставити перше фото в pmPhotos на вибраний колір
+          var ph = btn.dataset.photo;
+          var i = pmPhotos.indexOf(ph);
+          if (i >= 0) pmGo(i);
+        });
+      } else {
+        pmSelectedColor = null;
+      }
+    });
+    if (p.ribbon) { pmRibbon.textContent = p.ribbon; pmRibbon.hidden = false; }
+    else { pmRibbon.hidden = true; }
+    pmTitle.textContent = p.title;
+    pmCrumb.textContent = p.title.toLowerCase();
+    pmPrice.textContent = (Number(p.price||0)*EN_MARKUP/EUR_RATE).toFixed(2);
+    var _dEn = (window.EN_DESCR || {})[p.uid];
+    pmDescr.innerHTML = _dEn ? escapeHtml(_dEn) : (p.description ? escapeHtml(p.description) : 'Showgirl piece · one size · handmade in Ukraine');
+    // ==== Specs (динамічні; фолбек — футболкові) ====
+    (function(){
+      var specsEl = document.getElementById('pmSpecs');
+      if (!specsEl) return;
+      var sp = (window.EN_SPECS || {})[p.uid] || ((p.attrs && Array.isArray(p.attrs.specs) && p.attrs.specs.length) ? p.attrs.specs : [
+        {l:'size',   v:'one size'},
+        {l:'fabric', v:'satin &amp; lace'},
+        {l:'fit',    v:'fully<br>adjustable'},
+        {l:'made',   v:'handmade<br>in Ukraine'}
+      ]);
+      specsEl.innerHTML = sp.map(function(s){
+        return '<div class="pm-spec"><div class="lbl">' + escapeHtml(String(s.l||'')) + '</div><div class="val">' + String(s.v||'') + '</div></div>';
+      }).join('');
+    })();
+    pmCta.textContent = 'Add to cart'; pmCta.classList.remove('added');
+    pmIdx = 0; pmGo(0);
+    pmOverlay.classList.add('open');
+    pmEl.classList.add('open');
+    pmEl.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('pm-open');
+    if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('view_item', { product_uid: uid, value: p.price }); } catch(e){}
+  }
+  function closeProduct(){
+    pmOverlay.classList.remove('open');
+    pmEl.classList.remove('open');
+    pmEl.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('pm-open');
+    pmCurrent = null;
+  }
+  pmClose.addEventListener('click', closeProduct);
+  pmOverlay.addEventListener('click', closeProduct);
+  pmPrev.addEventListener('click', function(){ pmGo(pmIdx - 1); });
+  pmNext.addEventListener('click', function(){ pmGo(pmIdx + 1); });
+  pmThumbs.addEventListener('click', function(e){
+    var t = e.target.closest('[data-idx]');
+    if (t) pmGo(parseInt(t.dataset.idx, 10));
+  });
+  // Swipe stage + tap-to-zoom
+  var pmStartX = null, pmStartY = null, pmStageMoved = false, pmLastTouch = 0;
+  pmStage.addEventListener('touchstart', function(e){ pmStartX = e.touches[0].clientX; pmStartY = e.touches[0].clientY; pmStageMoved = false; }, {passive:true});
+  pmStage.addEventListener('touchmove', function(e){
+    if (pmStartX == null) return;
+    if (Math.abs(e.touches[0].clientX - pmStartX) > 8 || Math.abs(e.touches[0].clientY - pmStartY) > 8) pmStageMoved = true;
+  }, {passive:true});
+  pmStage.addEventListener('touchend', function(e){
+    if (pmStartX == null) return;
+    var dx = e.changedTouches[0].clientX - pmStartX;
+    if (Math.abs(dx) > 40) pmGo(dx < 0 ? pmIdx + 1 : pmIdx - 1);
+    else if (!pmStageMoved) openZoomCurrent();
+    pmLastTouch = Date.now();
+    pmStartX = null;
+  });
+  pmStage.addEventListener('click', function(e){
+    if (e.target.closest('.pm-arrow') || e.target.closest('.pm-counter') || e.target.closest('.pm-ribbon')) return;
+    if (Date.now() - pmLastTouch < 600) return; // touch already handled
+    openZoomCurrent();
+  });
+
+  // ======== PHOTO ZOOM LIGHTBOX ========
+  var pmZoom      = document.getElementById('pmZoom');
+  var pmZoomStage = document.getElementById('pmZoomStage');
+  var pmZoomClose = document.getElementById('pmZoomClose');
+  var pmZoomHint  = document.getElementById('pmZoomHint');
+  function _pmzIsVideo(url){ return /\.(mp4|webm|mov)(\?|$)/i.test(url||''); }
+  function openZoomCurrent(){
+    if (!pmPhotos.length) return;
+    openZoom(pmPhotos[pmIdx]);
+  }
+  function openZoom(url){
+    if (!url) return;
+    var isVid = _pmzIsVideo(url);
+    if (isVid){
+      pmZoomStage.innerHTML = '<video class="pmz-media" src="' + escapeHtml(url) + '" autoplay loop playsinline controls></video>';
+      pmZoomHint.style.display = 'none';
+    } else {
+      pmZoomStage.innerHTML = '<img class="pmz-media" src="' + escapeHtml(url) + '" alt="">';
+      pmZoomHint.style.display = '';
+      setupImgZoom(pmZoomStage.querySelector('.pmz-media'));
+    }
+    pmZoom.classList.add('open');
+    pmZoom.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('pmz-open');
+  }
+  function closeZoom(){
+    pmZoom.classList.remove('open');
+    pmZoom.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('pmz-open');
+    pmZoomStage.innerHTML = '';
+  }
+  function setupImgZoom(img){
+    var scale = 1, tx = 0, ty = 0, dragging = false, sx = 0, sy = 0, moved = false;
+    function apply(){ img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'; }
+    img.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (moved){ moved = false; return; }
+      if (scale === 1){
+        scale = 2.4;
+        var r = img.getBoundingClientRect();
+        var cx = e.clientX - (r.left + r.width / 2);
+        var cy = e.clientY - (r.top + r.height / 2);
+        tx = -cx * (scale - 1); ty = -cy * (scale - 1);
+        img.style.cursor = 'grab';
+      } else {
+        scale = 1; tx = 0; ty = 0;
+        img.style.cursor = 'zoom-in';
+      }
+      apply();
+    });
+    img.addEventListener('pointerdown', function(e){
+      if (scale === 1) return;
+      dragging = true; moved = false;
+      sx = e.clientX - tx; sy = e.clientY - ty;
+      img.setPointerCapture(e.pointerId); img.style.cursor = 'grabbing';
+    });
+    img.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      tx = e.clientX - sx; ty = e.clientY - sy; moved = true; apply();
+    });
+    img.addEventListener('pointerup', function(){ if (dragging){ dragging = false; img.style.cursor = 'grab'; } });
+  }
+  pmZoomClose.addEventListener('click', closeZoom);
+  pmZoom.addEventListener('click', function(e){ if (e.target === pmZoom || e.target === pmZoomStage) closeZoom(); });
+  // Esc closes modal, arrows navigate
+  document.addEventListener('keydown', function(e){
+    if (pmZoom.classList.contains('open')){ if (e.key === 'Escape') closeZoom(); return; }
+    if (!pmEl.classList.contains('open')) return;
+    if (e.key === 'Escape') closeProduct();
+    else if (e.key === 'ArrowLeft')  pmGo(pmIdx - 1);
+    else if (e.key === 'ArrowRight') pmGo(pmIdx + 1);
+  });
+  pmCta.addEventListener('click', function(){
+    if (!pmCurrent) return;
+    addToCart(pmCurrent.uid);
+    pmCta.textContent = '✓ added';
+    pmCta.classList.add('added');
+    setTimeout(function(){ closeProduct(); }, 600);
+  });
+
+  // ======== GRID CLICK ROUTER ========
+  $grid.addEventListener('click', function(e){
+    // 1. Кнопка «Add to cart»
+    var buyBtn = e.target.closest('[data-action="buy"]');
+    if (buyBtn) { e.preventDefault(); e.stopPropagation();
+      var _card = buyBtn.closest('.card');
+      var _sw = _card ? _card.querySelector('.card-swatch.active') : null;
+      addToCart(buyBtn.dataset.uid, _sw ? _sw.dataset.code : '');
+      return; }
+    // 2. Dots или photo-track — игнорировать (свайп уже обработан)
+    if (e.target.closest('.card-dots')) return;
+    // 3. Иначе — открыть product modal
+    var card = e.target.closest('.card');
+    if (card && card.dataset.uid) openProduct(card.dataset.uid);
+  });
+
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  $overlay.addEventListener('click', closeCart);
+  if ($navCart) $navCart.addEventListener('click', function(e){ e.preventDefault(); openCart(); });
+
+  $body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-action]'); if (!t) return;
+    var idx = parseInt(t.dataset.idx, 10);
+    if (t.dataset.action === 'inc') cart[idx].qty += 1;
+    else if (t.dataset.action === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty < 1) cart.splice(idx, 1); }
+    else if (t.dataset.action === 'rm') cart.splice(idx, 1);
+    renderCart();
+  });
+
+// ======== EN CHECKOUT (international · Western Bid) ========
+  var EN_COUNTRIES=[['DE','Germany'],['PL','Poland'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['BE','Belgium'],['AT','Austria'],['CZ','Czechia'],['SK','Slovakia'],['SE','Sweden'],['FI','Finland'],['DK','Denmark'],['NO','Norway'],['IE','Ireland'],['PT','Portugal'],['GR','Greece'],['RO','Romania'],['HU','Hungary'],['BG','Bulgaria'],['HR','Croatia'],['SI','Slovenia'],['LT','Lithuania'],['LV','Latvia'],['EE','Estonia'],['LU','Luxembourg'],['CH','Switzerland'],['MD','Moldova'],['GB','United Kingdom'],['US','United States'],['CA','Canada'],['AU','Australia'],['AE','United Arab Emirates'],['SA','Saudi Arabia'],['JP','Japan'],['KR','South Korea'],['SG','Singapore'],['CN','China'],['ZA','South Africa'],['NZ','New Zealand']];
+  // Nova Global zones — держать в синхроне с api/westernbid.js (shippingEur)!
+  var EN_Z1=['PL','SK','HU','RO','CZ','MD'];
+  var EN_Z2=['DE','AT','FR','IT','ES','NL','BE','LU','PT','IE','DK','SE','FI','GR','LT','LV','EE','SI','HR','BG','CH','NO'];
+  var EN_Z3=['GB'];
+  var EN_Z4=['US','CA'];
+  var EN_ZINFO={z1:{eur:7,days:'3–6'},z2:{eur:9,days:'4–8'},z3:{eur:11,days:'5–9'},z4:{eur:15,days:'7–14'},z5:{eur:22,days:'10–20'}};
+  function enZone(c){ c=String(c||'').toUpperCase(); if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
+  function enShipInfo(c){ var z=enZone(c); return z?EN_ZINFO[z]:null; }
+
+  var $cIn  = document.getElementById('fld-country-in');
+  var $cHid = document.getElementById('fld-country');
+  var $cList= document.getElementById('enCountryList');
+  function enRenderList(f){
+    if(!$cList) return;
+    var q=String(f||'').toLowerCase();
+    var hits=EN_COUNTRIES.filter(function(c){ return !q || c[1].toLowerCase().indexOf(q)===0 || c[0].toLowerCase()===q; });
+    if(!hits.length){ $cList.hidden=true; return; }
+    $cList.innerHTML=hits.map(function(c){ return '<button type="button" data-code="'+c[0]+'">'+c[1]+'</button>'; }).join('');
+    $cList.hidden=false;
+  }
+  if($cIn && $cList){
+    $cIn.addEventListener('input', function(){ $cHid.value=''; enRenderList($cIn.value); updateEnShip(); });
+    $cIn.addEventListener('focus', function(){ enRenderList($cIn.value); });
+    document.addEventListener('click', function(e){ if(!e.target.closest('.en-cbx')) $cList.hidden=true; });
+    $cList.addEventListener('click', function(e){
+      var btn=e.target.closest('button[data-code]'); if(!btn) return;
+      $cHid.value=btn.dataset.code; $cIn.value=btn.textContent; $cList.hidden=true; updateEnShip();
+    });
+  }
+  function updateEnShip(){
+    var elS=document.getElementById('enShip');
+    var elG=document.getElementById('enGrand');
+    if(!elS) return;
+    var info=enShipInfo($cHid && $cHid.value);
+    var $btn=document.getElementById('cartSubmit');
+    if(info && cart.length){
+      var b=calcBreakdown();
+      var tot=b.total*EN_MARKUP/EUR_RATE + info.eur;
+      elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
+      if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
+      if($btn && !$btn.disabled) $btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal';
+    } else {
+      elS.innerHTML='<span>shipping · Nova Global</span><b class="d">select country</b>';
+      if(elG) elG.hidden=true;
+      if($btn && !$btn.disabled) $btn.textContent='pay by card / paypal';
+    }
+  }
+
+  $form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var $btn = document.getElementById('cartSubmit');
+    var $res = document.getElementById('cartResult');
+    var fio = document.getElementById('fld-fio').value.trim();
+    var phone = document.getElementById('fld-phone').value.trim();
+    var email = document.getElementById('fld-email').value.trim();
+    var country = ($cHid && $cHid.value) || '';
+    var city = document.getElementById('fld-city').value.trim();
+    var zip = document.getElementById('fld-zip').value.trim();
+    var addr = document.getElementById('fld-addr').value.trim();
+    function fail(m){ $res.textContent = m; $res.className = 'cart-result err'; $btn.disabled = false; updateEnShip(); }
+    if (!cart.length) return fail('your cart is empty');
+    if (fio.length < 2) return fail('please enter your full name');
+    if (phone.replace(/[^0-9]/g,'').length < 7) return fail('please enter a valid phone number');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('please enter a valid email');
+    if (!country) return fail('please pick a country from the list');
+    if (!city || !addr) return fail('please enter city and address');
+    $btn.disabled = true; $btn.textContent = 'redirecting to payment…'; $res.textContent = ''; $res.className = 'cart-result';
+    try {
+      var icItems = cart.map(function(c){ return String(c.uid); });
+      var icValue = Math.round(cart.reduce(function(s,c){ return s + (Number(c.price)||0)*(parseInt(c.qty,10)||1); },0)*100)/100;
+      var icNum = cart.reduce(function(s,c){ return s + (parseInt(c.qty,10)||1); },0);
+      var icEventId = 'ic-' + (window.SESSION_ID||'') + '-' + Date.now().toString(36);
+      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'UAH', num_items: icNum, content_ids: icItems, content_type:'product' }, { eventID: icEventId });
+      window.bgTrack && window.bgTrack('begin_checkout',{ value: icValue, event_id: icEventId, meta:{ num_items: icNum, market: 'en-sg' } });
+    } catch(err){}
+
+    var promo = null;
+    try { promo = sessionStorage.getItem('bg_promo_code'); } catch(err){}
+
+    var payload = {
+      fio: fio, phone: phone, email: email,
+      country: country, city: city, zip: zip, address1: addr,
+      promo_code: promo,
+      bundle_discount_pct: BUNDLE_DISCOUNT_PCT,
+      return_path: '/showgirl-en',
+      items: cart.map(function(c){
+        return { uid: c.uid, qty: c.qty, title: c.title, color_name: c.color_name, price: c.price, photo: c.photo };
+      }),
+      session_id: window.SESSION_ID || null,
+      referrer: document.referrer || null,
+      landing_url: window.LANDING_URL || location.href
+    };
+
+    fetch('/api/westernbid', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json().then(function(d){ return { httpOk: r.ok, d: d }; }); })
+    .then(function(x){
+      if (!x.httpOk || !x.d.ok) throw new Error((x.d && x.d.error) || 'payment error, please try again');
+      var f = document.createElement('form');
+      f.method = 'POST'; f.action = x.d.endpoint; f.acceptCharset = 'utf-8';
+      Object.keys(x.d.fields).forEach(function(k){
+        var inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = k; inp.value = x.d.fields[k]; f.appendChild(inp);
+      });
+      document.body.appendChild(f); f.submit();
+    })
+    .catch(function(err){ fail('error: ' + err.message); });
+  });
+
+  // Возврат со шлюза: ?paid=1 / ?paid=0
+  (function(){
+    try {
+      var q = new URLSearchParams(location.search);
+      if (q.get('paid') === '1') showToast("✓ payment received — thank you! ♥<br>we'll email you tracking soon");
+      else if (q.get('paid') === '0') showToast('payment was cancelled — your cart is waiting ♥');
+    } catch(e){}
+  })();
+
+    // ======== DEEP-LINK (?p=uid&c=color) — открытие карточки по ссылке из фида/рекламы ========
+  var _deepLinkDone = false;
+  function handleDeepLink(){
+    if (_deepLinkDone) return;
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch(e){ return; }
+    var uid = params.get('p');
+    if (!uid) { _deepLinkDone = true; return; }
+    var p = (D.all || []).find(function(x){ return x.uid === uid; });
+    if (!p) return; // продукт ще не підвантажений — спробуємо після Supabase inject
+    _deepLinkDone = true;
+    var color = params.get('c');
+    openProduct(uid);
+    if (color) {
+      var tries = 0;
+      var iv = setInterval(function(){
+        tries++;
+        var box = document.getElementById('pmColors');
+        if (box) {
+          var btn = box.querySelector('.pm-color[data-color="' + color + '"]');
+          if (btn) { btn.click(); clearInterval(iv); return; }
+        }
+        if (tries > 40) clearInterval(iv);
+      }, 200);
+    }
+  }
+
+  renderGrid();
+  handleDeepLink();
+  bootstrapFromSupabase();
+})();
+</script>
+
+
+
+</body></html>

@@ -246,6 +246,10 @@ module.exports = async function handler(req, res) {
   const wbSecret = process.env.WB_SECRET;
   if (!wbLogin || !wbSecret) return res.status(500).json({ ok: false, error: 'WB credentials not configured' });
 
+  // Сторінка повернення: /en (BabyGirl) або /showgirl-en (Showgirl). Whitelist!
+  const retPath = String(body.return_path || '') === '/showgirl-en' ? '/showgirl-en' : '/en';
+  const mkt = retPath === '/showgirl-en' ? 'EN-SG' : 'EN';
+
   // Номер як у api/order.js (спільний префікс BG- для дзеркала в CRM).
   const orderNum = 'BG-' + Date.now().toString(36).toUpperCase();
 
@@ -269,7 +273,7 @@ module.exports = async function handler(req, res) {
     items: body.items,
     total: uahTotal,
     status: 'new',
-    notes: 'САЙТ EN · WB ' + currency + ' goods ' + amount + ' + ship ' + shipEur.toFixed(2) +
+    notes: 'САЙТ ' + mkt + ' · WB ' + currency + ' goods ' + amount + ' + ship ' + shipEur.toFixed(2) +
       ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · x' + markup + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
@@ -285,7 +289,7 @@ module.exports = async function handler(req, res) {
     '· ' + esc(it.title || it.uid) + (it.color_name ? ' / ' + esc(it.color_name) : '') + ' ×' + (parseInt(it.qty || 1, 10))
   ).join('\n');
   tg.fireAndForget(tg.sendAdminMessage(
-    '🌍 <b>НОВЕ EN-ЗАМОВЛЕННЯ (WesternBid)</b> · <code>' + esc(orderNumber) + '</code>\n' +
+    '🌍 <b>НОВЕ ' + mkt + '-ЗАМОВЛЕННЯ (WesternBid)</b> · <code>' + esc(orderNumber) + '</code>\n' +
     '💰 <b>' + esc(totalEur.toFixed(2)) + ' ' + esc(currency) + '</b> (товари ' + esc(amount) + ' + доставка ' + esc(shipEur.toFixed(2)) + ') ≈ ' + esc(Math.round(uahTotal)) + ' ₴\n' +
     '👤 ' + esc(body.fio) + ' · ' + esc(body.phone) + '\n' +
     '✉️ ' + esc(body.email) + '\n' +
@@ -317,8 +321,8 @@ module.exports = async function handler(req, res) {
     zip: String(body.zip || ''),
     state: String(body.state || ''),
     shipping: shipEur.toFixed(2),
-    return: process.env.WB_RETURN_URL || (SITE_BASE + '/en?paid=1'),
-    cancel_return: process.env.WB_CANCEL_URL || (SITE_BASE + '/en?paid=0'),
+    return: process.env.WB_RETURN_URL || (SITE_BASE + retPath + '?paid=1'),
+    cancel_return: process.env.WB_CANCEL_URL || (SITE_BASE + retPath + '?paid=0'),
     notify_url: process.env.WB_NOTIFY_URL || (SITE_BASE + '/api/westernbid-callback')
   };
 
@@ -342,7 +346,7 @@ module.exports = async function handler(req, res) {
     fields['item_number_' + n] = String(it.uid || '');
     fields['amount_' + n] = unitCur.toFixed(2);
     fields['quantity_' + n] = String(parseInt(it.qty || 1, 10));
-    fields['url_' + n] = baseUid ? (SITE_BASE + '/en?p=' + encodeURIComponent(baseUid)) : (SITE_BASE + '/en');
+    fields['url_' + n] = baseUid ? (SITE_BASE + retPath + '?p=' + encodeURIComponent(baseUid)) : (SITE_BASE + retPath);
     fields['description_' + n] = label;
   });
 
