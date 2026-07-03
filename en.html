@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FF4FA1">
+<title>BabyGirl · Pink. Soft. Oversized. Forever. · Worldwide shipping</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+<meta name="description" content="BabyGirl — pink, soft, oversized t-shirts. Y2K icons forever. Worldwide shipping · checkout in EUR · card & PayPal.">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&amp;family=Bowlby+One&amp;family=Lilita+One&amp;family=Press+Start+2P&amp;family=VT323&amp;family=DM+Sans:wght@400;500;700;900&amp;family=Caveat:wght@500;700&amp;display=swap">
+
+<!-- 1. Attribution bootstrap (МУСИТЬ бути першим, перед усіма трекерами) -->
+<script id="attribution-bootstrap">
+/* attribution_bootstrap_v1 — sets window.SESSION_ID + LANDING_URL.
+   Read CLAUDE.md §7 before touching this. */
+(function(){
+  try {
+    var key = 'bg_session_id';
+    var sid = sessionStorage.getItem(key);
+    if(!sid){
+      sid = 's-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10);
+      sessionStorage.setItem(key, sid);
+    }
+    if(!window.SESSION_ID) window.SESSION_ID = sid;
+    var lkey = 'bg_landing_url';
+    if(!sessionStorage.getItem(lkey)) sessionStorage.setItem(lkey, location.href);
+    if(!window.LANDING_URL) window.LANDING_URL = sessionStorage.getItem(lkey);
+  } catch(e){}
+})();
+</script>
+
+<!-- 1b. bg_tracker_v2 — fire-and-forget POST /api/track. Не дублирует Meta Pixel. -->
+<script id="bg-tracker">
+(function(){
+  if (window.bgTrack) return;
+  function readCookie(n){ try { var m = document.cookie.match('(?:^|; )'+n+'=([^;]+)'); return m ? decodeURIComponent(m[1]) : null; } catch(e){ return null; } }
+  var lastSent = {};
+  window.bgTrack = function(event_name, data){
+    try {
+      var k = event_name + '|' + ((data && data.product_uid) || '') + '|' + ((data && data.meta && data.meta.color_name) || '');
+      var now = Date.now();
+      if (lastSent[k] && (now - lastSent[k]) < 400) return;
+      lastSent[k] = now;
+      var payload = Object.assign({
+        event_name: event_name,
+        session_id: window.SESSION_ID,
+        landing_url: window.LANDING_URL,
+        referrer: document.referrer || null,
+        page_url: location.href,
+        fbp: readCookie('_fbp'),
+        fbc: readCookie('_fbc')
+      }, data || {});
+      var body = JSON.stringify(payload);
+      // Endpoint всегда через www (apex 307 → POST не повторяется при redirect)
+      var endpoint = (location.host === 'babygirl.com.ua') ? 'https://www.babygirl.com.ua/api/track' : '/api/track';
+      if (navigator.sendBeacon) {
+        try { navigator.sendBeacon(endpoint, new Blob([body], { type:'application/json' })); return; } catch(e){}
+      }
+      fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body: body, keepalive: true }).catch(function(){});
+    } catch(e){}
+  };
+  if (document.readyState !== 'loading') { window.bgTrack('page_view'); }
+  else document.addEventListener('DOMContentLoaded', function(){ window.bgTrack('page_view'); });
+})();
+</script>
+
+<!-- 2. Brand config — admin → Setup пишет в localStorage 'bg_settings' -->
+<script id="brand-config">
+(function(){
+  window.BRAND = 'bg';
+  window.PRODUCTS_TABLE = 'bg_products';
+  // Defaults — Supabase shared project (fsihlzzjewhxpogvjapu)
+  window.SUPABASE_URL      = 'https://fsihlzzjewhxpogvjapu.supabase.co';
+  window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
+  // Overrides з admin → Setup (localStorage)
+  try {
+    var s = JSON.parse(localStorage.getItem('bg_settings') || '{}');
+    if (s.SUPABASE_URL)      window.SUPABASE_URL      = s.SUPABASE_URL;
+    if (s.SUPABASE_ANON_KEY) window.SUPABASE_ANON_KEY = s.SUPABASE_ANON_KEY;
+    if (s.PIXEL_ID)          window.PIXEL_ID          = s.PIXEL_ID;
+  } catch(e){}
+})();
+</script>
+<!-- bg-media-defaults: дефолтні URL для медіа -->
+<script id="bg-media-defaults">
+window.BG_MEDIA_DEFAULTS = {
+  logoMark:   "assets/logo-mark.webp",
+  heroVideo:  "assets/hero.mp4",
+  heroPoster: "",  // прибрано: щоб не дублювати nav-logo-img який має анімацію logo-land
+  heroVideoMobile: "assets/hero-mobile.mp4",  // 720p ~1.5MB для мобільних
+  lera:       "assets/lera.webp"
+};
+</script>
+<!-- bg-media-bootstrap -->
+<script id="bg-media-bootstrap">
+(function(){
+  var defaults = (window.BG_MEDIA_DEFAULTS) || { logoMark:"", heroVideo:"", heroPoster:"", lera:"" };
+  var override = {};
+  try {
+    var s = JSON.parse(localStorage.getItem("bg_settings") || "{}");
+    if (s && typeof s.media === "object" && s.media) override = s.media;
+  } catch(e){}
+  var M = Object.assign({}, defaults, override);
+  // Mobile detection: вузький viewport АБО coarse pointer (тач без миші) АБО mobile UA.
+  // matchMedia(max-width:768px) сам по собі ловить не всі девайси (старі Android, landscape).
+  var isMobile = false;
+  try {
+    var mqNarrow = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+    var mqCoarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    var uaMobile = /Mobi|Android|iPhone|iPad|iPod|Mobile Safari/i.test(navigator.userAgent || "");
+    isMobile = mqNarrow || mqCoarse || uaMobile;
+  } catch(e){}
+  if (isMobile && M.heroVideoMobile) M.heroVideo = M.heroVideoMobile;
+  window.BG_MEDIA = M;
+
+  function bindAutoplayFallback(el){
+    // Якщо autoplay заблокований (low-power mode, data-saver), запускаємо на першому тапі.
+    var resume = function(){
+      try { el.play(); } catch(e){}
+      document.removeEventListener("touchstart", resume, true);
+      document.removeEventListener("click", resume, true);
+      document.removeEventListener("scroll", resume, true);
+    };
+    document.addEventListener("touchstart", resume, { capture:true, once:true, passive:true });
+    document.addEventListener("click",      resume, { capture:true, once:true });
+    document.addEventListener("scroll",     resume, { capture:true, once:true, passive:true });
+  }
+
+  function playVideo(el){
+    try {
+      // На iOS Safari autoplay-атрибут спрацьовує лише при першому призначенні джерела
+      // ще до того, як елемент потрапив у DOM. Коли ми ставимо src динамічно — потрібен явний play().
+      el.muted = true;          // iOS вимагає muted для autoplay
+      el.defaultMuted = true;
+      el.setAttribute("muted", "");
+      el.setAttribute("playsinline", "");
+      var p = el.play && el.play();
+      if (p && typeof p.then === "function") {
+        p.catch(function(){ bindAutoplayFallback(el); });
+      }
+    } catch(e){ bindAutoplayFallback(el); }
+  }
+
+  function apply(){
+    document.querySelectorAll("[data-bg-media]").forEach(function(el){
+      var key = el.getAttribute("data-bg-media");
+      var url = M[key];
+      if (!url) return;
+      if (el.tagName === "IMG") el.src = url;
+      else if (el.tagName === "VIDEO"){
+        // Більш агресивний preload для мобільних, щоб не застрягати на HAVE_METADATA
+        try { el.setAttribute("preload", isMobile ? "auto" : "metadata"); } catch(e){}
+        el.src = url;
+        var pkey = el.getAttribute("data-bg-poster");
+        if (pkey && M[pkey]) el.poster = M[pkey];
+        try { el.load && el.load(); } catch(e){}
+        // Дочекаємось першого кадру і пробуємо play() — це найнадійніше для iOS
+        var tryPlay = function(){ playVideo(el); };
+        el.addEventListener("loadeddata", tryPlay, { once:true });
+        // На випадок якщо loadeddata вже минув або застряг — паралельно пробуємо одразу і з затримкою
+        playVideo(el);
+        setTimeout(function(){ if (el.paused) playVideo(el); }, 600);
+      } else if (el.tagName === "A") el.href = url;
+      else el.setAttribute("src", url);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+  window.refreshBgMedia = apply;
+})();
+</script>
+
+
+<!-- 3. Meta Pixel — BabyGirl 1636827497584775 -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+window.PIXEL_ID = window.PIXEL_ID || '1636827497584775';
+fbq('init', window.PIXEL_ID);
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1636827497584775&ev=PageView&noscript=1" alt=""/></noscript>
+<!-- End Meta Pixel -->
+
+<style>
+:root{
+  --bubblegum:#FFB8D9;
+  --pink:#FF4FA1;
+  --pink-deep:#E63B8A;
+  --pink-soft:#FFD7E8;
+  --pink-bg:#FFEAF3;
+  --yellow:#FFD93D;
+  --blue:#6FC4E9;
+  --blue-deep:#4A6FFF;
+  --lime:#B6F500;
+  --cream:#FFF5EC;
+  --black:#0E0E12;
+  --silver:#D5D8DD;
+  --silver-deep:#8B8F96;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  color:var(--black);
+  background:var(--cream);
+  overflow-x:hidden;
+  font-size:16px;line-height:1.5;
+}
+img,video{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,button{font-size:16px}
+
+/* ===== BASE: MOBILE FIRST ===== */
+.container{width:100%;padding:0 16px}
+
+/* ===== NAV ===== */
+.nav{
+  background:transparent;
+  padding:10px 0;
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  pointer-events:none;
+  transition:background .25s ease, backdrop-filter .25s ease, border-color .25s ease, padding .2s ease;
+}
+.nav.scrolled{
+  background:rgba(255,245,236,.78);
+  backdrop-filter:blur(12px) saturate(140%);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  border-bottom:2.5px solid var(--black);
+  padding:8px 0;
+  box-shadow:0 4px 0 rgba(0,0,0,.06);
+}
+.nav.scrolled .nav-logo-img{height:30px}
+.nav.scrolled .nav-logo-img img{filter:drop-shadow(2px 2px 0 var(--black)) drop-shadow(0 2px 6px rgba(0,0,0,.18))}
+.nav .nav-row > *{pointer-events:auto}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo-img{
+  display:inline-flex;align-items:center;
+  height:34px;
+  pointer-events:auto;
+  transform-origin:center center;
+  will-change:transform,opacity;
+  animation:logo-land 1.7s cubic-bezier(.55,.05,.2,1) both;
+}
+.nav-logo-img img{
+  height:100%;width:auto;display:block;
+  filter:drop-shadow(2px 2px 0 var(--black)) drop-shadow(0 4px 10px rgba(0,0,0,.35));
+}
+@keyframes logo-land{
+  0%   { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:0; }
+  14%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  55%  { transform:translateY(40vh) scale(5) rotate(-3deg); opacity:1; }
+  100% { transform:translateY(0) scale(1) rotate(0); opacity:1; }
+}
+.hero-content{ opacity:0; animation:hero-fade .55s ease 1.45s forwards; }
+.hero-scroll{ opacity:0; animation:scroll-fade .5s ease 1.55s forwards, scrollHint 1.6s ease-in-out 2.05s infinite; }
+@keyframes hero-fade{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scroll-fade{ from{opacity:0} to{opacity:.8} }
+@media (prefers-reduced-motion:reduce){
+  .nav-logo-img,.hero-content{animation:none;opacity:1}
+  .hero-scroll{opacity:.8;animation:scrollHint 1.6s ease-in-out infinite}
+}
+.nav-cart{
+  background:var(--yellow);color:var(--black);
+  padding:8px 12px;
+  border:2.5px solid var(--black);border-radius:999px;
+  font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.nav-burger{
+  background:#fff;color:var(--black);
+  width:40px;height:40px;
+  border:2.5px solid var(--black);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  height:min(88vh,720px);
+  min-height:540px;
+  border-bottom:3px solid var(--black);
+  background:#0E0E12;
+  overflow:hidden;
+}
+.hero-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  z-index:0;background:#0E0E12;
+}
+.hero-content{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  height:58%;min-height:280px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;
+  padding:0 16px 26px;
+  text-align:center;
+}
+.hero-eyebrow{
+  display:inline-block;
+  font-family:'Press Start 2P',monospace;
+  font-size:8px;letter-spacing:.22em;color:#fff;
+  text-shadow:0 1px 0 var(--black), 0 2px 6px rgba(0,0,0,.55);
+  margin:8px 0 0;
+}
+.hero-sub{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:34px;line-height:.9;letter-spacing:-.02em;
+  color:#fff;
+  -webkit-text-stroke:1.5px var(--black);
+  text-shadow:3px 3px 0 var(--pink), 3px 3px 0 var(--black);
+  text-transform:uppercase;
+  margin:0;
+  transform:rotate(-2deg);
+}
+.hero-sub .pink{color:var(--yellow)}
+.hero-scroll{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:3;
+  font-family:'VT323',monospace;font-size:13px;color:#fff;letter-spacing:.12em;
+  opacity:.8;pointer-events:none;
+}
+@keyframes scrollHint{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
+
+/* ===== SLOT MACHINE ===== */
+.slot-section{
+  background:radial-gradient(ellipse at 50% 0%, var(--pink) 0%, var(--pink-deep) 50%, #B82A6E 100%);
+  padding:32px 0 40px;
+  border-bottom:3px solid var(--black);
+  position:relative;overflow:hidden;
+}
+.slot-stars{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 12% 18%, #FFD93D 2px, transparent 3px),
+    radial-gradient(circle at 88% 12%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 25% 78%, #FFD93D 1.5px, transparent 2.5px),
+    radial-gradient(circle at 75% 88%, #FFFFFF 2px, transparent 3px),
+    radial-gradient(circle at 50% 50%, #FFD93D 1px, transparent 2px);
+}
+.slot-head{ text-align:center;color:#fff; margin-bottom:18px;padding:0 16px; position:relative;z-index:2; }
+.slot-head .kicker{
+  display:inline-block;
+  background:var(--yellow);color:var(--black);
+  padding:5px 12px;
+  border:2.5px solid var(--black);border-radius:999px;
+  font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:.08em;
+  box-shadow:2px 2px 0 var(--black);
+  margin-bottom:12px;
+}
+.slot-head h2{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:42px;line-height:.95;letter-spacing:-.01em;
+  color:var(--yellow);
+  -webkit-text-stroke:2.5px var(--black);
+  text-shadow:4px 4px 0 var(--black);
+  text-transform:uppercase;
+}
+.slot-tagline{
+  margin-top:10px;
+  font-family:'VT323',monospace;font-size:18px;color:#fff;letter-spacing:.04em;
+  text-shadow:1px 1px 0 var(--black);
+}
+.slot-tagline b{
+  background:var(--yellow);color:var(--black);
+  padding:1px 8px;border:2px solid var(--black);border-radius:6px;
+  font-family:'Bowlby One',sans-serif;font-size:13px;letter-spacing:.06em;
+  text-shadow:none;text-transform:uppercase;
+}
+
+/* Применённый промо: бейдж на карточке + анимированный пересчёт цены */
+.promo-applied-bar{
+  position:sticky;top:0;z-index:55;
+  background:var(--lime);color:var(--black);
+  border-bottom:3px solid var(--black);
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 3px 0 var(--black);
+  animation:promoSlide .4s ease-out;
+}
+@keyframes promoSlide{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.promo-applied-bar .code{
+  background:var(--pink);color:#fff;
+  padding:2px 10px;border:2px solid var(--black);border-radius:6px;
+  font-family:'VT323',monospace;font-size:14px;letter-spacing:.08em;
+}
+.promo-applied-bar .pct{
+  background:var(--yellow);color:var(--black);
+  padding:2px 8px;border:2px solid var(--black);border-radius:6px;
+}
+.promo-applied-bar [data-action="clear-promo"]{
+  background:#fff;border:2px solid var(--black);border-radius:6px;
+  font-family:'VT323',monospace;font-size:14px;color:var(--black);
+  padding:1px 8px;cursor:pointer;
+}
+
+.card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
+.card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.price-flash{animation:priceFlash .8s ease-out}
+@keyframes priceFlash{
+  0%{transform:scale(1);color:var(--pink-deep)}
+  30%{transform:scale(1.25) rotate(-3deg);color:var(--lime)}
+  60%{transform:scale(.95) rotate(2deg)}
+  100%{transform:scale(1) rotate(0);color:var(--pink-deep)}
+}
+.slot-machine{ max-width:340px;margin:0 auto; position:relative;z-index:2; }
+.slot-body{
+  background:linear-gradient(180deg,#EAEDF1 0%,#B7BBC2 50%,#8B8F96 100%);
+  border:4px solid var(--black);
+  border-radius:24px 24px 18px 18px;
+  box-shadow:inset 0 4px 0 rgba(255,255,255,.4),inset 0 -4px 0 rgba(0,0,0,.15),8px 8px 0 var(--black);
+  padding:18px 14px 18px;position:relative;
+}
+.slot-top-light{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--pink);color:#fff;
+  padding:5px 16px;
+  border:3px solid var(--black);border-radius:999px;
+  font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.1em;
+  box-shadow:3px 3px 0 var(--black);
+  z-index:3;
+}
+.slot-display{
+  background:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  padding:8px;
+  display:flex;gap:6px;
+  box-shadow:inset 0 0 0 2px #fff;
+}
+.reel{
+  flex:1;background:#fff;border-radius:8px;
+  height:90px;overflow:hidden;position:relative;
+  border:2px solid var(--silver-deep);
+}
+.reel::before,.reel::after{ content:"";position:absolute;left:0;right:0;height:18px;z-index:2;pointer-events:none; }
+.reel::before{top:0;background:linear-gradient(180deg,rgba(255,255,255,.95),transparent)}
+.reel::after{bottom:0;background:linear-gradient(0deg,rgba(255,255,255,.95),transparent)}
+.reel-strip{ display:flex;flex-direction:column; transition:transform 2.4s cubic-bezier(.15,.7,.25,1); }
+.reel-strip.spinning{ animation:spin .12s linear infinite; }
+@keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-90px)} }
+.reel-item{
+  height:90px;display:flex;align-items:center;justify-content:center;
+  font-family:'Bagel Fat One',sans-serif;font-size:42px;
+  color:var(--pink-deep);
+  -webkit-text-stroke:1.5px var(--black);
+}
+.reel-item.word{font-size:22px}
+.reel-item.percent{
+  font-family:'Bowlby One',sans-serif;font-size:32px;
+  color:var(--pink);
+  -webkit-text-stroke:1.5px var(--black);
+}
+.slot-lever{ position:absolute;top:32px;right:-22px;width:22px;z-index:1; }
+.lever-rod{ width:8px;height:80px; background:linear-gradient(180deg,#EAEDF1,#8B8F96); border:2px solid var(--black);border-radius:4px;margin:0 auto; }
+.lever-ball{ width:28px;height:28px; background:radial-gradient(circle at 30% 30%,#FF8FB8,#E63B8A 60%,#9C1E5B); border:3px solid var(--black);border-radius:50%;margin-top:-8px; box-shadow:3px 3px 0 var(--black); }
+.slot-result{
+  margin:18px auto 0;max-width:340px;
+  background:#fff;border:3px solid var(--black);border-radius:14px;
+  padding:14px 16px;text-align:center;
+  box-shadow:5px 5px 0 var(--black);
+  position:relative;z-index:2;
+  min-height:84px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.slot-result .placeholder{ font-family:'Bowlby One',sans-serif;font-size:14px;color:var(--silver-deep);text-transform:uppercase;letter-spacing:.06em; }
+.slot-result .win-line{ font-family:'Bagel Fat One';font-size:22px;color:var(--pink-deep); -webkit-text-stroke:1.5px var(--black); margin-bottom:4px;text-transform:uppercase; }
+.slot-result .code{ font-family:'VT323',monospace;font-size:18px; background:var(--yellow); border:2px solid var(--black);border-radius:8px; padding:3px 10px;letter-spacing:.1em; }
+.spin-btn{
+  display:block;margin:12px auto 0;width:100%;
+  background:var(--lime);color:var(--black);
+  border:3px solid var(--black);border-radius:12px;
+  padding:12px 18px;
+  font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);
+  position:relative;z-index:2;
+  transition:transform .12s,box-shadow .12s,background .15s;
+}
+.spin-btn:hover{background:#9DDB00}
+.spin-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.spin-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== PRODUCTS ===== */
+.section{padding:36px 0}
+.section-title-wrap{ margin-bottom:18px;text-align:center;padding:0 4px; }
+.section-title{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:46px;line-height:.85;letter-spacing:-.02em;
+  color:var(--pink);
+  -webkit-text-stroke:2.5px var(--black);
+  text-shadow:5px 5px 0 var(--yellow), 5px 5px 0 var(--black);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.section-title .alt{color:var(--blue-deep)}
+.section-sub{font-family:'Caveat';font-size:22px;color:var(--pink-deep);display:inline-block;transform:rotate(-2deg)}
+.grid{ display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 4px; }
+.card{
+  background:#fff;
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:4px 4px 0 var(--black);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  cursor:pointer;
+}
+.card-window{
+  background:var(--pink-soft);
+  border-bottom:2.5px solid var(--black);
+  padding:4px 7px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:'VT323',monospace;font-size:11px;color:var(--black);
+}
+.card-window .dots{display:flex;gap:3px}
+.card-window .dot{width:7px;height:7px;border-radius:50%;border:1px solid var(--black);background:var(--pink)}
+.card-window .dot:nth-child(2){background:var(--yellow)}
+.card-window .dot:nth-child(3){background:var(--lime)}
+.card-img{
+  aspect-ratio:4/5;
+  background:#fff;
+  border-bottom:2.5px solid var(--black);
+  overflow:hidden;
+  position:relative;
+}
+.card-img img{width:100%;height:100%;object-fit:contain;background:#fff}
+.card-img .ribbon{
+  position:absolute;top:6px;left:-22px;
+  background:var(--yellow);color:var(--black);
+  font-family:'Bowlby One';font-size:9px;letter-spacing:.08em;
+  padding:3px 24px;transform:rotate(-25deg);
+  border:1.5px solid var(--black);
+}
+.card-img .heart-tag{
+  position:absolute;top:6px;right:6px;
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;border:2px solid var(--black);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--pink);
+  box-shadow:1.5px 1.5px 0 var(--black);
+}
+.card-body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:5px;flex:1}
+.card-title{
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.01em;line-height:1.05;
+  min-height:28px;
+}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.card-price{ font-family:'Bagel Fat One';font-size:22px;color:var(--pink-deep); -webkit-text-stroke:1px var(--black); }
+.card-tag{
+  font-family:'VT323',monospace;font-size:11px;
+  background:var(--lime);border:1.5px solid var(--black);border-radius:999px;
+  padding:0 6px;
+}
+.card-btn{
+  margin-top:auto;
+  background:var(--pink);color:#fff;
+  border:2.5px solid var(--black);border-radius:8px;
+  padding:8px;
+  font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.06em;
+  text-align:center;text-transform:uppercase;
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.card-btn.alt{background:var(--blue-deep)}
+.card-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.empty{ padding:40px;text-align:center;color:var(--silver-deep);font-family:'VT323',monospace;font-size:18px; grid-column:1/-1; border:2px dashed var(--silver);border-radius:14px; }
+
+/* ===== ABOUT (Sims-style hero) ===== */
+.about{
+  position:relative;
+  background:#7ec5ed;
+  border-top:3px solid var(--black);border-bottom:3px solid var(--black);
+  color:#fff;padding:48px 0 56px;
+  overflow:hidden;
+  isolation:isolate;
+}
+.about-bg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('assets/baby-hero-clouds.webp') center center / cover no-repeat;
+}
+.about-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(126,197,237,0) 55%, rgba(126,197,237,.35) 100%);
+}
+.about .cloud-puff{
+  position:absolute;z-index:0;pointer-events:none;
+  width:90px;height:36px;border-radius:50%;
+  background:#fff;opacity:.85;
+  filter:blur(.5px) drop-shadow(0 6px 10px rgba(40,80,140,.12));
+}
+.about .cloud-puff::before,.about .cloud-puff::after{
+  content:'';position:absolute;background:#fff;border-radius:50%;
+}
+.about .cloud-puff::before{ width:50px;height:50px; top:-22px; left:14px; }
+.about .cloud-puff::after { width:36px;height:36px; top:-14px; right:14px; }
+.about .cloud-puff.c1{ top:8%;  right:6%;  transform:scale(1.1); animation:cloud-drift 22s linear infinite }
+.about .cloud-puff.c2{ top:54%; right:14%; transform:scale(.75); animation:cloud-drift 30s linear infinite reverse }
+.about .cloud-puff.c3{ bottom:8%; left:6%; transform:scale(.9);  animation:cloud-drift 26s linear infinite }
+@keyframes cloud-drift{
+  0%{ margin-left:-16px } 50%{ margin-left:16px } 100%{ margin-left:-16px }
+}
+
+.about-wrap{ position:relative; z-index:2 }
+
+.about-title{
+  position:relative;
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:38px;line-height:.9;letter-spacing:-.02em;
+  color:var(--yellow);
+  -webkit-text-stroke:2px var(--black);
+  text-shadow:3px 3px 0 var(--pink-deep), 3px 3px 0 var(--black);
+  text-transform:uppercase;
+  margin:0 0 22px;text-align:center;
+  padding-top:6px;
+}
+.about-title .plumbob{ margin:0 auto 6px; display:block }
+
+/* The Sims green plumbob — animated floating diamond */
+.plumbob{
+  position:relative;
+  width:34px;height:48px;
+  background:
+    radial-gradient(ellipse 50% 30% at 50% 22%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%),
+    linear-gradient(180deg, #d9ff7a 0%, #9ee83a 38%, #5fbf12 78%, #3a8e08 100%);
+  clip-path:polygon(50% 0%, 100% 36%, 100% 62%, 50% 100%, 0% 62%, 0% 36%);
+  filter:drop-shadow(0 3px 6px rgba(40,90,10,.45)) drop-shadow(0 0 12px rgba(185,255,90,.7));
+  animation:plumbob-float 2.4s ease-in-out infinite;
+}
+.plumbob::after{
+  content:'';position:absolute; left:18%; top:6%; width:24%; height:18%;
+  background:rgba(255,255,255,.85); border-radius:50%; filter:blur(1px);
+}
+@keyframes plumbob-float{
+  0%,100%{ transform:translateY(0) rotate(-2deg) }
+  50%    { transform:translateY(-7px) rotate(2deg) }
+}
+
+.about-stage{
+  display:grid;grid-template-columns:1fr;gap:18px;
+  align-items:start;
+}
+
+/* === Lera card (Sims-style sim portrait) === */
+.about-photo{
+  position:relative;
+  border:3px solid var(--black);border-radius:18px;
+  background:linear-gradient(180deg, #cfe9fb, #ffd7e8);
+  overflow:visible;
+  box-shadow:6px 6px 0 var(--black), 0 12px 28px rgba(20,40,80,.18);
+  aspect-ratio:4/5;
+  max-height:none;
+}
+.about-photo > img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:15px;
+}
+.about-photo .plumbob{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  z-index:5;
+}
+.about-photo .name-tag{
+  position:absolute;top:10px;left:10px;z-index:4;
+  background:linear-gradient(180deg,#ff7ab8,#ff4fa1);
+  color:#fff;
+  font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.12em;
+  padding:5px 9px;border:2px solid var(--black);border-radius:7px;
+  box-shadow:2px 2px 0 var(--black);text-transform:uppercase;
+}
+
+50%{width:100%}}
+
+50%    { transform:translateY(-5px) scale(1.08) }
+}
+
+50%    { transform:rotate(-2deg) translateY(-4px) }
+}
+
+/* === Clean accent: floating pink heart sticker in photo corner === */
+.about-photo .hero-sticker{
+  position:absolute;top:-18px;right:-14px;z-index:5;
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#FFD93D,#FF9A1A);
+  color:var(--pink-deep);
+  font-family:'Bagel Fat One',sans-serif;font-size:26px;line-height:1;
+  border:3px solid var(--black);
+  box-shadow:3px 3px 0 var(--black), 0 8px 18px rgba(255,79,161,.35);
+  transform:rotate(-12deg);
+  animation:sticker-bob 3.4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sticker-bob{
+  0%,100%{transform:rotate(-12deg) translateY(0)}
+  50%{transform:rotate(-6deg) translateY(-5px)}
+}
+@media (max-width:759px){
+  .about-photo .hero-sticker{width:46px;height:46px;font-size:22px;top:-14px;right:-10px}
+}
+
+/* === Right panel: Sims action menu / dialog === */
+.gta-dialog{
+  position:relative;
+  background:var(--cream);color:var(--black);
+  border:3px solid var(--black);border-radius:18px;
+  box-shadow:6px 6px 0 var(--black), 0 12px 28px rgba(20,40,80,.18);
+  overflow:hidden;
+}
+.gta-dialog .bar{
+  background:linear-gradient(90deg, var(--pink), var(--pink-deep));
+  border-bottom:3px solid var(--black);
+  padding:9px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:#fff;
+}
+.gta-dialog .bar .speaker{
+  font-family:'Bowlby One',sans-serif;font-size:13px;letter-spacing:.05em;
+  text-transform:uppercase;text-shadow:1px 1px 0 var(--black);
+  display:flex;align-items:center;gap:6px;
+}
+.gta-dialog .bar .speaker::before{
+  content:''; width:10px; height:14px;
+  background:linear-gradient(180deg,#d9ff7a,#5fbf12);
+  clip-path:polygon(50% 0%,100% 36%,100% 62%,50% 100%,0% 62%,0% 36%);
+  filter:drop-shadow(0 0 4px rgba(180,255,80,.8));
+  animation:plumbob-float 2.4s ease-in-out infinite;
+}
+.gta-dialog .bar .pip{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.12em;
+  color:var(--yellow);text-shadow:1px 1px 0 var(--black);
+}
+.gta-dialog .bar .pip i{width:7px;height:7px;background:var(--yellow);border:1.5px solid var(--black);border-radius:50%;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.gta-screen{
+  padding:14px 14px 16px;
+  font-family:'VT323',monospace;font-size:17px;line-height:1.45;
+  min-height:220px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 1px, transparent 1px 3px),
+    var(--cream);
+}
+.gta-line{margin-bottom:8px}
+.gta-line.dim{opacity:.55}
+.gta-line .who{
+  display:block;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--pink-deep);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:2px;
+}
+.gta-line .what{color:#1a1a1a}
+.gta-line .what em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.gta-line.me .who{color:var(--blue-deep)}
+.gta-cursor{display:inline-block;width:7px;height:15px;background:var(--pink-deep);vertical-align:-2px;animation:caret 1s steps(2) infinite;margin-left:2px}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+.gta-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(180deg,var(--pink-bg),#ffd7e8);
+  border-top:2px dashed rgba(0,0,0,.18);
+  padding:11px 14px;
+  font-family:'VT323',monospace;font-size:13px;color:var(--silver-deep);
+}
+.gta-cta .keys b{
+  display:inline-block;padding:1px 5px;
+  background:#fff;border:1.5px solid var(--black);border-radius:4px;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--black);margin:0 2px;
+}
+.gta-cta button{
+  background:linear-gradient(180deg,#D6FF4A,#9ED600);
+  color:var(--black);
+  border:2.5px solid var(--black);border-radius:10px;
+  padding:9px 14px;
+  font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);cursor:pointer;
+  flex-shrink:0;
+  position:relative;
+}
+.gta-cta button::after{
+  content:'';position:absolute;top:-6px;right:-6px;
+  width:14px;height:14px;background:#FFD93D;border:2px solid var(--black);border-radius:50%;
+  box-shadow:1px 1px 0 var(--black);
+  animation:btn-dot 1.8s ease-in-out infinite;
+}
+.gta-cta button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+
+@keyframes btn-dot{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.08)}}
+
+/* Mobile tuning */
+@media (max-width:759px){
+  .about{ padding:42px 0 48px }
+  .about-title{ font-size:32px; margin-bottom:18px }
+  .about-stage{ gap:22px }
+  .about-photo{
+    max-width:340px;margin:0 auto;
+    aspect-ratio:4/5;
+  }
+  .about-photo .plumbob{ width:28px; height:40px; top:-24px }
+  .gta-screen{ min-height:200px; font-size:16px }
+  .gta-cta button{ font-size:10px; padding:8px 12px }
+  .about .cloud-puff.c1{ display:none }
+  .about .cloud-puff.c2{ top:38%; right:6%; transform:scale(.6) }
+  .about .cloud-puff.c3{ bottom:14%; left:4%; transform:scale(.7) }
+}
+
+@media (min-width:760px){
+  .about{ padding:64px 0 72px }
+  .about-title{ font-size:54px; margin-bottom:32px }
+  .about-stage{grid-template-columns:0.95fr 1.05fr;gap:32px}
+  .about-photo{aspect-ratio:auto;height:100%;min-height:440px;max-height:560px}
+  .about-photo .plumbob{ width:42px; height:60px; top:-38px }
+  .gta-screen{min-height:320px;font-size:22px}
+  .gta-dialog .bar .speaker{font-size:16px}
+}
+
+/* ===== VIBE ===== */
+.vibe{padding:36px 0;background:var(--pink-bg)}
+.vibe-grid{display:grid;grid-template-columns:1fr;gap:14px;padding:0 4px}
+.vibe-card{
+  background:#fff;border:3px solid var(--black);border-radius:14px;
+  padding:18px 16px;box-shadow:4px 4px 0 var(--black);
+  position:relative;
+}
+.vibe-card .num{
+  position:absolute;top:-14px;left:14px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--pink);color:#fff;
+  border:2.5px solid var(--black);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagel Fat One';font-size:16px;
+  box-shadow:2px 2px 0 var(--black);
+}
+.vibe-card h4{
+  margin-top:6px;font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:18px;color:var(--pink-deep);text-transform:uppercase;line-height:1.05;
+}
+.vibe-card p{margin-top:6px;font-size:14px;line-height:1.5;color:#2a2a2a}
+
+/* ===== NEWSLETTER ===== */
+
+
+/* ===== INFO / DELIVERY / CONTACTS (v118) ===== */
+.info-section{padding:48px 0 56px;background:var(--cream);border-top:3px solid var(--black);border-bottom:3px solid var(--black)}
+.info-grid{display:grid;grid-template-columns:1fr;gap:18px;padding:0 4px;margin-top:18px}
+.info-card{
+  background:#fff;border:3px solid var(--black);border-radius:14px;
+  padding:22px 20px;box-shadow:5px 5px 0 var(--black);
+  position:relative;
+}
+.info-card.pink{background:var(--pink-bg)}
+.info-card.yellow{background:var(--yellow)}
+.info-card h3{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:24px;line-height:1.05;color:var(--pink-deep);
+  -webkit-text-stroke:1px var(--black);
+  margin-bottom:14px;letter-spacing:-.01em;
+}
+.info-card p{font-size:14.5px;line-height:1.55;color:#2a2a2a;margin-bottom:8px}
+.info-card p b{color:var(--black)}
+.info-card p.muted{font-size:12.5px;color:var(--silver-deep);font-style:italic}
+.info-card a{color:var(--pink-deep);font-weight:700;text-decoration:underline}
+.info-card a:hover{color:var(--black)}
+.info-card .legal{
+  margin-top:14px;padding-top:12px;
+  border-top:2px dashed rgba(0,0,0,.15);
+  font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);
+}
+.tg-button{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:14px;padding:12px 18px;
+  background:#229ED9;color:#fff !important;
+  border:2.5px solid var(--black);border-radius:12px;
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+  text-decoration:none !important;
+  box-shadow:4px 4px 0 var(--black);
+  transition:transform .12s,box-shadow .12s;
+}
+.tg-button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--black);color:#fff !important}
+.tg-button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+.tg-button .tg-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;
+  background:#fff;color:#229ED9;
+  font-size:14px;font-weight:900;
+}
+.drawer-link.tg{background:#229ED9;color:#fff}
+@media(min-width:760px){
+  .info-grid{grid-template-columns:1fr 1fr;gap:22px}
+  .info-card.wide{grid-column:1/-1}
+  .info-card h3{font-size:28px}
+}
+@media(min-width:1024px){
+  .info-grid{grid-template-columns:1fr 1fr 1fr}
+  .info-card.wide{grid-column:1/-1}
+}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--pink);color:#fff;
+  padding:32px 0 20px;
+  border-top:3px solid var(--black);
+}
+.foot-logo{
+  font-family:'Bagel Fat One',sans-serif;font-size:36px;line-height:1;
+  color:var(--yellow);
+  -webkit-text-stroke:2px var(--black);
+  text-shadow:3px 3px 0 var(--black);
+  letter-spacing:-.02em;text-align:center;margin-bottom:8px;
+}
+.foot-logo .girl{color:var(--cream)}
+.foot-tagline{text-align:center;font-size:13px;margin-bottom:20px}
+.foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 4px}
+.foot-grid h5{
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:6px;
+}
+.foot-grid a{display:block;padding:3px 0;font-weight:500;color:#fff;font-size:14px}
+.foot-bot{
+  margin-top:20px;padding-top:14px;border-top:2px dashed rgba(255,255,255,.4);
+  font-size:11px;text-align:center;
+}
+
+/* ===== BURGER DRAWER ===== */
+.drawer-overlay{
+  position:fixed;inset:0;
+  background:rgba(14,14,18,.55);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease;
+  z-index:60;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(86vw,360px);
+  background:var(--cream);
+  border-right:3px solid var(--black);
+  box-shadow:8px 0 0 var(--black);
+  transform:translateX(-110%);
+  transition:transform .26s cubic-bezier(.2,.8,.2,1);
+  z-index:70;
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-head{
+  background:var(--pink);
+  border-bottom:3px solid var(--black);
+  padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:2;
+}
+.drawer-head .title{
+  font-family:'Bagel Fat One',sans-serif;font-size:24px;color:#fff;
+  text-shadow:2px 2px 0 var(--black);
+  letter-spacing:-.01em;
+}
+.drawer-close{
+  width:38px;height:38px;
+  background:var(--yellow);
+  border:2.5px solid var(--black);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:var(--black);
+  box-shadow:2px 2px 0 var(--black);
+  cursor:pointer;
+}
+.drawer-section{ padding:18px 16px 6px; border-bottom:2px dashed rgba(0,0,0,.12); }
+.drawer-section:last-of-type{border-bottom:none}
+.drawer-section h6{
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;letter-spacing:.08em;
+  color:var(--silver-deep);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.drawer-link{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:11px 14px;margin-bottom:8px;
+  background:#fff;color:var(--black);
+  border:2.5px solid var(--black);border-radius:10px;
+  font-family:'Bowlby One',sans-serif;font-weight:400;
+  font-size:14px;letter-spacing:.04em;
+  text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--black);
+  transition:transform .12s,box-shadow .12s;
+}
+.drawer-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+.drawer-link.pink{background:var(--pink);color:#fff}
+.drawer-link.yellow{background:var(--yellow);color:var(--black)}
+.drawer-link.lime{background:var(--lime);color:var(--black)}
+.drawer-link.blue{background:var(--blue-deep);color:#fff}
+.drawer-link .arrow{ font-family:'VT323',monospace;font-size:18px;font-weight:400; opacity:.85; }
+.drawer-foot{
+  padding:18px 16px 24px;margin-top:auto;
+  background:var(--pink-bg);
+  border-top:3px solid var(--black);
+  text-align:center;
+  font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);
+}
+body.drawer-open{overflow:hidden}
+
+/* ===== CART DRAWER ===== */
+.cart-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:80}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(92vw,420px);background:var(--cream);border-left:3px solid var(--black);box-shadow:-8px 0 0 var(--black);transform:translateX(110%);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:90;display:flex;flex-direction:column;overflow-y:auto}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{background:var(--pink);border-bottom:3px solid var(--black);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.cart-head .title{font-family:'Bagel Fat One',sans-serif;font-size:24px;color:#fff;text-shadow:2px 2px 0 var(--black);letter-spacing:-.01em}
+.cart-close{width:38px;height:38px;background:var(--yellow);border:2.5px solid var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--black);box-shadow:2px 2px 0 var(--black);cursor:pointer}
+.cart-body{padding:16px;flex:1}
+.cart-empty{text-align:center;padding:40px 20px;color:var(--silver-deep);font-family:'VT323',monospace;font-size:18px}
+.cart-line{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:2px dashed rgba(0,0,0,.12)}
+.cart-line img{width:54px;height:54px;border-radius:8px;border:2px solid var(--black);background:#fff;object-fit:cover}
+.cart-line .info{flex:1;min-width:0}
+.cart-line .name{font-family:'Bowlby One',sans-serif;font-size:13px;line-height:1.1}
+.cart-line .price{font-family:'Bagel Fat One';font-size:14px;color:var(--pink-deep);-webkit-text-stroke:1px var(--black);margin-top:2px}
+.cart-line .qty{display:flex;align-items:center;gap:6px;font-family:'VT323',monospace;font-size:14px}
+.cart-line .qty button{width:24px;height:24px;border:2px solid var(--black);background:var(--yellow);border-radius:6px;font-weight:900;cursor:pointer}
+.cart-line .rm{background:none;border:none;color:var(--pink-deep);font-size:18px;cursor:pointer;padding:0 4px}
+.cart-line .price .old{text-decoration:line-through;opacity:.55;font-size:11px;margin-right:4px;color:var(--silver-deep)}
+
+.bundle-banner{
+  background:var(--pink-bg);border:2.5px solid var(--black);border-radius:10px;
+  padding:9px 12px;margin-bottom:12px;
+  font-family:'VT323',monospace;font-size:14px;color:var(--pink-deep);line-height:1.3;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.bundle-banner b{font-family:'Bowlby One',sans-serif;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:var(--yellow);padding:1px 6px;border:1.5px solid var(--black);border-radius:4px}
+.bundle-banner.active{background:var(--lime);color:var(--black);border-color:var(--black);animation:bundleIn .35s ease-out}
+.bundle-banner.active .check{background:var(--pink);color:#fff;border:1.5px solid var(--black);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+@keyframes bundleIn{from{transform:scale(.9);opacity:.6}50%{transform:scale(1.05)}to{transform:scale(1);opacity:1}}
+
+.cart-total{flex-direction:column;align-items:stretch;gap:4px}
+.cart-total .total-row{display:flex;align-items:center;justify-content:space-between;font-family:"DM Sans",sans-serif;font-size:14px;text-transform:none}
+.cart-total .total-row.sub{color:var(--silver-deep)}
+.cart-total .total-row.disc{color:var(--pink-deep);font-weight:700}
+.cart-total .total-row.main{font-family:"Bowlby One",sans-serif;font-size:14px;text-transform:uppercase;margin-top:4px;padding-top:6px;border-top:2px dashed rgba(0,0,0,.12)}
+.cart-total .total-row.main .num{font-family:"Bagel Fat One",sans-serif;font-size:24px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black)}
+
+.bg-toast{
+  position:fixed;bottom:24px;left:50%;transform:translate(-50%, 0);z-index:200;
+  background:var(--lime);color:var(--black);
+  border:3px solid var(--black);border-radius:14px;
+  padding:12px 18px;
+  font-family:"Bowlby One",sans-serif;font-size:13px;letter-spacing:.04em;text-transform:lowercase;
+  box-shadow:5px 5px 0 var(--black);
+  animation:toastIn .4s cubic-bezier(.2,.8,.2,1);
+  max-width:90vw;text-align:center;
+}
+.bg-toast b{background:var(--pink);color:#fff;padding:1px 8px;border:1.5px solid var(--black);border-radius:6px;margin:0 2px}
+.bg-toast.hide{animation:toastOut .35s ease-in forwards}
+@keyframes toastIn{from{transform:translate(-50%, 60px);opacity:0}to{transform:translate(-50%, 0);opacity:1}}
+@keyframes toastOut{to{transform:translate(-50%, 60px);opacity:0}}
+.cart-total{padding:14px 16px;background:var(--pink-bg);border-top:3px solid var(--black);border-bottom:3px solid var(--black);display:flex;align-items:center;justify-content:space-between;font-family:'Bowlby One',sans-serif;font-size:16px;text-transform:uppercase}
+.cart-total .num{font-family:'Bagel Fat One';font-size:24px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black)}
+.cart-form{padding:16px;display:flex;flex-direction:column;gap:8px}
+.cart-form label{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.18em;color:var(--silver-deep);text-transform:uppercase;margin-top:4px}
+.cart-form input,.cart-form select{padding:12px;background:#fff;border:2.5px solid var(--black);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;box-shadow:2px 2px 0 var(--black)}
+.cart-form input:focus,.cart-form select:focus{outline:none;border-color:var(--pink);box-shadow:3px 3px 0 var(--pink)}
+.cart-submit{margin-top:12px;width:100%;padding:16px;background:var(--lime);color:var(--black);border:3px solid var(--black);border-radius:12px;font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:4px 4px 0 var(--black);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.cart-submit:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--black)}
+.cart-submit:disabled{opacity:.5;cursor:not-allowed}
+.cart-result{padding:12px 16px;font-family:'VT323',monospace;font-size:15px;color:var(--silver-deep);min-height:38px}
+.cart-result.ok{color:var(--pink-deep);font-weight:bold}
+.cart-result.err{color:#d00}
+body.cart-open{overflow:hidden}
+
+/* ===== TABLET / DESKTOP ===== */
+@media (min-width:600px){
+  .container{max-width:1280px;margin:0 auto;padding:0 24px}
+  .hero{height:min(92vh,820px);min-height:640px}
+  .hero-content{height:62%;min-height:380px;padding:0 32px 36px}
+  .hero-eyebrow{font-size:10px;margin-top:14px}
+  .hero-sub{font-size:64px;text-shadow:6px 6px 0 var(--pink), 6px 6px 0 var(--black)}
+  .grid{grid-template-columns:repeat(3,1fr);gap:18px}
+  .vibe-grid{grid-template-columns:repeat(3,1fr)}
+  .section-title{font-size:72px;text-shadow:6px 6px 0 var(--yellow), 6px 6px 0 var(--black)}
+  .foot-grid{grid-template-columns:1.2fr 1fr 1fr 1fr}
+  .nav-logo-img{height:44px}
+  .slot-machine{max-width:420px}
+  .reel{height:110px}
+  .reel-item{height:110px;font-size:54px}
+  .reel-item.percent{font-size:42px}
+  .reel-item.word{font-size:28px}
+  @keyframes spin{ 0%{transform:translateY(0)} 100%{transform:translateY(-110px)} }
+  .slot-head h2{font-size:54px}
+}
+@media (min-width:900px){ .grid{grid-template-columns:repeat(4,1fr)} }
+
+/* ===== CARD MINI-CAROUSEL (фото внутри плитки грида) ===== */
+.card-img{position:relative;touch-action:pan-y}
+.card-photos{display:flex;width:100%;height:100%;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.card-photos > img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;background:#fff}
+.card-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:4px;background:rgba(14,14,18,.55);padding:3px 6px;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.card-dots i{display:block;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.5;transition:opacity .15s}
+.card-dots i.active{opacity:1;background:var(--yellow)}
+.card-swatches{display:flex;gap:6px;padding:8px 10px 0;align-items:center;flex-wrap:wrap}
+.card-swatch{width:18px;height:18px;border-radius:50%;border:2px solid var(--black);box-shadow:1px 1px 0 var(--black);cursor:pointer;padding:0;flex-shrink:0;transition:transform .15s;background-clip:padding-box}
+.card-swatch:hover{transform:scale(1.15)}
+.card-swatch.active{outline:2px solid var(--pink-deep);outline-offset:1px}
+
+/* ===== PRODUCT MODAL ===== */
+.pm-overlay{position:fixed;inset:0;background:rgba(14,14,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}
+.pm-overlay.open{opacity:1;pointer-events:auto}
+.pm{position:fixed;top:0;left:0;right:0;bottom:0;z-index:110;background:var(--cream);overflow-y:auto;overflow-x:hidden;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.pm.open{transform:translateY(0)}
+body.pm-open{overflow:hidden}
+
+.pm-close{position:fixed;top:12px;right:12px;z-index:115;width:44px;height:44px;background:var(--yellow);border:3px solid var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--black);box-shadow:3px 3px 0 var(--black);cursor:pointer;transition:transform .15s}
+.pm-close:hover{transform:rotate(90deg)}
+.pm-close:active{transform:rotate(90deg) translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+
+.pm-hero{position:relative;background:var(--pink-soft);border-bottom:3px solid var(--black)}
+.pm-stage{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--pink-bg);touch-action:pan-y pinch-zoom}
+.pm-stage-track{display:flex;width:100%;height:100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pm-stage-track > img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:var(--pink-bg)}
+.pm-ribbon{position:absolute;top:18px;left:-30px;z-index:3;background:var(--yellow);color:var(--black);font-family:'Bowlby One',sans-serif;font-size:12px;letter-spacing:.08em;padding:6px 36px;transform:rotate(-25deg);border:2px solid var(--black);text-transform:uppercase}
+.pm-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--black);border:2.5px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;cursor:pointer;box-shadow:3px 3px 0 var(--black);transition:transform .12s,box-shadow .12s,background .15s}
+.pm-arrow:hover{background:var(--yellow)}
+.pm-arrow:active{transform:translateY(-50%) translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.pm-arrow.prev{left:10px}
+.pm-arrow.next{right:10px}
+.pm-arrow[hidden]{display:none}
+.pm-counter{position:absolute;bottom:14px;right:14px;z-index:3;background:rgba(14,14,18,.7);color:#fff;font-family:'VT323',monospace;font-size:13px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;border:1.5px solid var(--black)}
+
+.pm-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:#fff;border-bottom:3px solid var(--black);-webkit-overflow-scrolling:touch}
+.pm-thumbs::-webkit-scrollbar{height:6px}
+.pm-thumbs::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px}
+.pm-thumb{flex-shrink:0;width:64px;height:64px;border:2.5px solid var(--black);border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:2px 2px 0 var(--black);background:#fff;transition:transform .12s,box-shadow .12s}
+.pm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pm-stage-track > .pm-video{flex:0 0 100%;width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:var(--pink-bg)}
+.pm-thumb video{width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+.pm-thumb .pm-thumb-play{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(255,79,161,.92);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;border:1.5px solid var(--black);
+  box-shadow:1px 1px 0 var(--black);pointer-events:none;
+}
+.pm-thumb{position:relative}
+
+.pm-thumb.active{outline:3px solid var(--pink);outline-offset:2px}
+.pm-thumb:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+
+.pm-info{padding:24px 16px 28px}
+.pm-info h1{font-family:'Bagel Fat One',sans-serif;font-weight:400;font-size:42px;line-height:.9;letter-spacing:-.02em;color:var(--pink);-webkit-text-stroke:2px var(--black);text-shadow:4px 4px 0 var(--yellow), 4px 4px 0 var(--black);text-transform:uppercase;margin-bottom:6px}
+.pm-info .crumbs{font-family:'VT323',monospace;font-size:14px;color:var(--silver-deep);margin-bottom:14px}
+.pm-info .crumbs b{color:var(--pink-deep)}
+.pm-price{font-family:'Bagel Fat One',sans-serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:1.5px var(--black);margin-bottom:14px;line-height:1}
+.pm-price .currency{font-size:24px;margin-left:4px}
+.pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
+.pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
+.pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.pm-spec{background:#fff;border:2.5px solid var(--black);border-radius:10px;padding:10px 12px;box-shadow:3px 3px 0 var(--black)}
+.pm-spec .lbl{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.14em;color:var(--silver-deep);text-transform:uppercase;margin-bottom:4px}
+.pm-spec .val{font-family:'Bowlby One',sans-serif;font-size:12px;line-height:1.2;color:var(--pink-deep);text-transform:uppercase}
+.pm-cta{display:block;width:100%;padding:18px;background:var(--lime);color:var(--black);border:3px solid var(--black);border-radius:14px;font-family:'Bowlby One',sans-serif;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:5px 5px 0 var(--black);transition:transform .12s,box-shadow .12s;cursor:pointer}
+.pm-cta:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--black)}
+.pm-cta.added{background:var(--yellow)}
+
+@media (min-width:760px){
+  .pm-stage{aspect-ratio:auto;height:min(90vh,900px)}
+  .pm-arrow{width:54px;height:54px;font-size:24px}
+  .pm-info{padding:32px 24px 40px;max-width:760px;margin:0 auto}
+  .pm-info h1{font-size:72px;text-shadow:6px 6px 0 var(--yellow), 6px 6px 0 var(--black)}
+  .pm-price{font-size:54px}
+  .pm-specs{grid-template-columns:repeat(4,1fr)}
+  .pm-close{top:20px;right:24px;width:52px;height:52px;font-size:26px}
+  .pm-thumb{width:80px;height:80px}
+}
+
+/* color pills для product modal — під стрічкою мініатюр */
+.pm-colors{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:#fff;border-bottom:3px solid var(--black);margin:0}
+.pm-colors-label{font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:.1em;color:var(--pink-deep);text-transform:uppercase;margin-right:6px}
+.pm-color{
+  position:relative;
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid var(--black);
+  cursor:pointer;
+  transition:transform .12s ease;
+  padding:0;
+}
+.pm-color:hover{transform:scale(1.06)}
+.pm-color.active{box-shadow:0 0 0 3px var(--cream), 0 0 0 5px var(--pink), 0 0 0 7px var(--black)}
+.pm-color-name{
+  position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--silver-deep);white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .15s;
+}
+.pm-color:hover .pm-color-name,.pm-color.active .pm-color-name{opacity:1}
+
+/* grid section marquee — y2k bouncing band */
+.grid-section-marquee{
+  grid-column:1 / -1;
+  margin:34px 0 18px;
+  padding:14px 0;
+  background:var(--pink);
+  border-top:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);
+}
+.grid-section-marquee::before,
+.grid-section-marquee::after{
+  content:"";
+  position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+.grid-section-marquee::before{ left:0; background:linear-gradient(to right, var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee::after { right:0; background:linear-gradient(to left,  var(--pink) 0%, rgba(255,79,161,0) 100%); }
+.grid-section-marquee .marquee-track{
+  display:flex;align-items:center;gap:36px;
+  white-space:nowrap;
+  animation:marquee-scroll 22s linear infinite;
+  width:max-content;
+}
+.grid-section-marquee .marquee-item{
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;
+  font-size:30px;line-height:1;
+  color:var(--cream);
+  -webkit-text-stroke:1.5px var(--black);
+  text-shadow:3px 3px 0 var(--yellow), 3px 3px 0 var(--black);
+  text-transform:uppercase;letter-spacing:.04em;
+  flex-shrink:0;
+}
+.grid-section-marquee .marquee-emoji{
+  font-size:28px;flex-shrink:0;
+  filter:drop-shadow(2px 2px 0 var(--black));
+}
+@keyframes marquee-scroll{
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+@media (max-width:560px){
+  .grid-section-marquee{padding:10px 0;margin:24px 0 14px}
+  .grid-section-marquee .marquee-item{font-size:22px;text-shadow:2px 2px 0 var(--yellow), 2px 2px 0 var(--black)}
+  .grid-section-marquee .marquee-emoji{font-size:22px}
+  .grid-section-marquee .marquee-track{gap:24px;animation-duration:16s}
+}
+@media (prefers-reduced-motion:reduce){
+  .grid-section-marquee .marquee-track{animation:none;justify-content:center}
+}
+</style>
+<style id="en-css">
+.en-cbx{position:relative}
+.en-cbx-list{position:absolute;left:0;right:0;top:100%;z-index:60;background:#fff;border:2px solid var(--black);border-radius:10px;max-height:180px;overflow:auto;box-shadow:4px 4px 0 rgba(0,0,0,.15)}
+.en-cbx-list button{display:block;width:100%;text-align:left;padding:8px 10px;background:none;border:0;font:inherit;cursor:pointer}
+.en-cbx-list button:hover{background:var(--pink-soft)}
+.en-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 0;font-size:14px}
+.en-row small{opacity:.65;font-weight:400}
+.en-row .d{opacity:.55}
+.en-row.main{font-weight:800;font-size:16px;border-top:2px dashed rgba(0,0,0,.2);padding-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav scrolled">
+  <div class="container nav-row">
+    <button class="nav-burger" id="navBurger" aria-label="menu" aria-expanded="false" aria-controls="drawer">≡</button>
+    <a href="#top" class="nav-logo-img" aria-label="BabyGirl"><img data-bg-media="logoMark" alt="BabyGirl"></a>
+    <button class="nav-cart" id="navCart">Cart [0]</button>
+  </div>
+</nav>
+
+<!-- ===== BURGER DRAWER ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="site menu">
+  <div class="drawer-head">
+    <span class="title">menu ♥</span>
+    <button class="drawer-close" id="drawerClose" aria-label="close menu">×</button>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ shop the vibe</h6>
+    <a class="drawer-link pink" href="#shop">all t-shirts <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="#shop" data-family="oversize">oversize t-shirts <span class="arrow">→</span></a>
+    <a class="drawer-link pink" href="#shop" data-family="crop">crop tops <span class="arrow">→</span></a>
+    <a class="drawer-link lime" href="#shop" data-family="long">long t-shirts <span class="arrow">→</span></a>
+    <a class="drawer-link yellow" href="#shop" data-family="belt">belts <span class="arrow">→</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ info</h6>
+    <a class="drawer-link" href="#top">main page <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#about">about <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#delivery">shipping & payment <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#returns">returns <span class="arrow">→</span></a>
+    <a class="drawer-link" href="#contacts">contacts <span class="arrow">→</span></a>
+  </div>
+
+  <div class="drawer-section">
+    <h6>★ follow</h6>
+    <a class="drawer-link tg" href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">telegram bot ✈ <span class="arrow">↗</span></a>
+    <a class="drawer-link" href="https://www.instagram.com/_babygirl.shop/" target="_blank" rel="noopener">instagram <span class="arrow">↗</span></a>
+  </div>
+
+  <div class="drawer-foot">
+    BabyGirl™ · pink hours 24/7
+  </div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section id="top" class="hero">
+  <video class="hero-video" data-bg-media="heroVideo" data-bg-poster="heroPoster" autoplay muted loop playsinline preload="metadata"></video>
+  <div class="hero-content">
+    <div class="hero-eyebrow">★ DROP N°1 · 2026 ★</div>
+    <div class="hero-sub">pink · soft<br><span class="pink">oversized</span></div>
+  </div>
+  <div class="hero-scroll">▼ scroll ▼</div>
+</section>
+
+<!-- ===== SLOT MACHINE ===== -->
+<section class="slot-section">
+  <div class="slot-stars"></div>
+  <div class="slot-head">
+    <span class="kicker">★ promo ★</span>
+    <h2>win pink</h2>
+    <p class="slot-tagline">Spin & get a <b>promo code</b> ♥</p>
+  </div>
+
+  <div class="slot-machine">
+    <div class="slot-body">
+      <div class="slot-top-light" id="slotTopLight">PROMO ♥ ROLL ME</div>
+      <div class="slot-display">
+        <div class="reel">
+          <div class="reel-strip" id="reel1">
+            <div class="reel-item">🎀</div><div class="reel-item">♥</div><div class="reel-item">★</div><div class="reel-item">💋</div><div class="reel-item">🦋</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel2">
+            <div class="reel-item percent">5%</div><div class="reel-item percent">6%</div><div class="reel-item percent">7%</div><div class="reel-item percent">8%</div><div class="reel-item percent">10%</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel3">
+            <div class="reel-item word">OFF</div><div class="reel-item word">WIN</div><div class="reel-item word">PINK</div><div class="reel-item word">BABY</div><div class="reel-item word">DROP</div>
+          </div>
+        </div>
+      </div>
+      <button id="spinBtn" class="spin-btn">spin ♥</button>
+    </div>
+    <div class="slot-lever" aria-hidden="true">
+      <div class="lever-rod"></div>
+      <div class="lever-ball"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section id="shop" class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">level up your <span class="alt">look</span></h2>
+      <span class="section-sub">~ pick your alter ego ~</span>
+    </div>
+
+    <!-- DATA: каталог. Парсить validate_deploy_js.py (id="DATA"). -->
+    <script id="DATA" type="application/json">{"all":[{"uid":"pamela-90s","title":"Pamela 90s","family":"icons","price":1790,"in_grid":true,"featured":true,"sort_order":10,"ribbon":"ICON","photo_main":"https://static.tildacdn.com/stor3233-6263-4437-b061-303964363736/d42dad8623d023c1e5d58c9d18077dc7.png","photos":["https://static.tildacdn.com/stor3233-6263-4437-b061-303964363736/d42dad8623d023c1e5d58c9d18077dc7.png","assets/pamela-90s-1.webp","assets/pamela-90s-2.webp","assets/pamela-90s-video-1.mp4","assets/pamela-90s-video-2.mp4","assets/pamela-90s-video-3.mp4","assets/pamela-90s-video-4.mp4","assets/size-oversize.webp"],"description":"OG babygirl. Памела не вчилася бути іконою — вона нею прокинулась. Світле волосся, червоні губи, нуль вибачень. Oversize 95% бавовна — щоб ти теж прокидалась головною в кадрі.","sizes":["ONE SIZE"]},{"uid":"eminem","title":"Eminem","family":"icons","price":1790,"in_grid":true,"sort_order":20,"photo_main":"https://static.tildacdn.com/stor6639-6563-4937-b439-343732616138/009a092a5f6af533afafb5f574e23e49.png","photos":["https://static.tildacdn.com/stor6639-6563-4937-b439-343732616138/009a092a5f6af533afafb5f574e23e49.png","https://static.tildacdn.com/stor6531-6362-4735-b564-333132343132/f00fe1f20e503ad5b5638581855e7a02.png","https://static.tildacdn.com/stor6338-3132-4965-b865-393934336631/fb4f77b4b23004ec3df11902aa738d15.png","assets/eminem-1.webp","assets/eminem-2.webp","assets/eminem-3.webp","assets/eminem-4.webp","assets/eminem-5.webp","assets/eminem-6.webp","assets/eminem-7.webp","assets/eminem-8.webp","assets/eminem-video-1.mp4","assets/eminem-video-2.mp4","assets/size-oversize.webp"],"description":"Slim Shady на оверсайзі — бо babygirl теж бувають злі. Вайб 2000-х: пейджер у кишені, плеєр у рюкзаку, MTV на повторі. Для тих, хто не пом'якшується під ввічливість і не вибачається двічі.","sizes":["ONE SIZE"]},{"uid":"beavis-butthead","title":"Beavis & Butthead","family":"icons","price":1790,"in_grid":true,"sort_order":40,"photo_main":"https://static.tildacdn.com/stor3161-6661-4662-b330-333166656362/ff24f704418d99e312a111c3f4592efe.jpg","photos":["https://static.tildacdn.com/stor3161-6661-4662-b330-333166656362/ff24f704418d99e312a111c3f4592efe.jpg","https://static.tildacdn.com/stor6335-6164-4861-a636-303233373836/25865b828f1d4756e6a8aa5438d54a21.jpg","https://static.tildacdn.com/stor6633-6663-4934-b438-346561646335/c0cd4d62f198b16464b9d1dc49a8a340.jpg","assets/size-oversize.webp"],"description":"Heh heh. Найрозумніша філософія — від двох найдурніших.","sizes":["ONE SIZE"]},{"uid":"crush","title":"Crush","family":"soft-rebel","price":1790,"in_grid":true,"sort_order":160,"photo_main":"https://static.tildacdn.com/stor3834-3262-4137-b064-336132643330/5608ea8d7945d750d8a506ac014822e4.jpg","photos":["https://static.tildacdn.com/stor3834-3262-4137-b064-336132643330/5608ea8d7945d750d8a506ac014822e4.jpg","assets/crush-1.webp","assets/crush-2.webp","assets/crush-3.webp","assets/crush-4.webp","assets/crush-5.webp","assets/crush-6.webp","assets/crush-7.webp","assets/crush-video-1.mp4","assets/crush-8.webp","assets/size-oversize.webp"],"description":"Любов проста: коли побачив — і пропав.","sizes":["ONE SIZE"]},{"uid":"pam-tommy","title":"Pam & Tommy","family":"icons","price":1790,"in_grid":true,"sort_order":90,"ribbon":"LEGEND","photo_main":"https://static.tildacdn.com/stor3834-6530-4935-b539-343438643630/a778187c3152ec7c7fc9cc83faccfaf5.jpg","photos":["https://static.tildacdn.com/stor3834-6530-4935-b539-343438643630/a778187c3152ec7c7fc9cc83faccfaf5.jpg","assets/pam-tommy-2.webp","assets/pam-tommy-3.webp","assets/pam-tommy-4.webp","assets/pam-tommy-5.webp","assets/pam-tommy-6.webp","assets/pam-tommy-7.webp","assets/pam-tommy-video-1.mp4","assets/pam-tommy-video-2.mp4","assets/size-oversize.webp"],"description":"Легенда 90-х на тілі. Той самий тейп — без фільтрів.","sizes":["ONE SIZE"]},{"uid":"playboy","title":"Playboy","family":"icons","price":1790,"in_grid":true,"sort_order":100,"photo_main":"https://static.tildacdn.com/stor6332-6538-4637-a337-393136393238/6d600b74f9601916befb952a030d41e3.jpg","photos":["https://static.tildacdn.com/stor6332-6538-4637-a337-393136393238/6d600b74f9601916befb952a030d41e3.jpg","https://static.tildacdn.com/stor6135-3539-4439-b732-623734643933/a7c0779dbb83a7ab7b7cb3ae9934e2da.jpg","https://static.tildacdn.com/stor3665-3034-4234-b666-323535366538/db86378c1a6db6f230e7a5a968ddae3a.jpg","assets/playboy-lifestyle-1.webp","assets/playboy-lifestyle-2.webp","assets/playboy-lifestyle-3.webp","assets/playboy-video-1.mp4","assets/size-oversize.webp"],"description":"Класика, що не іде. Bunny — символ свободи з 1953.","sizes":["ONE SIZE"]},{"uid":"soft-rebel","title":"Soft Rebel","family":"soft-rebel","price":1790,"in_grid":true,"sort_order":170,"ribbon":"NEW","photo_main":"https://static.tildacdn.com/stor3131-6134-4433-b266-326464303363/086002b3b8f3e264448149f8049df0d4.jpg","photos":["https://static.tildacdn.com/stor3131-6134-4433-b266-326464303363/086002b3b8f3e264448149f8049df0d4.jpg","https://static.tildacdn.com/stor3066-3264-4836-b132-373461623135/ad1b66c7cb47df509d4385fd31997413.jpg","assets/soft-rebel-2.webp","assets/soft-rebel-3.webp","assets/soft-rebel-4.webp","assets/soft-rebel-5.webp","assets/soft-rebel-video-1.mp4","assets/size-oversize.webp"],"description":"Pink outside, hardcore inside. Не воює — просто живе так, що всі переймають. Oversize-фасон з характером: ніжний на дотик, твердий у рішеннях. Soft на вигляд, rebel насправді.","sizes":["ONE SIZE"]},{"uid":"pillow-talk","title":"Pillow Talk","family":"soft-rebel","price":1790,"in_grid":true,"featured":false,"sort_order":150,"color_name":"pink","photo_main":"assets/pillow-talk-1.webp","photos":["assets/pillow-talk-1.webp","assets/pillow-talk-2.webp","assets/pillow-talk-3.webp","assets/pillow-talk-4.webp","assets/pillow-talk-video-1.mp4","assets/size-oversize.webp"],"description":"Y2K oversize · Betty Boop & Garfield pillow-talk · bavovna 95% + еластан 5% · DTF print"},{"uid":"crop-sexy","title":"Sexy","family":"crop","price":1490,"in_grid":true,"sort_order":200,"ribbon":"NEW","photo_main":"assets/crop-sexy-pink.webp","photos":["assets/crop-sexy-pink.webp","assets/crop-sexy-black.webp","assets/crop-sexy-pink-lifestyle.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-sexy-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-sexy-black.webp"}],"description":"Crop top · rhinestone Sexy script · oversize · bavovna · soft hand-feel","sizes":["ONE SIZE"]},{"uid":"crop-pornstar","title":"Porn Star","family":"crop","price":1490,"in_grid":true,"sort_order":210,"photo_main":"assets/crop-pornstar-white.webp","photos":["assets/crop-pornstar-white.webp","assets/crop-pornstar-pink.webp","assets/crop-pornstar-black.webp","assets/crop-pornstar-lifestyle-white.webp"],"colors":[{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-pornstar-white.webp"},{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-pornstar-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-pornstar-black.webp"}],"description":"Crop top · red Porn Star print · Y2K oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"crop-badgirls","title":"Bad Girls Club","family":"crop","price":1490,"in_grid":true,"sort_order":220,"ribbon":"CULT","photo_main":"assets/crop-badgirls-pink.webp","photos":["assets/crop-badgirls-pink.webp","assets/crop-badgirls-black.webp","assets/crop-badgirls-white.webp","assets/crop-badgirls-lifestyle-black.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-badgirls-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-badgirls-black.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-badgirls-white.webp"}],"description":"Crop top · Bad Girls Club neon-red print · oversize","sizes":["ONE SIZE"]},{"uid":"crop-talkdirty","title":"Talk Dirty To Me","family":"crop","price":1490,"in_grid":true,"sort_order":230,"photo_main":"assets/crop-talkdirty-cover.webp","photos":["assets/crop-talkdirty-cover.webp","assets/crop-talkdirty-pink.webp","assets/crop-talkdirty-white.webp","assets/crop-talkdirty-pink-lifestyle.webp","assets/crop-talkdirty-white-lifestyle.webp","assets/crop-collection-video.mp4"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-talkdirty-pink.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-talkdirty-white.webp"}],"description":"Crop top · vintage bear 'Talk dirty to me' · oversize","sizes":["ONE SIZE"]},{"uid":"michael-jackson","title":"Michael Jackson","family":"icons","price":1790,"in_grid":true,"sort_order":55,"ribbon":"LEGEND","photo_main":"assets/michael-jackson.webp","photos":["assets/michael-jackson.webp","assets/size-oversize.webp"],"description":"Y2K oversize · King of Pop on stage · bavovna 95% + еластан 5% · DTF print","sizes":["ONE SIZE"]},{"uid":"long-eminem","title":"Eminem Teen People","family":"long","price":2490,"in_grid":true,"sort_order":300,"ribbon":"NEW","photo_main":"assets/long-eminem-1.webp","photos":["assets/long-eminem-1.webp","assets/long-eminem-2.webp","assets/long-eminem-3.webp","assets/long-eminem-4.webp","assets/size-long.webp"],"description":"Long T-shirt · Eminem 'Teen People' Y2K mag print · pink · oversize","sizes":["ONE SIZE"]},{"uid":"long-barbwire","title":"Barb Wire","family":"long","price":2490,"in_grid":true,"sort_order":310,"ribbon":"LEGEND","photo_main":"assets/long-barbwire-1.webp","photos":["assets/long-barbwire-1.webp","assets/long-barbwire-2.webp","assets/size-long.webp"],"description":"Long T-shirt · Pamela Anderson 'Barb Wire' · black · oversize","sizes":["ONE SIZE"]},{"uid":"belt","title":"Пояс","family":"belt","price":1500,"in_grid":true,"sort_order":400,"ribbon":"NEW","photo_main":"https://static.tildacdn.com/stor6364-3235-4736-b066-363661656661/7bdabd7cbd838560adf4a6103eb7bcbe.png","photos":["https://static.tildacdn.com/stor6364-3235-4736-b066-363661656661/7bdabd7cbd838560adf4a6103eb7bcbe.png","https://static.tildacdn.com/stor3738-3938-4836-b061-303161323465/2efbd30cbccff829703ac32336583b1b.png","https://static.tildacdn.com/stor6239-3161-4534-b533-366162323837/b0d813b09a67cb225f45466ac21fb9c0.png","https://static.tildacdn.com/stor3537-6536-4632-b738-646161316262/726b1d26325abd08ec7f141be2ea21ad.png","https://static.tildacdn.com/stor3437-3131-4438-b231-663033313635/9e79a437d652d7c1e947b155c6e14e08.png"],"colors":[{"code":"leo-black","name":"LEO Black","hex":"#1a1a1a","photo":"https://static.tildacdn.com/stor6364-3235-4736-b066-363661656661/7bdabd7cbd838560adf4a6103eb7bcbe.png"},{"code":"leo-red","name":"LEO Red","hex":"#c52a2a","photo":"https://static.tildacdn.com/stor3738-3938-4836-b061-303161323465/2efbd30cbccff829703ac32336583b1b.png"},{"code":"red-mesh","name":"Red сітка","hex":"#ff3344","photo":"https://static.tildacdn.com/stor6239-3161-4534-b533-366162323837/b0d813b09a67cb225f45466ac21fb9c0.png"},{"code":"black-mesh","name":"Black сітка","hex":"#0a0a0a","photo":"https://static.tildacdn.com/stor3537-6536-4632-b738-646161316262/726b1d26325abd08ec7f141be2ea21ad.png"},{"code":"rose","name":"Rose","hex":"#ff8db8","photo":"https://static.tildacdn.com/stor3437-3131-4438-b231-663033313635/9e79a437d652d7c1e947b155c6e14e08.png"}],"description":"Пояс для оверсайз футболки, який перетворює її в щось значно цікавіше! Щоб навіть у базових речах виглядати секси і тримати на собі погляд.","sizes":["ONE SIZE"]},{"uid":"britney-bubble","title":"Britney Bubble","family":"icons","price":1790,"in_grid":true,"sort_order":35,"ribbon":"NEW","photo_main":"assets/britney-bubble.webp","photos":["assets/britney-bubble.webp","assets/size-oversize.webp"],"description":"Britney blowing pink bubble gum. Y2K teen-pop ікона на молочно-білому оверсайзі. Soft & sweet — як шепіт «oops».","sizes":["ONE SIZE"]},{"uid":"pamela-anderson","title":"Pamela Anderson","family":"icons","price":1790,"in_grid":true,"sort_order":15,"ribbon":"NEW","photo_main":"assets/pamela-anderson-white.webp","photos":["assets/pamela-anderson-white.webp","assets/pamela-anderson-black.webp","assets/pamela-anderson-pink.webp","assets/pamela-anderson-lifestyle-black.webp","assets/pamela-anderson-lifestyle-black-2.webp","assets/pamela-anderson-lifestyle-black-3.webp","assets/pamela-anderson-video-1.mp4","assets/size-oversize.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/pamela-anderson-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/pamela-anderson-black.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/pamela-anderson-white.webp"}],"description":"Barb Wire mood: блонд, шкіра, мотоцикл — досі trending через 30 років. Памела на оверсайзі читається з 10 метрів. Pink, black, white — обирай настрій, ікона вже включена в комплект."},{"uid":"long-pam-tommy","title":"Pam & Tommy Long","family":"long","price":2490,"in_grid":true,"sort_order":320,"ribbon":"NEW","photo_main":"assets/long-pam-tommy-1.webp","photos":["assets/long-pam-tommy-1.webp","assets/long-pam-tommy-2.webp","assets/size-long.webp"],"description":"Long T-shirt · Pam & Tommy 90s polaroid · white · oversize · крокус-довжина"},{"uid":"long-soft-rebel","title":"Soft Rebel Long","family":"long","price":2490,"in_grid":true,"sort_order":330,"ribbon":"NEW","photo_main":"assets/long-soft-rebel-1.webp","photos":["assets/long-soft-rebel-1.webp","assets/long-soft-rebel-2.webp","assets/size-long.webp"],"description":"Long T-shirt · pink lips with piercing print · white · oversize · крокус-довжина","sizes":["ONE SIZE"]},{"uid":"choker","title":"Choker","family":"belt","price":490,"in_grid":true,"sort_order":410,"ribbon":"NEW","photo_main":"assets/choker-worn2.webp","photos":["assets/choker-worn2.webp","assets/choker-worn.webp","assets/choker-1.webp","assets/choker-2.webp"],"sizes":["ONE SIZE"],"colors":[{"hex":"#FF8DB8","code":"pink","name":"Pink","photo":"assets/choker-worn2.webp"},{"hex":"#0A0A0A","code":"black","name":"Black","photo":"assets/choker-worn.webp"}],"description":"Тонкий чокер з регульованою застібкою і срібним серцем-кільцем. М'які лінії ніжно облягають шию, серце притягує і утримує погляд. Мінімалістичний, регульований — під твій настрій. Колір: рожевий або чорний."},{"uid":"beach-spray","title":"Beach Spray","family":"belt","price":890,"in_grid":true,"sort_order":510,"ribbon":"NEW","photo_main":"https://static.tildacdn.com/stor3933-3939-4832-b536-363130633130/ca3f79db79d52e6432a41317839f0397.jpg","photos":["https://static.tildacdn.com/stor3933-3939-4832-b536-363130633130/ca3f79db79d52e6432a41317839f0397.jpg"],"sizes":["250 ml"],"colors":[],"description":"Сольовий спрей для природної текстури, об’єму та ефекту beach waves — без липкості й пересушування 🩷\nДарує матовий beach-фініш, рухому фіксацію та легко формує недбалу, природну укладку.\n\n💅 текстура та ефект beach waves\n💅 об’єм і щільність\n💅 не склеює, не лишає слідів, швидко висихає\n💅 не пересушує волосся\n💅 ідеальний для прикореневого об’єму\n💅 на вологе або сухе волосся, будь-який тип\n\nЯк працює: формула на основі морської та мінеральних солей структурує волосся й підкреслює хвилю ❤️‍🔥\n\nЗастосування: нанеси на вологе чи сухе волосся та сформуй руками. Для м’якої хвилі — на ніч у пучок, вранці розпусти 🌊"},{"uid":"good-pussy","title":"Good Pussy","family":"icons","price":1790,"in_grid":true,"featured":false,"sort_order":110,"ribbon":"NEW","photo_main":"assets/good-pussy-white.webp","photos":["assets/good-pussy-white.webp","assets/good-pussy-black.webp","assets/good-pussy-pink.webp","assets/size-oversize.webp"],"description":"Vintage kitten energy. Ретро-кошеня в мереживному серці і підпис, який змушує озирнутись — наймиліша провокація сезону. Oversize, 95% бавовна. Pink, black, white — гарна дівчинка з характером.","sizes":["ONE SIZE"],"colors":[{"hex":"#FFFFFF","code":"white","name":"White","photo":"assets/good-pussy-white.webp"},{"hex":"#0A0A0A","code":"black","name":"Black","photo":"assets/good-pussy-black.webp"},{"hex":"#FF4FA1","code":"pink","name":"Pink","photo":"assets/good-pussy-pink.webp"}]},{"uid":"crop-goodpussy","title":"Good Pussy","family":"crop","price":1490,"in_grid":true,"featured":false,"sort_order":240,"ribbon":"NEW","photo_main":"assets/crop-goodpussy-white.webp","photos":["assets/crop-goodpussy-pink.webp","assets/crop-goodpussy-white.webp","assets/crop-goodpussy-black.webp"],"description":"Crop top · Good Pussy retro-kitten print · Y2K oversize · бавовна","sizes":["ONE SIZE"],"colors":[{"hex":"#FF4FA1","code":"pink","name":"Pink","photo":"assets/crop-goodpussy-pink.webp"},{"hex":"#FFFFFF","code":"white","name":"White","photo":"assets/crop-goodpussy-white.webp"},{"hex":"#0A0A0A","code":"black","name":"Black","photo":"assets/crop-goodpussy-black.webp"}]},{"uid":"leo","title":"Leo","family":"icons","price":1790,"in_grid":true,"sort_order":25,"ribbon":"NEW","color_name":"grey","photo_main":"assets/leo-1.webp","photos":["assets/leo-1.webp","assets/leo-2.webp","assets/leo-3.webp","assets/size-oversize.webp"],"description":"Той самий Лео з 90-х: мокре волосся, сигара і погляд, від якого тонули ще до «Титаніка». Журнальний постер на сіро-блакитному меланжі. Oversize, 95% бавовна — романтика, що не старіє.","sizes":["ONE SIZE"]},{"uid":"slim-shady","title":"Slim Shady","family":"icons","price":1790,"in_grid":true,"sort_order":30,"ribbon":"NEW","color_name":"white","photo_main":"assets/slim-shady-1.webp","photos":["assets/slim-shady-1.webp","assets/slim-shady-2.webp","assets/size-oversize.webp"],"description":"Молодий Маршалл дивиться прямо в душу. Портрет епохи, коли MTV вирішувало все, — на білому оверсайзі. Тихий принт, гучний характер.","sizes":["ONE SIZE"]},{"uid":"its-britney","title":"It's Britney","family":"icons","price":1790,"in_grid":true,"sort_order":45,"ribbon":"NEW","color_name":"pink","photo_main":"assets/its-britney-1.webp","photos":["assets/its-britney-1.webp","assets/its-britney-2.webp","assets/size-oversize.webp"],"description":"It's Britney, bitch! Принцеса попу в таблоїдному колажі на рожевому оверсайзі. Для тих, хто пережив свій 2007 і став тільки сильнішим.","sizes":["ONE SIZE"]},{"uid":"johnny-depp","title":"Johnny Depp","family":"icons","price":1790,"in_grid":true,"sort_order":50,"ribbon":"NEW","color_name":"black","photo_main":"assets/johnny-depp-1.webp","photos":["assets/johnny-depp-1.webp","assets/johnny-depp-2.webp","assets/size-oversize.webp"],"description":"Джонні з 90-х: піджак, скуйовджений вигляд і нуль зусиль, щоб бути найкрасивішим у кімнаті. Чорний oversize, 95% бавовна — для тих, хто любить поганих хлопців.","sizes":["ONE SIZE"]},{"uid":"erotica","title":"Erotica","family":"icons","price":1790,"in_grid":true,"sort_order":120,"ribbon":"NEW","color_name":"pink","photo_main":"assets/erotica-1.webp","photos":["assets/erotica-1.webp","assets/erotica-2.webp","assets/size-oversize.webp"],"description":"Pleasure is a memory. Ретро-колаж: сигара, поцілунок і готельна записка — Маямі 90-х на рожевому оверсайзі. Провокація в пастельній обгортці.","sizes":["ONE SIZE"]},{"uid":"skater-girl","title":"Skater Girl","family":"icons","price":1790,"in_grid":true,"sort_order":130,"ribbon":"NEW","color_name":"pink","photo_main":"assets/skater-girl-1.webp","photos":["assets/skater-girl-1.webp","assets/skater-girl-2.webp","assets/size-oversize.webp"],"description":"Підбори на скейті — баланс, який кожна babygirl тримає щодня. Леопард, рожевий і трохи нахабства. Oversize, 95% бавовна.","sizes":["ONE SIZE"]},{"uid":"crop-gods-favorite","title":"God's Favorite","family":"crop","price":2190,"in_grid":true,"sort_order":245,"ribbon":"NEW","photo_main":"assets/crop-gods-favorite-pink.webp","photos":["assets/crop-gods-favorite-pink.webp","assets/crop-gods-favorite-black.webp","assets/crop-gods-favorite-black-lifestyle.webp","assets/crop-gods-favorite-black-lifestyle-2.webp","assets/crop-gods-favorite-video-1.mp4"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-gods-favorite-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-gods-favorite-black.webp"}],"description":"Crop top · GOD'S FAVORITE SLUT rhinestones · oversize · bavovna · soft hand-feel","sizes":["ONE SIZE"]},{"uid":"doggy-style","title":"Doggy Style","family":"icons","price":1790,"in_grid":true,"sort_order":140,"ribbon":"NEW","photo_main":"assets/doggy-style-white.webp","photos":["assets/doggy-style-white.webp","assets/doggy-style-pink.webp","assets/doggy-style-black.webp"],"colors":[{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/doggy-style-white.webp"},{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/doggy-style-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/doggy-style-black.webp"}],"description":"Tee · Doggy Style vintage puppies print · oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"only-fans","title":"Only Fans","family":"icons","price":1790,"in_grid":true,"sort_order":141,"ribbon":"NEW","photo_main":"assets/only-fans-white.webp","photos":["assets/only-fans-white.webp","assets/only-fans-pink.webp","assets/only-fans-black.webp","assets/size-oversize.webp"],"colors":[{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/only-fans-white.webp"},{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/only-fans-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/only-fans-black.webp"}],"description":"Tee · Only Fans print · oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"crop-doggy-style","title":"Doggy Style Crop","family":"crop","price":1490,"in_grid":true,"sort_order":246,"ribbon":"NEW","photo_main":"assets/crop-doggy-style-pink.webp","photos":["assets/crop-doggy-style-pink.webp","assets/crop-doggy-style-black.webp","assets/crop-doggy-style-white.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-doggy-style-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-doggy-style-black.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-doggy-style-white.webp"}],"description":"Crop top · Doggy Style vintage puppies print · oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"crop-only-fans","title":"Only Fans Crop","family":"crop","price":1490,"in_grid":true,"sort_order":247,"ribbon":"NEW","photo_main":"assets/crop-only-fans-pink.webp","photos":["assets/crop-only-fans-pink.webp","assets/crop-only-fans-white.webp","assets/crop-only-fans-black.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-only-fans-pink.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-only-fans-white.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/crop-only-fans-black.webp"}],"description":"Crop top · Only Fans print · oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"pet-friendly","title":"Pet Friendly","family":"icons","price":2500,"in_grid":true,"sort_order":142,"ribbon":"NEW","photo_main":"assets/pet-friendly-pink.webp","photos":["assets/pet-friendly-pink.webp","assets/pet-friendly-white.webp","assets/pet-friendly-grey.webp","assets/size-oversize.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/pet-friendly-pink.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/pet-friendly-white.webp"},{"code":"grey","name":"Grey","hex":"#9AA0A6","photo":"assets/pet-friendly-grey.webp"}],"description":"Tee · PET FRIENDLY mask print · oversize · bavovna 95%","sizes":["ONE SIZE"]},{"uid":"crop-pet-friendly","title":"Pet Friendly Crop","family":"crop","price":2100,"in_grid":true,"sort_order":248,"ribbon":"NEW","photo_main":"assets/crop-pet-friendly-pink.webp","photos":["assets/crop-pet-friendly-pink.webp","assets/crop-pet-friendly-white.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-pet-friendly-pink.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-pet-friendly-white.webp"}],"description":"Crop top · PET FRIENDLY mask print · Y2K oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"bad-baby","title":"Bad Baby","family":"icons","price":2500,"in_grid":true,"sort_order":143,"ribbon":"NEW","photo_main":"assets/bad-baby-pink.webp","photos":["assets/bad-baby-pink.webp","assets/bad-baby-black.webp","assets/bad-baby-white.webp","assets/size-oversize.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/bad-baby-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/bad-baby-black.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/bad-baby-white.webp"}],"description":"Tee · Bad Baby leopard pacifier print · oversize · bavovna 95%","sizes":["ONE SIZE"]},{"uid":"crop-bad-baby","title":"Bad Baby Crop","family":"crop","price":2100,"in_grid":true,"sort_order":249,"ribbon":"NEW","photo_main":"assets/crop-bad-baby-pink.webp","photos":["assets/crop-bad-baby-pink.webp","assets/crop-bad-baby-white.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/crop-bad-baby-pink.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/crop-bad-baby-white.webp"}],"description":"Crop top · Bad Baby leopard pacifier print · Y2K oversize · bavovna","sizes":["ONE SIZE"]},{"uid":"bad-bottle","title":"Bad Bottle","family":"icons","price":2500,"in_grid":true,"sort_order":144,"ribbon":"NEW","photo_main":"assets/bad-bottle-pink.webp","photos":["assets/bad-bottle-pink.webp","assets/bad-bottle-black.webp","assets/bad-bottle-white.webp","assets/size-oversize.webp"],"colors":[{"code":"pink","name":"Pink","hex":"#FF4FA1","photo":"assets/bad-bottle-pink.webp"},{"code":"black","name":"Black","hex":"#0A0A0A","photo":"assets/bad-bottle-black.webp"},{"code":"white","name":"White","hex":"#FFFFFF","photo":"assets/bad-bottle-white.webp"}],"description":"Tee · Bad Baby leopard bottle print · oversize · bavovna 95%","sizes":["ONE SIZE"]}],"grid":["pamela-90s","pamela-anderson","eminem","leo","slim-shady","britney-bubble","its-britney","beavis-butthead","michael-jackson","johnny-depp","pam-tommy","playboy","good-pussy","erotica","skater-girl","doggy-style","only-fans","pet-friendly","bad-baby","bad-bottle","pillow-talk","crush","soft-rebel","crop-sexy","crop-pornstar","crop-badgirls","crop-talkdirty","crop-goodpussy","crop-gods-favorite","crop-doggy-style","crop-only-fans","crop-pet-friendly","crop-bad-baby","long-eminem","long-barbwire","long-pam-tommy","long-soft-rebel","belt","choker","beach-spray"],"featured":["pamela-90s"]}</script>
+
+    <div id="grid" class="grid"></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="about">
+  <div class="about-bg" aria-hidden="true"></div>
+  <span class="cloud-puff c1" aria-hidden="true"></span>
+  <span class="cloud-puff c2" aria-hidden="true"></span>
+  <span class="cloud-puff c3" aria-hidden="true"></span>
+  <div class="container about-wrap">
+    <h2 class="about-title">
+      <span class="plumbob" aria-hidden="true"></span>
+      this is<br>a babygirl<br>thing
+    </h2>
+
+    <div class="about-stage">
+      <div class="about-photo">
+        <span class="name-tag">★ Lera · founder</span>
+        <span class="hero-sticker" aria-hidden="true">♥</span>
+        <img data-bg-media="lera" alt="Lera">
+      </div>
+
+      <div class="gta-dialog">
+        <div class="bar">
+          <span class="speaker">Lera ♥</span>
+          <span class="pip"><i></i> live</span>
+        </div>
+        <div class="gta-screen" id="gtaScreen" data-played="0"></div>
+        <div class="gta-cta">
+          <button id="gtaJoinBtn" type="button">join club ♥</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Скрипт диалога Леры (typewriter, GTA-style) -->
+<script>
+(function(){
+  var screen = document.getElementById('gtaScreen');
+  if (!screen) return;
+
+  // Реплики диалога — украинский на основе наброску пользователя
+  var LINES = [
+    { who: 'Lera',  what: "Hi! I'm <em>Lera</em> — that very baby girl." },
+    { who: 'Lera',  what: 'I love the <em>2000s</em>, pink and everything that sparkles.' },
+    { who: 'Lera',  what: 'I design the pieces and <em>prints</em> myself — for me and girls like me.' },
+    { who: 'Lera',  what: 'I know there are <em>many</em> of us — soft and real.' },
+    { who: 'Lera',  what: 'If the <em>vibe hits</em> — join the club ♥' },
+    { who: 'You',   what: "<em>i'm in the club</em> ✓", me: true }
+  ];
+
+  var SPEED_CHAR   = 28;   // мс на букву
+  var BETWEEN_LINE = 600;  // мс между репликами
+  var running = false;
+  var stopRequested = false;
+  var $linesEl = null;
+
+  function escapeAllowedHtml(s){
+    // Allow <em> tags; escape everything else
+    return s.replace(/<(?!\/?em\b)[^>]*>/g, function(m){ return m.replace(/</g,'&lt;').replace(/>/g,'&gt;'); });
+  }
+
+  function appendLine(line){
+    var div = document.createElement('div');
+    div.className = 'gta-line' + (line.me ? ' me' : '');
+    var who = document.createElement('span');
+    who.className = 'who';
+    who.textContent = '★ ' + line.who;
+    var what = document.createElement('span');
+    what.className = 'what';
+    var cursor = document.createElement('span');
+    cursor.className = 'gta-cursor';
+    div.appendChild(who); div.appendChild(what); div.appendChild(cursor);
+    screen.appendChild(div);
+    return { div: div, what: what, cursor: cursor };
+  }
+
+  function typeText(target, html, done){
+    // Парсим html на токены: либо тэг <em>...</em>, либо одиночные символы
+    var tokens = [], i = 0;
+    while (i < html.length){
+      if (html[i] === '<') {
+        var close = html.indexOf('>', i);
+        if (close === -1) { tokens.push(html[i]); i++; continue; }
+        tokens.push(html.slice(i, close + 1));
+        i = close + 1;
+      } else { tokens.push(html[i]); i++; }
+    }
+    var idx = 0;
+    function step(){
+      if (stopRequested) return done();
+      if (idx >= tokens.length) return done();
+      target.what.innerHTML += tokens[idx++];
+      setTimeout(step, SPEED_CHAR);
+    }
+    step();
+  }
+
+  function runDialog(){
+    if (running) return;
+    running = true;
+    screen.dataset.played = '1';
+    screen.innerHTML = '';
+    var i = 0;
+    function nextLine(){
+      if (stopRequested) {
+        // Скип — мгновенно показать всё
+        screen.innerHTML = LINES.map(function(line){
+          return '<div class="gta-line' + (line.me ? ' me' : '') + '">'
+            + '<span class="who">★ ' + line.who + '</span>'
+            + '<span class="what">' + escapeAllowedHtml(line.what) + '</span>'
+            + '</div>';
+        }).join('');
+        running = false;
+        return;
+      }
+      if (i >= LINES.length) { running = false; return; }
+      var line = LINES[i++];
+      var t = appendLine(line);
+      typeText(t, escapeAllowedHtml(line.what), function(){
+        if (t.cursor && t.cursor.parentNode) t.cursor.parentNode.removeChild(t.cursor);
+        // Dim предыдущие
+        var prev = screen.querySelectorAll('.gta-line');
+        for (var j = 0; j < prev.length - 2; j++) prev[j].classList.add('dim');
+        setTimeout(nextLine, BETWEEN_LINE);
+      });
+    }
+    nextLine();
+  }
+
+  // Запуск когда блок появился в viewport
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting && screen.dataset.played === '0') {
+          runDialog();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(screen);
+  } else {
+    // fallback — сразу
+    setTimeout(runDialog, 400);
+  }
+
+  // Skip по клику/tap/space/enter
+  function skip(){ if (running) { stopRequested = true; } }
+  screen.addEventListener('click', skip);
+  document.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter') {
+      if (screen.dataset.played === '0') runDialog();
+      else skip();
+    }
+  });
+
+  // CTA join — скроллит к каталогу
+  var joinBtn = document.getElementById('gtaJoinBtn');
+  if (joinBtn) joinBtn.addEventListener('click', function(){
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
+
+
+<!-- ===== VIBE ===== -->
+<section class="vibe">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">the <span class="alt">vibe</span></h2>
+      <span class="section-sub">~ what you get ~</span>
+    </div>
+    <div class="vibe-grid">
+      <div class="vibe-card">
+        <div class="num">1</div>
+        <h4>oversize or nothing</h4>
+        <p>Longline cut — wear it as a mini dress. 95% cotton + 5% elastane, breathes, doesn't shrink.</p>
+      </div>
+      <div class="vibe-card">
+        <div class="num">2</div>
+        <h4>print that stays</h4>
+        <p>Quality print that won't vanish after the 50th wash. We checked.</p>
+      </div>
+      <div class="vibe-card">
+        <div class="num">3</div>
+        <h4>one size fits all souls</h4>
+        <p>One size — XS to XL feel at home. BabyGirl is about the feeling, not centimeters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INFO / DELIVERY / CONTACTS ===== -->
+<section id="info" class="info-section">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">info <span class="alt">♥</span></h2>
+      <span class="section-sub">~ shipping, contacts, terms ~</span>
+    </div>
+
+    <div class="info-grid">
+      <article class="info-card pink" id="delivery">
+        <h3>🚚 Worldwide shipping</h3>
+        <p>We ship worldwide with <b>Nova Global</b> (Nova Poshta international).</p>
+        <p>— Central Europe (PL · SK · HU · RO · CZ · MD): <b>€7</b> · 3–6 business days<br>
+        — Western Europe &amp; Scandinavia: <b>€9</b> · 4–8 business days<br>
+        — United Kingdom: <b>€11</b> · 5–9 business days<br>
+        — USA &amp; Canada: <b>€15</b> · 7–14 business days<br>
+        — Rest of the world: <b>€22</b> · 10–20 business days</p>
+        <p class="muted">Shipping is calculated at checkout by destination country. Your tracking number arrives by email.</p>
+      </article>
+
+      <article class="info-card yellow" id="payment">
+        <h3>💳 Payment</h3>
+        <p><b>— Visa / MasterCard or PayPal</b><br>secure checkout in EUR via Western Bid</p>
+        <p>The full amount (items + shipping) is charged at checkout. No cash on delivery for international orders.</p>
+        <p class="muted">All payments are SSL-encrypted.</p>
+      </article>
+
+      <article class="info-card" id="returns">
+        <h3>↩ Returns &amp; exchange</h3>
+        <p>You can exchange or return an item within <b>14 days</b> of delivery if it doesn’t fit or isn’t what you expected.</p>
+        <p>Return conditions:</p>
+        <p>— item unworn, in original condition<br>— tags preserved<br>— proof of purchase preserved</p>
+        <p class="muted">Return shipping for international orders is paid by the customer. Some items are non-returnable by law.</p>
+      </article>
+
+      <article class="info-card wide" id="contacts">
+        <h3>💌 Contacts · Questions? Text us</h3>
+        <p>We’re here — soft &amp; ready. The fastest way is our Telegram bot. ♥</p>
+
+        <p style="margin-top:12px"><b>📞 Phone:</b> <a href="tel:+380958766756">+380 95 876 67 56</a></p>
+        <p><b>📸 Instagram:</b> <a href="https://www.instagram.com/_babygirl.shop/" target="_blank" rel="noopener">@_babygirl.shop</a></p>
+
+        <a class="tg-button" href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">
+          <span class="tg-icon">✈</span> Message us on Telegram
+        </a>
+
+        <div class="legal">
+          FOP Kodatska Valeriia Vadymivna · USREOU 3569012146<br>
+          65039, Odesa, Ukraine, Serednofontanska St. 19
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="foot-logo">baby<span class="girl">girl</span><span style="color:var(--blue-deep)">.</span></div>
+    <div class="foot-tagline">Pink. Soft. Oversized. Forever.</div>
+    <div class="foot-grid">
+      <div>
+        <h5>Shop</h5>
+        <a href="#shop">All t-shirts</a>
+        <a href="#shop" data-family="oversize">Oversize t-shirts</a>
+        <a href="#shop" data-family="crop">Crop tops</a>
+        <a href="#shop" data-family="long">Long t-shirts</a>
+        <a href="#shop" data-family="belt">Belts</a>
+      </div>
+      <div>
+        <h5>Info</h5>
+        <a href="#about">About</a>
+        <a href="#delivery">Shipping</a>
+        <a href="#payment">Payment</a>
+        <a href="#returns">Returns</a>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <a href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">Telegram bot ✈</a>
+        <a href="https://www.instagram.com/_babygirl.shop/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="#contacts">All contacts</a>
+        <a href="tel:+380958766756">+380 95 876 67 56</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      © 2026 BabyGirl™ · made with ♥ from Y2K · v2 · skeleton-powered
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-head">
+    <span class="title">cart ♥</span>
+    <button class="cart-close" id="cartClose" aria-label="close">×</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">cart is empty<br>~ pick something ~</div>
+  </div>
+  <div class="cart-total" id="cartTotal" hidden="">
+    <span>total</span><span class="num" id="cartTotalNum">€0</span>
+  </div>
+  <form class="cart-form" id="cartForm" hidden="">
+    <label>full name</label>
+    <input id="fld-fio" placeholder="Maria Smith" required="" autocomplete="name">
+    <label>phone</label>
+    <input id="fld-phone" type="tel" placeholder="+1 ..." required="" autocomplete="tel">
+    <label>email</label>
+    <input id="fld-email" type="email" placeholder="your@email.com" required="" autocomplete="email">
+    <label>country</label>
+    <div class="en-cbx">
+      <input id="fld-country-in" placeholder="start typing…" autocomplete="off" required="">
+      <input type="hidden" id="fld-country">
+      <div class="en-cbx-list" id="enCountryList" hidden=""></div>
+    </div>
+    <label>city</label>
+    <input id="fld-city" placeholder="Berlin" required="">
+    <label>zip / postal code</label>
+    <input id="fld-zip" placeholder="10115" autocomplete="postal-code">
+    <label>address · street, house, apt</label>
+    <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
+    <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
+    <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
+    <button type="submit" class="cart-submit" id="cartSubmit">pay by card / paypal ♥</button>
+    <div id="cartResult" class="cart-result"></div>
+  </form>
+</aside>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="pm-overlay" id="pmOverlay"></div>
+<div class="pm" id="pm" aria-hidden="true" role="dialog">
+  <button class="pm-close" id="pmClose" aria-label="close">×</button>
+  <div class="pm-hero">
+    <div class="pm-stage" id="pmStage">
+      <span class="pm-ribbon" id="pmRibbon" hidden=""></span>
+      <div class="pm-stage-track" id="pmTrack"></div>
+      <button class="pm-arrow prev" id="pmPrev" aria-label="prev">‹</button>
+      <button class="pm-arrow next" id="pmNext" aria-label="next">›</button>
+      <div class="pm-counter" id="pmCounter">1 / 1</div>
+    </div>
+    <div class="pm-thumbs" id="pmThumbs"></div>
+  </div>
+  <div class="pm-info">
+    <div class="crumbs" id="pmCrumbs">~/<b>shop</b>/icons/<b id="pmCrumbName"></b></div>
+    <h1 id="pmTitle">Title</h1>
+    <div class="pm-price"><span class="currency">€</span><span id="pmPrice">0</span></div>
+    <p class="pm-descr" id="pmDescr"></p>
+    <div class="pm-specs" id="pmSpecs">
+      <div class="pm-spec"><div class="lbl">★ size</div><div class="val">one size</div></div>
+      <div class="pm-spec"><div class="lbl">★ fabric</div><div class="val">95% cotton<br>5% elastane</div></div>
+      <div class="pm-spec"><div class="lbl">★ fit</div><div class="val">oversize<br>longline</div></div>
+      <div class="pm-spec"><div class="lbl">★ print</div><div class="val">DTF<br>does not fade</div></div>
+    </div>
+    <button class="pm-cta" id="pmCta">Add to cart ♥</button>
+  </div>
+</div>
+
+<script id="en-i18n">window.EN_TITLE={"belt": "Garter Belt"};window.EN_DESCR={"pamela-90s": "OG babygirl. Pamela never learned to be an icon — she woke up as one. Blonde hair, red lips, zero apologies. Oversize, 95% cotton — so you wake up owning the frame too.", "pamela-anderson": "Barb Wire mood: blonde, leather, a motorcycle — still trending 30 years later. Pamela on an oversized tee reads from 10 meters away. Pink, black, white — pick the mood, the icon comes included.", "pam-tommy": "A 90s legend on your body. That tape — no filters.", "britney-bubble": "Britney blowing pink bubble gum. Y2K teen-pop icon on a milky-white oversize. Soft & sweet — like a whispered ‘oops’.", "its-britney": "It's Britney, bitch! The princess of pop in a tabloid collage on a pink oversize. For everyone who survived their 2007 and came back stronger.", "eminem": "Slim Shady on an oversize — because babygirls get angry too. Pure 2000s vibe: pager in your pocket, player in your backpack, MTV on repeat. For those who don't soften up out of politeness and never apologize twice.", "slim-shady": "Young Marshall staring straight into your soul. A portrait of the era when MTV decided everything — on a white oversize. Quiet print, loud character.", "erotica": "Pleasure is a memory. A retro collage: a cigar, a kiss and a hotel note — 90s Miami on a pink oversize. Provocation in a pastel wrapper.", "good-pussy": "Vintage kitten energy. A retro kitten in a lace heart with a caption that makes people look twice — the cutest provocation of the season. Oversize, 95% cotton. Pink, black, white — a good girl with attitude.", "leo": "That 90s Leo: wet hair, a cigar and the look that sank hearts before Titanic even premiered. A magazine poster on a gray-blue melange. Oversize, 95% cotton — romance that doesn't age.", "michael-jackson": "Y2K oversize · King of Pop on stage · 95% cotton + 5% elastane · DTF print", "beavis-butthead": "Heh heh. The smartest philosophy — from the two dumbest guys.", "crush": "Love is simple: you see them — and you're gone.", "playboy": "A classic that never leaves. The Bunny — a symbol of freedom since 1953.", "skater-girl": "Heels on a skateboard — the balance every babygirl keeps daily. Leopard, pink and a bit of nerve. Oversize, 95% cotton.", "doggy-style": "Tee · Doggy Style vintage puppies print · oversize · cotton", "pet-friendly": "Tee · PET FRIENDLY mask print · oversize · 95% cotton", "bad-baby": "Tee · Bad Baby leopard pacifier print · oversize · 95% cotton", "bad-bottle": "Tee · Bad Baby leopard bottle print · oversize · 95% cotton", "soft-rebel": "Pink outside, hardcore inside. Doesn't fight — just lives in a way everyone ends up copying. An oversize cut with character: soft to the touch, firm in decisions. Soft-looking, rebel for real.", "pillow-talk": "Y2K oversize · Betty Boop & Garfield pillow-talk · 95% cotton + 5% elastane · DTF print", "crop-bad-baby": "Crop top · Bad Baby leopard pacifier print · Y2K oversize · cotton", "crop-doggy-style": "Crop top · Doggy Style vintage puppies print · oversize · cotton", "crop-gods-favorite": "Crop top · GOD'S FAVORITE SLUT rhinestones · oversize · cotton · soft hand-feel", "crop-goodpussy": "Crop top · Good Pussy retro-kitten print · Y2K oversize · cotton", "crop-pet-friendly": "Crop top · PET FRIENDLY mask print · Y2K oversize · cotton", "crop-pornstar": "Crop top · red Porn Star print · Y2K oversize · cotton", "crop-sexy": "Crop top · rhinestone Sexy script · oversize · cotton · soft hand-feel", "long-pam-tommy": "Long T-shirt · Pam & Tommy 90s polaroid · white · oversize · extra-long fit", "long-soft-rebel": "Long T-shirt · pink lips with piercing print · white · oversize · extra-long fit", "belt": "Leopard garter belt with adjustable straps and metal clasps 🐆 A sexy accent that makes any look bolder — wear it with stockings or as a standalone lingerie piece. Adjustable fit, guaranteed to hold the gaze.", "choker": "A thin choker with an adjustable clasp and a silver heart ring. Soft lines hug the neck, the heart catches and keeps the gaze. Minimalist, adjustable — to match your mood. Colors: pink or black.", "beach-spray": "Salt spray for natural texture, volume and beach waves — no stickiness, no over-drying 🩷 Matte beach finish, flexible hold, effortless undone styling. Works on wet or dry hair, any type. A sea-salt & mineral formula structures the hair and defines the wave ❤️‍🔥"};window.EN_SPECS={"belt": [{"l": "size", "v": "one size"}, {"l": "material", "v": "stretch<br>lace"}, {"l": "straps", "v": "4 garters<br>metal clips"}, {"l": "fit", "v": "adjustable"}], "choker": [{"l": "size", "v": "adjustable<br>one size"}, {"l": "material", "v": "ribbon +<br>metal"}, {"l": "detail", "v": "heart<br>ring"}, {"l": "colors", "v": "pink /<br>black"}], "beach-spray": [{"l": "volume", "v": "250 ml"}, {"l": "type", "v": "salt<br>spray"}, {"l": "effect", "v": "beach<br>waves"}, {"l": "apply on", "v": "wet /<br>dry hair"}]};</script>
+
+<script>
+/* ========== BURGER DRAWER ========== */
+(function(){
+  var burger = document.getElementById('navBurger');
+  var drawer = document.getElementById('drawer');
+  var overlay = document.getElementById('drawerOverlay');
+  var close = document.getElementById('drawerClose');
+  if (!burger || !drawer || !overlay) return;
+  function open(){
+    drawer.classList.add('open'); overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true');
+    document.body.classList.add('drawer-open');
+  }
+  function shut(){
+    drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false');
+    document.body.classList.remove('drawer-open');
+  }
+  burger.addEventListener('click', open);
+  if (close) close.addEventListener('click', shut);
+  overlay.addEventListener('click', shut);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') shut(); });
+  // Smooth scroll + auto-close on drawer hash-link click
+  // (для не data-family - data-family обробляє свій хендлер нижче)
+  drawer.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      shut();
+      if (a.hasAttribute('data-family')) return;
+      var href = a.getAttribute('href') || '';
+      if (href.length < 2) return;
+      var el = document.querySelector(href);
+      if (!el) return;
+      e.preventDefault();
+      setTimeout(function(){
+        var navH = 64;
+        var top = el.getBoundingClientRect().top + window.pageYOffset - navH;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }, 60);
+    });
+  });
+})();
+
+/* ========== NAV SCROLL EFFECT ========== */
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  var THRESHOLD = 220;          // px после которого появляется фон
+  var ticking = false;
+  function onScroll(){
+    if (!ticking){
+      requestAnimationFrame(function(){
+        if (window.scrollY > THRESHOLD) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // init
+})();
+
+/* ========== SLOT MACHINE + AUTO-APPLY PROMO ========== */
+(function(){
+  var r1 = document.getElementById('reel1');
+  var r2 = document.getElementById('reel2');
+  var r3 = document.getElementById('reel3');
+  var btn = document.getElementById('spinBtn');
+  var topLight = document.getElementById('slotTopLight');
+  if (!r1 || !btn) return;
+
+  // Скидки 5—10% (без джекпотов на 15/20/25)
+  var WINS = [
+    {emoji:'🦋', percent:'5%',  word:'DROP', code:'SOFT5',  pct:5,  msg:'5% off'},
+    {emoji:'♥',  percent:'6%',  word:'WIN',  code:'BABY6',  pct:6,  msg:'6% off'},
+    {emoji:'★',  percent:'7%',  word:'PINK', code:'PINK7',  pct:7,  msg:'7% off'},
+    {emoji:'💋', percent:'8%',  word:'BABY', code:'BABY8',  pct:8,  msg:'8% off'},
+    {emoji:'🎀', percent:'10%', word:'OFF',  code:'BABY10', pct:10, msg:'10% off · max'}
+  ];
+  var EMOJIS  = ['🎀','♥','★','💋','🦋'];
+  var PERCENT = ['5%','6%','7%','8%','10%'];
+  var WORDS   = ['OFF','WIN','PINK','BABY','DROP'];
+
+  var spinning = false;
+
+  btn.addEventListener('click', function(){
+    if (spinning) return;
+    spinning = true;
+    btn.disabled = true; btn.textContent = '⌛ ...';
+    r1.classList.add('spinning'); r2.classList.add('spinning'); r3.classList.add('spinning');
+    r1.style.transition = 'none'; r2.style.transition = 'none'; r3.style.transition = 'none';
+
+    var win = WINS[Math.floor(Math.random() * WINS.length)];
+    var itemH = window.innerWidth >= 600 ? 110 : 90;
+
+    setTimeout(function(){ stopReel(r1, win.emoji,   EMOJIS,  itemH); }, 1400);
+    setTimeout(function(){ stopReel(r2, win.percent, PERCENT, itemH); }, 2000);
+    setTimeout(function(){
+      stopReel(r3, win.word, WORDS, itemH);
+      setTimeout(function(){
+        // Применить автоматически: сохранить в sessionStorage + пересчитать цены
+        try { sessionStorage.setItem('bg_promo_code', win.code); } catch(e){}
+        try { sessionStorage.setItem('bg_promo_pct',  String(win.pct)); } catch(e){}
+        if (window.applyPromo) window.applyPromo(win.code, win.pct);
+        if (topLight) topLight.textContent = '✓ ' + win.code + ' · −' + win.pct + '%';
+        btn.textContent = 'spin again ♥'; btn.disabled = false; spinning = false;
+      }, 700);
+    }, 2700);
+  });
+
+  function stopReel(reel, target, items, itemH){
+    reel.classList.remove('spinning');
+    var idx = items.indexOf(target);
+    reel.style.transition = 'transform 0.7s cubic-bezier(.15,.7,.25,1)';
+    reel.style.transform = 'translateY(-' + (idx * itemH) + 'px)';
+  }
+
+  // Если промо уже было применено (вернулся пользователь) — восстанавливаем UI
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0 && topLight) {
+      topLight.textContent = '✓ ' + savedCode + ' · −' + savedPct + '%';
+    }
+  } catch(e){}
+})();
+
+/* ========== STOREFRONT (catalog + cart + checkout) ========== */
+(function(){
+  // Read DATA
+  var D = { all: [], grid: [], featured: [] };
+  try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
+  catch(e){ console.error('[DATA] parse fail', e); }
+  var EUR_RATE = 54; window.EUR_RATE = EUR_RATE;  // держать в синхроне с env WB_FX_UAH_PER_UNIT
+  function euro(u){ return '€' + (Number(u||0)/EUR_RATE).toFixed(2); }
+
+  var $grid = document.getElementById('grid');
+  var $overlay = document.getElementById('cartOverlay');
+  var $drawer  = document.getElementById('cartDrawer');
+  var $body    = document.getElementById('cartBody');
+  var $total   = document.getElementById('cartTotal');
+  var $totalN  = document.getElementById('cartTotalNum');
+  var $form    = document.getElementById('cartForm');
+  var $navCart = document.getElementById('navCart');
+
+  var familyFilter = null;
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function renderGrid(){
+    try { if (window.EN_TITLE) (D.all||[]).forEach(function(p){ if (window.EN_TITLE[p.uid]) p.title = window.EN_TITLE[p.uid]; }); } catch(e){}
+    var list = (D.grid || []).map(function(uid){
+      return D.all.find(function(p){ return p.uid === uid; });
+    }).filter(Boolean);
+    if (familyFilter === 'oversize') list = list.filter(function(p){ return p.family !== 'crop'; });
+    else if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
+    if (!list.length) {
+      $grid.innerHTML = '<div class="empty">~ nothing here ~</div>';
+      return;
+    }
+    // Текущий применённый промо (читаем из sessionStorage — пишет slot machine)
+    var pct = 0;
+    try { pct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){}
+
+    var FAMILY_LABEL = {icons:'2000s ICONS', 'self-love':'SELF-LOVE', 'soft-rebel':'SOFT REBEL', 'crop':'CROP TOPS'};
+    var FAMILY_SUB   = {icons:'~ y2k legends ~', 'self-love':'~ soft & loud ~', 'soft-rebel':'~ pink revolution ~', 'crop':'~ short & sexy ~'};
+    var lastFam = null;
+    var parts = [];
+    list.forEach(function(p, i){
+      var altClass = (i % 2 === 1) ? ' alt' : '';
+      var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
+      var photos = p.photo_main ? [p.photo_main] : [];
+      var photoSlides = photos.map(function(url){
+        return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="var c=this.closest(\'.card\');if(c)c.style.display=\'none\'">';
+      }).join('');
+      var swatches = (Array.isArray(p.colors) && p.colors.length > 1)
+        ? '<div class="card-swatches" data-uid="' + escapeHtml(p.uid) + '">' +
+            p.colors.map(function(c, ci){
+              return '<button type="button" class="card-swatch' + (ci===0?' active':'') + '" ' +
+                'data-code="' + escapeHtml(c.code) + '" ' +
+                'data-photo="' + escapeHtml(c.photo) + '" ' +
+                'style="background:' + escapeHtml(c.hex) + '" ' +
+                'aria-label="' + escapeHtml(c.name) + '"></button>';
+            }).join('') + '</div>'
+        : '';
+      var dots = '';
+
+      var priceHtml;
+      if (pct > 0) {
+        var newPrice = Math.round(p.price * (100 - pct) / 100);
+        priceHtml = '<span class="card-price-row">'
+          + '<span class="card-price old">' + euro(p.price) + '</span>'
+          + '<span class="card-price">' + euro(newPrice) + '</span>'
+          + '</span>';
+      } else {
+        priceHtml = '<span class="card-price">' + euro(p.price) + '</span>';
+      }
+
+      // Group: oversize / crop / long / belt
+      var grp = (p.family === 'crop') ? 'crop' : (p.family === 'long') ? 'long' : (p.family === 'belt') ? 'belt' : 'oversize';
+      if (grp !== lastFam){
+        // Marquee на переходах між групами (на початку гриду — нічого)
+        var unit = null;
+        if (lastFam === 'oversize' && grp === 'crop'){
+          unit = '<span class="marquee-item">CROP TOPS</span>'
+               + '<span class="marquee-emoji">🎀</span>'
+               + '<span class="marquee-item">SHORT &amp; SEXY</span>'
+               + '<span class="marquee-emoji">✨</span>'
+               + '<span class="marquee-item">BABYGIRL</span>'
+               + '<span class="marquee-emoji">💗</span>';
+        } else if ((lastFam === 'crop' || lastFam === 'oversize') && grp === 'long'){
+          unit = '<span class="marquee-item">LONG TEES</span>'
+               + '<span class="marquee-emoji">🌸</span>'
+               + '<span class="marquee-item">LAYERED VIBE</span>'
+               + '<span class="marquee-emoji">⭐</span>'
+               + '<span class="marquee-item">DRESS-LIKE FIT</span>'
+               + '<span class="marquee-emoji">🔥</span>';
+        } else if (grp === 'belt' && lastFam){
+          unit = '<span class="marquee-item">BELTS</span>'
+               + '<span class="marquee-emoji">⛓️</span>'
+               + '<span class="marquee-item">FINISH THE LOOK</span>'
+               + '<span class="marquee-emoji">🎀</span>'
+               + '<span class="marquee-item">CHOOSE YOUR COLOR</span>'
+               + '<span class="marquee-emoji">💄</span>';
+        }
+        if (unit){
+          var items = '';
+          for (var k=0; k<6; k++){ items += unit; }
+          parts.push('<div class="grid-section-marquee" data-from="' + (lastFam||'') + '" data-to="' + grp + '"><div class="marquee-track">' + items + '</div></div>');
+        }
+        lastFam = grp;
+      }
+
+      parts.push(''
+        + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-family="' + escapeHtml(p.family || '') + '" data-grp="' + escapeHtml(grp) + '" data-idx="0" data-count="' + photos.length + '">'
+        +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
+        +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
+        +     '<div class="card-photos">' + photoSlides + '</div>'
+        +     dots
+        +   '</div>'
+        +   swatches
+        +   '<div class="card-body">'
+        +     '<div class="card-title">' + escapeHtml(p.title) + (p.color_name ? ' / ' + escapeHtml(p.color_name) : '') + '</div>'
+        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">ONE SIZE</span></div>'
+        +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '">Add to cart</button>'
+        +   '</div>'
+        + '</article>');
+    });
+    $grid.innerHTML = parts.join('');
+
+    // Card swatch: click/hover → swap card img
+    $grid.querySelectorAll('.card-swatches').forEach(function(box){
+      box.addEventListener('click', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        e.stopPropagation();
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){ img.src = btn.dataset.photo; }
+        box.querySelectorAll('.card-swatch').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+      });
+      box.addEventListener('mouseover', function(e){
+        var btn = e.target.closest('.card-swatch'); if (!btn) return;
+        var img = box.closest('.card').querySelector('.card-photos img');
+        if (img && btn.dataset.photo){
+          if (!img.dataset.origSrc) img.dataset.origSrc = img.src;
+          img.src = btn.dataset.photo;
+        }
+      });
+      box.addEventListener('mouseleave', function(){
+        var card = box.closest('.card');
+        var img = card.querySelector('.card-photos img');
+        var activeBtn = box.querySelector('.card-swatch.active');
+        if (img && activeBtn && activeBtn.dataset.photo){ img.src = activeBtn.dataset.photo; }
+      });
+    });
+
+    // Свайп фото в плитках грида (touch + dot-tap)
+    $grid.querySelectorAll('.card').forEach(function(card){
+      var count = parseInt(card.dataset.count, 10) || 1;
+      if (count <= 1) return;
+      var track = card.querySelector('.card-photos');
+      var dotsEl = card.querySelector('.card-dots');
+      var idx = 0;
+      function goTo(i){
+        if (i < 0) i = 0; if (i >= count) i = count - 1;
+        idx = i;
+        track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+        if (dotsEl) dotsEl.querySelectorAll('i').forEach(function(d, di){ d.classList.toggle('active', di === idx); });
+      }
+      var startX = null;
+      track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+      track.addEventListener('touchend', function(e){
+        if (startX == null) return;
+        var dx = (e.changedTouches[0].clientX - startX);
+        if (Math.abs(dx) > 30) goTo(dx < 0 ? idx + 1 : idx - 1);
+        startX = null;
+      });
+      if (dotsEl) dotsEl.addEventListener('click', function(e){
+        e.stopPropagation();
+        var dots = Array.prototype.slice.call(dotsEl.querySelectorAll('i'));
+        var di = dots.indexOf(e.target);
+        if (di >= 0) goTo(di);
+      });
+    });
+  }
+
+  // Family navigation via [data-family] links (drawer + footer):
+  // не фільтруємо грід (всі товари лишаються видимими), просто скролимо
+  // до першої картки відповідної групи. v118: змінено поведінку за запитом.
+  function scrollToFamily(fam){
+    if (!$grid) return;
+    var target = null;
+    if (fam === 'oversize' || !fam){
+      target = $grid.querySelector('.card');
+    } else {
+      target = $grid.querySelector('.grid-section-marquee[data-to="' + fam + '"]');
+      if (!target) target = $grid.querySelector('.card[data-grp="' + fam + '"]');
+      if (!target) target = $grid.querySelector('.card[data-family="' + fam + '"]');
+    }
+    if (target){
+      var navH = 64;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+  document.querySelectorAll('a[data-family]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var fam = a.dataset.family || null;
+      setTimeout(function(){ scrollToFamily(fam); }, 50);
+    });
+  });
+  document.querySelectorAll('a[href="#shop"]:not([data-family])').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      setTimeout(function(){ scrollToFamily(null); }, 50);
+    });
+  });
+
+  // ===== Applied promo =====
+  function showPromoBar(code, pct){
+    var existing = document.getElementById('promoBar');
+    if (existing) existing.parentNode.removeChild(existing);
+    var bar = document.createElement('div');
+    bar.id = 'promoBar';
+    bar.className = 'promo-applied-bar';
+    bar.innerHTML = '\u2605 promo applied: '
+      + '<span class="code">' + code + '</span>'
+      + '<span class="pct">\u2212' + pct + '%</span>'
+      + '<button type="button" data-action="clear-promo">\u00d7</button>';
+    document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector('[data-action="clear-promo"]').addEventListener('click', function(){
+      try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
+      bar.parentNode.removeChild(bar);
+      renderGrid();
+      var tl = document.getElementById('slotTopLight');
+      if (tl) tl.textContent = 'PROMO \u2665 ROLL ME';
+    });
+  }
+  window.applyPromo = function(code, pct){
+    showPromoBar(code, pct);
+    renderGrid();
+    setTimeout(function(){
+      document.querySelectorAll('#grid .card-price:not(.old)').forEach(function(el){
+        el.classList.add('price-flash');
+        setTimeout(function(){ el.classList.remove('price-flash'); }, 900);
+      });
+    }, 50);
+    var shop = document.getElementById('shop');
+    if (shop) shop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0) showPromoBar(savedCode, savedPct);
+  } catch(e){}
+
+  // Supabase bootstrap
+  function bootstrapFromSupabase(){
+    var SB = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY, TABLE = window.PRODUCTS_TABLE;
+    if (!SB || !KEY || !TABLE) return;
+    // Беремо ВСІ рядки (без active фільтра), щоб мати змогу видалити з фронта
+    // ті товари, які адмін позначив active=false. Інакше локальний DATA містить їх назавжди.
+    fetch(SB + '/rest/v1/' + TABLE + '?select=*&order=sort_order.asc', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rows){
+      if (!Array.isArray(rows)) return;
+      rows = rows.filter(function(r){ return String(r.family||'').indexOf('sg-') !== 0; });
+      var inactiveUids = {};
+      var activeRows = [];
+      rows.forEach(function(row){
+        if (row.active === false) inactiveUids[row.uid] = true;
+        else activeRows.push(row);
+      });
+      // 1) Видаляємо з D.all + D.grid усі inactive
+      if (Array.isArray(D.all))  D.all  = D.all.filter(function(p){ return !inactiveUids[p.uid]; });
+      if (Array.isArray(D.grid)) D.grid = D.grid.filter(function(uid){ return !inactiveUids[uid]; });
+      // 2) Апсертимо active рядки
+      var byUid = {}; D.all.forEach(function(p){ byUid[p.uid] = p; });
+      var featuredByFamily = {}, gridByFamily = {};
+      D.all.forEach(function(p){
+        if (p.featured) featuredByFamily[p.family] = p.uid;
+        if (D.grid && D.grid.indexOf(p.uid) >= 0) gridByFamily[p.family] = p.uid;
+      });
+      activeRows.forEach(function(row){
+        if (!byUid[row.uid]) {
+          D.all.push(row);
+          var fam = row.family || '';
+          if (!featuredByFamily[fam] && !gridByFamily[fam]) {
+            if (!Array.isArray(D.grid)) D.grid = [];
+            D.grid.push(row.uid);
+          }
+        } else { Object.assign(byUid[row.uid], row); }
+      });
+      renderGrid();
+      handleDeepLink();
+    })
+    .catch(function(e){ console.warn('[SB inject]', e.message); });
+  }
+
+  // ===== Cart with bundle discount =====
+  var cart = [];
+  var BUNDLE_DISCOUNT_PCT = 20;   // -20% на кожен товар, починаючи з 2-го
+
+  function getSlotPct(){
+    try { return parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){ return 0; }
+  }
+
+  // Применяем slot-промо к unit-цене
+  function unitPriceWithSlot(basePrice){
+    var sp = getSlotPct();
+    return sp > 0 ? Math.round(basePrice * (100 - sp) / 100) : basePrice;
+  }
+
+  // Считает: subtotal (без bundle), bundleDiscount, total
+  function calcBreakdown(){
+    var slotPct = getSlotPct();
+    var subtotal = 0, bundleDiscount = 0, total = 0;
+    var unitIdx = 0;
+    cart.forEach(function(line){
+      var unitPrice = unitPriceWithSlot(line.price);
+      for (var i = 0; i < line.qty; i++){
+        subtotal += unitPrice;
+        if (unitIdx >= 1){
+          // bundle: −20% на каждый юнит начиная со второго
+          var disc = Math.round(unitPrice * BUNDLE_DISCOUNT_PCT / 100);
+          bundleDiscount += disc;
+          total += (unitPrice - disc);
+        } else {
+          total += unitPrice;
+        }
+        unitIdx++;
+      }
+    });
+    return { subtotal: subtotal, bundleDiscount: bundleDiscount, total: total, totalUnits: unitIdx, slotPct: slotPct };
+  }
+  function calcTotal(){ return calcBreakdown().total; }
+
+  function bundleBanner(totalUnits){
+    if (totalUnits >= 2){
+      return '<div class="bundle-banner active">🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> off every item from the 2nd one <span class="check">✓</span></div>';
+    } else {
+      return '<div class="bundle-banner">🎁 add 1 more item — get <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> off the 2nd</div>';
+    }
+  }
+
+  function renderCart(){
+    if (!cart.length) {
+      $body.innerHTML = '<div class="cart-empty">cart is empty<br>~ pick something ~</div>';
+      $total.hidden = true; $form.hidden = true;
+    } else {
+      var b = calcBreakdown();
+      var lines = cart.map(function(i, idx){
+        var img = i.photo ? '<img src="' + escapeHtml(i.photo) + '" alt="">'
+          : '<div style="width:54px;height:54px;background:var(--pink-soft);border:2px solid var(--black);border-radius:8px"></div>';
+        var unitP = unitPriceWithSlot(i.price);
+        var priceStr;
+        if (b.slotPct > 0) {
+          priceStr = '<span class="old">' + euro(i.price) + '</span> ' + euro(unitP) + ' × ' + i.qty;
+        } else {
+          priceStr = euro(i.price) + ' × ' + i.qty;
+        }
+        return '<div class="cart-line">'
+          + img
+          + '<div class="info"><div class="name">' + escapeHtml(i.title) + '</div><div class="price">' + priceStr + '</div></div>'
+          + '<div class="qty"><button data-action="dec" data-idx="' + idx + '">−</button><span>' + i.qty + '</span><button data-action="inc" data-idx="' + idx + '">+</button></div>'
+          + '<button class="rm" data-action="rm" data-idx="' + idx + '" aria-label="remove">×</button>'
+          + '</div>';
+      }).join('');
+
+      $body.innerHTML = bundleBanner(b.totalUnits) + lines;
+
+      // Разбивка в total
+      var html = '';
+      if (b.bundleDiscount > 0 || b.slotPct > 0) {
+        html += '<div class="total-row sub"><span>items</span><span>' + euro(b.subtotal) + '</span></div>';
+      }
+      if (b.bundleDiscount > 0) {
+        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + euro(b.bundleDiscount) + '</span></div>';
+      }
+      html += '<div class="total-row main"><span>items total</span><span class="num">' + euro(b.total) + '</span></div>';
+      $total.innerHTML = html;
+      $total.hidden = false; $form.hidden = false;
+    }
+    if ($navCart) $navCart.textContent = 'Cart [' + cart.length + ']';
+    try { if (typeof updateEnShip === 'function') updateEnShip(); } catch(e){}
+  }
+
+  function openCart(){ $overlay.classList.add('open'); $drawer.classList.add('open'); document.body.classList.add('cart-open'); }
+  function closeCart(){ $overlay.classList.remove('open'); $drawer.classList.remove('open'); document.body.classList.remove('cart-open'); }
+
+  // Toast
+  function showToast(msg){
+    var t = document.createElement('div');
+    t.className = 'bg-toast';
+    t.innerHTML = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('hide'); setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 2400);
+  }
+
+  function totalUnits(){ return cart.reduce(function(s, l){ return s + l.qty; }, 0); }
+
+  function addToCart(uid, colorCode){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    var was = totalUnits();
+    // Resolve color: explicit arg (from grid swatch) -> modal selection -> first color (never empty for multi-color items)
+    var sel = colorCode || ((Array.isArray(p.colors) && pmSelectedColor) ? pmSelectedColor : null);
+    if (Array.isArray(p.colors) && p.colors.length && !sel) sel = p.colors[0].code;
+    var col = (Array.isArray(p.colors) && sel) ? p.colors.find(function(c){return c.code===sel;}) : null;
+    var cartUid = p.uid + (col ? '|' + col.code : '');
+    var ex = cart.find(function(c){ return c.uid === cartUid; });
+    if (ex) ex.qty += 1;
+    else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), price: p.price, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
+    var now = totalUnits();
+    renderCart(); openCart();
+    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
+    // Если перешли через границу 1→2, показать toast
+    if (was < 2 && now >= 2){
+      showToast('🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> applied to your 2nd item ♥');
+    }
+  }
+
+  // ======== PRODUCT MODAL ========
+  var pmEl       = document.getElementById('pm');
+  var pmOverlay  = document.getElementById('pmOverlay');
+  var pmClose    = document.getElementById('pmClose');
+  var pmStage    = document.getElementById('pmStage');
+  var pmTrack    = document.getElementById('pmTrack');
+  var pmThumbs   = document.getElementById('pmThumbs');
+  var pmCounter  = document.getElementById('pmCounter');
+  var pmRibbon   = document.getElementById('pmRibbon');
+  var pmTitle    = document.getElementById('pmTitle');
+  var pmCrumb    = document.getElementById('pmCrumbName');
+  var pmPrice    = document.getElementById('pmPrice');
+  var pmDescr    = document.getElementById('pmDescr');
+  var pmCta      = document.getElementById('pmCta');
+  var pmPrev     = document.getElementById('pmPrev');
+  var pmNext     = document.getElementById('pmNext');
+
+  var pmCurrent = null;
+  var pmSelectedColor = null;   // current product
+  var pmPhotos  = [];     // photos array
+  var pmIdx     = 0;
+
+  function pmGo(i){
+    if (!pmPhotos.length) return;
+    if (i < 0) i = 0; if (i >= pmPhotos.length) i = pmPhotos.length - 1;
+    pmIdx = i;
+    pmTrack.style.transform = 'translateX(-' + (pmIdx * 100) + '%)';
+    pmCounter.textContent = (pmIdx + 1) + ' / ' + pmPhotos.length;
+    pmThumbs.querySelectorAll('.pm-thumb').forEach(function(t, ti){ t.classList.toggle('active', ti === pmIdx); });
+    pmPrev.hidden = pmIdx === 0;
+    pmNext.hidden = pmIdx >= pmPhotos.length - 1;
+  }
+  function openProduct(uid){
+    var p = D.all.find(function(x){ return x.uid === uid; });
+    if (!p) return;
+    pmCurrent = p;
+    pmUpdateURL(uid, (Array.isArray(p.colors) && p.colors.length) ? p.colors[0].code : null);
+    var candidates = (Array.isArray(p.photos) && p.photos.length) ? p.photos.slice() : (p.photo_main ? [p.photo_main] : []);
+    // Pre-validate: завантажуємо кожне фото через new Image() і лишаємо тільки робочі
+    pmTrack.innerHTML = '';
+    pmThumbs.innerHTML = '';
+    pmPhotos = [];
+    pmCounter.textContent = '…';
+    function _pmIsVideo(url){ return /\.(mp4|webm|mov)(\?|$)/i.test(url||""); }
+    function _pmCheck(url){
+      // Відео не валідуємо через new Image() — вважаємо доступним; <video> сам сховається при помилці
+      if (_pmIsVideo(url)) return Promise.resolve(true);
+      return new Promise(function(resolve){
+        var im = new Image();
+        var done = false;
+        var t = setTimeout(function(){ if(!done){done=true;resolve(false);} }, 7000);
+        im.onload  = function(){ if(!done){done=true;clearTimeout(t);resolve(true);} };
+        im.onerror = function(){ if(!done){done=true;clearTimeout(t);resolve(false);} };
+        im.src = url;
+      });
+    }
+    Promise.all(candidates.map(_pmCheck)).then(function(ok){
+      pmPhotos = candidates.filter(function(_, i){ return ok[i]; });
+      if (!pmPhotos.length && p.photo_main) pmPhotos = [p.photo_main]; // last-resort
+      pmTrack.innerHTML = pmPhotos.map(function(url){
+        if (_pmIsVideo(url)) {
+          return '<video class="pm-video" src="' + escapeHtml(url) + '" muted loop playsinline autoplay preload="metadata" controls="false" onerror="this.style.visibility=\'hidden\'"></video>';
+        }
+        return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="this.style.visibility=\'hidden\'">';
+      }).join('');
+      pmThumbs.innerHTML = pmPhotos.map(function(url, idx){
+        var inner;
+        if (_pmIsVideo(url)) {
+          inner = '<video src="' + escapeHtml(url) + '#t=0.1" muted playsinline preload="metadata"></video><span class="pm-thumb-play">▶</span>';
+        } else {
+          inner = '<img src="' + escapeHtml(url) + '" alt="">';
+        }
+        return '<button class="pm-thumb' + (idx === 0 ? ' active' : '') + '" data-idx="' + idx + '">' + inner + '</button>';
+      }).join('');
+      pmThumbs.hidden = pmPhotos.length <= 1;
+      pmIdx = 0; pmGo(0);
+      // Кешуємо результат на продукті, щоб не повторювати валідацію
+      p.photos = pmPhotos.slice();
+      if (!pmPhotos.length || pmPhotos.indexOf(p.photo_main) < 0) p.photo_main = pmPhotos[0] || '';
+      // ==== Color pills ====
+      var existingC = document.getElementById("pmColors");
+      if (existingC) existingC.remove();
+      if (Array.isArray(p.colors) && p.colors.length > 1){
+        var cBox = document.createElement("div");
+        cBox.className = "pm-colors";
+        cBox.id = "pmColors";
+        cBox.innerHTML = '<span class="pm-colors-label">color</span>' + p.colors.map(function(c, i){
+          return '<button type="button" class="pm-color' + (i===0?' active':'') + '" ' +
+            'data-color="' + escapeHtml(c.code) + '" data-photo="' + escapeHtml(c.photo) + '" ' +
+            'style="background:' + escapeHtml(c.hex) + '" aria-label="' + escapeHtml(c.name) + '">' +
+            '<span class="pm-color-name">' + escapeHtml(c.name) + '</span></button>';
+        }).join("");
+        // Вставляємо перед pm-cta
+        var thumbsEl = document.getElementById("pmThumbs");
+        // Поставити color picker одразу після стрічки мініатюр
+        thumbsEl.parentNode.insertBefore(cBox, thumbsEl.nextSibling);
+        pmSelectedColor = p.colors[0].code;
+        cBox.addEventListener("click", function(e){
+          var btn = e.target.closest(".pm-color"); if (!btn) return;
+          cBox.querySelectorAll(".pm-color").forEach(function(b){b.classList.remove("active");});
+          btn.classList.add("active");
+          pmSelectedColor = btn.dataset.color;
+          pmUpdateURL(pmCurrent && pmCurrent.uid, btn.dataset.color);
+          // переставити перше фото в pmPhotos на вибраний колір
+          var ph = btn.dataset.photo;
+          var i = pmPhotos.indexOf(ph);
+          if (i >= 0) pmGo(i);
+        });
+      } else {
+        pmSelectedColor = null;
+      }
+    });
+    if (p.ribbon) { pmRibbon.textContent = p.ribbon; pmRibbon.hidden = false; }
+    else { pmRibbon.hidden = true; }
+    pmTitle.textContent = p.title;
+    pmCrumb.textContent = p.title.toLowerCase();
+    pmPrice.textContent = (Number(p.price||0)/EUR_RATE).toFixed(2);
+    var _dEn = (window.EN_DESCR || {})[p.uid];
+    pmDescr.innerHTML = _dEn ? escapeHtml(_dEn) : (p.description ? escapeHtml(p.description) : 'Y2K oversize · 95% cotton + 5% elastane · DTF print');
+    // ==== Specs (динамічні; фолбек — футболкові) ====
+    (function(){
+      var specsEl = document.getElementById('pmSpecs');
+      if (!specsEl) return;
+      var sp = (window.EN_SPECS || {})[p.uid] || ((p.attrs && Array.isArray(p.attrs.specs) && p.attrs.specs.length) ? p.attrs.specs : [
+        {l:'size',   v:'one size'},
+        {l:'fabric', v:'95% cotton<br>5% elastane'},
+        {l:'fit',    v:'oversize<br>longline'},
+        {l:'print',  v:'DTF<br>does not fade'}
+      ]);
+      specsEl.innerHTML = sp.map(function(s){
+        return '<div class="pm-spec"><div class="lbl">★ ' + escapeHtml(String(s.l||'')) + '</div><div class="val">' + String(s.v||'') + '</div></div>';
+      }).join('');
+    })();
+    pmCta.textContent = 'Add to cart ♥'; pmCta.classList.remove('added');
+    pmIdx = 0; pmGo(0);
+    pmOverlay.classList.add('open');
+    pmEl.classList.add('open');
+    pmEl.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('pm-open');
+    if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
+    try { window.bgTrack && window.bgTrack('view_item', { product_uid: uid, value: p.price }); } catch(e){}
+  }
+  function pmUpdateURL(uid, color){
+    try{
+      var u = new URL(window.location.href);
+      if(uid){ u.searchParams.set('p', uid); if(color){ u.searchParams.set('c', color); } else { u.searchParams.delete('c'); } }
+      else { u.searchParams.delete('p'); u.searchParams.delete('c'); }
+      history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + (u.hash||''));
+    }catch(e){}
+  }
+  function closeProduct(){
+    pmOverlay.classList.remove('open');
+    pmEl.classList.remove('open');
+    pmEl.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('pm-open');
+    pmCurrent = null;
+    pmUpdateURL(null, null);
+  }
+  pmClose.addEventListener('click', closeProduct);
+  pmOverlay.addEventListener('click', closeProduct);
+  pmPrev.addEventListener('click', function(){ pmGo(pmIdx - 1); });
+  pmNext.addEventListener('click', function(){ pmGo(pmIdx + 1); });
+  pmThumbs.addEventListener('click', function(e){
+    var t = e.target.closest('[data-idx]');
+    if (t) pmGo(parseInt(t.dataset.idx, 10));
+  });
+  // Swipe stage
+  var pmStartX = null;
+  pmStage.addEventListener('touchstart', function(e){ pmStartX = e.touches[0].clientX; }, {passive:true});
+  pmStage.addEventListener('touchend', function(e){
+    if (pmStartX == null) return;
+    var dx = e.changedTouches[0].clientX - pmStartX;
+    if (Math.abs(dx) > 40) pmGo(dx < 0 ? pmIdx + 1 : pmIdx - 1);
+    pmStartX = null;
+  });
+  // Esc closes modal, arrows navigate
+  document.addEventListener('keydown', function(e){
+    if (!pmEl.classList.contains('open')) return;
+    if (e.key === 'Escape') closeProduct();
+    else if (e.key === 'ArrowLeft')  pmGo(pmIdx - 1);
+    else if (e.key === 'ArrowRight') pmGo(pmIdx + 1);
+  });
+  pmCta.addEventListener('click', function(){
+    if (!pmCurrent) return;
+    addToCart(pmCurrent.uid);
+    pmCta.textContent = '✓ added';
+    pmCta.classList.add('added');
+    setTimeout(function(){ closeProduct(); }, 600);
+  });
+
+  // ======== GRID CLICK ROUTER ========
+  $grid.addEventListener('click', function(e){
+    // 1. Кнопка «Add to cart»
+    var buyBtn = e.target.closest('[data-action="buy"]');
+    if (buyBtn) { e.preventDefault(); e.stopPropagation();
+      var _card = buyBtn.closest('.card');
+      var _sw = _card ? _card.querySelector('.card-swatch.active') : null;
+      addToCart(buyBtn.dataset.uid, _sw ? _sw.dataset.code : '');
+      return; }
+    // 2. Dots или photo-track — игнорировать (свайп уже обработан)
+    if (e.target.closest('.card-dots')) return;
+    // 3. Иначе — открыть product modal
+    var card = e.target.closest('.card');
+    if (card && card.dataset.uid) openProduct(card.dataset.uid);
+  });
+
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  $overlay.addEventListener('click', closeCart);
+  if ($navCart) $navCart.addEventListener('click', function(e){ e.preventDefault(); openCart(); });
+
+  $body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-action]'); if (!t) return;
+    var idx = parseInt(t.dataset.idx, 10);
+    if (t.dataset.action === 'inc') cart[idx].qty += 1;
+    else if (t.dataset.action === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty < 1) cart.splice(idx, 1); }
+    else if (t.dataset.action === 'rm') cart.splice(idx, 1);
+    renderCart();
+  });
+
+// ======== EN CHECKOUT (international · Western Bid) ========
+  var EN_COUNTRIES=[['DE','Germany'],['PL','Poland'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['BE','Belgium'],['AT','Austria'],['CZ','Czechia'],['SK','Slovakia'],['SE','Sweden'],['FI','Finland'],['DK','Denmark'],['NO','Norway'],['IE','Ireland'],['PT','Portugal'],['GR','Greece'],['RO','Romania'],['HU','Hungary'],['BG','Bulgaria'],['HR','Croatia'],['SI','Slovenia'],['LT','Lithuania'],['LV','Latvia'],['EE','Estonia'],['LU','Luxembourg'],['CH','Switzerland'],['MD','Moldova'],['GB','United Kingdom'],['US','United States'],['CA','Canada'],['AU','Australia'],['AE','United Arab Emirates'],['SA','Saudi Arabia'],['JP','Japan'],['KR','South Korea'],['SG','Singapore'],['CN','China'],['ZA','South Africa'],['NZ','New Zealand']];
+  // Nova Global zones — держать в синхроне с api/westernbid.js (shippingEur)!
+  var EN_Z1=['PL','SK','HU','RO','CZ','MD'];
+  var EN_Z2=['DE','AT','FR','IT','ES','NL','BE','LU','PT','IE','DK','SE','FI','GR','LT','LV','EE','SI','HR','BG','CH','NO'];
+  var EN_Z3=['GB'];
+  var EN_Z4=['US','CA'];
+  var EN_ZINFO={z1:{eur:7,days:'3–6'},z2:{eur:9,days:'4–8'},z3:{eur:11,days:'5–9'},z4:{eur:15,days:'7–14'},z5:{eur:22,days:'10–20'}};
+  function enZone(c){ c=String(c||'').toUpperCase(); if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
+  function enShipInfo(c){ var z=enZone(c); return z?EN_ZINFO[z]:null; }
+
+  var $cIn  = document.getElementById('fld-country-in');
+  var $cHid = document.getElementById('fld-country');
+  var $cList= document.getElementById('enCountryList');
+  function enRenderList(f){
+    if(!$cList) return;
+    var q=String(f||'').toLowerCase();
+    var hits=EN_COUNTRIES.filter(function(c){ return !q || c[1].toLowerCase().indexOf(q)===0 || c[0].toLowerCase()===q; });
+    if(!hits.length){ $cList.hidden=true; return; }
+    $cList.innerHTML=hits.map(function(c){ return '<button type="button" data-code="'+c[0]+'">'+c[1]+'</button>'; }).join('');
+    $cList.hidden=false;
+  }
+  if($cIn && $cList){
+    $cIn.addEventListener('input', function(){ $cHid.value=''; enRenderList($cIn.value); updateEnShip(); });
+    $cIn.addEventListener('focus', function(){ enRenderList($cIn.value); });
+    document.addEventListener('click', function(e){ if(!e.target.closest('.en-cbx')) $cList.hidden=true; });
+    $cList.addEventListener('click', function(e){
+      var btn=e.target.closest('button[data-code]'); if(!btn) return;
+      $cHid.value=btn.dataset.code; $cIn.value=btn.textContent; $cList.hidden=true; updateEnShip();
+    });
+  }
+  function updateEnShip(){
+    var elS=document.getElementById('enShip');
+    var elG=document.getElementById('enGrand');
+    if(!elS) return;
+    var info=enShipInfo($cHid && $cHid.value);
+    var $btn=document.getElementById('cartSubmit');
+    if(info && cart.length){
+      var b=calcBreakdown();
+      var tot=b.total/EUR_RATE + info.eur;
+      elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
+      if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
+      if($btn && !$btn.disabled) $btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal ♥';
+    } else {
+      elS.innerHTML='<span>shipping · Nova Global</span><b class="d">select country</b>';
+      if(elG) elG.hidden=true;
+      if($btn && !$btn.disabled) $btn.textContent='pay by card / paypal ♥';
+    }
+  }
+
+  $form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var $btn = document.getElementById('cartSubmit');
+    var $res = document.getElementById('cartResult');
+    var fio = document.getElementById('fld-fio').value.trim();
+    var phone = document.getElementById('fld-phone').value.trim();
+    var email = document.getElementById('fld-email').value.trim();
+    var country = ($cHid && $cHid.value) || '';
+    var city = document.getElementById('fld-city').value.trim();
+    var zip = document.getElementById('fld-zip').value.trim();
+    var addr = document.getElementById('fld-addr').value.trim();
+    function fail(m){ $res.textContent = m; $res.className = 'cart-result err'; $btn.disabled = false; updateEnShip(); }
+    if (!cart.length) return fail('your cart is empty');
+    if (fio.length < 2) return fail('please enter your full name');
+    if (phone.replace(/[^0-9]/g,'').length < 7) return fail('please enter a valid phone number');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('please enter a valid email');
+    if (!country) return fail('please pick a country from the list');
+    if (!city || !addr) return fail('please enter city and address');
+    $btn.disabled = true; $btn.textContent = 'redirecting to payment…'; $res.textContent = ''; $res.className = 'cart-result';
+    // Meta InitiateCheckout — до редиректа в оплату (value в UAH, как на UA-версии).
+    try {
+      var icItems = cart.map(function(c){ return String(c.uid); });
+      var icValue = Math.round(cart.reduce(function(s,c){ return s + (Number(c.price)||0)*(parseInt(c.qty,10)||1); },0)*100)/100;
+      var icNum = cart.reduce(function(s,c){ return s + (parseInt(c.qty,10)||1); },0);
+      var icEventId = 'ic-' + (window.SESSION_ID||'') + '-' + Date.now().toString(36);
+      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'UAH', num_items: icNum, content_ids: icItems, content_type:'product' }, { eventID: icEventId });
+      window.bgTrack && window.bgTrack('begin_checkout',{ value: icValue, event_id: icEventId, meta:{ num_items: icNum, market: 'en' } });
+    } catch(err){}
+
+    var promo = null;
+    try { promo = sessionStorage.getItem('bg_promo_code'); } catch(err){}
+
+    var payload = {
+      fio: fio, phone: phone, email: email,
+      country: country, city: city, zip: zip, address1: addr,
+      promo_code: promo,
+      bundle_discount_pct: BUNDLE_DISCOUNT_PCT,
+      items: cart.map(function(c){
+        return { uid: c.uid, qty: c.qty, title: c.title, color_name: c.color_name, price: c.price, photo: c.photo };
+      }),
+      session_id: window.SESSION_ID || null,
+      referrer: document.referrer || null,
+      landing_url: window.LANDING_URL || location.href
+    };
+
+    fetch('/api/westernbid', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json().then(function(d){ return { httpOk: r.ok, d: d }; }); })
+    .then(function(x){
+      if (!x.httpOk || !x.d.ok) throw new Error((x.d && x.d.error) || 'payment error, please try again');
+      var f = document.createElement('form');
+      f.method = 'POST'; f.action = x.d.endpoint; f.acceptCharset = 'utf-8';
+      Object.keys(x.d.fields).forEach(function(k){
+        var inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = k; inp.value = x.d.fields[k]; f.appendChild(inp);
+      });
+      document.body.appendChild(f); f.submit();
+    })
+    .catch(function(err){ fail('error: ' + err.message); });
+  });
+
+  // Возврат со шлюза: ?paid=1 / ?paid=0
+  (function(){
+    try {
+      var q = new URLSearchParams(location.search);
+      if (q.get('paid') === '1') showToast("✓ payment received — thank you! ♥<br>we'll email you tracking soon");
+      else if (q.get('paid') === '0') showToast('payment was cancelled — your cart is waiting ♥');
+    } catch(e){}
+  })();
+
+  
+    // ======== DEEP-LINK (?p=uid&c=color) — открытие карточки по ссылке из фида/рекламы ========
+  var _deepLinkDone = false;
+  function handleDeepLink(){
+    if (_deepLinkDone) return;
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch(e){ return; }
+    var uid = params.get('p');
+    if (!uid) { _deepLinkDone = true; return; }
+    var p = (D.all || []).find(function(x){ return x.uid === uid; });
+    if (!p) return; // продукт ще не підвантажений — спробуємо після Supabase inject
+    _deepLinkDone = true;
+    var color = params.get('c');
+    openProduct(uid);
+    if (color) {
+      var tries = 0;
+      var iv = setInterval(function(){
+        tries++;
+        var box = document.getElementById('pmColors');
+        if (box) {
+          var btn = box.querySelector('.pm-color[data-color="' + color + '"]');
+          if (btn) { btn.click(); clearInterval(iv); return; }
+        }
+        if (tries > 40) clearInterval(iv);
+      }, 200);
+    }
+  }
+
+  renderGrid();
+  handleDeepLink();
+  bootstrapFromSupabase();
+})();
+</script>
+
+
+
+</body></html>
