@@ -56,10 +56,18 @@ async function rateLimit(ip) {
   return r || { allowed: true, skipped: true };
 }
 
+// Кошик зберігає складений uid "base|colorCode" для кольорових товарів;
+// у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
+function baseUid(u) { return String(u || '').split('|')[0]; }
+
 async function computeTotal(items) {
+  const norm = (items || []).map(it => ({
+    uid: baseUid(it && it.uid),
+    qty: parseInt((it && it.qty) || 1, 10) || 1
+  }));
   return await sb('rpc/compute_order_total', {
     method: 'POST',
-    body: JSON.stringify({ p_items: items, p_table: T.PRODUCTS })
+    body: JSON.stringify({ p_items: norm, p_table: T.PRODUCTS })
   });
 }
 
@@ -204,7 +212,7 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Discounted amount is not positive' });
     }
 
-    const uids = items.map(it => String(it.uid || ''));
+    const uids = items.map(it => baseUid(it.uid));
     const names = await getProductNames(uids);
     productName = []; productCount = []; productPrice = [];
     for (const line of discounted.lines) {
