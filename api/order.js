@@ -132,6 +132,38 @@ async function saveOrder(order) {
   return Array.isArray(rows) ? rows[0] : null;
 }
 
+
+// Якщо чекаут падає ПІСЛЯ вводу контактів — зберігаємо як заказ-«недооформлений»
+// (status=new → дзеркалиться в CRM для прозвону). Дедуп по телефону за 1 год.
+async function saveFailedCheckout(body, reason, total) {
+  try {
+    const phone = String(body.phone || '').slice(0, 40);
+    if (!phone || !body.fio) return;
+    const since = new Date(Date.now() - 3600 * 1000).toISOString();
+    const dup = await sb(T.ORDERS + '?customer_phone=eq.' + encodeURIComponent(phone) +
+      '&created_at=gte.' + encodeURIComponent(since) + '&select=id&limit=1');
+    if (Array.isArray(dup) && dup.length) return;
+    await saveOrder({
+      number: 'BG-FAIL-' + Date.now().toString(36).toUpperCase(),
+      customer_name: body.fio,
+      customer_phone: phone,
+      customer_email: body.email || null,
+      delivery_type: body.delivery_type || 'np',
+      delivery_city: body.city || '',
+      delivery_branch: body.wh || '',
+      payment_method: body.payment || 'card',
+      payment_status: 'failed',
+      items: body.items,
+      total: total || 0,
+      status: 'new',
+      notes: 'САЙТ · ⚠ НЕ ПРОЙШЛО ОФОРМЛЕННЯ (' + reason + ') — передзвонити',
+      session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
+      referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
+      landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
+    });
+  } catch (e) { console.warn('[order/failed-checkout]', e.message); }
+}
+
 module.exports = async function handler(req, res) {
   setCors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -189,6 +221,9 @@ module.exports = async function handler(req, res) {
     if (!(total > 0)) total = subtotal;
   } else {
     if (!isLead && body.payment === 'card') {
+      const fbTotal = (body.items || []).reduce(
+        (s2, it) => s2 + (parseFloat(it.price) || 0) * (parseInt(it.qty || 1, 10)), 0);
+      await saveFailedCheckout(body, 'price-verify', fbTotal);
       return res.status(400).json({ ok: false, error: 'Price verification failed' });
     }
     total = (body.items || []).reduce(
