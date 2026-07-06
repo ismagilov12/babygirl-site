@@ -76,9 +76,13 @@ async function verifyTurnstile(token, ip) {
   }
 }
 
+// Кошик зберігає складений uid "base|colorCode" для кольорових товарів;
+// у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
+function baseUid(u) { return String(u || '').split('|')[0]; }
+
 async function recomputePrices(items) {
   const payload = items.map(it => ({
-    uid: String(it.uid || ''),
+    uid: baseUid(it.uid),
     qty: parseInt(it.qty || 1, 10)
   }));
   return await sb('rpc/compute_order_total', {
@@ -287,7 +291,7 @@ module.exports = async function handler(req, res) {
     }] : [],
     products: (body.items || []).map(it => {
       const line = priced && priced.breakdown
-        ? priced.breakdown.find(b => b.uid === String(it.uid || ''))
+        ? priced.breakdown.find(b => b.uid === baseUid(it.uid))
         : null;
       const unit = line ? Number(line.unit_price) : (parseFloat(it.price) || 0);
       return {
