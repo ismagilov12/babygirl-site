@@ -1301,6 +1301,35 @@ nav.nav.scrolled{background:rgba(13,10,12,.86);border-bottom:1px solid rgba(201,
 .card-img{background:#171113;border-bottom:1px solid rgba(242,236,230,.08)}
 .card-img img,.card-photos > img{background:#171113}
 .card-img .ribbon{left:0;top:12px;transform:none;background:#D92344;color:#fff;border:none;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;letter-spacing:.22em;padding:4px 12px;border-radius:0 2px 2px 0}
+
+/* ==== SALE -25% ==== */
+.card-img .sale-badge{
+  position:absolute;bottom:10px;left:0;z-index:3;
+  background:#D92344;color:#fff;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:.2em;
+  padding:4px 12px;border:none;border-radius:0 2px 2px 0;
+}
+.sale-bar{
+  position:relative;overflow:hidden;background:#D92344;
+  border-top:1px solid rgba(201,163,95,.35);border-bottom:1px solid rgba(201,163,95,.35);
+  padding:11px 0;
+}
+.sale-bar .marquee-track{
+  display:flex;gap:26px;white-space:nowrap;width:max-content;
+  animation:saleScroll 20s linear infinite;align-items:center;
+}
+.sale-bar .sale-item{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:.28em;text-transform:uppercase;color:#fff;
+}
+.sale-bar .sale-em{color:#F2ECE6;font-size:12px}
+@keyframes saleScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.sale-bar .marquee-track{animation:none;justify-content:center;width:100%}}
+@media (max-width:600px){.sale-bar .sale-item{font-size:11px;letter-spacing:.2em}}
+.pm-price .pm-old{
+  font-size:.55em;color:#8b7f78;-webkit-text-stroke:0;font-weight:400;
+  text-decoration:line-through;margin-right:10px;vertical-align:middle;
+}
 .card-img .heart-tag{display:none}
 .card-title{font-family:'Playfair Display',serif;font-weight:600;font-size:15px;color:#F2ECE6}
 .card-price{font-family:'Manrope',sans-serif;font-weight:700;font-size:18px;color:#C9A35F}
@@ -1519,6 +1548,9 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 </section>
 
 <!-- ===== PRODUCTS ===== -->
+
+<!-- SALE -25% marquee -->
+<div class="sale-bar" aria-label="Знижка 25% на все"><div class="marquee-track"><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span><span class="sale-item">Sale −25%</span><span class="sale-em">✦</span><span class="sale-item">Вся колекція</span><span class="sale-em">✦</span><span class="sale-item">Showgirl</span><span class="sale-em">✦</span></div></div>
 <section id="shop" class="section" style="background:var(--cream)">
   <div class="container">
     <div class="section-title-wrap">
@@ -2099,14 +2131,20 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       var dots = '';
 
       var priceHtml;
-      if (pct > 0) {
-        var newPrice = Math.round(p.price * (100 - pct) / 100);
+      var newPrice = (pct > 0) ? Math.round(p.price * (100 - pct) / 100) : p.price;
+      var oldPrice = Number(p.price_old || 0) || (pct > 0 ? p.price : 0);
+      var saleBadge = '';
+      if (Number(p.price_old || 0) > p.price) {
+        var offPct = Math.round((1 - p.price / Number(p.price_old)) * 100);
+        saleBadge = '<span class="sale-badge">−' + offPct + '%</span>';
+      }
+      if (oldPrice > newPrice) {
         priceHtml = '<span class="card-price-row">'
-          + '<span class="card-price old">' + p.price + '₴</span>'
+          + '<span class="card-price old">' + oldPrice + '₴</span>'
           + '<span class="card-price">' + newPrice + '₴</span>'
           + '</span>';
       } else {
-        priceHtml = '<span class="card-price">' + p.price + '₴</span>';
+        priceHtml = '<span class="card-price">' + newPrice + '₴</span>';
       }
 
       // Group: oversize / crop / long / belt
@@ -2147,7 +2185,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       parts.push(''
         + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-family="' + escapeHtml(p.family || '') + '" data-grp="' + escapeHtml(grp) + '" data-idx="0" data-count="' + photos.length + '">'
         +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
-        +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
+        +   '<div class="card-img">' + ribbon + saleBadge + '<span class="heart-tag">♥</span>'
         +     '<div class="card-photos">' + photoSlides + '</div>'
         +     dots
         +   '</div>'
@@ -2390,10 +2428,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
           : '<div style="width:54px;height:54px;background:var(--pink-soft);border:1px solid rgba(242,236,230,.14);border-radius:8px"></div>';
         var unitP = unitPriceWithSlot(i.price);
         var priceStr;
-        if (b.slotPct > 0) {
-          priceStr = '<span class="old">' + i.price + '₴</span> ' + unitP + '₴ × ' + i.qty;
+        var cartOld = (b.slotPct > 0) ? i.price : (Number(i.price_old || 0) || 0);
+        if (cartOld > unitP) {
+          priceStr = '<span class="old">' + cartOld + '₴</span> ' + unitP + '₴ × ' + i.qty;
         } else {
-          priceStr = i.price + '₴ × ' + i.qty;
+          priceStr = unitP + '₴ × ' + i.qty;
         }
         return '<div class="cart-line">'
           + img
@@ -2445,7 +2484,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     var cartUid = p.uid + (col ? '|' + col.code : '');
     var ex = cart.find(function(c){ return c.uid === cartUid; });
     if (ex) ex.qty += 1;
-    else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), price: p.price, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
+    else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), price: p.price, price_old: Number(p.price_old || 0) || null, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
     var now = totalUnits();
     renderCart(); openCart();
     if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
@@ -2570,7 +2609,14 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     else { pmRibbon.hidden = true; }
     pmTitle.textContent = p.title;
     pmCrumb.textContent = p.title.toLowerCase();
-    pmPrice.textContent = p.price;
+    (function(){
+      var po = Number(p.price_old || 0);
+      if (po > Number(p.price)) {
+        pmPrice.innerHTML = '<span class="pm-old">' + po + '\u20b4</span>' + p.price;
+      } else {
+        pmPrice.textContent = p.price;
+      }
+    })();
     pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversize · bavovna 95% + еластан 5% · DTF print';
     // ==== Specs (динамічні; фолбек — футболкові) ====
     (function(){
