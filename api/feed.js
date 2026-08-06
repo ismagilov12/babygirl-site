@@ -46,7 +46,11 @@ function makeItem(p, color) {
 
   const desc = p.description || (BRAND + ' · ' + p.title + (isVariant ? ' (' + (color.name || color.code) + ')' : ''));
   const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(', ') : 'ONE SIZE';
-  const price = (Number(p.price) || 0).toFixed(2) + ' UAH';
+  const priceNum = Number(p.price) || 0;
+  const oldNum = Number(p.price_old) || 0;
+  const hasSale = oldNum > priceNum && priceNum > 0;
+  const price = (hasSale ? oldNum : priceNum).toFixed(2) + ' UAH';
+  const salePrice = priceNum.toFixed(2) + ' UAH';
 
   const lines = [];
   lines.push('    <item>');
@@ -60,7 +64,7 @@ function makeItem(p, color) {
   lines.push('      <g:availability>in stock</g:availability>');
   lines.push('      <g:condition>new</g:condition>');
   lines.push('      <g:price>' + xmlEscape(price) + '</g:price>');
-  if (p.price_old && Number(p.price_old) > Number(p.price)) lines.push('      <g:sale_price>' + xmlEscape(price) + '</g:sale_price>');
+  if (hasSale) lines.push('      <g:sale_price>' + xmlEscape(salePrice) + '</g:sale_price>');
   lines.push('      <g:brand>' + xmlEscape(BRAND) + '</g:brand>');
   if (isVariant && color.name) lines.push('      <g:color>' + xmlEscape(color.name) + '</g:color>');
   lines.push('      <g:size>' + xmlEscape(sizes) + '</g:size>');
