@@ -2352,7 +2352,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 
   // ===== Cart with bundle discount =====
   var cart = [];
-  var BUNDLE_DISCOUNT_PCT = 20;   // -20% на кожен товар, починаючи з 2-го
+  var BUNDLE_DISCOUNT_PCT = 10;   // -10% на кожен товар, починаючи з 2-го
 
   function getSlotPct(){
     try { return parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){ return 0; }
@@ -2374,7 +2374,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       for (var i = 0; i < line.qty; i++){
         subtotal += unitPrice;
         if (unitIdx >= 1){
-          // bundle: −20% на каждый юнит начиная со второго
+          // bundle: −10% на каждый юнит начиная со второго
           var disc = Math.round(unitPrice * BUNDLE_DISCOUNT_PCT / 100);
           bundleDiscount += disc;
           total += (unitPrice - disc);
