@@ -3,7 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/thanks", "destination": "/api/thanks" },
-    { "source": "/feed.xml", "destination": "/api/feed" }
+    { "source": "/feed.xml", "destination": "/api/feed" },
+    { "source": "/feed-en.xml", "destination": "/api/feed-en" }
   ],
   "crons": [
     { "path": "/api/wayforpay-reconcile", "schedule": "*/10 * * * *" }
