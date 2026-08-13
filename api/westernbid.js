@@ -324,7 +324,7 @@ module.exports = async function handler(req, res) {
     zip: String(body.zip || ''),
     state: String(body.state || ''),
     shipping: shipEur.toFixed(2),
-    return: process.env.WB_RETURN_URL || (SITE_BASE + retPath + '?paid=1'),
+    return: process.env.WB_RETURN_URL || (SITE_BASE + retPath + '?paid=1&inv=' + encodeURIComponent(invoice) + '&v=' + encodeURIComponent(totalEur.toFixed(2))),
     cancel_return: process.env.WB_CANCEL_URL || (SITE_BASE + retPath + '?paid=0'),
     notify_url: process.env.WB_NOTIFY_URL || (SITE_BASE + '/api/westernbid-callback')
   };
