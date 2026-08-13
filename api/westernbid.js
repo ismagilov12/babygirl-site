@@ -230,7 +230,10 @@ module.exports = async function handler(req, res) {
   // Наценка EN-версії (×2 за замовчуванням). Синхронно з EN_MARKUP в en.html!
   // Застосовується ДО конвертації і зберігається в bg_orders.total (реальна виручка в UAH).
   // Курс WB_FX_UAH_PER_UNIT=53.43 підібрано так, щоб tee 1790₴ ×2 = рівно €67.
-  const markup = Number(process.env.WB_PRICE_MARKUP || 2);
+  // Витринная скидка EN-версии (SALE). Синхронно с EN_SALE_PCT в en.html / showgirl-en.html!
+  // Выключить = задать env WB_EN_SALE_PCT=0 (или убрать дефолт 20 здесь).
+  const enSalePct = Math.max(0, Math.min(90, Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20) || 0));
+  const markup = Math.round(Number(process.env.WB_PRICE_MARKUP || 2) * (100 - enSalePct)) / 100;
   uahTotal = Math.round(uahTotal * markup * 100) / 100;
 
   // Конвертація (env-driven).
@@ -274,7 +277,7 @@ module.exports = async function handler(req, res) {
     total: uahTotal,
     status: 'new',
     notes: 'САЙТ ' + mkt + ' · WB ' + currency + ' goods ' + amount + ' + ship ' + shipEur.toFixed(2) +
-      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · x' + markup + discountNote,
+      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · x' + markup + (enSalePct > 0 ? ' (EN sale −' + enSalePct + '%)' : '') + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null
