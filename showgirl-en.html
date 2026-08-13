@@ -404,6 +404,21 @@ input,button{font-size:16px}
 
 .card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
 .card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+/* ==== EN SALE -20% (showgirl, dark) ==== */
+.card-img .sale-badge{
+  position:absolute;bottom:10px;left:10px;z-index:3;
+  background:#D92344;color:#fff;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:.18em;
+  padding:4px 10px;border-radius:2px;
+}
+.sale-bar{position:relative;overflow:hidden;background:#141013;border-top:1px solid rgba(201,163,95,.35);border-bottom:1px solid rgba(201,163,95,.35);padding:11px 0;margin:0}
+.sale-bar .marquee-track{display:flex;gap:34px;white-space:nowrap;width:max-content;animation:saleScroll 22s linear infinite;align-items:center}
+.sale-bar .sale-item{font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#C9A35F;letter-spacing:.3em;text-transform:uppercase}
+.sale-bar .sale-em{font-size:11px;color:rgba(242,236,230,.45)}
+@keyframes saleScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.sale-bar .marquee-track{animation:none;justify-content:center;width:100%}}
+@media (max-width:600px){.sale-bar .sale-item{font-size:10px;letter-spacing:.22em}}
+.pm-price .pm-old{font-size:.55em;color:rgba(242,236,230,.45);-webkit-text-stroke:0;text-decoration:line-through;margin-right:10px;vertical-align:middle}
 .price-flash{animation:priceFlash .8s ease-out}
 @keyframes priceFlash{
   0%{transform:scale(1);color:var(--pink-deep)}
@@ -1529,6 +1544,9 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 </section>
 
 <!-- ===== PRODUCTS ===== -->
+
+<!-- EN SALE -20% marquee -->
+<div class="sale-bar" aria-label="20% off everything"><div class="marquee-track"><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span><span class="sale-item">SALE −20%</span><span class="sale-em">·</span><span class="sale-item">worldwide shipping</span><span class="sale-em">·</span><span class="sale-item">showgirl</span><span class="sale-em">·</span></div></div>
 <section id="shop" class="section" style="background:var(--cream)">
   <div class="container">
     <div class="section-title-wrap">
@@ -2058,8 +2076,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
   var EUR_RATE = 53.43; window.EUR_RATE = EUR_RATE;  // синхронно с env WB_FX_UAH_PER_UNIT
-  var EN_MARKUP = 2; window.EN_MARKUP = EN_MARKUP;   // синхронно с WB_PRICE_MARKUP в api/westernbid.js
+  var EN_SALE_PCT = 20; window.EN_SALE_PCT = EN_SALE_PCT;  // витринная скидка EN; синхронно с WB_EN_SALE_PCT в api/westernbid.js
+  var EN_MARKUP_BASE = 2; window.EN_MARKUP_BASE = EN_MARKUP_BASE;  // базовая наценка EN (для зачёркнутой старой цены)
+  var EN_MARKUP = Math.round(EN_MARKUP_BASE * (100 - EN_SALE_PCT)) / 100; window.EN_MARKUP = EN_MARKUP;  // эффективная наценка = base x (1 - sale)
   function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
+  function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
 
   var $grid = document.getElementById('grid');
   var $overlay = document.getElementById('cartOverlay');
@@ -2116,15 +2137,16 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       var dots = '';
 
       var priceHtml;
-      if (pct > 0) {
-        var newPrice = Math.round(p.price * (100 - pct) / 100);
+      var newPrice = (pct > 0) ? Math.round(p.price * (100 - pct) / 100) : p.price;
+      if (pct > 0 || EN_SALE_PCT > 0) {
         priceHtml = '<span class="card-price-row">'
-          + '<span class="card-price old">' + euro(p.price) + '</span>'
+          + '<span class="card-price old">' + euroOld(p.price) + '</span>'
           + '<span class="card-price">' + euro(newPrice) + '</span>'
           + '</span>';
       } else {
         priceHtml = '<span class="card-price">' + euro(p.price) + '</span>';
       }
+      var saleBadge = (EN_SALE_PCT > 0) ? '<span class="sale-badge">\u2212' + EN_SALE_PCT + '%</span>' : '';
 
       // Group: oversize / crop / long / belt
       var grp = (p.family === 'crop') ? 'crop' : (p.family === 'long') ? 'long' : (p.family === 'belt') ? 'belt' : 'oversize';
@@ -2164,7 +2186,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       parts.push(''
         + '<article class="card" data-uid="' + escapeHtml(p.uid) + '" data-family="' + escapeHtml(p.family || '') + '" data-grp="' + escapeHtml(grp) + '" data-idx="0" data-count="' + photos.length + '">'
         +   '<div class="card-window"><span>~/' + escapeHtml(p.uid) + '</span><span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div>'
-        +   '<div class="card-img">' + ribbon + '<span class="heart-tag">♥</span>'
+        +   '<div class="card-img">' + ribbon + saleBadge + '<span class="heart-tag">♥</span>'
         +     '<div class="card-photos">' + photoSlides + '</div>'
         +     dots
         +   '</div>'
@@ -2588,7 +2610,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     else { pmRibbon.hidden = true; }
     pmTitle.textContent = p.title;
     pmCrumb.textContent = p.title.toLowerCase();
-    pmPrice.textContent = (Number(p.price||0)*EN_MARKUP/EUR_RATE).toFixed(2);
+    (function(){
+      var _pNew = (Number(p.price||0)*EN_MARKUP/EUR_RATE).toFixed(2);
+      if (EN_SALE_PCT > 0) pmPrice.innerHTML = '<span class="pm-old">€' + (Number(p.price||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2) + '</span>' + _pNew;
+      else pmPrice.textContent = _pNew;
+    })();
     var _dEn = (window.EN_DESCR || {})[p.uid];
     pmDescr.innerHTML = _dEn ? escapeHtml(_dEn) : (p.description ? escapeHtml(p.description) : 'Showgirl piece · one size · handmade in Ukraine');
     // ==== Specs (динамічні; фолбек — футболкові) ====
