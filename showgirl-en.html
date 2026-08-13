@@ -2079,6 +2079,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   var EN_SALE_PCT = 20; window.EN_SALE_PCT = EN_SALE_PCT;  // витринная скидка EN; синхронно с WB_EN_SALE_PCT в api/westernbid.js
   var EN_MARKUP_BASE = 2; window.EN_MARKUP_BASE = EN_MARKUP_BASE;  // базовая наценка EN (для зачёркнутой старой цены)
   var EN_MARKUP = Math.round(EN_MARKUP_BASE * (100 - EN_SALE_PCT)) / 100; window.EN_MARKUP = EN_MARKUP;  // эффективная наценка = base x (1 - sale)
+  // ==== Meta pixel helpers (EN market) — значения в EUR, SKU в формате фида /feed-en.xml ====
+  function eurNum(u){ return Math.round((Number(u||0)*EN_MARKUP/EUR_RATE)*100)/100; }
+  function fbSku(uid, colorCode){ var b=String(uid||'').split('|')[0]; return colorCode ? (b + '-' + colorCode) : b; }
+  function fbSkuFromCart(cartUid){ var s=String(cartUid||'').split('|'); return s[1] ? (s[0]+'-'+s[1]) : s[0]; }
+  window.eurNum = eurNum; window.fbSku = fbSku; window.fbSkuFromCart = fbSkuFromCart;
   function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
   function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
 
@@ -2488,7 +2493,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), price: p.price, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
     var now = totalUnits();
     renderCart(); openCart();
-    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
+    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[fbSku(uid, sel)], content_type:'product', contents:[{id:fbSku(uid, sel), quantity:1}], value:eurNum(p.price), currency:'EUR' });
     try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
     // Если перешли через границу 1→2, показать toast
     if (was < 2 && now >= 2){
@@ -2637,7 +2642,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     pmEl.classList.add('open');
     pmEl.setAttribute('aria-hidden', 'false');
     document.body.classList.add('pm-open');
-    if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[uid], value:p.price, currency:'UAH' });
+    if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_ids:[fbSku(uid, (Array.isArray(p.colors)&&p.colors.length) ? (pmSelectedColor || p.colors[0].code) : null)], content_type:'product', value:eurNum(p.price), currency:'EUR' });
     try { window.bgTrack && window.bgTrack('view_item', { product_uid: uid, value: p.price }); } catch(e){}
   }
   function closeProduct(){
@@ -2855,12 +2860,17 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     if (!city || !addr) return fail('please enter city and address');
     $btn.disabled = true; $btn.textContent = 'redirecting to payment…'; $res.textContent = ''; $res.className = 'cart-result';
     try {
-      var icItems = cart.map(function(c){ return String(c.uid); });
-      var icValue = Math.round(cart.reduce(function(s,c){ return s + (Number(c.price)||0)*(parseInt(c.qty,10)||1); },0)*100)/100;
+      var icItems = cart.map(function(c){ return fbSkuFromCart(c.uid); });
+      var icContents = cart.map(function(c){ return { id: fbSkuFromCart(c.uid), quantity: (parseInt(c.qty,10)||1) }; });
+      var icShipEur = ((enShipInfo($cHid && $cHid.value) || {}).eur) || 0;
+      var icGoodsUah = calcBreakdown().total;
+      var icValue = Math.round((eurNum(icGoodsUah) + icShipEur)*100)/100;
       var icNum = cart.reduce(function(s,c){ return s + (parseInt(c.qty,10)||1); },0);
       var icEventId = 'ic-' + (window.SESSION_ID||'') + '-' + Date.now().toString(36);
-      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'UAH', num_items: icNum, content_ids: icItems, content_type:'product' }, { eventID: icEventId });
-      window.bgTrack && window.bgTrack('begin_checkout',{ value: icValue, event_id: icEventId, meta:{ num_items: icNum, market: 'en-sg' } });
+      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'EUR', num_items: icNum, content_ids: icItems, contents: icContents, content_type:'product' }, { eventID: icEventId });
+      // снапшот для Purchase после возврата со шлюза (страница перезагружается — cart в памяти теряется)
+      try { sessionStorage.setItem('bg_en_pending', JSON.stringify({ ids: icItems, contents: icContents, num: icNum, value: icValue })); } catch(err2){}
+      window.bgTrack && window.bgTrack('begin_checkout',{ value: icGoodsUah, event_id: icEventId, meta:{ num_items: icNum, market: 'en-sg', value_eur: icValue } });
     } catch(err){}
 
     var promo = null;
@@ -2901,7 +2911,21 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   (function(){
     try {
       var q = new URLSearchParams(location.search);
-      if (q.get('paid') === '1') showToast("✓ payment received — thank you! ♥<br>we'll email you tracking soon");
+      if (q.get('paid') === '1') {
+        showToast("✓ payment received — thank you! ♥<br>we'll email you tracking soon");
+        // Meta Purchase: eventID === invoice, тем же id шлёт CAPI из api/westernbid-callback.js -> дедуп
+        var pInv = q.get('inv') || '';
+        var pPend = null; try { pPend = JSON.parse(sessionStorage.getItem('bg_en_pending') || 'null'); } catch(e2){}
+        var pVal = parseFloat(q.get('v'));
+        if (!isFinite(pVal) || pVal <= 0) pVal = (pPend && pPend.value) || 0;
+        if (typeof fbq === 'function' && pInv) {
+          fbq('track','Purchase',{ value: pVal, currency:'EUR', num_items: (pPend && pPend.num) || 1,
+            content_ids: (pPend && pPend.ids) || [], contents: (pPend && pPend.contents) || [], content_type:'product' }, { eventID: pInv });
+        }
+        try { window.bgTrack && window.bgTrack('purchase',{ value: pVal, event_id: pInv, meta:{ market:'en-sg', currency:'EUR' } }); } catch(e3){}
+        try { sessionStorage.removeItem('bg_en_pending'); } catch(e4){}
+        try { cart = []; renderCart(); } catch(e5){}
+      }
       else if (q.get('paid') === '0') showToast('payment was cancelled — your cart is waiting ♥');
     } catch(e){}
   })();
