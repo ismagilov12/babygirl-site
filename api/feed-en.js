@@ -68,6 +68,13 @@ function isImage(url) {
   return !!url && /\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url));
 }
 
+// Картинки размерной сетки (assets/size-oversize.webp, assets/size-long.webp, ...).
+// В фид их пускать нельзя: для Meta/Google это текстовый баннер — item получает
+// "низкое качество изображения", а в DPA-карусели вместо вещи показывается таблица.
+function isSizeChart(url) {
+  return /(^|\/)size-[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
+}
+
 function eur(uah, mult) {
   return (Math.round((Number(uah || 0) * mult / FX) * 100) / 100).toFixed(2);
 }
@@ -81,10 +88,10 @@ function makeItem(p, color) {
   const title = isVariant ? (baseTitle + ' — ' + (color.name || color.code)) : baseTitle;
 
   const mainPhoto = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
-  if (!mainPhoto || !isImage(mainPhoto) || BROKEN_IMG[mainPhoto]) return null;
+  if (!mainPhoto || !isImage(mainPhoto) || BROKEN_IMG[mainPhoto] || isSizeChart(mainPhoto)) return null;
 
   const allPhotos = Array.isArray(p.photos) ? p.photos : [];
-  const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !BROKEN_IMG[u]).slice(0, 20);
+  const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !BROKEN_IMG[u] && !isSizeChart(u)).slice(0, 20);
 
   // Описание берём ТОЛЬКО английское. Украинское из БД в EU-рекламу пускать нельзя.
   const desc = stripTags(i18n.EN_DESCR[p.uid] || (BRAND + ' · ' + baseTitle + (isVariant ? ' (' + (color.name || color.code) + ')' : '')));
@@ -154,6 +161,7 @@ module.exports = async function handler(req, res) {
   const items = [];
   for (const p of (rows || [])) {
     const family = String(p.family || '');
+    if (p.active === false) continue;             // страховка: скрытый товар не в фиде
     if (i18n.EN_HIDDEN[p.uid]) continue;          // celeb/IP принты — вне EU-рекламы
     if (family === 'sg-addon') continue;          // скрытые SKU апселла
     const isSg = /^sg-/.test(family);
