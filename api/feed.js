@@ -34,15 +34,23 @@ function isImage(url) {
   return /\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url));
 }
 
+// Картинки размерной сетки (assets/size-oversize.webp, assets/size-long.webp, ...).
+// В фид их пускать нельзя: для Meta/Google это текстовый баннер — item получает
+// "низкое качество изображения", а в DPA-карусели вместо вещи показывается таблица.
+function isSizeChart(url) {
+  return /(^|\/)size-[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
+}
+
 function makeItem(p, color) {
   const isVariant = !!color;
   const sku = isVariant ? (p.uid + '-' + color.code) : p.uid;
   const title = isVariant ? (p.title + ' — ' + (color.name || color.code)) : p.title;
-  const mainPhoto = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
+  const rawMain = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
+  const mainPhoto = isSizeChart(rawMain) ? null : rawMain;
   if (!mainPhoto) return null;
 
   const allPhotos = Array.isArray(p.photos) ? p.photos : [];
-  const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto).slice(0, 20);
+  const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !isSizeChart(u)).slice(0, 20);
 
   const desc = p.description || (BRAND + ' · ' + p.title + (isVariant ? ' (' + (color.name || color.code) + ')' : ''));
   const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(', ') : 'ONE SIZE';
@@ -103,6 +111,7 @@ module.exports = async function handler(req, res) {
 
   const items = [];
   for (const p of (rows || [])) {
+    if (p.active === false) continue;   // страховка: скрытый товар не должен попасть в фид
     if (p.in_grid === false) continue;
     if (Array.isArray(p.colors) && p.colors.length > 0) {
       for (const c of p.colors) {
