@@ -3020,37 +3020,37 @@ body.pm-open{overflow:hidden}
   // ======== NEW DROPS: hoodie / zip / mask / jacket / longsleeve ========
   var BG_DROPS = [
     { uid:'hoodie-baby-girl', id:'hoodie', t1:'baby girl', t2:'hoodie',
-      kicker:'новинка · вже в наявності', tape:'baby girl hoodie',
+      kicker:'новинка · передзамовлення', tape:'baby girl hoodie',
       sub:'оверсайз-худі · тринитка-петля · готичний принт на всю спину · 5 кольорів',
       cta:'обрати худі ♥',
       bullets:[
         ['🖤','<b>Оверсайз-фасон</b> з обʼємним капюшоном і приспущеним плечем. Тринитка-петля — тепло, але не парко.'],
         ['🔥','<b class="hl">Великий готичний принт на всю спину</b> і мінімалістичне лого на грудях.'],
         ['🎀','<b>5 кольорів · one size (oversized).</b> Друга річ у замовленні — ще −10%.'],
-        ['📦','<b>Відправка Новою поштою за 1–2 дні.</b> Все є в наявності.']
+        ['📦','<b>Відправка за 3–5 днів</b> з моменту замовлення, Новою поштою.']
       ]},
     { uid:'zip-baby-girl', id:'zip', t1:'baby girl', t2:'zip hoodie',
-      kicker:'новинка · вже в наявності', tape:'baby girl zip hoodie',
+      kicker:'новинка · передзамовлення', tape:'baby girl zip hoodie',
       sub:'зіпка на блискавці · тринитка-петля · вишивка «baby girl» · 4 кольори',
       cta:'обрати зіпку ♥',
       bullets:[
         ['🤍','<b>Повна блискавка</b> і обʼємний капюшон. Тринитка-петля всередині — мʼяко й тепло.'],
         ['🎀','<b class="hl">Вишивка «baby girl»</b> на грудях + кишені-кенгуру.'],
         ['✨','<b>4 кольори · one size (oversized).</b> Друга річ у замовленні — ще −10%.'],
-        ['📦','<b>Відправка Новою поштою за 1–2 дні.</b>']
+        ['📦','<b>Відправка за 3–5 днів</b> з моменту замовлення, Новою поштою.']
       ]},
     { uid:'hoodie-mask-baby-girl', id:'mask', t1:'baby girl', t2:'mask hoodie',
-      kicker:'новинка · limited', tape:'mask hoodie',
+      kicker:'новинка · передзамовлення', tape:'mask hoodie',
       sub:'half-zip з капюшоном-маскою · щільний фліс · 2 кольори',
       cta:'обрати худі з маскою ♥',
       bullets:[
         ['🖤','<b class="hl">Капюшон-маска.</b> Коротка блискавка з високим коміром: піднімаєш — і закриває пів обличчя.'],
         ['🔥','<b>Щільний фліс</b> + кишеня-кенгуру. Вишивка «baby girl» біля блискавки.'],
         ['🎀','<b>2 кольори · one size (oversized).</b> Друга річ у замовленні — ще −10%.'],
-        ['📦','<b>Відправка Новою поштою за 1–2 дні.</b>']
+        ['📦','<b>Відправка за 3–5 днів</b> з моменту замовлення, Новою поштою.']
       ]},
     { uid:'jacket-bad-girls', id:'jacket', t1:'bad girls', t2:'jacket',
-      kicker:'новинка · вітрівка', tape:'bad girls jacket',
+      kicker:'новинка · передзамовлення', tape:'bad girls jacket',
       sub:'анорак-вітрівка · плащівка · великий принт на всю спину · 2 кольори',
       cta:'обрати куртку ♥',
       bullets:[
@@ -3060,14 +3060,14 @@ body.pm-open{overflow:hidden}
         ['🎀','<b>2 кольори · one size (oversized).</b> Друга річ у замовленні — ще −10%.']
       ]},
     { uid:'longsleeve-baby-girl', id:'longsleeve', t1:'baby girl', t2:'longsleeve',
-      kicker:'новинка · вже в наявності', tape:'baby girl longsleeve',
+      kicker:'новинка · передзамовлення', tape:'baby girl longsleeve',
       sub:'оверсайз-лонгслів · щільний трикотаж · принт «baby girl» · 4 кольори',
       cta:'обрати лонгслів ♥',
       bullets:[
         ['🤍','<b>Оверсайз-крій</b> з приспущеним плечем і довгим рукавом.'],
         ['🎀','<b class="hl">Готичний напис «baby girl»</b> на грудях — маленький, але помітний.'],
         ['✨','<b>4 кольори · one size (oversized).</b> Друга річ у замовленні — ще −10%.'],
-        ['📦','<b>Відправка Новою поштою за 1–2 дні.</b>']
+        ['📦','<b>Відправка за 3–5 днів</b> з моменту замовлення, Новою поштою.']
       ]}
   ];
 
@@ -3100,7 +3100,7 @@ body.pm-open{overflow:hidden}
         +       '<div class="suits-colors"><span class="lbl">color</span></div>'
         +       '<ul class="suits-offers"></ul>'
         +       '<button type="button" class="suits-cta">' + cfg.cta + '</button>'
-        +       '<p class="suits-note">one size · oversized фасон · відправка 1–2 дні</p>'
+        +       '<p class="suits-note">one size · oversized фасон · відправка 3–5 днів</p>'
         +     '</div>'
         +   '</div>'
         + '</div>';
@@ -3110,7 +3110,7 @@ body.pm-open{overflow:hidden}
       var tape = sec.querySelector('.suits-tape .t');
       if (tape && !tape.childNodes.length){
         var unit = '<span>new drop</span><span>♥</span><span>' + cfg.tape + '</span><span>✦</span>'
-                 + '<span>вже в наявності</span><span>♥</span><span>відправка 1–2 дні</span><span>✦</span>';
+                 + '<span>передзамовлення</span><span>♥</span><span>відправка 3–5 днів</span><span>✦</span>';
         var html = ''; for (var k = 0; k < 8; k++) html += unit;
         tape.innerHTML = html;
       }
