@@ -3,9 +3,19 @@
 // обновлять И en.html, И этот файл — иначе в фид уйдёт украинское описание.
 module.exports = {
   EN_TITLE: {
+  "hoodie-baby-girl": "Baby Girl Hoodie",
+  "zip-baby-girl": "Baby Girl Zip Hoodie",
+  "hoodie-mask-baby-girl": "Baby Girl Mask Hoodie",
+  "jacket-bad-girls": "Bad Girls Club Jacket",
+  "longsleeve-baby-girl": "Baby Girl Longsleeve",
   "belt": "Garter Belt"
 },
   EN_DESCR: {
+  "hoodie-baby-girl": "The hoodie you have been looking for all year. Oversized fit with a roomy hood and dropped shoulders, brushed fleece inside — warm without overheating. A big gothic ‘baby girl’ across the whole back and a small logo on the chest. Five colors: black with lime, black with pink, grey melange with pink, pink with white and yellow with black. One size, oversized — fits S to L.",
+  "zip-baby-girl": "A full-zip hoodie you will not take off. Oversized fit, roomy hood, brushed fleece inside, two kangaroo pockets and a ‘baby girl’ embroidery on the chest. Four colors: black, pink, washed pink and grey melange. One size, oversized — fits S to L. Pairs perfectly with wide jeans or joggers.",
+  "hoodie-mask-baby-girl": "A half-zip hoodie with a mask hood. Heavy fleece and a short zip with a tall collar: pull it up and the hood covers half your face. Kangaroo pocket and a ‘baby girl’ embroidery next to the zip. Two colors: black and pink. One size, oversized — fits S to L.",
+  "jacket-bad-girls": "An anorak windbreaker with a large back print. Light shell fabric, adjustable hood, drawcords at the hem and cuffs, full-length zip and a roomy oversized cut. Two colors: black and pink. One size, oversized — fits S to L. Windproof, wrinkle-free, packs into a bag.",
+  "longsleeve-baby-girl": "The longsleeve that answers the ‘what do I wear’ question. Heavy knit, oversized cut with dropped shoulders and long sleeves. A gothic ‘baby girl’ script on the chest — small but impossible to miss. Four colors: black, pink, yellow and pink tie-dye. One size, oversized — fits S to L. Wear it alone, under a vest or as a base layer.",
   "sg-leo-black": "Leopard mood in a darker key. Black lines hold the shape yet hide almost nothing. Heart-shaped details catch and keep the gaze. One size, fully adjustable to your body and mood. Heart choker included. Handmade with love for every detail.",
   "sg-leo-red": "A wild leopard print paired with bold red straps that add tension to every movement. Clean lines hold their shape while leaving almost everything to the imagination. Soft, delicate satin glides gently over the skin, creating a light, barely-there feel, while the heart-shaped details catch — and hold — the eye. One size, fully adjustable to your body, your curves, and your mood. Depending on your bust shape, it can either offer a subtle amount of coverage or reveal just a little more. The set includes a heart-shaped choker that completes the look with a subtle touch of bold elegance. Playful, a little dangerous, and impossible to look away from. Every one of our sets is handcrafted with love and attention to every detail.",
   "sg-cow-pink": "Soft, playful, and a little unexpected. The contrast of the cow print and delicate pink straps creates a light yet striking look. It appears sweet at first glance — but tells a different story. Clean lines hold their shape while leaving almost everything to the imagination. One size, fully adjustable to your body, your curves, and your mood. Depending on your bust shape, it can offer a subtle amount of coverage or reveal just a little more. The set includes a delicate pink heart-shaped choker that completes the look with a playful finishing touch.",
