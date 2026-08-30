@@ -69,7 +69,12 @@ function makeItem(p, color) {
   lines.push('      <g:link>' + xmlEscape(buildLink(p.uid, isVariant ? color.code : null)) + '</g:link>');
   lines.push('      <g:image_link>' + xmlEscape(absUrl(mainPhoto)) + '</g:image_link>');
   extras.forEach(u => { lines.push('      <g:additional_image_link>' + xmlEscape(absUrl(u)) + '</g:additional_image_link>'); });
-  lines.push('      <g:availability>in stock</g:availability>');
+  var _av = (p.attrs && p.attrs.feed_availability) || 'in stock';
+  lines.push('      <g:availability>' + xmlEscape(_av) + '</g:availability>');
+  if (_av === 'preorder' || _av === 'backorder') {
+    var _d = new Date(Date.now() + (Number((p.attrs && p.attrs.feed_ship_days) || 5)) * 86400000);
+    lines.push('      <g:availability_date>' + _d.toISOString().replace(/\.\d{3}Z$/, '+00:00') + '</g:availability_date>');
+  }
   lines.push('      <g:condition>new</g:condition>');
   lines.push('      <g:price>' + xmlEscape(price) + '</g:price>');
   if (hasSale) lines.push('      <g:sale_price>' + xmlEscape(salePrice) + '</g:sale_price>');
@@ -99,7 +104,7 @@ module.exports = async function handler(req, res) {
 
   let rows;
   try {
-    const r = await fetch(sbUrl + '/rest/v1/' + T.PRODUCTS + '?select=uid,title,family,price,price_old,ribbon,photo_main,photos,sizes,colors,description,active,in_grid&active=eq.true&order=sort_order.asc', {
+    const r = await fetch(sbUrl + '/rest/v1/' + T.PRODUCTS + '?select=uid,title,family,price,price_old,ribbon,photo_main,photos,sizes,colors,description,active,in_grid,attrs&active=eq.true&order=sort_order.asc', {
       headers: { apikey: key, Authorization: 'Bearer ' + key }
     });
     if (!r.ok) { fail(res, 502, 'Supabase fetch failed: ' + r.status); return; }
@@ -112,7 +117,7 @@ module.exports = async function handler(req, res) {
   const items = [];
   for (const p of (rows || [])) {
     if (p.active === false) continue;   // страховка: скрытый товар не должен попасть в фид
-    if (p.in_grid === false) continue;
+    if (p.in_grid === false && !(p.attrs && p.attrs.in_feed)) continue;  // секційні товари з opt-in
     if (Array.isArray(p.colors) && p.colors.length > 0) {
       for (const c of p.colors) {
         if (!c || !c.code) continue;
