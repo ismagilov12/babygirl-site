@@ -426,6 +426,10 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
         <svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 17l4-8 4 4 6-10"/></svg>
         Аналітика
       </a>
+      <a data-page="feed">
+        <svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg>
+        Фід
+      </a>
       <a data-page="settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Налаштування <span style="margin-left:auto;font-size:10px;background:#444;padding:1px 6px;border-radius:8px;color:#aaa">soon</span>
@@ -700,6 +704,122 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
         </div>
       </div>
     </div>
+
+    <!-- FEED PAGE START -->
+    <div class="page" id="page-feed" style="display:none">
+      <style>
+      .feed-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+      .feed-toolbar input[type=text],.feed-toolbar select{border:1.5px solid #ebebe6;background:#fff;border-radius:10px;padding:9px 12px;font:500 13px/1 Inter,system-ui;color:#0e0e0e;outline:none}
+      .feed-toolbar input[type=text]:focus,.feed-toolbar select:focus{border-color:var(--pink-brand)}
+      .feed-toolbar label.sw{display:inline-flex;align-items:center;gap:6px;font:500 13px/1 Inter,system-ui;color:#0e0e0e99;cursor:pointer}
+      .feed-th{width:44px;height:44px;object-fit:cover;border-radius:8px;background:#f0efe9;display:block}
+      .feed-name{font:600 13px/1.25 Inter,system-ui}
+      .feed-sub{font:500 10px/1.3 JetBrains Mono,monospace;color:#0e0e0e70;margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+      .feed-chip{display:inline-block;padding:1px 6px;border-radius:7px;background:#f0efe9;color:#0e0e0e90;font:600 9px/1.5 JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.05em;margin-left:4px}
+      .feed-chip.warn{background:#fff0d6;color:#8a5a00}
+      .feed-chip.off{background:#ffe2e0;color:#b1322e}
+      .feed-chip.pink{background:var(--pink-soft);color:#c2246e}
+      .feed-act{border:1px solid #ebebe6;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer;font:500 12px/1 Inter,system-ui;color:#0e0e0e99;text-decoration:none;display:inline-block}
+      .feed-act:hover{border-color:var(--pink-brand);color:var(--pink-brand)}
+      .feed-bar{height:4px;border-radius:3px;background:#ebebe6;margin-top:5px;overflow:hidden}
+      .feed-bar i{display:block;height:100%;background:var(--pink-brand)}
+      .feed-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+      .feed-card{border:1.5px solid #ebebe6;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+      .feed-card.hot{border-color:var(--pink-brand)}
+      .feed-card .ph{aspect-ratio:1/1;background:#f0efe9}
+      .feed-card .ph img{width:100%;height:100%;object-fit:cover;display:block}
+      .feed-card .bd{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+      .feed-card .t{font:600 13px/1.25 Inter,system-ui}
+      .feed-card .p{font:600 12px/1 JetBrains Mono,monospace;color:#0e0e0e90}
+      .feed-card .p s{color:#0e0e0e50;font-weight:500;margin-right:5px}
+      .feed-card .st{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:auto;padding-top:8px;border-top:1px solid #ebebe6}
+      .feed-card .st div{text-align:center}
+      .feed-card .st b{display:block;font:700 14px/1.1 Inter,system-ui}
+      .feed-card .st span{font:500 9px/1.2 JetBrains Mono,monospace;color:#0e0e0e70;text-transform:uppercase;letter-spacing:.05em}
+      </style>
+
+      <div class="page-head">
+        <div><h1>Фід</h1><div class="meta" id="feed-meta">— позицій · — днів</div></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div class="period-tabs" id="feed-loc">
+            <button data-loc="ua" class="active">UA фід</button>
+            <button data-loc="en">EN фід</button>
+          </div>
+          <div class="period-tabs" id="feed-tabs">
+            <button data-days="1">Сьогодні</button>
+            <button data-days="7" class="active">7 днів</button>
+            <button data-days="30">30 днів</button>
+            <button data-days="90">90 днів</button>
+          </div>
+          <button class="btn" id="feed-reload">↻ Оновити</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card" title="Кількість позицій (SKU) у feed.xml"><div class="l">Позицій у фіді</div><div class="v" id="feed-kpi-items">—</div></div>
+        <div class="kpi-card" title="Унікальні сесії, що приземлились на посилання ?p=uid конкретного товару"><div class="l">Переходи</div><div class="v" id="feed-kpi-clicks">—</div><div class="delta" id="feed-kpi-hits"></div></div>
+        <div class="kpi-card" title="Замовлення, чия сесія прийшла з товарного посилання"><div class="l">Замовлень з лінків</div><div class="v" id="feed-kpi-orders">—</div></div>
+        <div class="kpi-card" title="Сума замовлень, що прийшли з товарних посилань"><div class="l">Виручка з лінків</div><div class="v" id="feed-kpi-rev">—</div></div>
+        <div class="kpi-card" title="Замовлення / переходи"><div class="l">CR переходів</div><div class="v" id="feed-kpi-cr">—</div></div>
+        <div class="kpi-card" title="Позиції фіду, на які за період не було жодного переходу"><div class="l">Без переходів</div><div class="v" id="feed-kpi-dead">—</div></div>
+        <div class="kpi-card" title="Середня кількість переходів на позицію фіду"><div class="l">Сер. переходів / SKU</div><div class="v" id="feed-kpi-avg">—</div></div>
+      </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <div class="feed-toolbar">
+          <input type="text" id="feed-q" placeholder="Пошук: назва або uid…" style="min-width:220px">
+          <select id="feed-fam"><option value="">Усі категорії</option></select>
+          <label class="sw"><input type="checkbox" id="feed-only"> тільки з переходами</label>
+          <div class="period-tabs" id="feed-view">
+            <button data-view="table" class="active">Таблиця</button>
+            <button data-view="cards">Картки</button>
+          </div>
+          <a class="feed-act" id="feed-xml" href="/feed.xml" target="_blank" rel="noopener" style="margin-left:auto">feed.xml ↗</a>
+        </div>
+
+        <div class="daily-wrap" id="feed-table-wrap">
+          <table class="daily-tbl" id="feed-tbl">
+            <thead><tr>
+              <th style="width:56px"></th>
+              <th data-sort="title">Товар <span class="sort-ar"></span></th>
+              <th class="num" data-sort="price">Ціна <span class="sort-ar"></span></th>
+              <th class="num" data-sort="clicks">Переходи <span class="sort-ar"></span></th>
+              <th class="num" data-sort="hits">Хіти <span class="sort-ar"></span></th>
+              <th class="num" data-sort="views">Перегляди <span class="sort-ar"></span></th>
+              <th class="num" data-sort="atc">В кошик <span class="sort-ar"></span></th>
+              <th class="num" data-sort="link_orders">Замовл. <span class="sort-ar"></span></th>
+              <th class="num" data-sort="cr">CR <span class="sort-ar"></span></th>
+              <th class="num" data-sort="link_revenue">Виручка <span class="sort-ar"></span></th>
+              <th class="num" data-sort="item_qty">Продано шт <span class="sort-ar"></span></th>
+              <th class="num" data-sort="item_revenue">Виручка SKU <span class="sort-ar"></span></th>
+              <th data-sort="top_source">Джерело <span class="sort-ar"></span></th>
+              <th data-sort="last_click">Останній <span class="sort-ar"></span></th>
+              <th style="width:80px"></th>
+            </tr></thead>
+            <tbody><tr><td colspan="15" class="ana-empty">Завантажую…</td></tr></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+
+        <div class="feed-cards" id="feed-cards" style="display:none"></div>
+      </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <h3>Переходи поза фідом <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— товарні лінки ?p=, яких зараз немає у цьому фіді</span></h3>
+        <div class="daily-wrap">
+          <table class="daily-tbl" id="feed-orphan">
+            <thead><tr>
+              <th>UID</th><th>Колір</th>
+              <th class="num">Переходи</th><th class="num">Замовл.</th><th class="num">Виручка</th>
+              <th>Джерело</th><th>Останній</th>
+            </tr></thead>
+            <tbody><tr><td colspan="7" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- FEED PAGE END -->
+
 
     <!-- SETTINGS PAGE (placeholder) -->
     <div class="page" id="page-settings" style="display:none">
@@ -1876,5 +1996,363 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 })();
 </script>
 
+<script>
+/* FEED-JS START */
+(function(){
+  var SB_URL = 'https://fsihlzzjewhxpogvjapu.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
+  var GNS = 'http://base.google.com/ns/1.0';
+
+  var S = { days:7, loc:'ua', view:'table', sort:'clicks', dir:'desc', q:'', fam:'', only:false,
+            items:[], stats:null, orphans:[], loading:false, loadedKey:'' };
+
+  function $(id){ return document.getElementById(id); }
+  function nf(n){ return (Number(n)||0).toLocaleString('uk-UA'); }
+  function money(n){ return Math.round(Number(n)||0).toLocaleString('uk-UA') + ' ₴'; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function gtext(el, tag){
+    if (!el) return '';
+    var n = el.getElementsByTagNameNS ? el.getElementsByTagNameNS(GNS, tag) : null;
+    if (!n || !n.length) n = el.getElementsByTagName('g:' + tag);
+    if (!n || !n.length) n = el.getElementsByTagName(tag);
+    return (n && n.length) ? (n[0].textContent || '').trim() : '';
+  }
+  function priceNum(s){ var m = String(s||'').match(/[\d.]+/); return m ? Number(m[0]) : 0; }
+  function ago(iso){
+    if (!iso) return '—';
+    var d = new Date(iso), diff = (Date.now() - d.getTime())/1000;
+    if (diff < 3600) return Math.max(1, Math.round(diff/60)) + ' хв тому';
+    if (diff < 86400) return Math.round(diff/3600) + ' год тому';
+    if (diff < 86400*7) return Math.round(diff/86400) + ' дн тому';
+    return d.toLocaleDateString('uk-UA', { day:'2-digit', month:'2-digit' });
+  }
+  function keyOf(uid, color){ return String(uid||'').toLowerCase() + '|' + String(color||'').toLowerCase(); }
+
+  // ---------- data ----------
+  function parseFeed(xmlText){
+    var doc = new DOMParser().parseFromString(xmlText, 'application/xml');
+    var nodes = doc.getElementsByTagName('item');
+    var out = [];
+    for (var i = 0; i < nodes.length; i++){
+      var it = nodes[i];
+      var link = gtext(it, 'link');
+      var uid = '', color = '';
+      try {
+        var u = new URL(link, location.origin);
+        uid = (u.searchParams.get('p') || '').toLowerCase();
+        color = (u.searchParams.get('c') || '').toLowerCase();
+      } catch(e){}
+      var priceRaw = gtext(it, 'price');
+      var price = priceNum(priceRaw);
+      var sale = priceNum(gtext(it, 'sale_price'));
+      var cur = /EUR/i.test(priceRaw) ? '€' : (/USD/i.test(priceRaw) ? '$' : '₴');
+      out.push({
+        sku: gtext(it, 'id'),
+        group: gtext(it, 'item_group_id'),
+        title: gtext(it, 'title'),
+        link: link,
+        image: gtext(it, 'image_link'),
+        avail: gtext(it, 'availability') || 'in stock',
+        price: sale && sale < price ? sale : price,
+        priceOld: sale && sale < price ? price : 0,
+        cur: cur,
+        fam: gtext(it, 'custom_label_0'),
+        colorName: gtext(it, 'color'),
+        uid: uid, color: color
+      });
+    }
+    return out;
+  }
+
+  function loadFeedStats(force){
+    var key = S.loc + ':' + S.days;
+    if (S.loading) return;
+    if (!force && S.loadedKey === key) return;
+    S.loading = true;
+    renderLoading();
+
+    var to = new Date();
+    var from = new Date(Date.now() - S.days*86400000);
+    var feedUrl = (S.loc === 'en' ? '/feed-en.xml' : '/feed.xml') + '?_=' + Date.now();
+
+    var pFeed = fetch(feedUrl, { cache:'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('feed ' + r.status); return r.text(); })
+      .then(parseFeed)
+      .catch(function(e){ console.warn('feed load failed', e); return []; });
+
+    var pStats = fetch(SB_URL + '/rest/v1/rpc/bg_feed_link_stats', {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify({ p_from: from.toISOString(), p_to: to.toISOString() })
+    }).then(function(r){ return r.json(); }).catch(function(e){ console.warn('stats failed', e); return null; });
+
+    Promise.all([pFeed, pStats]).then(function(arr){
+      S.items = arr[0] || [];
+      S.stats = (arr[1] && arr[1].rows) ? arr[1] : { rows:[], totals:{} };
+      S.loading = false;
+      S.loadedKey = key;
+      merge();
+      buildFamOptions();
+      render();
+    });
+  }
+
+  function statFor(row){
+    var loc = S.loc;
+    var clicksAll = Number(row.clicks)||0, clicksEn = Number(row.clicks_en)||0;
+    var clicks = loc === 'en' ? clicksEn : (clicksAll - clicksEn);
+    if (clicks < 0) clicks = 0;
+    var share = clicksAll ? clicks/clicksAll : (loc === 'en' ? 0 : 1);
+    return {
+      clicks: clicks,
+      hits: Math.round((Number(row.hits)||0) * share),
+      views: Number(row.views)||0,
+      atc: Number(row.atc)||0,
+      link_orders: Math.round((Number(row.link_orders)||0) * share),
+      link_revenue: (Number(row.link_revenue)||0) * share,
+      item_qty: Number(row.item_qty)||0,
+      item_orders: Number(row.item_orders)||0,
+      item_revenue: Number(row.item_revenue)||0,
+      top_source: row.top_source || '',
+      last_click: row.last_click || null
+    };
+  }
+
+  function blank(){ return { clicks:0,hits:0,views:0,atc:0,link_orders:0,link_revenue:0,item_qty:0,item_orders:0,item_revenue:0,top_source:'',last_click:null }; }
+
+  function merge(){
+    var byKey = {}, byUid = {};
+    (S.stats.rows || []).forEach(function(r){
+      var st = statFor(r);
+      byKey[keyOf(r.uid, r.color)] = st;
+      (byUid[String(r.uid||'').toLowerCase()] = byUid[String(r.uid||'').toLowerCase()] || []).push({ color: String(r.color||''), st: st });
+    });
+
+    var used = {};
+    var feedUids = {};
+    S.items.forEach(function(it){ feedUids[it.uid] = true; });
+
+    S.rows = S.items.map(function(it){
+      var k = keyOf(it.uid, it.color);
+      used[k] = true;
+      var st = byKey[k] || blank();
+      var cr = st.clicks ? (st.link_orders / st.clicks * 100) : 0;
+      return Object.assign({}, it, st, { cr: cr, noColorLink: false });
+    });
+
+    // clicks on a plain ?p=uid link of a product that only has colored SKUs in the feed
+    Object.keys(byKey).forEach(function(k){
+      if (used[k]) return;
+      var parts = k.split('|'), uid = parts[0], color = parts[1];
+      var st = byKey[k];
+      if (feedUids[uid] && !color){
+        var base = null;
+        for (var i = 0; i < S.items.length; i++){ if (S.items[i].uid === uid){ base = S.items[i]; break; } }
+        if (base){
+          used[k] = true;
+          S.rows.push(Object.assign({}, base, st, {
+            sku: uid, color: '', colorName: '', noColorLink: true,
+            cr: st.clicks ? (st.link_orders/st.clicks*100) : 0
+          }));
+        }
+      }
+    });
+
+    S.orphans = [];
+    Object.keys(byKey).forEach(function(k){
+      if (used[k]) return;
+      var st = byKey[k];
+      if (!st.clicks && !st.link_orders) return;
+      var parts = k.split('|');
+      S.orphans.push(Object.assign({ uid: parts[0], color: parts[1] }, st));
+    });
+    S.orphans.sort(function(a,b){ return b.clicks - a.clicks; });
+  }
+
+  // ---------- render ----------
+  function visible(){
+    var q = S.q.trim().toLowerCase();
+    return (S.rows || []).filter(function(r){
+      if (S.only && !r.clicks) return false;
+      if (S.fam && r.fam !== S.fam) return false;
+      if (q && (r.title||'').toLowerCase().indexOf(q) < 0 && (r.sku||'').toLowerCase().indexOf(q) < 0 && (r.uid||'').toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function(a,b){
+      var k = S.sort, va = a[k], vb = b[k];
+      if (k === 'title' || k === 'top_source'){ va = String(va||''); vb = String(vb||''); return S.dir==='asc' ? va.localeCompare(vb) : vb.localeCompare(va); }
+      if (k === 'last_click'){ va = va ? new Date(va).getTime() : 0; vb = vb ? new Date(vb).getTime() : 0; }
+      va = Number(va)||0; vb = Number(vb)||0;
+      return S.dir==='asc' ? va-vb : vb-va;
+    });
+  }
+
+  function renderLoading(){
+    var tb = document.querySelector('#feed-tbl tbody');
+    if (tb) tb.innerHTML = '<tr><td colspan="15" class="ana-empty">Завантажую…</td></tr>';
+  }
+
+  function buildFamOptions(){
+    var sel = $('feed-fam'); if (!sel) return;
+    var fams = {}; S.items.forEach(function(i){ if (i.fam) fams[i.fam] = 1; });
+    var list = Object.keys(fams).sort();
+    var cur = S.fam;
+    sel.innerHTML = '<option value="">Усі категорії</option>' + list.map(function(f){
+      return '<option value="'+esc(f)+'"'+(f===cur?' selected':'')+'>'+esc(f)+'</option>';
+    }).join('');
+  }
+
+  function render(){
+    var rows = visible();
+    var maxClicks = rows.reduce(function(m,r){ return Math.max(m, r.clicks); }, 0);
+
+    var T = rows.reduce(function(a,r){
+      a.clicks += r.clicks; a.hits += r.hits; a.views += r.views; a.atc += r.atc;
+      a.link_orders += r.link_orders; a.link_revenue += r.link_revenue;
+      a.item_qty += r.item_qty; a.item_revenue += r.item_revenue;
+      if (!r.clicks) a.dead++;
+      return a;
+    }, { clicks:0,hits:0,views:0,atc:0,link_orders:0,link_revenue:0,item_qty:0,item_revenue:0,dead:0 });
+
+    $('feed-meta').textContent = nf(S.items.length) + ' позицій · ' + S.days + ' дн · ' + (S.loc === 'en' ? 'EN' : 'UA');
+    $('feed-kpi-items').textContent = nf(S.items.length);
+    $('feed-kpi-clicks').textContent = nf(T.clicks);
+    $('feed-kpi-hits').textContent = nf(T.hits) + ' хітів';
+    $('feed-kpi-orders').textContent = nf(T.link_orders);
+    $('feed-kpi-rev').textContent = money(T.link_revenue);
+    $('feed-kpi-cr').textContent = T.clicks ? (T.link_orders/T.clicks*100).toFixed(2) + '%' : '—';
+    $('feed-kpi-dead').textContent = nf(T.dead);
+    $('feed-kpi-avg').textContent = rows.length ? (T.clicks/rows.length).toFixed(1) : '—';
+    var x = $('feed-xml'); if (x){ x.href = (S.loc==='en' ? '/feed-en.xml' : '/feed.xml'); x.textContent = (S.loc==='en' ? 'feed-en.xml ↗' : 'feed.xml ↗'); }
+
+    // table
+    var tb = document.querySelector('#feed-tbl tbody');
+    if (!rows.length){
+      tb.innerHTML = '<tr><td colspan="15" class="ana-empty">Нічого не знайдено</td></tr>';
+      document.querySelector('#feed-tbl tfoot').innerHTML = '';
+    } else {
+      tb.innerHTML = rows.map(function(r){
+        var pct = maxClicks ? Math.round(r.clicks/maxClicks*100) : 0;
+        var chips = '';
+        if (r.colorName) chips += '<span class="feed-chip">'+esc(r.colorName)+'</span>';
+        if (r.noColorLink) chips += '<span class="feed-chip warn">лінк без кольору</span>';
+        if (r.avail && r.avail !== 'in stock') chips += '<span class="feed-chip off">'+esc(r.avail)+'</span>';
+        return '<tr'+(r.clicks?' class="has-orders"':'')+'>' +
+          '<td>' + (r.image ? '<img class="feed-th" loading="lazy" src="'+esc(r.image)+'" alt="">' : '<div class="feed-th"></div>') + '</td>' +
+          '<td><div class="feed-name">'+esc(r.title)+chips+'</div><div class="feed-sub">'+esc(r.sku||r.uid)+'</div>' +
+            (r.clicks ? '<div class="feed-bar"><i style="width:'+pct+'%"></i></div>' : '') + '</td>' +
+          '<td class="num">'+(r.priceOld ? '<s style="color:#0e0e0e50">'+nf(r.priceOld)+'</s> ' : '')+nf(r.price)+' '+(r.cur||'₴')+'</td>' +
+          '<td class="num"><b>'+nf(r.clicks)+'</b></td>' +
+          '<td class="num">'+nf(r.hits)+'</td>' +
+          '<td class="num">'+nf(r.views)+'</td>' +
+          '<td class="num">'+nf(r.atc)+'</td>' +
+          '<td class="num">'+nf(r.link_orders)+'</td>' +
+          '<td class="num">'+(r.clicks ? r.cr.toFixed(1)+'%' : '—')+'</td>' +
+          '<td class="num">'+(r.link_revenue ? money(r.link_revenue) : '—')+'</td>' +
+          '<td class="num">'+nf(r.item_qty)+'</td>' +
+          '<td class="num">'+(r.item_revenue ? money(r.item_revenue) : '—')+'</td>' +
+          '<td>'+(r.top_source ? '<span class="feed-chip pink">'+esc(r.top_source)+'</span>' : '—')+'</td>' +
+          '<td style="white-space:nowrap;color:#0e0e0e80">'+ago(r.last_click)+'</td>' +
+          '<td style="white-space:nowrap"><button class="feed-act" data-copy="'+esc(r.link)+'" title="Скопіювати лінк">⧉</button> ' +
+            '<a class="feed-act" href="'+esc(r.link)+'" target="_blank" rel="noopener" title="Відкрити">↗</a></td>' +
+        '</tr>';
+      }).join('');
+      document.querySelector('#feed-tbl tfoot').innerHTML =
+        '<tr><td colspan="3">Разом · '+nf(rows.length)+' позицій</td>' +
+        '<td class="num">'+nf(T.clicks)+'</td><td class="num">'+nf(T.hits)+'</td>' +
+        '<td class="num">'+nf(T.views)+'</td><td class="num">'+nf(T.atc)+'</td>' +
+        '<td class="num">'+nf(T.link_orders)+'</td>' +
+        '<td class="num">'+(T.clicks ? (T.link_orders/T.clicks*100).toFixed(1)+'%' : '—')+'</td>' +
+        '<td class="num">'+money(T.link_revenue)+'</td>' +
+        '<td class="num">'+nf(T.item_qty)+'</td><td class="num">'+money(T.item_revenue)+'</td>' +
+        '<td colspan="3"></td></tr>';
+    }
+
+    // cards
+    var cards = $('feed-cards');
+    cards.innerHTML = rows.map(function(r){
+      return '<div class="feed-card'+(r.clicks && maxClicks && r.clicks >= maxClicks*0.5 ? ' hot' : '')+'">' +
+        '<a class="ph" href="'+esc(r.link)+'" target="_blank" rel="noopener">'+(r.image ? '<img loading="lazy" src="'+esc(r.image)+'" alt="">' : '')+'</a>' +
+        '<div class="bd">' +
+          '<div class="t">'+esc(r.title)+(r.noColorLink ? '<span class="feed-chip warn">без кольору</span>' : '')+'</div>' +
+          '<div class="p">'+(r.priceOld ? '<s>'+nf(r.priceOld)+'</s>' : '')+nf(r.price)+' '+(r.cur||'₴')+'</div>' +
+          '<div class="st">' +
+            '<div><b>'+nf(r.clicks)+'</b><span>переходи</span></div>' +
+            '<div><b>'+nf(r.link_orders)+'</b><span>замовл.</span></div>' +
+            '<div><b>'+(r.clicks ? r.cr.toFixed(1)+'%' : '—')+'</b><span>CR</span></div>' +
+          '</div>' +
+        '</div></div>';
+    }).join('') || '<div class="ana-empty">Нічого не знайдено</div>';
+
+    // orphans
+    var ob = document.querySelector('#feed-orphan tbody');
+    ob.innerHTML = S.orphans.length ? S.orphans.map(function(o){
+      return '<tr><td><span class="feed-sub">'+esc(o.uid)+'</span></td><td>'+(o.color ? esc(o.color) : '—')+'</td>' +
+        '<td class="num"><b>'+nf(o.clicks)+'</b></td><td class="num">'+nf(o.link_orders)+'</td>' +
+        '<td class="num">'+(o.link_revenue ? money(o.link_revenue) : '—')+'</td>' +
+        '<td>'+(o.top_source ? '<span class="feed-chip pink">'+esc(o.top_source)+'</span>' : '—')+'</td>' +
+        '<td style="color:#0e0e0e80">'+ago(o.last_click)+'</td></tr>';
+    }).join('') : '<tr><td colspan="7" class="ana-empty">Немає — усі переходи ведуть на позиції фіду</td></tr>';
+
+    // sort indicators
+    document.querySelectorAll('#feed-tbl thead th[data-sort]').forEach(function(th){
+      th.classList.remove('sort-asc','sort-desc');
+      var ar = th.querySelector('.sort-ar');
+      if (th.dataset.sort === S.sort){ th.classList.add(S.dir==='asc'?'sort-asc':'sort-desc'); if (ar) ar.textContent = S.dir==='asc'?'▲':'▼'; }
+      else if (ar) ar.textContent = '';
+    });
+
+    $('feed-table-wrap').style.display = S.view === 'table' ? '' : 'none';
+    cards.style.display = S.view === 'cards' ? '' : 'none';
+  }
+
+  // ---------- events ----------
+  function tabs(id, attr, fn){
+    var wrap = $(id); if (!wrap) return;
+    wrap.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-'+attr+']'); if (!b) return;
+      wrap.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      fn(b.dataset[attr]);
+    });
+  }
+
+  function init(){
+    if (!$('page-feed')) return;
+
+    tabs('feed-tabs','days', function(v){ S.days = Number(v)||7; loadFeedStats(true); });
+    tabs('feed-loc','loc', function(v){ S.loc = v; loadFeedStats(true); });
+    tabs('feed-view','view', function(v){ S.view = v; render(); });
+
+    $('feed-reload').onclick = function(){ loadFeedStats(true); };
+    $('feed-q').oninput = function(){ S.q = this.value; render(); };
+    $('feed-fam').onchange = function(){ S.fam = this.value; render(); };
+    $('feed-only').onchange = function(){ S.only = this.checked; render(); };
+
+    document.querySelector('#feed-tbl thead').addEventListener('click', function(e){
+      var th = e.target.closest('th[data-sort]'); if (!th) return;
+      var k = th.dataset.sort;
+      if (S.sort === k) S.dir = (S.dir === 'desc' ? 'asc' : 'desc');
+      else { S.sort = k; S.dir = (k === 'title' || k === 'top_source') ? 'asc' : 'desc'; }
+      render();
+    });
+
+    document.querySelector('#page-feed').addEventListener('click', function(e){
+      var b = e.target.closest('[data-copy]'); if (!b) return;
+      var link = b.dataset.copy;
+      var done = function(){ b.textContent = '✓'; setTimeout(function(){ b.textContent = '⧉'; }, 1200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, function(){});
+      else { var ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch(err){} document.body.removeChild(ta); }
+    });
+
+    var navBtn = document.querySelector('#nav a[data-page="feed"]');
+    if (navBtn) navBtn.addEventListener('click', function(){ loadFeedStats(false); });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+/* FEED-JS END */
+
+</script>
 </body>
 </html>
