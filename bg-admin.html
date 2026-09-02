@@ -838,10 +838,21 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 
       <div class="kpi-grid" id="stk-kpi"></div>
 
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 4px">
+        <input id="stk-q" placeholder="пошук по всіх блоках…" style="flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:8px;font-size:13px">
+        <div class="period-tabs" id="stk-days">
+          <button data-d="14">14 дн</button><button data-d="30" class="active">30 дн</button><button data-d="90">90 дн</button>
+        </div>
+      </div>
+      <p class="note" style="font-size:12px;color:var(--ink-60);margin:4px 0 0">
+        Кількість і мінімум редагуються прямо в таблиці — вписав число, натиснув Enter або клікнув поза полем, і воно збережеться.
+        <b>⚑</b> — надрукували партію (мінус бланк і принт, плюс готове). <b>≡</b> — історія рухів.
+      </p>
+
       <div class="ana-block" style="margin-top:14px">
-        <h3>Треба замовити <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— нижче мінімуму або вистачить менше ніж на 14 днів</span></h3>
+        <h3>Треба замовити <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— нижче мінімуму або вистачить менше ніж на 14 днів</span> <span id="stk-c-need" style="font-weight:400;color:#0e0e0e50;font-size:12px"></span></h3>
         <div class="daily-wrap">
-          <table class="daily-tbl" id="stk-need">
+          <table class="daily-tbl" id="stk-t-need">
             <thead><tr><th>Позиція</th><th>Тип</th><th class="num">Залишок</th><th class="num">Мін</th><th class="num">Витрата/дн</th><th class="num">Вистачить, дн</th><th class="num">Замовити</th></tr></thead>
             <tbody><tr><td colspan="7" class="ana-empty">Завантажую…</td></tr></tbody>
           </table>
@@ -849,31 +860,35 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       </div>
 
       <div class="ana-block" style="margin-top:14px">
-        <h3>Усі позиції</h3>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 12px">
-          <div class="period-tabs" id="stk-tabs">
-            <button data-k="blank" class="active">Бланки</button>
-            <button data-k="print">Принти</button>
-            <button data-k="finished">Готове</button>
-            <button data-k="all">Усе</button>
-          </div>
-          <div class="period-tabs" id="stk-days">
-            <button data-d="14">14 дн</button><button data-d="30" class="active">30 дн</button><button data-d="90">90 дн</button>
-          </div>
-          <input id="stk-q" placeholder="пошук…" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px">
-        </div>
+        <h3>Бланки <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— чисті футболки, кропи, лонги, худі</span> <span id="stk-c-blank" style="font-weight:400;color:#0e0e0e50;font-size:12px"></span></h3>
         <div class="daily-wrap">
-          <table class="daily-tbl" id="stk-tbl">
-            <thead><tr><th>Позиція</th><th>Тип</th><th class="num">Залишок</th><th class="num">Мін</th><th class="num">Продано</th><th class="num">Вистачить, дн</th><th style="text-align:right">Дії</th></tr></thead>
-            <tbody><tr><td colspan="7" class="ana-empty">Завантажую…</td></tr></tbody>
+          <table class="daily-tbl" id="stk-t-blank">
+            <thead><tr><th>Бланк</th><th class="num" style="width:110px">Залишок</th><th class="num" style="width:90px">Мін</th><th class="num">Продано</th><th class="num">Вистачить, дн</th><th style="width:44px;text-align:right"></th></tr></thead>
+            <tbody><tr><td colspan="6" class="ana-empty">Завантажую…</td></tr></tbody>
           </table>
         </div>
-        <p class="note" style="font-size:12px;color:var(--ink-60);margin-top:10px">
-          <b>+</b> прихід (закупили бланки / надрукували плівку) · <b>=</b> інвентаризація (виставити точний залишок) ·
-          <b>⚑</b> надрукували партію (мінус бланк і принт, плюс готове) · <b>≡</b> історія рухів.
-          Мінімум редагується кліком по колонці «Мін».
-        </p>
       </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <h3>Принти <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— DTF-плівка по дизайнах</span> <span id="stk-c-print" style="font-weight:400;color:#0e0e0e50;font-size:12px"></span></h3>
+        <div class="daily-wrap">
+          <table class="daily-tbl" id="stk-t-print">
+            <thead><tr><th>Принт</th><th class="num" style="width:110px">Залишок</th><th class="num" style="width:90px">Мін</th><th class="num">Продано</th><th class="num">Вистачить, дн</th><th style="width:44px;text-align:right"></th></tr></thead>
+            <tbody><tr><td colspan="6" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <h3>Готові вироби <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— уже надруковані та покупні позиції</span> <span id="stk-c-finished" style="font-weight:400;color:#0e0e0e50;font-size:12px"></span></h3>
+        <div class="daily-wrap">
+          <table class="daily-tbl" id="stk-t-finished">
+            <thead><tr><th>Виріб</th><th class="num" style="width:110px">Залишок</th><th class="num" style="width:90px">Мін</th><th class="num">Продано</th><th class="num">Вистачить, дн</th><th style="width:80px;text-align:right"></th></tr></thead>
+            <tbody><tr><td colspan="6" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
     <!-- STOCK PAGE END -->
 
@@ -2410,6 +2425,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 /* FEED-JS END */
 
 </script>
+
 <!-- STOCK MODAL START -->
 <div class="modal-overlay" id="stockMovesModal" style="display:none">
   <div class="modal-card" style="max-width:680px">
@@ -2432,7 +2448,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 (function(){
   var SB_URL='https://fsihlzzjewhxpogvjapu.supabase.co';
   var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
-  var S = { days:30, kind:'blank', q:'', rows:[] };
+  var S = { days:30, q:'', rows:[] };
 
   function rpc(fn, body){
     return fetch(SB_URL+'/rest/v1/rpc/'+fn, { method:'POST',
@@ -2452,7 +2468,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   function e(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function n(v){ return (Math.round(Number(v)||0)).toLocaleString('uk-UA'); }
   function say(m, cls){
-    var t=document.getElementById('toast'); if(!t){ return; }
+    var t=document.getElementById('toast'); if(!t) return;
     t.textContent=m; t.className='toast show '+(cls||'');
     clearTimeout(say._t); say._t=setTimeout(function(){ t.classList.remove('show'); }, 2600);
   }
@@ -2465,16 +2481,23 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   function load(){
     rpc('bg_stock_overview', { p_days: S.days }).then(function(rows){
       S.rows = rows || [];
-      renderKpi(); renderNeed(); renderTable(); renderBadge();
+      renderAll();
     }).catch(function(err){
-      var tb=document.querySelector('#stk-tbl tbody');
-      if(tb) tb.innerHTML='<tr><td colspan="7" class="ana-empty">Помилка: '+e(err.message)+'</td></tr>';
+      ['need','blank','print','finished'].forEach(function(k){
+        var tb=document.querySelector('#stk-t-'+k+' tbody');
+        if(tb) tb.innerHTML='<tr><td colspan="7" class="ana-empty">Помилка: '+e(err.message)+'</td></tr>';
+      });
     });
+  }
+
+  function renderAll(){
+    renderKpi(); renderNeed(); renderBadge();
+    renderBlock('blank'); renderBlock('print'); renderBlock('finished');
   }
 
   function lowRows(){
     return S.rows.filter(function(r){
-      var low = r.qty <= r.min_qty;
+      var low = r.qty <= r.min_qty && r.min_qty > 0;
       var soon = r.days_left != null && Number(r.days_left) < 14;
       return low || soon;
     }).sort(function(a,b){
@@ -2510,16 +2533,17 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   }
 
   function renderNeed(){
-    var tb=document.querySelector('#stk-need tbody'); if(!tb) return;
+    var tb=document.querySelector('#stk-t-need tbody'); if(!tb) return;
     var rows=lowRows();
+    var c=document.getElementById('stk-c-need'); if(c) c.textContent = rows.length? '· '+rows.length : '';
     if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="ana-empty">Усе в нормі 🎀</td></tr>'; return; }
     tb.innerHTML = rows.map(function(r){
-      var order = Math.max(Number(r.min_qty||0) - Number(r.qty||0), 0);
+      var gap = Math.max(Number(r.min_qty||0) - Number(r.qty||0), 0);
       var need30 = r.per_day ? Math.ceil(Number(r.per_day)*30) : 0;
-      var suggest = Math.max(order, need30);
+      var suggest = Math.max(gap, need30);
       return '<tr'+(r.qty<0?' style="background:#fff2f2"':'')+'>'+
         '<td>'+e(r.title)+'</td><td>'+kindPill(r.kind)+'</td>'+
-        '<td class="num"'+(r.qty<=r.min_qty?' style="color:var(--err);font-weight:700"':'')+'>'+n(r.qty)+'</td>'+
+        '<td class="num" style="color:var(--err);font-weight:700">'+n(r.qty)+'</td>'+
         '<td class="num">'+n(r.min_qty)+'</td>'+
         '<td class="num">'+(r.per_day? Number(r.per_day).toFixed(2):'—')+'</td>'+
         '<td class="num">'+(r.days_left==null?'—':Number(r.days_left).toFixed(0))+'</td>'+
@@ -2527,25 +2551,33 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     }).join('');
   }
 
-  function renderTable(){
-    var tb=document.querySelector('#stk-tbl tbody'); if(!tb) return;
+  function numInput(r, field){
+    var v = field==='qty' ? r.qty : r.min_qty;
+    var danger = field==='qty' && r.min_qty>0 && r.qty<=r.min_qty;
+    return '<input type="number" data-f="'+field+'" data-id="'+r.id+'" value="'+n(v)+'"'+
+      ' style="width:100%;max-width:96px;text-align:right;padding:5px 8px;border:1px solid var(--line);border-radius:7px;'+
+      'font:600 13px/1 var(--font-mono);background:#fff;'+(danger?'color:var(--err);border-color:#ffcccc;':'')+'">';
+  }
+
+  function renderBlock(kind){
+    var tb=document.querySelector('#stk-t-'+kind+' tbody'); if(!tb) return;
     var q=S.q.toLowerCase();
     var rows=S.rows.filter(function(r){
-      if(S.kind!=='all' && r.kind!==S.kind) return false;
+      if(r.kind!==kind) return false;
       if(q && (String(r.title)+' '+String(r.sku)+' '+String(r.family||'')).toLowerCase().indexOf(q)<0) return false;
       return true;
     });
-    if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="ana-empty">Нічого не знайдено</td></tr>'; return; }
+    var c=document.getElementById('stk-c-'+kind); if(c) c.textContent = '· '+rows.length;
+    if(!rows.length){ tb.innerHTML='<tr><td colspan="6" class="ana-empty">Нічого не знайдено</td></tr>'; return; }
     tb.innerHTML = rows.map(function(r){
-      var acts = '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="in" data-id="'+r.id+'" title="Прихід">+</button> '+
-        '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="set" data-id="'+r.id+'" title="Інвентаризація">=</button> '+
-        (r.kind==='finished' ? '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="prod" data-id="'+r.id+'" title="Надрукували партію">⚑</button> ' : '')+
-        '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="hist" data-id="'+r.id+'" title="Історія">≡</button>';
-      return '<tr'+(r.qty<0?' style="background:#fff2f2"':'')+'>'+
+      var acts = (kind==='finished'
+        ? '<button class="btn ghost" style="padding:3px 8px;font-size:12px" data-act="prod" data-id="'+r.id+'" title="Надрукували партію">⚑</button> '
+        : '') +
+        '<button class="btn ghost" style="padding:3px 8px;font-size:12px" data-act="hist" data-id="'+r.id+'" title="Історія рухів">≡</button>';
+      return '<tr data-row="'+r.id+'"'+(r.qty<0?' style="background:#fff2f2"':'')+'>'+
         '<td>'+e(r.title)+'<div style="font:500 10.5px/1.4 var(--font-mono);color:var(--ink-40)">'+e(r.sku)+'</div></td>'+
-        '<td>'+kindPill(r.kind)+'</td>'+
-        '<td class="num"'+(r.qty<=r.min_qty?' style="color:var(--err);font-weight:700"':'')+'>'+n(r.qty)+'</td>'+
-        '<td class="num" style="cursor:pointer;text-decoration:underline dotted" data-act="min" data-id="'+r.id+'">'+n(r.min_qty)+'</td>'+
+        '<td class="num">'+numInput(r,'qty')+'</td>'+
+        '<td class="num">'+numInput(r,'min_qty')+'</td>'+
         '<td class="num">'+n(r.sold)+'</td>'+
         '<td class="num">'+(r.days_left==null?'—':Number(r.days_left).toFixed(0))+'</td>'+
         '<td style="text-align:right;white-space:nowrap">'+acts+'</td></tr>';
@@ -2554,42 +2586,60 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 
   function byId(id){ for(var i=0;i<S.rows.length;i++){ if(String(S.rows[i].id)===String(id)) return S.rows[i]; } return null; }
 
+  function flash(el, ok){
+    el.style.background = ok ? '#eaf7e4' : '#ffecec';
+    setTimeout(function(){ el.style.background='#fff'; }, 900);
+  }
+
+  function onEdit(ev){
+    var el = ev.target;
+    if(!el || el.tagName!=='INPUT' || !el.getAttribute('data-f')) return;
+    var id = el.getAttribute('data-id'), field = el.getAttribute('data-f');
+    var row = byId(id); if(!row) return;
+    var v = parseInt(el.value, 10);
+    if(isNaN(v)){ el.value = n(field==='qty'? row.qty : row.min_qty); return; }
+    var old = field==='qty' ? Number(row.qty) : Number(row.min_qty);
+    if(v === old){ return; }
+
+    if(field==='qty'){
+      rpc('bg_stock_adjust', { p_item_id:Number(id), p_new_qty:v, p_note:'ручне редагування', p_by:'admin' })
+        .then(function(){
+          row.qty = v;
+          if(row.per_day && Number(row.per_day)>0) row.days_left = Math.max(v,0) / Number(row.per_day);
+          flash(el, true); say(row.title + ': ' + v);
+          renderKpi(); renderNeed(); renderBadge(); restyle(el, row);
+        })
+        .catch(function(err){ flash(el,false); el.value=n(old); say(err.message,'err'); });
+    } else {
+      rest('bg_stock_items?id=eq.'+encodeURIComponent(id), { method:'PATCH', body: JSON.stringify({ min_qty: v }) })
+        .then(function(){
+          row.min_qty = v; flash(el, true);
+          renderKpi(); renderNeed(); renderBadge();
+          var qi = document.querySelector('tr[data-row="'+id+'"] input[data-f="qty"]');
+          if(qi) restyle(qi, row);
+        })
+        .catch(function(err){ flash(el,false); el.value=n(old); say(err.message,'err'); });
+    }
+  }
+
+  function restyle(qtyInput, row){
+    var danger = row.min_qty>0 && row.qty<=row.min_qty;
+    qtyInput.style.color = danger ? 'var(--err)' : '';
+    qtyInput.style.borderColor = danger ? '#ffcccc' : 'var(--line)';
+    var tr = qtyInput.closest('tr');
+    if(tr) tr.style.background = row.qty<0 ? '#fff2f2' : '';
+  }
+
   function onAction(ev){
-    var b = ev.target.closest('[data-act]'); if(!b) return;
+    var b = ev.target.closest && ev.target.closest('[data-act]'); if(!b) return;
     var id = b.getAttribute('data-id'), act = b.getAttribute('data-act');
     var row = byId(id); if(!row) return;
 
-    if(act==='in'){
-      var q = prompt('Прихід «'+row.title+'». Скільки додати?', '10');
-      if(q===null) return;
-      q = parseInt(q,10); if(!q){ return; }
-      var c = prompt('Ціна за одиницю (необовʼязково, ₴):', row.unit_cost==null?'':String(row.unit_cost));
-      rpc('bg_stock_receive', { p_item_id:Number(id), p_qty:q, p_cost: (c===null||c==='')?null:Number(c), p_note:'прихід', p_by:'admin' })
-        .then(function(){ say('Прихід записано'); load(); })
-        .catch(function(err){ say(err.message,'err'); });
-    }
-
-    else if(act==='set'){
-      var v = prompt('Інвентаризація «'+row.title+'». Фактичний залишок:', String(row.qty));
-      if(v===null) return;
-      rpc('bg_stock_adjust', { p_item_id:Number(id), p_new_qty:parseInt(v,10)||0, p_note:'інвентаризація', p_by:'admin' })
-        .then(function(){ say('Залишок оновлено'); load(); })
-        .catch(function(err){ say(err.message,'err'); });
-    }
-
-    else if(act==='prod'){
+    if(act==='prod'){
       var p = prompt('Надрукували «'+row.title+'». Скільки штук?\n(мінус бланк і принт, плюс готове)', '5');
       if(p===null) return;
       rpc('bg_stock_produce', { p_finished_id:Number(id), p_qty:parseInt(p,10)||0, p_by:'admin' })
         .then(function(){ say('Партію проведено'); load(); })
-        .catch(function(err){ say(err.message,'err'); });
-    }
-
-    else if(act==='min'){
-      var m = prompt('Мінімальний залишок для «'+row.title+'»:', String(row.min_qty));
-      if(m===null) return;
-      rest('bg_stock_items?id=eq.'+encodeURIComponent(id), { method:'PATCH', body: JSON.stringify({ min_qty: parseInt(m,10)||0 }) })
-        .then(function(){ say('Мінімум оновлено'); load(); })
         .catch(function(err){ say(err.message,'err'); });
     }
 
@@ -2600,7 +2650,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       document.getElementById('stockMovesModal').style.display='';
       rpc('bg_stock_item_moves', { p_item_id:Number(id), p_limit:80 }).then(function(ms){
         if(!ms || !ms.length){ mb.innerHTML='<tr><td colspan="5" class="ana-empty">Рухів ще не було</td></tr>'; return; }
-        var names = { order:"замовлення", order_cancel:"скасування", purchase:"прихід", print:"друк", recount:"інвентаризація", manual:"вручну", writeoff:"списання" };
+        var names = { order:"замовлення", order_cancel:"скасування", purchase:"прихід", print:"друк", recount:"редагування", manual:"вручну", writeoff:"списання" };
         mb.innerHTML = ms.map(function(m){
           var d = new Date(m.created_at);
           return '<tr><td>'+d.toLocaleString('uk-UA',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})+'</td>'+
@@ -2616,12 +2666,9 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   function init(){
     var page = document.getElementById('page-stock'); if(!page) return;
     page.addEventListener('click', onAction);
-
-    var tabs = document.getElementById('stk-tabs');
-    if(tabs) tabs.addEventListener('click', function(ev){
-      var b=ev.target.closest('button'); if(!b) return;
-      tabs.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
-      b.classList.add('active'); S.kind=b.getAttribute('data-k'); renderTable();
+    page.addEventListener('change', onEdit);
+    page.addEventListener('keydown', function(ev){
+      if(ev.key==='Enter' && ev.target.tagName==='INPUT' && ev.target.getAttribute('data-f')){ ev.target.blur(); }
     });
 
     var days = document.getElementById('stk-days');
@@ -2632,7 +2679,9 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     });
 
     var q = document.getElementById('stk-q');
-    if(q) q.addEventListener('input', function(){ S.q=q.value; renderTable(); });
+    if(q) q.addEventListener('input', function(){
+      S.q=q.value; renderBlock('blank'); renderBlock('print'); renderBlock('finished');
+    });
 
     var rl = document.getElementById('stk-reload');
     if(rl) rl.onclick = function(){ load(); say('Оновлено'); };
