@@ -430,6 +430,11 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
         <svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg>
         Фід
       </a>
+      <a data-page="stock">
+        <svg viewBox="0 0 24 24"><path d="M21 8V5a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v3M3 8h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8zM9 12h6"/></svg>
+        Склад
+        <span id="stk-nav-badge" style="margin-left:auto;font-size:10px;background:var(--err);padding:1px 6px;border-radius:8px;color:#fff;display:none"></span>
+      </a>
       <a data-page="settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Налаштування <span style="margin-left:auto;font-size:10px;background:#444;padding:1px 6px;border-radius:8px;color:#aaa">soon</span>
@@ -820,6 +825,57 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     </div>
     <!-- FEED PAGE END -->
 
+
+    <!-- STOCK PAGE START -->
+    <div class="page" id="page-stock" style="display:none">
+      <div class="page-head">
+        <div><h1>Склад</h1><div class="meta">Бланки, принти й готові вироби. Списання автоматичне у момент створення замовлення.</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn ghost" id="stk-sync" title="Підтягнути нові товари з каталогу у номенклатуру складу">Оновити номенклатуру</button>
+          <button class="btn primary" id="stk-reload">Оновити</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="stk-kpi"></div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <h3>Треба замовити <span style="font-weight:400;color:#0e0e0e70;font-size:12px">— нижче мінімуму або вистачить менше ніж на 14 днів</span></h3>
+        <div class="daily-wrap">
+          <table class="daily-tbl" id="stk-need">
+            <thead><tr><th>Позиція</th><th>Тип</th><th class="num">Залишок</th><th class="num">Мін</th><th class="num">Витрата/дн</th><th class="num">Вистачить, дн</th><th class="num">Замовити</th></tr></thead>
+            <tbody><tr><td colspan="7" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <h3>Усі позиції</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 12px">
+          <div class="period-tabs" id="stk-tabs">
+            <button data-k="blank" class="active">Бланки</button>
+            <button data-k="print">Принти</button>
+            <button data-k="finished">Готове</button>
+            <button data-k="all">Усе</button>
+          </div>
+          <div class="period-tabs" id="stk-days">
+            <button data-d="14">14 дн</button><button data-d="30" class="active">30 дн</button><button data-d="90">90 дн</button>
+          </div>
+          <input id="stk-q" placeholder="пошук…" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px">
+        </div>
+        <div class="daily-wrap">
+          <table class="daily-tbl" id="stk-tbl">
+            <thead><tr><th>Позиція</th><th>Тип</th><th class="num">Залишок</th><th class="num">Мін</th><th class="num">Продано</th><th class="num">Вистачить, дн</th><th style="text-align:right">Дії</th></tr></thead>
+            <tbody><tr><td colspan="7" class="ana-empty">Завантажую…</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note" style="font-size:12px;color:var(--ink-60);margin-top:10px">
+          <b>+</b> прихід (закупили бланки / надрукували плівку) · <b>=</b> інвентаризація (виставити точний залишок) ·
+          <b>⚑</b> надрукували партію (мінус бланк і принт, плюс готове) · <b>≡</b> історія рухів.
+          Мінімум редагується кліком по колонці «Мін».
+        </p>
+      </div>
+    </div>
+    <!-- STOCK PAGE END -->
 
     <!-- SETTINGS PAGE (placeholder) -->
     <div class="page" id="page-settings" style="display:none">
@@ -2353,6 +2409,257 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 })();
 /* FEED-JS END */
 
+</script>
+<!-- STOCK MODAL START -->
+<div class="modal-overlay" id="stockMovesModal" style="display:none">
+  <div class="modal-card" style="max-width:680px">
+    <h3 id="stk-mv-title" style="margin:0 0 12px">Історія рухів</h3>
+    <div class="daily-wrap" style="max-height:52vh;overflow:auto">
+      <table class="daily-tbl" id="stk-mv">
+        <thead><tr><th>Коли</th><th class="num">Зміна</th><th>Причина</th><th>Замовлення</th><th>Коментар</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="modal-actions" style="margin-top:14px;display:flex;justify-content:flex-end">
+      <button class="btn" id="stk-mv-close">Закрити</button>
+    </div>
+  </div>
+</div>
+<!-- STOCK MODAL END -->
+
+<script>
+/* STOCK-JS START */
+(function(){
+  var SB_URL='https://fsihlzzjewhxpogvjapu.supabase.co';
+  var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
+  var S = { days:30, kind:'blank', q:'', rows:[] };
+
+  function rpc(fn, body){
+    return fetch(SB_URL+'/rest/v1/rpc/'+fn, { method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body||{}) })
+      .then(function(r){ return r.text().then(function(t){
+        if(!r.ok) throw new Error(r.status+' '+t.slice(0,200));
+        return t ? JSON.parse(t) : null; }); });
+  }
+  function rest(path, opts){
+    opts = opts || {};
+    return fetch(SB_URL+'/rest/v1/'+path, { method: opts.method||'GET',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json', Prefer:'return=representation' },
+      body: opts.body })
+      .then(function(r){ return r.text().then(function(t){ if(!r.ok) throw new Error(r.status+' '+t.slice(0,200)); return t?JSON.parse(t):null; }); });
+  }
+  function e(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function n(v){ return (Math.round(Number(v)||0)).toLocaleString('uk-UA'); }
+  function say(m, cls){
+    var t=document.getElementById('toast'); if(!t){ return; }
+    t.textContent=m; t.className='toast show '+(cls||'');
+    clearTimeout(say._t); say._t=setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+  function kindPill(k){
+    var m={blank:['бланк','#e8f0ff'],print:['принт','#ffeaf5'],finished:['готове','#eaf7e4'],material:['матеріал','#f0f0ea']};
+    var x=m[k]||[k,'#f0f0ea'];
+    return '<span style="font:600 10px/1.6 var(--font-mono);text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;background:'+x[1]+'">'+x[0]+'</span>';
+  }
+
+  function load(){
+    rpc('bg_stock_overview', { p_days: S.days }).then(function(rows){
+      S.rows = rows || [];
+      renderKpi(); renderNeed(); renderTable(); renderBadge();
+    }).catch(function(err){
+      var tb=document.querySelector('#stk-tbl tbody');
+      if(tb) tb.innerHTML='<tr><td colspan="7" class="ana-empty">Помилка: '+e(err.message)+'</td></tr>';
+    });
+  }
+
+  function lowRows(){
+    return S.rows.filter(function(r){
+      var low = r.qty <= r.min_qty;
+      var soon = r.days_left != null && Number(r.days_left) < 14;
+      return low || soon;
+    }).sort(function(a,b){
+      var da = a.days_left==null ? 9999 : Number(a.days_left);
+      var db = b.days_left==null ? 9999 : Number(b.days_left);
+      return (a.qty-a.min_qty) - (b.qty-b.min_qty) || da - db;
+    });
+  }
+
+  function renderBadge(){
+    var b=document.getElementById('stk-nav-badge'); if(!b) return;
+    var k=lowRows().length;
+    if(k){ b.textContent=k; b.style.display=''; } else { b.style.display='none'; }
+  }
+
+  function renderKpi(){
+    var box=document.getElementById('stk-kpi'); if(!box) return;
+    function sum(k){ var s=0; S.rows.forEach(function(r){ if(r.kind===k) s+=Number(r.qty)||0; }); return s; }
+    function cnt(k){ return S.rows.filter(function(r){ return r.kind===k; }).length; }
+    var low = lowRows().length;
+    var neg = S.rows.filter(function(r){ return r.qty < 0; }).length;
+    box.innerHTML =
+      card('Треба замовити', low, low? 'позицій нижче норми':'усе в нормі', low?'var(--err)':null) +
+      card('Бланки', n(sum('blank')), cnt('blank')+' позицій') +
+      card('Принти', n(sum('print')), cnt('print')+' дизайнів') +
+      card('Готові вироби', n(sum('finished')), cnt('finished')+' SKU') +
+      card('У мінусі', neg, neg? 'продали більше, ніж є':'немає', neg?'var(--err)':null);
+  }
+  function card(label, val, sub, color){
+    return '<div class="kpi-card"><div class="l">'+e(label)+'</div>'+
+      '<div class="v"'+(color?' style="color:'+color+'"':'')+'>'+e(String(val))+'</div>'+
+      '<div class="delta" style="color:var(--ink-60)">'+e(sub||'')+'</div></div>';
+  }
+
+  function renderNeed(){
+    var tb=document.querySelector('#stk-need tbody'); if(!tb) return;
+    var rows=lowRows();
+    if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="ana-empty">Усе в нормі 🎀</td></tr>'; return; }
+    tb.innerHTML = rows.map(function(r){
+      var order = Math.max(Number(r.min_qty||0) - Number(r.qty||0), 0);
+      var need30 = r.per_day ? Math.ceil(Number(r.per_day)*30) : 0;
+      var suggest = Math.max(order, need30);
+      return '<tr'+(r.qty<0?' style="background:#fff2f2"':'')+'>'+
+        '<td>'+e(r.title)+'</td><td>'+kindPill(r.kind)+'</td>'+
+        '<td class="num"'+(r.qty<=r.min_qty?' style="color:var(--err);font-weight:700"':'')+'>'+n(r.qty)+'</td>'+
+        '<td class="num">'+n(r.min_qty)+'</td>'+
+        '<td class="num">'+(r.per_day? Number(r.per_day).toFixed(2):'—')+'</td>'+
+        '<td class="num">'+(r.days_left==null?'—':Number(r.days_left).toFixed(0))+'</td>'+
+        '<td class="num" style="font-weight:700">'+n(suggest)+'</td></tr>';
+    }).join('');
+  }
+
+  function renderTable(){
+    var tb=document.querySelector('#stk-tbl tbody'); if(!tb) return;
+    var q=S.q.toLowerCase();
+    var rows=S.rows.filter(function(r){
+      if(S.kind!=='all' && r.kind!==S.kind) return false;
+      if(q && (String(r.title)+' '+String(r.sku)+' '+String(r.family||'')).toLowerCase().indexOf(q)<0) return false;
+      return true;
+    });
+    if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="ana-empty">Нічого не знайдено</td></tr>'; return; }
+    tb.innerHTML = rows.map(function(r){
+      var acts = '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="in" data-id="'+r.id+'" title="Прихід">+</button> '+
+        '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="set" data-id="'+r.id+'" title="Інвентаризація">=</button> '+
+        (r.kind==='finished' ? '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="prod" data-id="'+r.id+'" title="Надрукували партію">⚑</button> ' : '')+
+        '<button class="btn ghost" style="padding:3px 9px;font-size:12px" data-act="hist" data-id="'+r.id+'" title="Історія">≡</button>';
+      return '<tr'+(r.qty<0?' style="background:#fff2f2"':'')+'>'+
+        '<td>'+e(r.title)+'<div style="font:500 10.5px/1.4 var(--font-mono);color:var(--ink-40)">'+e(r.sku)+'</div></td>'+
+        '<td>'+kindPill(r.kind)+'</td>'+
+        '<td class="num"'+(r.qty<=r.min_qty?' style="color:var(--err);font-weight:700"':'')+'>'+n(r.qty)+'</td>'+
+        '<td class="num" style="cursor:pointer;text-decoration:underline dotted" data-act="min" data-id="'+r.id+'">'+n(r.min_qty)+'</td>'+
+        '<td class="num">'+n(r.sold)+'</td>'+
+        '<td class="num">'+(r.days_left==null?'—':Number(r.days_left).toFixed(0))+'</td>'+
+        '<td style="text-align:right;white-space:nowrap">'+acts+'</td></tr>';
+    }).join('');
+  }
+
+  function byId(id){ for(var i=0;i<S.rows.length;i++){ if(String(S.rows[i].id)===String(id)) return S.rows[i]; } return null; }
+
+  function onAction(ev){
+    var b = ev.target.closest('[data-act]'); if(!b) return;
+    var id = b.getAttribute('data-id'), act = b.getAttribute('data-act');
+    var row = byId(id); if(!row) return;
+
+    if(act==='in'){
+      var q = prompt('Прихід «'+row.title+'». Скільки додати?', '10');
+      if(q===null) return;
+      q = parseInt(q,10); if(!q){ return; }
+      var c = prompt('Ціна за одиницю (необовʼязково, ₴):', row.unit_cost==null?'':String(row.unit_cost));
+      rpc('bg_stock_receive', { p_item_id:Number(id), p_qty:q, p_cost: (c===null||c==='')?null:Number(c), p_note:'прихід', p_by:'admin' })
+        .then(function(){ say('Прихід записано'); load(); })
+        .catch(function(err){ say(err.message,'err'); });
+    }
+
+    else if(act==='set'){
+      var v = prompt('Інвентаризація «'+row.title+'». Фактичний залишок:', String(row.qty));
+      if(v===null) return;
+      rpc('bg_stock_adjust', { p_item_id:Number(id), p_new_qty:parseInt(v,10)||0, p_note:'інвентаризація', p_by:'admin' })
+        .then(function(){ say('Залишок оновлено'); load(); })
+        .catch(function(err){ say(err.message,'err'); });
+    }
+
+    else if(act==='prod'){
+      var p = prompt('Надрукували «'+row.title+'». Скільки штук?\n(мінус бланк і принт, плюс готове)', '5');
+      if(p===null) return;
+      rpc('bg_stock_produce', { p_finished_id:Number(id), p_qty:parseInt(p,10)||0, p_by:'admin' })
+        .then(function(){ say('Партію проведено'); load(); })
+        .catch(function(err){ say(err.message,'err'); });
+    }
+
+    else if(act==='min'){
+      var m = prompt('Мінімальний залишок для «'+row.title+'»:', String(row.min_qty));
+      if(m===null) return;
+      rest('bg_stock_items?id=eq.'+encodeURIComponent(id), { method:'PATCH', body: JSON.stringify({ min_qty: parseInt(m,10)||0 }) })
+        .then(function(){ say('Мінімум оновлено'); load(); })
+        .catch(function(err){ say(err.message,'err'); });
+    }
+
+    else if(act==='hist'){
+      document.getElementById('stk-mv-title').textContent = 'Історія · ' + row.title;
+      var mb = document.querySelector('#stk-mv tbody');
+      mb.innerHTML = '<tr><td colspan="5" class="ana-empty">Завантажую…</td></tr>';
+      document.getElementById('stockMovesModal').style.display='';
+      rpc('bg_stock_item_moves', { p_item_id:Number(id), p_limit:80 }).then(function(ms){
+        if(!ms || !ms.length){ mb.innerHTML='<tr><td colspan="5" class="ana-empty">Рухів ще не було</td></tr>'; return; }
+        var names = { order:"замовлення", order_cancel:"скасування", purchase:"прихід", print:"друк", recount:"інвентаризація", manual:"вручну", writeoff:"списання" };
+        mb.innerHTML = ms.map(function(m){
+          var d = new Date(m.created_at);
+          return '<tr><td>'+d.toLocaleString('uk-UA',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})+'</td>'+
+            '<td class="num" style="color:'+(m.delta<0?'var(--err)':'#2b7a3d')+';font-weight:700">'+(m.delta>0?'+':'')+m.delta+'</td>'+
+            '<td>'+e(names[m.reason]||m.reason)+'</td>'+
+            '<td>'+e(m.order_number||'—')+'</td>'+
+            '<td>'+e(m.note||'')+'</td></tr>';
+        }).join('');
+      }).catch(function(err){ mb.innerHTML='<tr><td colspan="5" class="ana-empty">'+e(err.message)+'</td></tr>'; });
+    }
+  }
+
+  function init(){
+    var page = document.getElementById('page-stock'); if(!page) return;
+    page.addEventListener('click', onAction);
+
+    var tabs = document.getElementById('stk-tabs');
+    if(tabs) tabs.addEventListener('click', function(ev){
+      var b=ev.target.closest('button'); if(!b) return;
+      tabs.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); S.kind=b.getAttribute('data-k'); renderTable();
+    });
+
+    var days = document.getElementById('stk-days');
+    if(days) days.addEventListener('click', function(ev){
+      var b=ev.target.closest('button'); if(!b) return;
+      days.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); S.days=parseInt(b.getAttribute('data-d'),10)||30; load();
+    });
+
+    var q = document.getElementById('stk-q');
+    if(q) q.addEventListener('input', function(){ S.q=q.value; renderTable(); });
+
+    var rl = document.getElementById('stk-reload');
+    if(rl) rl.onclick = function(){ load(); say('Оновлено'); };
+
+    var sync = document.getElementById('stk-sync');
+    if(sync) sync.onclick = function(){
+      sync.disabled = true; sync.textContent = 'Синхронізую…';
+      rpc('bg_stock_autofill', {}).then(function(res){
+        say('Номенклатура: бланків '+(res&&res.blanks)+', принтів '+(res&&res.prints)+', готових '+(res&&res.finished));
+        sync.disabled=false; sync.textContent='Оновити номенклатуру'; load();
+      }).catch(function(err){ say(err.message,'err'); sync.disabled=false; sync.textContent='Оновити номенклатуру'; });
+    };
+
+    var mvClose = document.getElementById('stk-mv-close');
+    if(mvClose) mvClose.onclick = function(){ document.getElementById('stockMovesModal').style.display='none'; };
+    var mvOv = document.getElementById('stockMovesModal');
+    if(mvOv) mvOv.addEventListener('click', function(ev){ if(ev.target===mvOv) mvOv.style.display='none'; });
+
+    var nav = document.querySelector('#nav a[data-page="stock"]');
+    if(nav) nav.addEventListener('click', function(){ setTimeout(load, 40); });
+
+    load();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+/* STOCK-JS END */
 </script>
 </body>
 </html>
