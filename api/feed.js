@@ -116,7 +116,9 @@ module.exports = async function handler(req, res) {
 
   const items = [];
   for (const p of (rows || [])) {
+    const family = String(p.family || '');
     if (p.active === false) continue;   // страховка: скрытый товар не должен попасть в фид
+    if (/^sg-/.test(family)) continue;  // основной фид зеркалит витрину BabyGirl, без Showgirl
     if (p.in_grid === false && !(p.attrs && p.attrs.in_feed)) continue;  // секційні товари з opt-in
     if (Array.isArray(p.colors) && p.colors.length > 0) {
       for (const c of p.colors) {
