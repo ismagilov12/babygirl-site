@@ -2040,6 +2040,14 @@ body.pm-open{overflow:hidden}
     });
   }
 
+  function catalogPhoto(p, color){
+    var src = (color && color.photo) || (p && p.photo_main) || '';
+    if (p && p.family === 'hoodie' && /-front(?=\.webp(?:$|\?))/.test(src)) {
+      return src.replace(/-front(?=\.webp(?:$|\?))/, '');
+    }
+    return src;
+  }
+
   function renderGrid(){
     var list = (D.grid || []).map(function(uid){
       return D.all.find(function(p){ return p.uid === uid; });
@@ -2061,7 +2069,8 @@ body.pm-open{overflow:hidden}
     list.forEach(function(p, i){
       var altClass = (i % 2 === 1) ? ' alt' : '';
       var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
-      var photos = p.photo_main ? [p.photo_main] : [];
+      var catalogMain = catalogPhoto(p);
+      var photos = catalogMain ? [catalogMain] : [];
       var photoSlides = photos.map(function(url){
         return '<img loading="lazy" src="' + escapeHtml(url) + '" alt="' + escapeHtml(p.title) + '" onerror="var c=this.closest(\'.card\');if(c)c.style.display=\'none\'">';
       }).join('');
@@ -2070,7 +2079,7 @@ body.pm-open{overflow:hidden}
             p.colors.map(function(c, ci){
               return '<button type="button" class="card-swatch' + (ci===0?' active':'') + '" ' +
                 'data-code="' + escapeHtml(c.code) + '" ' +
-                'data-photo="' + escapeHtml(c.photo) + '" ' +
+                'data-photo="' + escapeHtml(catalogPhoto(p, c)) + '" ' +
                 'style="background:' + escapeHtml(c.hex) + '" ' +
                 'aria-label="' + escapeHtml(c.name) + '"></button>';
             }).join('') + '</div>'
