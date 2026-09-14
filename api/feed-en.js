@@ -21,6 +21,7 @@ const T = cfg.T;
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
+const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories']);
 
 // Товары, чьи названия/принты Meta режет по adult-политике (и/или дают strike).
 // В фид попадают, но помечены custom_label_3=risky — в Commerce Manager собери
@@ -166,8 +167,9 @@ module.exports = async function handler(req, res) {
 
   const items = [];
   for (const p of (rows || [])) {
-    const family = String(p.family || '');
+    const family = String(p.family || '').toLowerCase();
     if (p.active === false) continue;             // страховка: скрытый товар не в фиде
+    if (FEED_EXCLUDED_FAMILIES.has(family)) continue; // кропи та аксесуари не рекламуємо в Meta
     if (i18n.EN_HIDDEN[p.uid]) continue;          // celeb/IP принты — вне EU-рекламы
     if (family === 'sg-addon') continue;          // скрытые SKU апселла
     const isSg = /^sg-/.test(family);
