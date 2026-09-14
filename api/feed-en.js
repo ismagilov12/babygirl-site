@@ -21,7 +21,7 @@ const T = cfg.T;
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
-const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories']);
+const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
 
 // Товары, чьи названия/принты Meta режет по adult-политике (и/или дают strike).
 // В фид попадают, но помечены custom_label_3=risky — в Commerce Manager собери
