@@ -9,7 +9,7 @@ const T = cfg.T;
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
-const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories']);
+const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
 
 function xmlEscape(s) {
   return String(s == null ? '' : s)
