@@ -482,12 +482,12 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
           <option value="soft-rebel">SOFT REBEL</option>
           <option value="crop">CROP TOPS</option>
           <option value="long">LONG T-SHIRTS</option>
+          <option value="hoodie">HOODIES</option>
           <option value="belt">BELTS</option>
         </select>
         <select id="prod-status">
           <option value="">Усі</option>
           <option value="active">Активні</option>
-          <option value="hidden">Приховані</option>
         </select>
         <select id="prod-sort">
           <option value="sort_asc">Sort order ↑</option>
@@ -741,6 +741,25 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       .feed-card .st div{text-align:center}
       .feed-card .st b{display:block;font:700 14px/1.1 Inter,system-ui}
       .feed-card .st span{font:500 9px/1.2 JetBrains Mono,monospace;color:#0e0e0e70;text-transform:uppercase;letter-spacing:.05em}
+      .feed-manage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+      .feed-manage-head h3{margin:0 0 4px}
+      .feed-manage-note{font:500 12px/1.45 Inter,system-ui;color:#0e0e0e80;max-width:760px}
+      .feed-manage-count{white-space:nowrap;font:600 11px/1.4 JetBrains Mono,monospace;color:#0e0e0e80;background:#f5f4ef;border-radius:9px;padding:6px 9px}
+      .feed-manage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+      .feed-manage-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;border:1px solid #ebeae5;border-radius:11px;padding:7px 9px;background:#fff;transition:opacity .15s,border-color .15s,background .15s}
+      .feed-manage-item.is-off{background:#f8f7f3;opacity:.72}
+      .feed-manage-item.is-locked{background:#fff7e9}
+      .feed-manage-item.is-saving{border-color:var(--pink-brand)}
+      .feed-manage-img{width:40px;height:40px;object-fit:cover;border-radius:8px;background:#f0efe9;display:block}
+      .feed-manage-name{min-width:0;font:600 12px/1.25 Inter,system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .feed-manage-uid{font:500 9px/1.3 JetBrains Mono,monospace;color:#0e0e0e65;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .feed-toggle{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;padding:3px;cursor:pointer;color:#76736c;font:600 10px/1 Inter,system-ui}
+      .feed-toggle-track{position:relative;width:36px;height:20px;border-radius:999px;background:#c9c7c1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:background .15s}
+      .feed-toggle-track:after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+      .feed-toggle.is-on{color:#a91359}.feed-toggle.is-on .feed-toggle-track{background:var(--pink-brand)}
+      .feed-toggle.is-on .feed-toggle-track:after{transform:translateX(16px)}
+      .feed-toggle:disabled{cursor:not-allowed;opacity:.65}
+      @media(max-width:700px){.feed-manage-head{flex-direction:column}.feed-manage-grid{grid-template-columns:1fr}.feed-manage-count{white-space:normal}}
       </style>
 
       <div class="page-head">
@@ -757,6 +776,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
             <button data-days="90">90 днів</button>
           </div>
           <button class="btn" id="feed-reload">↻ Оновити</button>
+          <button class="btn" id="feed-sync-crm" title="Синхронізувати активні товари з CRM">↻ CRM</button>
         </div>
       </div>
 
@@ -768,6 +788,17 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
         <div class="kpi-card" title="Замовлення / переходи"><div class="l">CR переходів</div><div class="v" id="feed-kpi-cr">—</div></div>
         <div class="kpi-card" title="Позиції фіду, на які за період не було жодного переходу"><div class="l">Без переходів</div><div class="v" id="feed-kpi-dead">—</div></div>
         <div class="kpi-card" title="Середня кількість переходів на позицію фіду"><div class="l">Сер. переходів / SKU</div><div class="v" id="feed-kpi-avg">—</div></div>
+      </div>
+
+      <div class="ana-block" style="margin-top:14px">
+        <div class="feed-manage-head">
+          <div>
+            <h3>Керування товарами у фіді</h3>
+            <div class="feed-manage-note">Перемикач діє одразу для UA та EN фідів. Вимкнений товар залишається на сайті, але зникає з XML-фідів. Обмеження EN для захищених брендів і персон залишаються активними.</div>
+          </div>
+          <div class="feed-manage-count" id="feed-manage-count">Завантажую…</div>
+        </div>
+        <div class="feed-manage-grid" id="feed-manage-grid"><div class="ana-empty">Завантажую…</div></div>
       </div>
 
       <div class="ana-block" style="margin-top:14px">
@@ -967,7 +998,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   var SB_URL = 'https://fsihlzzjewhxpogvjapu.supabase.co';
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
   var TABLE = 'bg_products';
-  var ADMIN_PASSWORD = 'babygirl2026';
+  var ADMIN_PASSWORD = sessionStorage.getItem('bg_admin_password') || '';
 
   var PRODUCTS = [];
   var EDITING = null;
@@ -988,19 +1019,31 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   }
   document.getElementById('gateBtn').onclick = function(){
     var v = document.getElementById('gatePwd').value.trim();
-    if (v === ADMIN_PASSWORD){
+    var btn = this;
+    if (!v) { showGate('Введіть пароль'); return; }
+    btn.disabled = true;
+    btn.textContent = 'Перевіряю…';
+    ADMIN_PASSWORD = v;
+    window.bgAdminProductsApi('list').then(function(){
+      sessionStorage.setItem('bg_admin_password', v);
       sessionStorage.setItem('bg_admin_ok', '1');
       showApp();
-    } else {
+    }).catch(function(){
+      ADMIN_PASSWORD = '';
+      sessionStorage.removeItem('bg_admin_password');
+      sessionStorage.removeItem('bg_admin_ok');
       var e = document.getElementById('gateErr');
       e.textContent = 'Невірний пароль'; e.classList.add('show');
-    }
+    }).then(function(){ btn.disabled = false; btn.textContent = 'Увійти'; });
   };
   document.getElementById('gatePwd').addEventListener('keydown', function(e){
     if (e.key === 'Enter') document.getElementById('gateBtn').click();
   });
   document.getElementById('logoutBtn').onclick = function(){
-    sessionStorage.removeItem('bg_admin_ok'); showGate();
+    ADMIN_PASSWORD = '';
+    sessionStorage.removeItem('bg_admin_password');
+    sessionStorage.removeItem('bg_admin_ok');
+    showGate();
   };
 
   // ===== Sidebar nav =====
@@ -1036,6 +1079,25 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     });
   }
 
+  // Authenticated product API for admin-only controls outside this module.
+  window.bgAdminProductsApi = function(action, payload){
+    return fetch('/api/admin-products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Password': ADMIN_PASSWORD
+      },
+      body: JSON.stringify({ action: action, payload: payload || {} })
+    }).then(function(r){
+      return r.text().then(function(t){
+        var data = null;
+        try { data = t ? JSON.parse(t) : {}; } catch(e){}
+        if (!r.ok) throw new Error((data && data.error) || ('admin-products ' + r.status));
+        return data || {};
+      });
+    });
+  };
+
   function toast(msg, cls){
     var t = document.getElementById('toast');
     t.textContent = msg;
@@ -1047,8 +1109,8 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 
   // ===== Products =====
   function loadProducts(){
-    sb(TABLE + '?select=*&order=sort_order.asc&limit=500').then(function(rows){
-      PRODUCTS = rows || [];
+    window.bgAdminProductsApi('list').then(function(data){
+      PRODUCTS = data.products || [];
       renderProducts(); try { populateFbBar(); } catch(e){}
     }).catch(function(e){ toast(e.message, 'err'); });
   }
@@ -1389,11 +1451,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       description: document.getElementById('f_description').value.trim() || null,
       updated_at: new Date().toISOString()
     };
-    sb(TABLE + '?on_conflict=uid', {
-      method: 'POST',
-      headers: { 'Prefer': 'return=representation,resolution=merge-duplicates' },
-      body: JSON.stringify(p)
-    }).then(function(){
+    window.bgAdminProductsApi('upsert', p).then(function(){
       toast('✓ Збережено', 'ok');
       document.getElementById('editorModal').style.display = 'none';
       loadProducts();
@@ -1401,9 +1459,9 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   };
 
   function delProduct(p){
-    if (!confirm('Видалити "' + p.title + '"?')) return;
-    sb(TABLE + '?uid=eq.' + encodeURIComponent(p.uid), { method: 'DELETE' })
-      .then(function(){ toast('✓ Видалено', 'ok'); loadProducts(); })
+    if (!confirm('Зняти "' + p.title + '" з продажу? Товар зникне із сайту, адмінки, фідів та активного каталогу CRM. Історія замовлень збережеться.')) return;
+    window.bgAdminProductsApi('retire', { uid: p.uid })
+      .then(function(){ toast('✓ Знято з продажу всюди', 'ok'); loadProducts(); })
       .catch(function(e){ toast(e.message, 'err'); });
   }
 
@@ -1417,8 +1475,16 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   };
 
   // ===== Init =====
-  if (sessionStorage.getItem('bg_admin_ok') === '1'){
-    showApp();
+  if (ADMIN_PASSWORD){
+    window.bgAdminProductsApi('list').then(function(){
+      sessionStorage.setItem('bg_admin_ok', '1');
+      showApp();
+    }).catch(function(){
+      ADMIN_PASSWORD = '';
+      sessionStorage.removeItem('bg_admin_password');
+      sessionStorage.removeItem('bg_admin_ok');
+      showGate('Сесія завершена — увійдіть знову');
+    });
   } else {
     showGate();
   }
@@ -2074,8 +2140,21 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaWhsenpqZXdoeHBvZ3ZqYXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTY2MzUsImV4cCI6MjA5MDg3MjYzNX0._hS7TA8EqIHgz7CH6XxGKuDdOnVBb6u40ntEtZ__MjU';
   var GNS = 'http://base.google.com/ns/1.0';
 
+  var DEFAULT_OFF_FAMILIES = { crop:1, belt:1, accessory:1, accessories:1, longsleeve:1 };
+  var DEFAULT_OFF_UIDS = {
+    'ls-soft-rebel':1, 'ls-barbwire':1, 'hoodie-eminem':1,
+    'baby-girl':1, 'long-baby-girl':1
+  };
+  var EN_POLICY_HIDDEN = {
+    'ls-soft-rebel':1, 'baby-girl':1, 'long-baby-girl':1,
+    'pamela-90s':1, 'pamela-anderson':1, 'pam-tommy':1, 'long-pam-tommy':1, 'long-barbwire':1,
+    'eminem':1, 'slim-shady':1, 'long-eminem':1, 'ls-barbwire':1, 'hoodie-eminem':1,
+    'britney-bubble':1, 'its-britney':1, 'michael-jackson':1, 'leo':1, 'johnny-depp':1,
+    'playboy':1, 'beavis-butthead':1, 'pillow-talk':1, 'crush':1
+  };
+
   var S = { days:7, loc:'ua', view:'table', sort:'clicks', dir:'desc', q:'', fam:'', only:false,
-            items:[], stats:null, orphans:[], loading:false, loadedKey:'' };
+            items:[], products:[], stats:null, orphans:[], saving:{}, loading:false, loadedKey:'' };
 
   function $(id){ return document.getElementById(id); }
   function nf(n){ return (Number(n)||0).toLocaleString('uk-UA'); }
@@ -2098,6 +2177,29 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     return d.toLocaleDateString('uk-UA', { day:'2-digit', month:'2-digit' });
   }
   function keyOf(uid, color){ return String(uid||'').toLowerCase() + '|' + String(color||'').toLowerCase(); }
+  function attrsOf(p){ return p && p.attrs && typeof p.attrs === 'object' ? p.attrs : {}; }
+  function feedFlag(p){
+    var attrs = attrsOf(p);
+    var family = String((p && p.family) || '').toLowerCase();
+    if (attrs.feed_enabled === false) return false;
+    if (attrs.feed_enabled === true || attrs.in_feed === true) return true;
+    if (DEFAULT_OFF_UIDS[String((p && p.uid) || '').toLowerCase()]) return false;
+    if (DEFAULT_OFF_FAMILIES[family]) return false;
+    return p && p.in_grid !== false;
+  }
+  function policyLock(p){
+    var family = String((p && p.family) || '').toLowerCase();
+    if (/^sg-/.test(family)) return S.loc === 'en' ? 'Showgirl — лише окремий EN фід' : 'Showgirl не входить до UA фіду';
+    if (S.loc === 'en' && EN_POLICY_HIDDEN[String((p && p.uid) || '').toLowerCase()]) return 'Обмеження EN для брендів і персон';
+    return '';
+  }
+  function feedToast(message, cls){
+    var t = $('toast'); if (!t) return;
+    t.textContent = message;
+    t.className = 'toast show ' + (cls || '');
+    clearTimeout(feedToast._timer);
+    feedToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
 
   // ---------- data ----------
   function parseFeed(xmlText){
@@ -2157,9 +2259,19 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       body: JSON.stringify({ p_from: from.toISOString(), p_to: to.toISOString() })
     }).then(function(r){ return r.json(); }).catch(function(e){ console.warn('stats failed', e); return null; });
 
-    Promise.all([pFeed, pStats]).then(function(arr){
+    var pProducts = window.bgAdminProductsApi
+      ? window.bgAdminProductsApi('list').then(function(r){ return r.products || []; })
+      : Promise.reject(new Error('admin products API unavailable'));
+    pProducts = pProducts.catch(function(e){
+      console.warn('products load failed', e);
+      feedToast('Не вдалося завантажити керування фідом', 'err');
+      return S.products || [];
+    });
+
+    Promise.all([pFeed, pStats, pProducts]).then(function(arr){
       S.items = arr[0] || [];
       S.stats = (arr[1] && arr[1].rows) ? arr[1] : { rows:[], totals:{} };
+      S.products = (arr[2] || []).filter(function(p){ return p && p.active !== false; });
       S.loading = false;
       S.loadedKey = key;
       merge();
@@ -2257,18 +2369,67 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     });
   }
 
+  function visibleProducts(){
+    var q = S.q.trim().toLowerCase();
+    return (S.products || []).filter(function(p){
+      if (S.fam && String(p.family || '') !== S.fam) return false;
+      if (q && String(p.title || '').toLowerCase().indexOf(q) < 0 && String(p.uid || '').toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function(a,b){
+      var ao = Number(a.sort_order)||0, bo = Number(b.sort_order)||0;
+      if (ao !== bo) return ao - bo;
+      return String(a.title||'').localeCompare(String(b.title||''));
+    });
+  }
+
   function renderLoading(){
     var tb = document.querySelector('#feed-tbl tbody');
     if (tb) tb.innerHTML = '<tr><td colspan="15" class="ana-empty">Завантажую…</td></tr>';
+    if (!S.products.length && $('feed-manage-grid')) $('feed-manage-grid').innerHTML = '<div class="ana-empty">Завантажую…</div>';
   }
 
   function buildFamOptions(){
     var sel = $('feed-fam'); if (!sel) return;
-    var fams = {}; S.items.forEach(function(i){ if (i.fam) fams[i.fam] = 1; });
+    var fams = {}; S.products.forEach(function(p){ if (p.family) fams[p.family] = 1; });
     var list = Object.keys(fams).sort();
     var cur = S.fam;
     sel.innerHTML = '<option value="">Усі категорії</option>' + list.map(function(f){
       return '<option value="'+esc(f)+'"'+(f===cur?' selected':'')+'>'+esc(f)+'</option>';
+    }).join('');
+  }
+
+  function renderManager(){
+    var grid = $('feed-manage-grid'), count = $('feed-manage-count');
+    if (!grid || !count) return;
+    var products = visibleProducts();
+    var enabled = 0, disabled = 0, locked = 0;
+
+    products.forEach(function(p){
+      if (policyLock(p)) locked++;
+      else if (feedFlag(p)) enabled++;
+      else disabled++;
+    });
+    count.textContent = nf(enabled) + ' у фіді · ' + nf(disabled) + ' вимкн.' + (locked ? ' · ' + nf(locked) + ' обмеж.' : '');
+
+    if (!products.length){
+      grid.innerHTML = '<div class="ana-empty">Товарів не знайдено</div>';
+      return;
+    }
+
+    grid.innerHTML = products.map(function(p){
+      var on = feedFlag(p), lock = policyLock(p), saving = !!S.saving[p.uid];
+      var image = p.photo_main || (Array.isArray(p.photos) && p.photos[0]) || '';
+      var classes = 'feed-manage-item' + (on ? '' : ' is-off') + (lock ? ' is-locked' : '') + (saving ? ' is-saving' : '');
+      var buttonClass = 'feed-toggle ' + (on ? 'is-on' : 'is-off');
+      var label = lock ? 'Обмеж.' : (saving ? 'Зберігаю…' : (on ? 'Увімк.' : 'Вимк.'));
+      var title = lock || (on ? 'Вимкнути товар у фідах' : 'Увімкнути товар у фідах');
+      return '<div class="'+classes+'">' +
+        (image ? '<img class="feed-manage-img" loading="lazy" src="'+esc(image)+'" alt="">' : '<div class="feed-manage-img"></div>') +
+        '<div style="min-width:0"><div class="feed-manage-name" title="'+esc(p.title||'')+'">'+esc(p.title||p.uid)+'</div>' +
+          '<div class="feed-manage-uid">'+esc(p.uid)+(p.family ? ' · '+esc(p.family) : '')+'</div></div>' +
+        '<button type="button" class="'+buttonClass+'" data-feed-toggle="'+esc(p.uid)+'" aria-pressed="'+(on?'true':'false')+'" title="'+esc(title)+'"'+((lock||saving)?' disabled':'')+'>' +
+          '<span class="feed-toggle-track" aria-hidden="true"></span><span>'+esc(label)+'</span></button>' +
+      '</div>';
     }).join('');
   }
 
@@ -2284,6 +2445,7 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       return a;
     }, { clicks:0,hits:0,views:0,atc:0,link_orders:0,link_revenue:0,item_qty:0,item_revenue:0,dead:0 });
 
+    renderManager();
     $('feed-meta').textContent = nf(S.items.length) + ' позицій · ' + S.days + ' дн · ' + (S.loc === 'en' ? 'EN' : 'UA');
     $('feed-kpi-items').textContent = nf(S.items.length);
     $('feed-kpi-clicks').textContent = nf(T.clicks);
@@ -2376,6 +2538,31 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     cards.style.display = S.view === 'cards' ? '' : 'none';
   }
 
+  function setFeedEnabled(uid, enabled){
+    var product = null;
+    for (var i = 0; i < S.products.length; i++){
+      if (S.products[i].uid === uid){ product = S.products[i]; break; }
+    }
+    if (!product || S.saving[uid] || policyLock(product)) return;
+    if (!window.bgAdminProductsApi){ feedToast('API керування товарами недоступний', 'err'); return; }
+
+    S.saving[uid] = true;
+    renderManager();
+    window.bgAdminProductsApi('set_feed_enabled', { uid:uid, enabled:enabled }).then(function(result){
+      product.attrs = Object.assign({}, attrsOf(product), { feed_enabled:enabled });
+      if (result && result.product) Object.assign(product, result.product);
+      delete S.saving[uid];
+      renderManager();
+      feedToast(enabled ? '✓ Товар додано у фід' : '✓ Товар прибрано з фіду', 'ok');
+      S.loadedKey = '';
+      loadFeedStats(true);
+    }).catch(function(e){
+      delete S.saving[uid];
+      renderManager();
+      feedToast(e.message || 'Не вдалося зберегти', 'err');
+    });
+  }
+
   // ---------- events ----------
   function tabs(id, attr, fn){
     var wrap = $(id); if (!wrap) return;
@@ -2395,6 +2582,22 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     tabs('feed-view','view', function(v){ S.view = v; render(); });
 
     $('feed-reload').onclick = function(){ loadFeedStats(true); };
+    $('feed-sync-crm').onclick = function(){
+      var btn = this;
+      var original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Синхронізація…';
+      window.bgAdminProductsApi('sync_crm').then(function(result){
+        var crm = result.crm || {};
+        feedToast('✓ CRM синхронізовано: ' + (crm.expected_rows || crm.saved || 0) + ' позицій');
+        loadFeedStats(true);
+      }).catch(function(err){
+        feedToast(err.message || 'Не вдалося синхронізувати CRM', 'err');
+      }).then(function(){
+        btn.disabled = false;
+        btn.textContent = original;
+      });
+    };
     $('feed-q').oninput = function(){ S.q = this.value; render(); };
     $('feed-fam').onchange = function(){ S.fam = this.value; render(); };
     $('feed-only').onchange = function(){ S.only = this.checked; render(); };
@@ -2408,6 +2611,11 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
     });
 
     document.querySelector('#page-feed').addEventListener('click', function(e){
+      var toggle = e.target.closest('[data-feed-toggle]');
+      if (toggle){
+        setFeedEnabled(toggle.dataset.feedToggle, toggle.getAttribute('aria-pressed') !== 'true');
+        return;
+      }
       var b = e.target.closest('[data-copy]'); if (!b) return;
       var link = b.dataset.copy;
       var done = function(){ b.textContent = '✓'; setTimeout(function(){ b.textContent = '⧉'; }, 1200); };
