@@ -9,7 +9,23 @@ const T = cfg.T;
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
-const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
+const FEED_DISABLED_BY_DEFAULT_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
+const FEED_DISABLED_BY_DEFAULT_UIDS = new Set([
+  'ls-soft-rebel',
+  'ls-barbwire',
+  'hoodie-eminem',
+  'baby-girl',
+  'long-baby-girl'
+]);
+
+function isFeedEnabled(p, family) {
+  const attrs = (p && p.attrs) || {};
+  if (attrs.feed_enabled === false) return false;
+  if (attrs.feed_enabled === true || attrs.in_feed === true) return true;
+  if (FEED_DISABLED_BY_DEFAULT_UIDS.has(p.uid)) return false;
+  if (FEED_DISABLED_BY_DEFAULT_FAMILIES.has(family)) return false;
+  return p.in_grid !== false;
+}
 
 function xmlEscape(s) {
   return String(s == null ? '' : s)
@@ -119,9 +135,8 @@ module.exports = async function handler(req, res) {
   for (const p of (rows || [])) {
     const family = String(p.family || '').toLowerCase();
     if (p.active === false) continue;   // страховка: скрытый товар не должен попасть в фид
-    if (FEED_EXCLUDED_FAMILIES.has(family)) continue; // кропи та аксесуари не рекламуємо в Meta
+    if (!isFeedEnabled(p, family)) continue; // керується в адмінці через attrs.feed_enabled
     if (/^sg-/.test(family)) continue;  // основной фид зеркалит витрину BabyGirl, без Showgirl
-    if (p.in_grid === false && !(p.attrs && p.attrs.in_feed)) continue;  // секційні товари з opt-in
     if (Array.isArray(p.colors) && p.colors.length > 0) {
       for (const c of p.colors) {
         if (!c || !c.code) continue;
@@ -149,6 +164,6 @@ module.exports = async function handler(req, res) {
 
   res.status(200);
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=600');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.send(xml);
 };

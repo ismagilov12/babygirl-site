@@ -21,7 +21,23 @@ const T = cfg.T;
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
 const CATEGORY = 'Apparel & Accessories > Clothing';
-const FEED_EXCLUDED_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
+const FEED_DISABLED_BY_DEFAULT_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
+const FEED_DISABLED_BY_DEFAULT_UIDS = new Set([
+  'ls-soft-rebel',
+  'ls-barbwire',
+  'hoodie-eminem',
+  'baby-girl',
+  'long-baby-girl'
+]);
+
+function isFeedEnabled(p, family) {
+  const attrs = (p && p.attrs) || {};
+  if (attrs.feed_enabled === false) return false;
+  if (attrs.feed_enabled === true || attrs.in_feed === true) return true;
+  if (FEED_DISABLED_BY_DEFAULT_UIDS.has(p.uid)) return false;
+  if (FEED_DISABLED_BY_DEFAULT_FAMILIES.has(family)) return false;
+  return p.in_grid !== false;
+}
 
 // Товары, чьи названия/принты Meta режет по adult-политике (и/или дают strike).
 // В фид попадают, но помечены custom_label_3=risky — в Commerce Manager собери
@@ -30,7 +46,11 @@ const META_RISKY = {
   'jacket-bad-girls': 1,                   // принт Bad Girls Club — ліцензійний ризик
   'only-fans': 1, 'crop-only-fans': 1,     // название = adult-сервис
   'crop-pornstar': 1,                      // принт «Porn Star»
+  'hoodie-porn-star': 1,                   // принт «Porn Star»
   'crop-gods-favorite': 1,                 // принт «GOD'S FAVORITE SLUT»
+  'hoodie-smile-horny': 1,                 // provocative slogan
+  'hoodie-cute-sexy': 1,                   // suggestive slogan
+  'hoodie-baby-doll-betty-black': 1,       // licensed character print
   'good-pussy': 1, 'crop-goodpussy': 1,    // двусмысленность в названии
   'erotica': 1,                            // название
   'belt': 1, 'sg-garter': 1                // бельё/пояс для чулок
@@ -169,12 +189,11 @@ module.exports = async function handler(req, res) {
   for (const p of (rows || [])) {
     const family = String(p.family || '').toLowerCase();
     if (p.active === false) continue;             // страховка: скрытый товар не в фиде
-    if (FEED_EXCLUDED_FAMILIES.has(family)) continue; // кропи та аксесуари не рекламуємо в Meta
+    if (!isFeedEnabled(p, family)) continue;      // керується в адмінці через attrs.feed_enabled
     if (i18n.EN_HIDDEN[p.uid]) continue;          // celeb/IP принты — вне EU-рекламы
     if (family === 'sg-addon') continue;          // скрытые SKU апселла
     const isSg = /^sg-/.test(family);
     if (isSg && !withSg) continue;                // бельё — только по ?sg=1
-    if (!isSg && p.in_grid === false && !(p.attrs && p.attrs.in_feed)) continue;   // не в витрине UA
 
     if (Array.isArray(p.colors) && p.colors.length > 0) {
       for (const c of p.colors) {
@@ -203,6 +222,6 @@ module.exports = async function handler(req, res) {
 
   res.status(200);
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=600');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.send(xml);
 };
