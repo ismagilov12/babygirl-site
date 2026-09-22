@@ -1,18 +1,15 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "redirects": [
-    { "source": "/bg-admin", "destination": "/", "permanent": false },
-    { "source": "/bg-admin.html", "destination": "/", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/", "destination": "/api/site-paused" },
-    { "source": "/index.html", "destination": "/api/site-paused" },
-    { "source": "/en", "destination": "/api/site-paused" },
-    { "source": "/en.html", "destination": "/api/site-paused" },
-    { "source": "/thanks", "destination": "/api/thanks" },
-    { "source": "/feed.xml", "destination": "/api/feed" },
-    { "source": "/feed-en.xml", "destination": "/api/feed-en" }
+  "routes": [
+    { "src": "/", "dest": "/api/site-paused" },
+    { "src": "/index\\.html", "dest": "/api/site-paused" },
+    { "src": "/en", "dest": "/api/site-paused" },
+    { "src": "/en\\.html", "dest": "/api/site-paused" },
+    { "src": "/bg-admin", "dest": "/api/site-paused" },
+    { "src": "/bg-admin\\.html", "dest": "/api/site-paused" },
+    { "src": "/thanks", "dest": "/api/thanks" },
+    { "src": "/feed\\.xml", "dest": "/api/feed" },
+    { "src": "/feed-en\\.xml", "dest": "/api/feed-en" },
+    { "handle": "filesystem" }
   ],
   "crons": [
     { "path": "/api/wayforpay-reconcile", "schedule": "*/10 * * * *" }
