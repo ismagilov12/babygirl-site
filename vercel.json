@@ -6,6 +6,10 @@
     { "source": "/bg-admin.html", "destination": "/", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/", "destination": "/api/site-paused" },
+    { "source": "/index.html", "destination": "/api/site-paused" },
+    { "source": "/en", "destination": "/api/site-paused" },
+    { "source": "/en.html", "destination": "/api/site-paused" },
     { "source": "/thanks", "destination": "/api/thanks" },
     { "source": "/feed.xml", "destination": "/api/feed" },
     { "source": "/feed-en.xml", "destination": "/api/feed-en" }
