@@ -1,10 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    { "source": "/bg-admin", "destination": "/", "permanent": false },
-    { "source": "/bg-admin.html", "destination": "/", "permanent": false }
-  ],
   "rewrites": [
     { "source": "/thanks", "destination": "/api/thanks" },
     { "source": "/feed.xml", "destination": "/api/feed" },
