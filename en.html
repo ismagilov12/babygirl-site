@@ -2015,6 +2015,7 @@ Object.assign(window.EN_DESCR, {
 /* ========== STOREFRONT (catalog + cart + checkout) ========== */
 (function(){
   // Read DATA
+  window.BG_CATALOG_PAUSED = true;
   var D = { all: [], grid: [], featured: [] };
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
@@ -2512,6 +2513,7 @@ Object.assign(window.EN_DESCR, {
     pmNext.hidden = pmIdx >= pmPhotos.length - 1;
   }
   function openProduct(uid){
+    if (window.BG_CATALOG_PAUSED && uid !== 'suit-baby-girl') return;
     if (EN_HIDDEN[uid]) return;
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;

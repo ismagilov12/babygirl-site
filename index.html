@@ -2040,6 +2040,7 @@ body.pm-open{overflow:hidden}
 /* ========== STOREFRONT (catalog + cart + checkout) ========== */
 (function(){
   // Read DATA
+  window.BG_CATALOG_PAUSED = true;
   var D = { all: [], grid: [], featured: [] };
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
@@ -2511,7 +2512,7 @@ body.pm-open{overflow:hidden}
     else cart.push({ uid: cartUid, title: p.title, color_name: col ? col.name : (p.color_name || ''), size: sz, price: p.price, price_old: Number(p.price_old || 0) || null, qty: 1, photo: col ? col.photo : (p.photo_main || (p.photos && p.photos[0]) || '') });
     var now = totalUnits();
     renderCart(); openCart();
-    try{ window.__bgUpsell && window.__bgUpsell(p, {cart:cart, render:renderCart, open:openCart, all:(typeof D!=="undefined"&&D.all)||[]}); }catch(e){}
+    try{ !window.BG_CATALOG_PAUSED && window.__bgUpsell && window.__bgUpsell(p, {cart:cart, render:renderCart, open:openCart, all:(typeof D!=="undefined"&&D.all)||[]}); }catch(e){}
     if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids:[uid], value:p.price, currency:'UAH' });
     try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
     // Если перешли через границу 1→2, показать toast
@@ -2584,6 +2585,7 @@ body.pm-open{overflow:hidden}
   }
 
   function openProduct(uid){
+    if (window.BG_CATALOG_PAUSED && uid !== 'suit-baby-girl') return;
     var p = D.all.find(function(x){ return x.uid === uid; });
     if (!p) return;
     pmCurrent = p;
