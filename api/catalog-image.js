@@ -3,11 +3,14 @@ const sharp = require('sharp');
 module.exports = async function(req, res) {
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.status(405).end(); return; }
   const src = req.query && req.query.src;
-  if (typeof src !== 'string' || !/^assets\/[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/i.test(src)) {
+  if (typeof src !== 'string' || !/^(?:assets|storage)(?:\/[a-zA-Z0-9_-]+)+\.(webp|png|jpe?g)$/i.test(src)) {
     res.status(400).send('Invalid image'); return;
   }
   try {
-    const upstream = await fetch('https://www.babygirl.com.ua/' + src, {
+    const sourceUrl = src.startsWith('storage/')
+      ? 'https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/' + src.slice(8)
+      : 'https://www.babygirl.com.ua/' + src;
+    const upstream = await fetch(sourceUrl, {
       redirect: 'error', signal: AbortSignal.timeout(12000)
     });
     if (!upstream.ok || !String(upstream.headers.get('content-type')).startsWith('image/')) {

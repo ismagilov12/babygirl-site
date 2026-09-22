@@ -39,6 +39,10 @@ function xmlEscape(s) {
 
 function absUrl(path) {
   if (!path) return '';
+  const storagePrefix = 'https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/';
+  if (String(path).startsWith(storagePrefix)) {
+    return SITE + '/api/catalog-image?src=' + encodeURIComponent('storage/' + String(path).slice(storagePrefix.length)) + '&v=1';
+  }
   const local = String(path).replace(SITE + '/', '').replace(/^\/+/, '');
   if (/^assets\/[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/i.test(local)) {
     return SITE + '/api/catalog-image?src=' + encodeURIComponent(local) + '&v=1';
