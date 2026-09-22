@@ -19,6 +19,7 @@ const DEFAULT_HOODIE_DESCRIPTION = [
   '',
   'Oversize fit • One size • Тринитка на флісі • Made for Baby Girls'
 ].join('\n');
+const DEFAULT_HOODIE_SIZE_GUIDE = 'assets/hoodie-size-guide-ua.webp';
 
 function text(value) {
   return String(value == null ? '' : value).trim();
@@ -44,10 +45,20 @@ function uniqueStrings(values) {
   return out;
 }
 
-function ensureHoodieDescription(product) {
-  if (!product || product.family !== 'hoodie' || text(product.description)) return product;
-  return Object.assign({}, product, { description: DEFAULT_HOODIE_DESCRIPTION });
+function ensureHoodieDefaults(product) {
+  if (!product || product.family !== 'hoodie') return product;
+  const photos = uniqueStrings([
+    ...(Array.isArray(product.photos) ? product.photos : []),
+    DEFAULT_HOODIE_SIZE_GUIDE
+  ]);
+  return Object.assign({}, product, {
+    description: DEFAULT_HOODIE_DESCRIPTION,
+    photos,
+    sizes: ['ONE SIZE']
+  });
 }
+
+const ensureHoodieDescription = ensureHoodieDefaults;
 
 function productPhotos(product, siteOrigin) {
   const colors = Array.isArray(product.colors) ? product.colors : [];
@@ -79,7 +90,7 @@ function variantName(title, colorName) {
 }
 
 function expectedCrmRows(rawProduct, siteOrigin) {
-  const product = ensureHoodieDescription(rawProduct || {});
+  const product = ensureHoodieDefaults(rawProduct || {});
   const uid = text(product.uid);
   if (!uid) return [];
 
@@ -299,6 +310,8 @@ async function deactivateCrmProduct(sb, uid) {
 module.exports = {
   CRM_TABLE,
   DEFAULT_HOODIE_DESCRIPTION,
+  DEFAULT_HOODIE_SIZE_GUIDE,
+  ensureHoodieDefaults,
   ensureHoodieDescription,
   expectedCrmRows,
   syncCatalogToCrm,

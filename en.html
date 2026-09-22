@@ -2018,6 +2018,32 @@ Object.assign(window.EN_DESCR, {
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
 
+  var HOODIE_SIZE_GUIDE = 'assets/hoodie-size-guide-ua.webp';
+  var HOODIE_DESCRIPTION = [
+    'BABY GIRL HOODIE 💗',
+    '',
+    'The oversized hoodie you will want to live in.',
+    'Its relaxed, voluminous silhouette is designed for maximum comfort — it never restricts movement and drapes beautifully.',
+    '',
+    'ONE SIZE — one universal oversized fit.',
+    'Made from high-quality heavyweight brushed fleece: soft, warm and exceptionally comfortable against the skin.',
+    '',
+    'For cold mornings, long walks and days when you just want to wrap up in something warm and still feel sexy. 💞',
+    '',
+    'Oversize fit • One size • Brushed fleece • Made for Baby Girls'
+  ].join('\n');
+  function normalizeHoodies(products){
+    (Array.isArray(products) ? products : []).forEach(function(p){
+      if (!p || p.family !== 'hoodie') return;
+      p.description = HOODIE_DESCRIPTION;
+      p.sizes = ['ONE SIZE'];
+      var photos = Array.isArray(p.photos) ? p.photos.slice() : [];
+      if (photos.indexOf(HOODIE_SIZE_GUIDE) < 0) photos.push(HOODIE_SIZE_GUIDE);
+      p.photos = photos;
+    });
+  }
+  normalizeHoodies(D.all);
+
   // EN-only: ховаємо товари з принтами реальних осіб/брендів, а також позиції,
   // які зняті з продажу. Діє ТІЛЬКИ на /en — UA-версія має окремий стоп-лист.
   var EN_HIDDEN = {
@@ -2347,6 +2373,7 @@ Object.assign(window.EN_DESCR, {
         } else { Object.assign(byUid[row.uid], row); }
         if (row.in_grid !== false && D.grid.indexOf(row.uid) < 0) D.grid.push(row.uid);
       });
+      normalizeHoodies(D.all);
       renderGrid();
       renderSuits();
       handleDeepLink();

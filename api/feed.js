@@ -4,6 +4,7 @@
 // Multi-color товары -> отдельный SKU на цвет + общий g:item_group_id.
 
 const cfg = require('./_config');
+const crmCatalog = require('./_crm-catalog');
 const T = cfg.T;
 
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
@@ -55,7 +56,7 @@ function isImage(url) {
 // В фид их пускать нельзя: для Meta/Google это текстовый баннер — item получает
 // "низкое качество изображения", а в DPA-карусели вместо вещи показывается таблица.
 function isSizeChart(url) {
-  return /(^|\/)size-[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
+  return /(^|\/)[^/]*size-(guide|oversize|long)[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
 }
 
 function makeItem(p, color) {
@@ -132,7 +133,8 @@ module.exports = async function handler(req, res) {
   }
 
   const items = [];
-  for (const p of (rows || [])) {
+  for (const rawProduct of (rows || [])) {
+    const p = crmCatalog.ensureHoodieDefaults(rawProduct);
     const family = String(p.family || '').toLowerCase();
     if (p.active === false) continue;   // страховка: скрытый товар не должен попасть в фид
     if (!isFeedEnabled(p, family)) continue; // керується в адмінці через attrs.feed_enabled

@@ -77,7 +77,8 @@ module.exports = async function handler(req, res) {
   try {
     if (action === 'list') {
       const rows = await sb(T.PRODUCTS + '?select=*&active=eq.true&order=sort_order.asc&limit=500');
-      return res.status(200).json({ ok: true, products: rows || [] });
+      const products = (rows || []).map(crmCatalog.ensureHoodieDefaults);
+      return res.status(200).json({ ok: true, products });
     }
 
     if (action === 'upsert') {
@@ -91,9 +92,8 @@ module.exports = async function handler(req, res) {
       ];
       const clean = {};
       for (const k of allowedCols) if (k in payload) clean[k] = payload[k];
-      if (clean.family === 'hoodie' && !String(clean.description || '').trim()) {
-        clean.description = crmCatalog.DEFAULT_HOODIE_DESCRIPTION;
-      }
+      const normalized = crmCatalog.ensureHoodieDefaults(clean);
+      Object.assign(clean, normalized);
       clean.updated_at = new Date().toISOString();
       const rows = await sb(
         T.PRODUCTS + '?on_conflict=uid',

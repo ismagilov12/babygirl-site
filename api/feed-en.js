@@ -16,6 +16,7 @@
 
 const cfg = require('./_config');
 const i18n = require('./_en_i18n');
+const crmCatalog = require('./_crm-catalog');
 const T = cfg.T;
 
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
@@ -64,6 +65,19 @@ const FX = Number(process.env.WB_FX_UAH_PER_UNIT || 53.43);
 const MARKUP_BASE = Number(process.env.WB_PRICE_MARKUP || 2);
 const SALE_PCT = Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20);
 const MARKUP = Math.round(MARKUP_BASE * (100 - SALE_PCT)) / 100;
+const DEFAULT_HOODIE_DESCRIPTION_EN = [
+  'BABY GIRL HOODIE 💗',
+  '',
+  'The oversized hoodie you will want to live in.',
+  'Its relaxed, voluminous silhouette is designed for maximum comfort — it never restricts movement and drapes beautifully.',
+  '',
+  'ONE SIZE — one universal oversized fit.',
+  'Made from high-quality heavyweight brushed fleece: soft, warm and exceptionally comfortable against the skin.',
+  '',
+  'For cold mornings, long walks and days when you just want to wrap up in something warm and still feel sexy. 💞',
+  '',
+  'Oversize fit • One size • Brushed fleece • Made for Baby Girls'
+].join('\n');
 
 function xmlEscape(s) {
   return String(s == null ? '' : s)
@@ -94,7 +108,7 @@ function isImage(url) {
 // В фид их пускать нельзя: для Meta/Google это текстовый баннер — item получает
 // "низкое качество изображения", а в DPA-карусели вместо вещи показывается таблица.
 function isSizeChart(url) {
-  return /(^|\/)size-[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
+  return /(^|\/)[^/]*size-(guide|oversize|long)[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
 }
 
 function eur(uah, mult) {
@@ -116,7 +130,11 @@ function makeItem(p, color) {
   const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !BROKEN_IMG[u] && !isSizeChart(u)).slice(0, 20);
 
   // Описание берём ТОЛЬКО английское. Украинское из БД в EU-рекламу пускать нельзя.
-  const desc = stripTags(i18n.EN_DESCR[p.uid] || (BRAND + ' · ' + baseTitle + (isVariant ? ' (' + (color.name || color.code) + ')' : '')));
+  const desc = stripTags(
+    p.family === 'hoodie'
+      ? DEFAULT_HOODIE_DESCRIPTION_EN
+      : (i18n.EN_DESCR[p.uid] || (BRAND + ' · ' + baseTitle + (isVariant ? ' (' + (color.name || color.code) + ')' : '')))
+  );
 
   const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(', ') : 'ONE SIZE';
   const uah = Number(p.price) || 0;
@@ -186,7 +204,8 @@ module.exports = async function handler(req, res) {
   }
 
   const items = [];
-  for (const p of (rows || [])) {
+  for (const rawProduct of (rows || [])) {
+    const p = crmCatalog.ensureHoodieDefaults(rawProduct);
     const family = String(p.family || '').toLowerCase();
     if (p.active === false) continue;             // страховка: скрытый товар не в фиде
     if (!isFeedEnabled(p, family)) continue;      // керується в адмінці через attrs.feed_enabled

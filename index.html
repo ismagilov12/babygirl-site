@@ -2043,6 +2043,32 @@ body.pm-open{overflow:hidden}
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
 
+  var HOODIE_SIZE_GUIDE = 'assets/hoodie-size-guide-ua.webp';
+  var HOODIE_DESCRIPTION = [
+    'BABY GIRL HOODIE 💗',
+    '',
+    'Той самий oversize, у якому хочеться жити.',
+    'Вільний, обʼємний силует створений для максимального комфорту — худі не сковує рухів і красиво сідає по фігурі.',
+    '',
+    'ONE SIZE — один універсальний oversize розмір.',
+    'Виконаний із якісної щільної тринитки на флісі: мʼякий, теплий та дуже приємний до тіла.',
+    '',
+    'Для холодних ранків, довгих прогулянок і днів, коли хочеться просто загорнутися у щось тепле й залишатися sexy. 💞',
+    '',
+    'Oversize fit • One size • Тринитка на флісі • Made for Baby Girls'
+  ].join('\n');
+  function normalizeHoodies(products){
+    (Array.isArray(products) ? products : []).forEach(function(p){
+      if (!p || p.family !== 'hoodie') return;
+      p.description = HOODIE_DESCRIPTION;
+      p.sizes = ['ONE SIZE'];
+      var photos = Array.isArray(p.photos) ? p.photos.slice() : [];
+      if (photos.indexOf(HOODIE_SIZE_GUIDE) < 0) photos.push(HOODIE_SIZE_GUIDE);
+      p.photos = photos;
+    });
+  }
+  normalizeHoodies(D.all);
+
   // Сезонна акція на теплі худі: поточна ціна вже враховує знижку −20%.
   function applyHoodieSeasonSale(products){
     (Array.isArray(products) ? products : []).forEach(function(p){
@@ -2376,6 +2402,7 @@ body.pm-open{overflow:hidden}
         } else { Object.assign(byUid[row.uid], row); }
         if (row.in_grid !== false && D.grid.indexOf(row.uid) < 0) D.grid.push(row.uid);
       });
+      normalizeHoodies(D.all);
       applyHoodieSeasonSale(D.all);
       renderGrid();
       renderSuits();
