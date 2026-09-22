@@ -91,6 +91,10 @@ function stripTags(s) {
 
 function absUrl(path) {
   if (!path) return '';
+  const local = String(path).replace(SITE + '/', '').replace(/^\/+/, '');
+  if (/^assets\/[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/i.test(local)) {
+    return SITE + '/api/catalog-image?src=' + encodeURIComponent(local) + '&v=1';
+  }
   if (/^https?:\/\//i.test(path)) return path;
   return SITE + '/' + String(path).replace(/^\/+/, '');
 }
@@ -108,6 +112,7 @@ function isImage(url) {
 // В фид их пускать нельзя: для Meta/Google это текстовый баннер — item получает
 // "низкое качество изображения", а в DPA-карусели вместо вещи показывается таблица.
 function isSizeChart(url) {
+  if (/(^|\/)suit-baby-girl-logo\./i.test(String(url || ''))) return true;
   return /(^|\/)[^/]*size-(guide|oversize|long)[^/]*\.(webp|jpe?g|png|gif)(\?.*)?$/i.test(String(url || ''));
 }
 
