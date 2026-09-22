@@ -78,29 +78,17 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid signature' });
   }
 
+  async function recordWebhook() {
+    return sb(T.WAYFORPAY_EVENTS, {
+      method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=representation' },
+      body: JSON.stringify({ order_ref: orderReference, transaction_status: transactionStatus || '',
+        amount: amount != null ? Number(amount) : null, currency: currency || '',
+        auth_code: authCode || '', card_pan: cardPan || '', reason_code: reasonCode != null ? String(reasonCode) : '',
+        raw_payload: body, source_ip: String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() })
+    });
+  }
+
   try {
-  // Idempotent insert
-  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || '';
-  let isFirstEvent = true;
-  const inserted = await sb(T.WAYFORPAY_EVENTS, {
-    method: 'POST',
-    headers: { 'Prefer': 'resolution=ignore-duplicates,return=representation' },
-    body: JSON.stringify({
-      order_ref: orderReference,
-      transaction_status: transactionStatus || '',
-      amount: amount != null ? Number(amount) : null,
-      currency: currency || '',
-      auth_code: authCode || '',
-      card_pan: cardPan || '',
-      reason_code: reasonCode != null ? String(reasonCode) : '',
-      raw_payload: body,
-      source_ip: clientIp
-    })
-  });
-  if (Array.isArray(inserted) && inserted.length === 0) isFirstEvent = false;
-
-  console.log('[wfp-callback]', { orderReference, transactionStatus, amount, reasonCode, isFirstEvent });
-
   // Always retry incomplete processing; an inserted webhook is not proof of delivery.
   if (transactionStatus === 'Approved') {
     const ref = encodeURIComponent(orderReference);
@@ -117,6 +105,7 @@ module.exports = async function handler(req, res) {
         (process.env.WAYFORPAY_MERCHANT && merchantAccount !== process.env.WAYFORPAY_MERCHANT)) {
       return res.status(400).json({ error: 'Payment does not match saved order' });
     }
+    await recordWebhook();
     const paidAt = (tracking && tracking.paid_at) || new Date().toISOString();
     const updated = await sb(T.ORDERS + '?number=eq.' + ref, {
       method: 'PATCH', headers: { Prefer: 'return=representation' },
@@ -147,6 +136,8 @@ module.exports = async function handler(req, res) {
       await sb('bg_order_tracking?order_ref=eq.' + ref, { method: 'PATCH',
         body: JSON.stringify({ capi_sent_at: new Date().toISOString() }) });
     }
+  } else {
+    await recordWebhook();
   }
 
   // Signed response
