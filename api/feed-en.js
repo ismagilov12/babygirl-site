@@ -126,7 +126,11 @@ function makeItem(p, color) {
   const mainPhoto = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
   if (!mainPhoto || !isImage(mainPhoto) || BROKEN_IMG[mainPhoto] || isSizeChart(mainPhoto)) return null;
 
-  const allPhotos = Array.isArray(p.photos) ? p.photos : [];
+  // Use the selected color gallery; do not advertise another color as an extra image.
+  const allPhotos = isVariant && Array.isArray(color.photos) && color.photos.length
+    ? color.photos
+    : (isVariant && Array.isArray(p.colors) && p.colors.length > 1
+      ? [] : (Array.isArray(p.photos) ? p.photos : []));
   const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !BROKEN_IMG[u] && !isSizeChart(u)).slice(0, 20);
 
   // Описание берём ТОЛЬКО английское. Украинское из БД в EU-рекламу пускать нельзя.

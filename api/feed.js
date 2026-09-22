@@ -67,7 +67,11 @@ function makeItem(p, color) {
   const mainPhoto = isSizeChart(rawMain) ? null : rawMain;
   if (!mainPhoto) return null;
 
-  const allPhotos = Array.isArray(p.photos) ? p.photos : [];
+  // Use the selected color gallery; do not advertise another color as an extra image.
+  const allPhotos = isVariant && Array.isArray(color.photos) && color.photos.length
+    ? color.photos
+    : (isVariant && Array.isArray(p.colors) && p.colors.length > 1
+      ? [] : (Array.isArray(p.photos) ? p.photos : []));
   const extras = allPhotos.filter(u => isImage(u) && u !== mainPhoto && !isSizeChart(u)).slice(0, 20);
 
   const desc = p.description || (BRAND + ' · ' + p.title + (isVariant ? ' (' + (color.name || color.code) + ')' : ''));
