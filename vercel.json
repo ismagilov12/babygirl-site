@@ -1,9 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/bg-admin", "destination": "/", "permanent": false },
+    { "source": "/bg-admin.html", "destination": "/", "permanent": false }
+  ],
   "rewrites": [
-    { "source": "/bg-admin", "destination": "/api/admin-paused" },
-    { "source": "/bg-admin.html", "destination": "/api/admin-paused" },
     { "source": "/thanks", "destination": "/api/thanks" },
     { "source": "/feed.xml", "destination": "/api/feed" },
     { "source": "/feed-en.xml", "destination": "/api/feed-en" }
