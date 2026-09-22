@@ -1377,8 +1377,6 @@ body.pm-open{overflow:hidden}
 .suit-launch__thumb:hover,.suit-launch__thumb.on{transform:translateY(-2px);box-shadow:3px 5px 0 #ff4fa1}
 .suit-launch__thumb.on{outline:3px solid #ff4fa1;outline-offset:1px}
 .suit-launch__thumb img{width:100%;height:100%;object-fit:cover}
-/* Temporary storefront pause: keep the new suit launch live, hide the previous catalog. */
-#bgDrops,#shop{display:none!important}
 @media(max-width:900px){.suit-launch{padding-bottom:42px}.suit-launch__grid{grid-template-columns:1fr;padding-top:24px}.suit-launch__copy{order:1}.suit-launch__visual{order:2}.suit-launch__frame{min-height:0;aspect-ratio:5/4}.suit-launch__main{max-height:none}.suit-launch__rail-track{animation-duration:22s}}
 @media(max-width:520px){.suit-launch__grid{gap:20px}.suit-launch__copy{border-radius:18px;padding:23px 19px;box-shadow:6px 6px 0 #ff4fa1}.suit-launch h2{font-size:38px}.suit-launch__frame{border-radius:18px;box-shadow:6px 6px 0 #ffd600}.suit-launch__price-sticker{font-size:14px;padding:9px 12px}.suit-launch__thumb{width:68px;height:78px}.suit-launch__gallery{grid-auto-columns:68px}.suit-launch__buy{align-items:stretch}.suit-launch__price{width:100%}}
 @media(prefers-reduced-motion:reduce){.suit-launch__rail-track{animation:none}}
@@ -2040,7 +2038,7 @@ body.pm-open{overflow:hidden}
 /* ========== STOREFRONT (catalog + cart + checkout) ========== */
 (function(){
   // Read DATA
-  window.BG_CATALOG_PAUSED = true;
+  window.BG_CATALOG_PAUSED = false;
   var D = { all: [], grid: [], featured: [] };
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
