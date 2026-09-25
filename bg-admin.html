@@ -1067,6 +1067,16 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
       'Content-Type': 'application/json',
       'Prefer': opts.prefer || 'return=representation'
     }, opts.headers || {});
+    if (/^bg_orders(?:\?|$)/.test(path)) {
+      return fetch('/api/admin-orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Password': ADMIN_PASSWORD },
+        body: JSON.stringify({ path: path, method: opts.method || 'GET', payload: opts.body ? JSON.parse(opts.body) : null })
+      }).then(function(r){ return r.json().then(function(data){
+        if (!r.ok) throw new Error(data.error || 'Order access failed');
+        return data;
+      }); });
+    }
     return fetch(SB_URL + '/rest/v1/' + path, {
       method: opts.method || 'GET',
       headers: headers,
@@ -2920,3 +2930,4 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 </script>
 </body>
 </html>
+
