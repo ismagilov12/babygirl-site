@@ -20,7 +20,7 @@ async function sb(path, opts) {
   opts = opts || {};
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
+  if (!url || !key) throw new Error('Database unavailable');
   const r = await fetch(url + '/rest/v1/' + path, {
     method: opts.method || 'GET',
     headers: Object.assign({
@@ -33,7 +33,7 @@ async function sb(path, opts) {
   if (!r.ok) {
     const t = await r.text().catch(() => '');
     console.warn('[wfp-cb/sb]', path, r.status, t.slice(0, 200));
-    return null;
+    throw new Error('Database operation failed');
   }
   const txt = await r.text();
   return txt ? JSON.parse(txt) : null;
@@ -78,76 +78,66 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid signature' });
   }
 
-  // Idempotent insert
-  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || '';
-  let isFirstEvent = true;
-  const inserted = await sb(T.WAYFORPAY_EVENTS, {
-    method: 'POST',
-    headers: { 'Prefer': 'resolution=ignore-duplicates,return=representation' },
-    body: JSON.stringify({
-      order_ref: orderReference,
-      transaction_status: transactionStatus || '',
-      amount: amount != null ? Number(amount) : null,
-      currency: currency || '',
-      auth_code: authCode || '',
-      card_pan: cardPan || '',
-      reason_code: reasonCode != null ? String(reasonCode) : '',
-      raw_payload: body,
-      source_ip: clientIp
-    })
-  });
-  if (Array.isArray(inserted) && inserted.length === 0) isFirstEvent = false;
-
-  console.log('[wfp-callback]', { orderReference, transactionStatus, amount, reasonCode, isFirstEvent });
-
-  // Side-effects on first Approved
-  if (isFirstEvent && transactionStatus === 'Approved') {
-    await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference), {
-      method: 'PATCH',
-      body: JSON.stringify({ payment_status: 'paid', paid_at: new Date().toISOString() })
+  async function recordWebhook() {
+    return sb(T.WAYFORPAY_EVENTS, {
+      method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=representation' },
+      body: JSON.stringify({ order_ref: orderReference, transaction_status: transactionStatus || '',
+        amount: amount != null ? Number(amount) : null, currency: currency || '',
+        auth_code: authCode || '', card_pan: cardPan || '', reason_code: reasonCode != null ? String(reasonCode) : '',
+        raw_payload: body, source_ip: String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() })
     });
+  }
 
-    // Meta CAPI Purchase — server-side mirror of browser Pixel.
-    // event_id == orderReference -> Meta deduplicates with browser fbq Purchase.
-    try {
-      const selectCols = 'customer_name,customer_phone,customer_email,items,total,delivery_city,fbp,fbc,landing_url';
-      const orderRows = await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference) + '&select=' + selectCols + '&limit=1');
-      const order = (Array.isArray(orderRows) && orderRows[0]) ? orderRows[0] : {};
+  try {
+  // Always retry incomplete processing; an inserted webhook is not proof of delivery.
+  if (transactionStatus === 'Approved') {
+    const ref = encodeURIComponent(orderReference);
+    const trackRows = await sb('bg_order_tracking?order_ref=eq.' + ref + '&limit=1');
+    const tracking = Array.isArray(trackRows) && trackRows[0];
+    const orderRows = tracking && tracking.order_data ? [tracking.order_data] :
+      await sb(T.ORDERS + '?number=eq.' + ref + '&limit=1');
+    const order = Array.isArray(orderRows) && orderRows[0];
+    if (!order) return res.status(503).json({ error: 'Order unavailable; retry callback' });
+    const isCod = order.payment_method === 'cod' || order.payment_method === 'np';
+    const expectedAmount = isCod ? Number(cfg.COD_PREPAYMENT_AMOUNT_UAH) : Number(order.total);
+    if (currency !== 'UAH' || !Number.isFinite(Number(amount)) ||
+        Math.round(Number(amount)*100) !== Math.round(expectedAmount*100) ||
+        (process.env.WAYFORPAY_MERCHANT && merchantAccount !== process.env.WAYFORPAY_MERCHANT)) {
+      return res.status(400).json({ error: 'Payment does not match saved order' });
+    }
+    await recordWebhook();
+    const paidAt = (tracking && tracking.paid_at) || new Date().toISOString();
+    const updated = await sb(T.ORDERS + '?number=eq.' + ref, {
+      method: 'PATCH', headers: { Prefer: 'return=representation' },
+      body: JSON.stringify({ payment_status: 'paid', paid_at: paidAt })
+    });
+    if (!Array.isArray(updated) || !updated.length) throw new Error('Order update failed');
+    await sb('bg_order_tracking?on_conflict=order_ref', {
+      method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+      body: JSON.stringify({ order_ref: orderReference, order_data: order, paid_at: paidAt })
+    });
+    if (!(tracking && tracking.capi_sent_at)) {
       const items = Array.isArray(order.items) ? order.items : [];
-      const contentIds = items.map(function(it){ return String((it && it.uid) || ''); }).filter(Boolean);
-      const contents = items.map(function(it){
-        return {
-          id: String((it && it.uid) || ''),
-          quantity: parseInt((it && it.qty) || 1, 10),
-          item_price: Number(it && it.price) || 0
-        };
-      }).filter(function(c){ return !!c.id; });
-      const numItems = items.reduce(function(s, it){ return s + (parseInt((it && it.qty) || 1, 10)); }, 0);
-      capi.sendPurchaseFireAndForget({
-        event_id: orderReference,
-        order_id: orderReference,
-        // Prefer bg_orders.total (full order amount) over WFP amount, because for COD
-        // prepayment WFP amount=200 but actual purchase value is the full order total.
-        // For full card payment they are equal, so this is safe in both flows.
-        value: Number(order.total) || (amount != null ? Number(amount) : 0),
-        currency: currency || 'UAH',
-        content_ids: contentIds,
-        contents: contents,
-        num_items: numItems,
-        email: order.customer_email,
-        phone: order.customer_phone,
-        fio: order.customer_name,
-        city: order.delivery_city,
-        country: 'ua',
-        fbp: order.fbp || null,
-        fbc: order.fbc || null,
-        client_ip: clientIp,
-        client_ua: req.headers['user-agent'] || '',
+      const contents = items.map(it => ({ id: String(it.uid || '').replace('|','-'),
+        quantity: Number(it.qty) || 1 })).filter(it => it.id);
+      const sent = await capi.sendPurchase({
+        event_id: orderReference, order_id: orderReference,
+        event_time_ms: new Date(paidAt).getTime(),
+        value: Number(order.total), currency: 'UAH',
+        content_ids: contents.map(it => it.id), contents,
+        num_items: contents.reduce((n,it) => n + it.quantity, 0),
+        email: order.customer_email, phone: order.customer_phone, fio: order.customer_name,
+        city: order.delivery_city, country: 'ua',
+        fbp: tracking && tracking.fbp, fbc: tracking && tracking.fbc,
+        client_ip: tracking && tracking.client_ip, client_ua: tracking && tracking.client_ua,
         event_source_url: order.landing_url || ('https://' + cfg.SITE_DOMAIN + '/')
       });
-    } catch (e) {
-      console.warn('[wfp-callback] capi prep threw', e && e.message);
+      if (!sent.ok) throw new Error('Meta delivery failed; retry callback');
+      await sb('bg_order_tracking?order_ref=eq.' + ref, { method: 'PATCH',
+        body: JSON.stringify({ capi_sent_at: new Date().toISOString() }) });
     }
+  } else {
+    await recordWebhook();
   }
 
   // Signed response
@@ -162,4 +152,9 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({
     orderReference: orderReference, status: status, time: responseTime, signature: responseSig
   });
+  } catch (e) {
+    console.error('[wfp-callback] processing failed:', e.message);
+    return res.status(503).json({ error: 'Processing incomplete; retry callback' });
+  }
 };
+

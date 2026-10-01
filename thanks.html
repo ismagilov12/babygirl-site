@@ -219,19 +219,8 @@ fbq('track','PageView');
     document.getElementById('tgLink').href = 'https://t.me/' + BOT + startPayload;
   }
 
-  // Meta Pixel Purchase (paid=1, есть order) — value/num_items берутся из URL
-  // (их добавляет api/wayforpay в approvedUrl). eventID == order для дедупа
-  // с серверным Purchase из api/wayforpay-callback (Meta их слепит в один).
-  try {
-    if (paid === '1' && order && typeof fbq === 'function') {
-      var amt = parseFloat(params.get('amount') || '0') || 0;
-      var n   = parseInt(params.get('n') || '1', 10) || 1;
-      var purchasePayload = { currency: 'UAH', eventID: order };
-      if (amt > 0)  purchasePayload.value = amt;
-      if (n   > 0)  purchasePayload.num_items = n;
-      fbq('track', 'Purchase', purchasePayload);
-    }
-  } catch(e){}
+  // Purchase is emitted by the verified payment webhook only.
 })();
 </script>
 </body></html>
+

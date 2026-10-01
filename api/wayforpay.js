@@ -56,94 +56,6 @@ async function rateLimit(ip) {
   return r || { allowed: true, skipped: true };
 }
 
-// Кошик зберігає складений uid "base|colorCode" для кольорових товарів;
-// у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
-function baseUid(u) { return String(u || '').split('|')[0]; }
-
-async function computeTotal(items) {
-  const norm = (items || []).map(it => ({
-    uid: baseUid(it && it.uid),
-    qty: parseInt((it && it.qty) || 1, 10) || 1
-  }));
-  return await sb('rpc/compute_order_total', {
-    method: 'POST',
-    body: JSON.stringify({ p_items: norm, p_table: T.PRODUCTS })
-  });
-}
-
-async function getProductNames(uids) {
-  if (!uids.length) return {};
-  const q = encodeURIComponent('(' + uids.map(u => '"' + u + '"').join(',') + ')');
-  const rows = await sb(T.PRODUCTS + '?uid=in.' + q + '&select=uid,title,color_name');
-  const byUid = {};
-  if (Array.isArray(rows)) {
-    for (const row of rows) {
-      const name = [row.title, row.color_name].filter(Boolean).join(' / ');
-      byUid[row.uid] = name || row.title || row.uid;
-    }
-  }
-  return byUid;
-}
-
-// Server-side validate promo code (НЕ довіряємо percent з фронту).
-// Returns { valid:bool, percent:number, reason?:string }.
-async function validatePromoServer(code, subtotalUAH) {
-  if (!code) return { valid: false, percent: 0 };
-  const safe = String(code).toUpperCase().trim();
-  if (!safe) return { valid: false, percent: 0 };
-  const rows = await sb(T.PROMOS + '?code=eq.' + encodeURIComponent(safe) + '&active=eq.true&limit=1');
-  if (!Array.isArray(rows) || !rows.length) return { valid: false, percent: 0, reason: 'not_found' };
-  const row = rows[0];
-  if (row.expires_at && new Date(row.expires_at) < new Date()) return { valid: false, percent: 0, reason: 'expired' };
-  if (row.min_total && Number(subtotalUAH) < Number(row.min_total)) {
-    return { valid: false, percent: 0, reason: 'min_total_not_met' };
-  }
-  const pct = Math.max(0, Math.min(100, parseInt(row.percent || 0, 10)));
-  return { valid: true, percent: pct };
-}
-
-// Реплікує клієнтську логіку BUNDLE_DISCOUNT_PCT: кожна одиниця починаючи з 2-ї
-// отримує -bundlePct%. Потім поверх — promoPct% з усієї суми.
-// Повертає { lines: [{uid, qty, unitPriceAfter, lineTotalAfter}], total }.
-function applyDiscounts(breakdown, bundlePct, promoPct) {
-  bundlePct = Math.max(0, Math.min(100, Number(bundlePct) || 0));
-  promoPct  = Math.max(0, Math.min(100, Number(promoPct)  || 0));
-  let unitIdx = 0;
-  const lines = [];
-  for (const line of breakdown) {
-    const qty  = parseInt(line.qty || 1, 10);
-    const unit = Number(line.unit_price);
-    let lineSum = 0;
-    for (let i = 0; i < qty; i++) {
-      unitIdx++;
-      let u = unit;
-      if (unitIdx >= 2 && bundlePct > 0) {
-        u = unit * (100 - bundlePct) / 100;
-      }
-      if (promoPct > 0) {
-        u = u * (100 - promoPct) / 100;
-      }
-      lineSum += u;
-    }
-    // Округлюємо суму лінії до копійок; усереднена ціна за одиницю.
-    const lineTotalAfter = Math.round(lineSum * 100) / 100;
-    const unitPriceAfter = Math.round((lineTotalAfter / qty) * 100) / 100;
-    lines.push({
-      uid: line.uid,
-      qty: qty,
-      unitPriceAfter: unitPriceAfter,
-      lineTotalAfter: lineTotalAfter
-    });
-  }
-  // Фінальна сума = сума ліній (а не line.qty * unitPriceAfter, бо округлення).
-  // Але для WFP підпис рахується саме як sum(productPrice[i]*productCount[i]).
-  // Тому пересчитуємо total через unitPriceAfter * qty, як це робить WFP.
-  let total = 0;
-  for (const ln of lines) total += ln.unitPriceAfter * ln.qty;
-  total = Math.round(total * 100) / 100;
-  return { lines, total };
-}
-
 module.exports = async function handler(req, res) {
   setCors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -170,57 +82,27 @@ module.exports = async function handler(req, res) {
   }
   body = body || {};
 
-  const { orderReference, items, clientFirstName, clientLastName, clientEmail, clientPhone, payment_method } = body;
-  // Discount inputs (опціональні): promo_code валідується серверно, bundle_discount_pct
-  // береться з фронту як параметр UX, але обмежується розумним діапазоном.
-  const promoCodeIn  = (typeof body.promo_code === 'string' ? body.promo_code : '').trim();
-  const bundlePctIn  = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
-
-  if (!orderReference || typeof orderReference !== 'string') {
-    return res.status(400).json({ error: 'orderReference is required' });
+  const { orderReference, clientFirstName, clientLastName, clientEmail, clientPhone } = body;
+  if (typeof orderReference !== 'string' || !/^BG-[a-z0-9-]+$/i.test(orderReference)) {
+    return res.status(400).json({ error: 'Valid orderReference is required' });
   }
-  if (!Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: 'items must be a non-empty array of {uid, qty}' });
+  const rows = await sb('bg_order_tracking?order_ref=eq.' + encodeURIComponent(orderReference) + '&select=order_data,paid_at&limit=1');
+  const snapshot = Array.isArray(rows) && rows[0];
+  const order = snapshot && snapshot.order_data;
+  if (!order || order.status === 'lead' || order.payment_status === 'failed') {
+    return res.status(409).json({ error: 'Saved order not found' });
   }
-
-  let productName, productCount, productPrice, authoritativeAmount;
-  if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
-    // COD передплата — фіксована сума, промо/bundle не застосовуються.
-    authoritativeAmount = Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
-    productName  = ['Передплата ' + cfg.PROJECT_NAME];
-    productCount = ['1'];
-    productPrice = [authoritativeAmount.toFixed(2)];
-  } else {
-    const priceResult = await computeTotal(items);
-    if (!priceResult || !priceResult.ok) {
-      return res.status(400).json({
-        error: (priceResult && priceResult.error) || 'Price calculation failed',
-        missing: priceResult && priceResult.missing
-      });
-    }
-    const subtotal = Number(priceResult.total);
-    if (!(subtotal > 0)) {
-      return res.status(400).json({ error: 'Computed amount is not positive' });
-    }
-
-    // Серверна валідація промо (від min_total рахуємо ДО bundle, бо так на фронті).
-    const promo = await validatePromoServer(promoCodeIn, subtotal);
-    // Застосовуємо знижки (bundle + promo).
-    const discounted = applyDiscounts(priceResult.breakdown, bundlePctIn, promo.percent);
-    authoritativeAmount = discounted.total;
-    if (!(authoritativeAmount > 0)) {
-      return res.status(400).json({ error: 'Discounted amount is not positive' });
-    }
-
-    const uids = items.map(it => baseUid(it.uid));
-    const names = await getProductNames(uids);
-    productName = []; productCount = []; productPrice = [];
-    for (const line of discounted.lines) {
-      productName.push(names[line.uid] || line.uid);
-      productCount.push(String(line.qty));
-      productPrice.push(line.unitPriceAfter.toFixed(2));
-    }
+  if (snapshot.paid_at || order.payment_status === 'paid') return res.status(409).json({ error: 'Order already paid' });
+  const items = Array.isArray(order.items) ? order.items : [];
+  const isCod = order.payment_method === 'cod' || order.payment_method === 'np';
+  const authoritativeAmount = isCod ? Number(cfg.COD_PREPAYMENT_AMOUNT_UAH) : Number(order.total);
+  if (!(authoritativeAmount > 0) || !items.length) {
+    return res.status(409).json({ error: 'Invalid saved order amount' });
   }
+  // One order line avoids per-unit rounding discrepancies with the saved total.
+  const productName = [(isCod ? 'Передплата ' : 'Замовлення ') + cfg.PROJECT_NAME + ' ' + orderReference];
+  const productCount = ['1'];
+  const productPrice = [authoritativeAmount.toFixed(2)];
 
   const orderDate = Math.floor(Date.now() / 1000);
   const currency = 'UAH';
@@ -277,3 +159,4 @@ module.exports = async function handler(req, res) {
     authoritativeAmount
   });
 };
+

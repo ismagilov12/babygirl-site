@@ -134,7 +134,8 @@ async function sendEvents(events) {
   const opts = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(5000)
   };
 
   // One retry on network failure (500ms backoff).
@@ -198,3 +199,4 @@ module.exports = {
   // exposed for unit tests / debugging
   _hash: { hashEmail, hashPhone, hashName }
 };
+

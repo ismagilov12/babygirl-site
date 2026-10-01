@@ -277,18 +277,7 @@ fbq('track','PageView');
   }
   // Telegram-бот тимчасово вимкнено — кнопку не показуємо.
 
-  // Meta Pixel Purchase (paid=1, есть order). eventID == order для дедупа
-  // с серверным Purchase из api/wayforpay-callback.
-  try {
-    if (paid === '1' && order && typeof fbq === 'function') {
-      var amt = parseFloat(params.get('amount') || '0') || 0;
-      var n   = parseInt(params.get('n') || '1', 10) || 1;
-      var payload = { currency: 'UAH', eventID: order };
-      if (amt > 0) payload.value = amt;
-      if (n   > 0) payload.num_items = n;
-      fbq('track', 'Purchase', payload);
-    }
-  } catch(e){}
+  // Purchase is sent only by the verified payment webhook.
 
   // ---- lightweight canvas confetti (no deps) ----
   function fireConfetti(){
@@ -352,3 +341,4 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'public, max-age=60, must-revalidate');
   return res.status(200).send(HTML);
 };
+

@@ -2,6 +2,7 @@
 // Скелет із досвіду ULTERA · v3 hardened
 
 const cfg = require('./_config');
+const crypto = require('crypto');
 const T = cfg.T;
 const tg = require('./_tg');
 const ALLOWED_ORIGINS_EXACT = new Set(cfg.ALLOWED_ORIGINS_EXACT);
@@ -203,12 +204,15 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  if (body.items.some(it => !it || !it.uid || !Number.isInteger(Number(it.qty)) || Number(it.qty) < 1 || Number(it.qty) > 100)) {
+    return res.status(400).json({ ok: false, error: 'Invalid item quantity' });
+  }
   const priced = await recomputePrices(body.items);
   let total = null;
   let subtotal = null;
   let appliedPromoCode = null;
   let appliedPromoPct  = 0;
-  const bundlePctIn = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
+  const bundlePctIn = 10; // Store policy; never accept a discount from the browser.
   if (priced && priced.ok) {
     subtotal = Number(priced.total);
     // Серверно валідуємо промо (не довіряємо percent з фронту).
@@ -220,21 +224,12 @@ module.exports = async function handler(req, res) {
     total = applyDiscounts(priced.breakdown, bundlePctIn, appliedPromoPct);
     if (!(total > 0)) total = subtotal;
   } else {
-    if (!isLead && body.payment === 'card') {
-      const fbTotal = (body.items || []).reduce(
-        (s2, it) => s2 + (parseFloat(it.price) || 0) * (parseInt(it.qty || 1, 10)), 0);
-      await saveFailedCheckout(body, 'price-verify', fbTotal);
-      return res.status(400).json({ ok: false, error: 'Price verification failed' });
-    }
-    total = (body.items || []).reduce(
-      (s, it) => s + (parseFloat(it.price) || 0) * (parseInt(it.qty || 1, 10)), 0
-    );
-    subtotal = total;
+    return res.status(503).json({ ok: false, error: 'Price verification unavailable. Please retry.' });
   }
 
   // BG-<base36-ts> — общий префикс для роутинга в shared Supabase Edge Function
   // wayforpay-webhook. Лавюхер шлёт numeric id, BG отличается префиксом BG-.
-  const orderNum = (typeof body.num === 'string' && body.num) || ('BG-' + Date.now().toString(36).toUpperCase());
+  const orderNum = 'BG-' + crypto.randomUUID();
 
   // У notes коротко фіксуємо застосовану знижку для аудиту (без зміни схеми таблиці).
   const discountNote = (appliedPromoCode || bundlePctIn > 0)
@@ -251,7 +246,9 @@ module.exports = async function handler(req, res) {
     ? 'abandoned-cart lead'
     : ('САЙТ' + (userComment ? ' · ' + userComment : ''));
 
-  const orderRow = await saveOrder({
+  let orderRow;
+  try {
+  orderRow = await saveOrder({
     number: orderNum,
     customer_name: body.fio,
     customer_phone: body.phone,
@@ -261,7 +258,10 @@ module.exports = async function handler(req, res) {
     delivery_branch: body.wh || '',
     payment_method: body.payment || (isLead ? null : 'np'),
     payment_status: isLead ? 'lead' : (body.payment === 'card' ? 'pending' : 'cod'),
-    items: body.items,
+    items: body.items.map(it => {
+      const line = priced.breakdown.find(b => b.uid === baseUid(it.uid));
+      return Object.assign({}, it, { price: Number(line.unit_price), qty: Number(it.qty) });
+    }),
     total: total,
     status: isLead ? 'lead' : 'new',
     notes: baseNotes + discountNote,
@@ -269,6 +269,29 @@ module.exports = async function handler(req, res) {
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
   });
+  } catch (e) {
+    console.error('[order] save failed');
+  }
+  if (!orderRow || !orderRow.id) {
+    return res.status(503).json({ ok: false, error: 'Order was not saved. Please retry.' });
+  }
+
+  // Attribution is private: public storefront/admin rows must not expose browser data.
+  if (!isLead) {
+    try {
+      const tracking = await sb('bg_order_tracking', { method: 'POST', headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({ order_ref: orderNum, order_data: orderRow,
+          fbp: typeof body.fbp === 'string' ? body.fbp.slice(0,255) : null,
+          fbc: typeof body.fbc === 'string' ? body.fbc.slice(0,1000) : null,
+          client_ip: ip === 'unknown' ? null : ip,
+          client_ua: String(req.headers['user-agent'] || '').slice(0,1000)
+        }) });
+      if (!Array.isArray(tracking) || !tracking.length) throw new Error('save failed');
+    } catch (e) {
+      console.warn('[order] private snapshot save failed');
+      return res.status(503).json({ ok: false, error: 'Payment setup unavailable. Please contact us before retrying.' });
+    }
+  }
 
   if (isLead) {
     return res.status(200).json({
@@ -363,3 +386,4 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ ok: false, error: e.message });
   }
 };
+
