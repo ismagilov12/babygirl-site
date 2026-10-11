@@ -3056,7 +3056,7 @@ body.pm-open{overflow:hidden}
     var uid = params.get('p');
     if (!uid) { _deepLinkDone = true; return; }
     var p = (D.all || []).find(function(x){ return x.uid === uid; });
-    if (!p) return; // продукт ще не підвантажений — спробуємо після Supabase inject
+    if (!p || p.active === false) { _deepLinkDone = true; return; } // hidden products must not open by direct URL
     _deepLinkDone = true;
     var color = params.get('c');
     openProduct(uid);
