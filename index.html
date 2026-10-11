@@ -3335,7 +3335,7 @@ body.pm-open{overflow:hidden}
   renderSuits();
   renderHoodie();
   renderDrops();
-  handleDeepLink();
+  // Deep links are handled after the catalog sync so inactive products cannot open from stale embedded data.
   bootstrapFromSupabase();
 })();
 </script>
