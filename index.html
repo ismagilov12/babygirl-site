@@ -2715,7 +2715,7 @@ body.pm-open{overflow:hidden}
   function openProduct(uid){
     if (window.BG_CATALOG_PAUSED && uid !== 'suit-baby-girl') return;
     var p = D.all.find(function(x){ return x.uid === uid; });
-    if (!p) return;
+    if (!p || p.active === false || p.active === 'false') return;
     pmPauseVideos();
     pmCurrent = p;
     pmUpdateURL(uid, (Array.isArray(p.colors) && p.colors.length) ? p.colors[0].code : null);
@@ -3056,7 +3056,7 @@ body.pm-open{overflow:hidden}
     var uid = params.get('p');
     if (!uid) { _deepLinkDone = true; return; }
     var p = (D.all || []).find(function(x){ return x.uid === uid; });
-    if (!p || p.active === false) { _deepLinkDone = true; return; } // hidden products must not open by direct URL
+    if (!p || p.active === false || p.active === 'false') { _deepLinkDone = true; return; } // hidden products must not open by direct URL
     _deepLinkDone = true;
     var color = params.get('c');
     openProduct(uid);
