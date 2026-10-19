@@ -183,6 +183,11 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'items must be a non-empty array of {uid, qty}' });
   }
 
+  const isShowgirl = items.some(item => String(item.uid || '').startsWith('sg-'));
+  if (isShowgirl && payment_method !== 'card') {
+    return res.status(400).json({ ok: false, error: 'Showgirl: доступна лише повна оплата карткою.' });
+  }
+
   let productName, productCount, productPrice, authoritativeAmount;
   if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
     // COD передплата — фіксована сума, промо/bundle не застосовуються.
