@@ -2338,7 +2338,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(rows){
       if (!Array.isArray(rows)) return;
-      rows = rows.filter(function(r){ return String(r.family||'').indexOf('sg-') === 0; });
+      rows = rows.filter(function(r){ return String(r.family||'').indexOf('sg-') === 0 && r.uid !== 'belt-addon'; });
       var inactiveUids = {};
       var activeRows = [];
       rows.forEach(function(row){
