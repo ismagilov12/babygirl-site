@@ -1,5 +1,4 @@
-// Register the new release with server-side price verification and the CRM.
-// Existing products are never overwritten on subsequent deployments.
+// Keep the six Sexy Set variants in sync with the storefront catalog and CRM.
 const products = require('../data/baby-girl-sexy-set.json');
 const { syncProductToCrm } = require('../api/_crm-catalog');
 
@@ -23,14 +22,24 @@ async function main() {
     return response.json();
   }
   for (const product of products) {
-    const existing = await sb('bg_products?select=uid&uid=eq.' + encodeURIComponent(product.uid));
-    if (!existing.length) {
-      const rows = await sb('bg_products', { method: 'POST', body: JSON.stringify(product) });
-      await syncProductToCrm(sb, rows[0], { siteOrigin: 'https://www.babygirl.com.ua' });
+    const rows = await sb('bg_products?on_conflict=uid', {
+      method: 'POST',
+      prefer: 'return=representation,resolution=merge-duplicates',
+      body: JSON.stringify(product)
+    });
+    await syncProductToCrm(sb, rows[0] || product, { siteOrigin: 'https://www.babygirl.com.ua' });
+
+    const verified = await sb(
+      'bg_products?select=uid,price,sizes,photo_main,photos,description&uid=eq.' + encodeURIComponent(product.uid)
+    );
+    const saved = verified[0];
+    if (!saved || saved.price !== product.price || saved.photo_main !== product.photo_main ||
+        saved.description !== product.description ||
+        JSON.stringify(saved.sizes) !== JSON.stringify(product.sizes) ||
+        JSON.stringify(saved.photos) !== JSON.stringify(product.photos)) {
+      throw new Error('Sexy Set product verification failed: ' + product.uid);
     }
-    const verified = await sb('bg_products?select=uid,price,sizes,photos&uid=eq.' + encodeURIComponent(product.uid));
-    if (!verified.length) throw new Error('New product was not registered');
   }
-  console.log('Baby Girl Sexy Set: all six product variants registered and verified.');
+  console.log('Baby Girl Sexy Set: all six product variants and CRM records synced and verified.');
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
