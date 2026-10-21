@@ -1,0 +1,260 @@
+[
+  {
+    "uid": "baby-girl-sexy-set-gothic-black",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Gothic · Black",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -100,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-gothic-black.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-gothic-black.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Gothic · Black.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  },
+  {
+    "uid": "baby-girl-sexy-set-varsity-black",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Varsity · Black",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -99,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-varsity-black.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-varsity-black.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Varsity · Black.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  },
+  {
+    "uid": "baby-girl-sexy-set-bubble-black",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Bubble · Black",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -98,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-bubble-black.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-bubble-black.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Bubble · Black.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  },
+  {
+    "uid": "baby-girl-sexy-set-bubble-white",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Bubble · White",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -97,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-bubble-white.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-bubble-white.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Bubble · White.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  },
+  {
+    "uid": "baby-girl-sexy-set-varsity-white",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Varsity · White",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -96,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-varsity-white.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-varsity-white.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Varsity · White.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  },
+  {
+    "uid": "baby-girl-sexy-set-gothic-white",
+    "title": "Baby Girl Sexy Set",
+    "color_name": "Gothic · White",
+    "family": "sexy-set",
+    "price": 1200,
+    "price_old": null,
+    "active": true,
+    "featured": false,
+    "in_grid": true,
+    "sort_order": -95,
+    "ribbon": "НОВИНКА",
+    "photo_main": "assets/baby-girl-sexy-set-gothic-white.webp",
+    "photos": [
+      "assets/baby-girl-sexy-set-gothic-white.webp"
+    ],
+    "sizes": [
+      "XS–M",
+      "M–L"
+    ],
+    "colors": [],
+    "description": "Baby Girl Sexy Set\n\nКомплект із натуральної бавовни: топ на тонких бретелях і стринги.\n\nРучна робота з DTF-принтом.\n\nДва розміри: XS–M та M–L.\n\nВаріант: Gothic · White.",
+    "attrs": {
+      "specs": [
+        {
+          "l": "розмір",
+          "v": "XS–M / M–L"
+        },
+        {
+          "l": "тканина",
+          "v": "натуральна бавовна"
+        },
+        {
+          "l": "виготовлення",
+          "v": "ручна робота"
+        },
+        {
+          "l": "принт",
+          "v": "DTF"
+        }
+      ]
+    }
+  }
+]
