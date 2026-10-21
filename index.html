@@ -1281,6 +1281,7 @@ body.pm-open{overflow:hidden}
 }
 </style>
 <style>.sexy-set-intro{background:#ffe6ef;text-align:center;padding:46px 16px 28px;border-top:3px solid #171717}.sexy-set-new{display:inline-block;background:#f20b72;color:#fff;border:2px solid #171717;border-radius:50px;padding:7px 20px;font-weight:900;letter-spacing:.1em;font-size:13px;box-shadow:3px 3px 0 #171717}.sexy-set-intro h2{font-family:'Bowlby One',sans-serif;font-size:clamp(29px,6vw,58px);line-height:1.2;margin:20px 0 12px;color:#171717}.sexy-set-intro h2 span{color:#f20b72}.sexy-set-intro p{font-size:clamp(14px,2vw,18px);line-height:1.6;margin:0 auto 14px}.sexy-set-details{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;font-size:17px}.sexy-set-details b{font-size:26px}.card[data-family="sexy-set"] .card-tag{font-size:11px;white-space:normal}.card[data-family="sexy-set"] .card-img{aspect-ratio:2/3}.card[data-family="sexy-set"] .card-photos img{object-fit:cover}</style>
+<style>.set-size-picker{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.set-size-picker>span{width:100%;font-size:12px;font-weight:700}.set-size-option{flex:1;min-height:44px;padding:8px 12px;border:2px solid #171717;border-radius:9px;background:#fff;color:#171717;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}.set-size-option[aria-pressed="true"]{background:#f20b72;color:#fff;box-shadow:2px 2px 0 #171717}.set-size-option:focus-visible{outline:3px solid #f20b72;outline-offset:3px}.card[data-family="sexy-set"] .card-btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}</style>
 </head>
 <body>
 
@@ -2284,8 +2285,9 @@ body.pm-open{overflow:hidden}
         +   swatches
         +   '<div class="card-body">'
         +     '<div class="card-title">' + escapeHtml(p.title) + (p.color_name ? ' / ' + escapeHtml(p.color_name) : '') + '</div>'
-        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">' + escapeHtml(p.family === 'sexy-set' ? (p.sizes || []).join(' / ') : 'ONE SIZE') + '</span></div>'
-        +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '">Add to cart</button>'
+        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">' + escapeHtml(p.family === 'sexy-set' ? '' : 'ONE SIZE') + '</span></div>'
+        +     (p.family === 'sexy-set' ? '<div class="set-size-picker" role="group" aria-label="Обери розмір"><span>Обери розмір</span>' + p.sizes.map(function(size){ return '<button type="button" class="set-size-option" data-action="set-size" data-size="' + escapeHtml(size) + '" aria-pressed="false">' + escapeHtml(size) + '</button>'; }).join('') + '</div>' : '')
+        +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '"' + (p.family === 'sexy-set' ? ' disabled' : '') + '>Add to cart</button>'
         +   '</div>'
         + '</article>');
     });
@@ -2919,11 +2921,27 @@ body.pm-open{overflow:hidden}
   });
 
   $grid.addEventListener('click', function(e){
+    var sizeButton = e.target.closest('[data-action="set-size"]');
+    if (sizeButton){
+      e.preventDefault(); e.stopPropagation();
+      var sizeCard = sizeButton.closest('.card');
+      sizeCard.dataset.selectedSize = sizeButton.dataset.size;
+      sizeCard.querySelectorAll('.set-size-option').forEach(function(button){
+        button.setAttribute('aria-pressed', button === sizeButton ? 'true' : 'false');
+      });
+      sizeCard.querySelector('[data-action="buy"]').disabled = false;
+      return;
+    }
     // 1. Кнопка «Add to cart»
     var buyBtn = e.target.closest('[data-action="buy"]');
     if (buyBtn) { e.preventDefault(); e.stopPropagation();
       var selectedProduct = D.all.find(function(p){ return p.uid === buyBtn.dataset.uid; });
-      if (selectedProduct && selectedProduct.family === 'sexy-set'){ openProduct(selectedProduct.uid); return; }
+      if (selectedProduct && selectedProduct.family === 'sexy-set'){
+        var selectedSize = buyBtn.closest('.card').dataset.selectedSize;
+        if (selectedProduct.sizes.indexOf(selectedSize) < 0) return;
+        addToCart(selectedProduct.uid, '', selectedSize);
+        return;
+      }
       var _card = buyBtn.closest('.card');
       var _sw = _card ? _card.querySelector('.card-swatch.active') : null;
       addToCart(buyBtn.dataset.uid, _sw ? _sw.dataset.code : '');
