@@ -19,7 +19,8 @@ async function main() {
       body: options.body
     });
     if (!response.ok) throw new Error('Catalog registration failed: HTTP ' + response.status);
-    return response.json();
+    const body = await response.text();
+    return body.trim() ? JSON.parse(body) : [];
   }
   for (const product of products) {
     const rows = await sb('bg_products?on_conflict=uid', {
