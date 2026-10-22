@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node scripts/seed-sexy-set.cjs",
+  "buildCommand": "node scripts/seed-sexy-set.cjs && node scripts/seed-bad-baby.cjs",
   "outputDirectory": "."
 }

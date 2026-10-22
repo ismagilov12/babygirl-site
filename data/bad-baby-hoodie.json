@@ -1,0 +1,64 @@
+{
+  "uid": "hoodie-bad-baby",
+  "title": "bad baby hoodie",
+  "family": "hoodie",
+  "price": 4500,
+  "price_old": null,
+  "active": true,
+  "featured": false,
+  "in_grid": true,
+  "sort_order": -90,
+  "ribbon": "NEW",
+  "photo_main": "assets/hoodie-bad-baby-pink-front.webp",
+  "photos": [
+    "assets/hoodie-bad-baby-pink-front.webp",
+    "assets/hoodie-bad-baby-back.webp",
+    "assets/hoodie-bad-baby-black-front.webp",
+    "assets/hoodie-size-guide-ua.webp"
+  ],
+  "sizes": [
+    "ONE SIZE"
+  ],
+  "colors": [
+    {
+      "code": "pink",
+      "name": "Pink",
+      "hex": "#F4478E",
+      "photo": "assets/hoodie-bad-baby-pink-front.webp",
+      "photos": [
+        "assets/hoodie-bad-baby-pink-front.webp",
+        "assets/hoodie-bad-baby-back.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    },
+    {
+      "code": "black",
+      "name": "Black",
+      "hex": "#0A0A0A",
+      "photo": "assets/hoodie-bad-baby-black-front.webp",
+      "photos": [
+        "assets/hoodie-bad-baby-black-front.webp",
+        "assets/hoodie-bad-baby-back.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    }
+  ],
+  "description": "bad baby hoodie 💗\n\nОверсайз-худі з леопардовою соскою спереду та великою вертикальною надписсю Baby Girl на спині.\n\nРожевий та чорний кольори. ONE SIZE. Тринитка на флісі.",
+  "attrs": {
+    "feed_enabled": true,
+    "specs": [
+      {
+        "l": "розмір",
+        "v": "one size<br>oversized"
+      },
+      {
+        "l": "кольори",
+        "v": "Pink / Black"
+      },
+      {
+        "l": "принт",
+        "v": "спереду<br>та на спині"
+      }
+    ]
+  }
+}
