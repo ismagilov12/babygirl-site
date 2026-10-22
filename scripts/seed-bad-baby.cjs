@@ -30,8 +30,8 @@ async function main() {
       uid, active: true, in_grid: true,
       attrs: { ...current.attrs, feed_enabled: true }
     };
-    const rows = await sb('bg_products?on_conflict=uid', {
-      method: 'POST',
+    const rows = await sb(uid === hoodie.uid ? 'bg_products?on_conflict=uid' : 'bg_products?uid=eq.' + uid, {
+      method: uid === hoodie.uid ? 'POST' : 'PATCH',
       headers: { Prefer: 'return=representation,resolution=merge-duplicates' },
       body: JSON.stringify(product)
     });
