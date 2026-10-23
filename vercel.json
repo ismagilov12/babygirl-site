@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node scripts/seed-sexy-set.cjs && node scripts/seed-bad-baby.cjs && node scripts/restore-playboy.cjs",
+  "buildCommand": "node scripts/seed-sexy-set.cjs && node scripts/seed-bad-baby.cjs && node scripts/restore-playboy.cjs && node scripts/update-playboy-photos.cjs",
   "outputDirectory": "."
 }
