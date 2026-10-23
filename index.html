@@ -1528,7 +1528,7 @@ body.pm-open{overflow:hidden}
   </div>
 </section>
 
-<section id="sexy-set" class="section sexy-set-intro"><div class="container"><span class="sexy-set-new">НОВИНКА</span><h2>Baby Girl <span>Sexy Set</span></h2><p>Якісна бавовна · Глянцеві резинки · Ручна робота · DTF-принт</p><div class="sexy-set-details"><b>1200 грн</b><span>XS–M / M–L</span></div></div></section>
+<template id="sexySetIntro"><section id="sexy-set" class="section sexy-set-intro" style="grid-column:1 / -1;width:100%"><div class="container"><span class="sexy-set-new">НОВИНКА</span><h2>Baby Girl <span>Sexy Set</span></h2><p>Якісна бавовна · Глянцеві резинки · Ручна робота · DTF-принт</p><div class="sexy-set-details"><b>1200 грн</b><span>XS–M / M–L</span></div></div></section></template>
 <section id="shop" class="section" style="background:var(--cream)">
   <div class="container">
     <div class="section-title-wrap">
@@ -2170,7 +2170,12 @@ body.pm-open{overflow:hidden}
 
   function renderGrid(){
     var newSetUids = D.all.filter(function(p){ return p.family === 'sexy-set' && p.active !== false; }).map(function(p){ return p.uid; });
-    var gridUids = newSetUids.concat((D.grid || []).filter(function(uid){ return newSetUids.indexOf(uid) < 0; }));
+    var hoodieUids = (D.grid || []).filter(function(uid){
+      return D.all.some(function(p){ return p.uid === uid && p.family === 'hoodie'; });
+    });
+    var gridUids = hoodieUids.concat(newSetUids, (D.grid || []).filter(function(uid){
+      return hoodieUids.indexOf(uid) < 0 && newSetUids.indexOf(uid) < 0;
+    }));
     var list = gridUids.map(function(uid){
       return D.all.find(function(p){ return p.uid === uid; });
     }).filter(Boolean);
@@ -2189,7 +2194,13 @@ body.pm-open{overflow:hidden}
     var FAMILY_SUB   = {icons:'~ y2k legends ~', 'self-love':'~ soft & loud ~', 'soft-rebel':'~ pink revolution ~', 'crop':'~ short & sexy ~'};
     var lastFam = null;
     var parts = [];
+    var setIntroAdded = false;
     list.forEach(function(p, i){
+      if (p.family === 'sexy-set' && !setIntroAdded){
+        var setIntro = document.getElementById('sexySetIntro');
+        if (setIntro) parts.push(setIntro.innerHTML);
+        setIntroAdded = true;
+      }
       var altClass = (i % 2 === 1) ? ' alt' : '';
       var ribbon = p.ribbon ? '<span class="ribbon">' + escapeHtml(p.ribbon) + '</span>' : '';
       var catalogMain = catalogPhoto(p);
