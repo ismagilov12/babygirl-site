@@ -17,11 +17,11 @@
 const cfg = require('./_config');
 const i18n = require('./_en_i18n');
 const crmCatalog = require('./_crm-catalog');
+const feedGroups = require('./_feed-groups');
 const T = cfg.T;
 
 const SITE = 'https://www.' + String(cfg.SITE_DOMAIN || 'babygirl.com.ua').replace(/^www\./, '');
 const BRAND = cfg.PROJECT_NAME || 'BabyGirl';
-const CATEGORY = 'Apparel & Accessories > Clothing';
 const FEED_DISABLED_BY_DEFAULT_FAMILIES = new Set(['crop', 'belt', 'accessory', 'accessories', 'longsleeve']);
 const FEED_DISABLED_BY_DEFAULT_UIDS = new Set([
   'ls-soft-rebel',
@@ -97,7 +97,7 @@ function absUrl(path) {
   }
   const local = String(path).replace(SITE + '/', '').replace(/^\/+/, '');
   if (/^assets\/[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/i.test(local)) {
-    return SITE + '/api/catalog-image?src=' + encodeURIComponent(local) + '&v=1';
+    return SITE + '/api/catalog-image?src=' + encodeURIComponent(local) + '&v=' + feedGroups.imageVersion(local);
   }
   if (/^https?:\/\//i.test(path)) return path;
   return SITE + '/' + String(path).replace(/^\/+/, '');
@@ -126,11 +126,13 @@ function eur(uah, mult) {
 
 function makeItem(p, color) {
   const isVariant = !!color;
+  const group = feedGroups.category(p, 'en');
+  const variant = feedGroups.variant(p, color);
   const isSg = /^sg-/.test(String(p.family || ''));
   const sku = isVariant ? (p.uid + '-' + color.code) : p.uid;
 
   const baseTitle = i18n.EN_TITLE[p.uid] || p.title;
-  const title = isVariant ? (baseTitle + ' — ' + (color.name || color.code)) : baseTitle;
+  const title = variant.titleSuffix ? (baseTitle + ' — ' + variant.titleSuffix) : baseTitle;
 
   const mainPhoto = isVariant && color.photo ? color.photo : (p.photo_main || (Array.isArray(p.photos) && p.photos[0]));
   if (!mainPhoto || !isImage(mainPhoto) || BROKEN_IMG[mainPhoto] || isSizeChart(mainPhoto)) return null;
@@ -160,7 +162,7 @@ function makeItem(p, color) {
   const lines = [];
   lines.push('    <item>');
   lines.push('      <g:id>' + xmlEscape(sku) + '</g:id>');
-  if (isVariant) lines.push('      <g:item_group_id>' + xmlEscape(p.uid) + '</g:item_group_id>');
+  if (variant.groupId) lines.push('      <g:item_group_id>' + xmlEscape(variant.groupId) + '</g:item_group_id>');
   lines.push('      <g:title>' + xmlEscape(title) + '</g:title>');
   lines.push('      <g:description>' + xmlEscape(desc) + '</g:description>');
   lines.push('      <g:link>' + xmlEscape(buildLink(p.uid, isVariant ? color.code : null, isSg)) + '</g:link>');
@@ -176,11 +178,14 @@ function makeItem(p, color) {
   lines.push('      <g:price>' + xmlEscape(priceFull) + '</g:price>');
   if (hasSale) lines.push('      <g:sale_price>' + xmlEscape(priceSale) + '</g:sale_price>');
   lines.push('      <g:brand>' + xmlEscape(BRAND) + '</g:brand>');
-  if (isVariant && color.name) lines.push('      <g:color>' + xmlEscape(color.name) + '</g:color>');
+  if (variant.color) lines.push('      <g:color>' + xmlEscape(variant.color) + '</g:color>');
+  if (variant.pattern) lines.push('      <g:pattern>' + xmlEscape(variant.pattern) + '</g:pattern>');
   lines.push('      <g:size>' + xmlEscape(sizes) + '</g:size>');
   lines.push('      <g:gender>female</g:gender>');
   lines.push('      <g:age_group>adult</g:age_group>');
-  lines.push('      <g:google_product_category>' + xmlEscape(CATEGORY) + '</g:google_product_category>');
+  lines.push('      <g:google_product_category>' + xmlEscape(group.googleCategory) + '</g:google_product_category>');
+  lines.push('      <g:product_type>' + xmlEscape(group.productType) + '</g:product_type>');
+  lines.push('      <g:custom_label_4>' + xmlEscape(group.key) + '</g:custom_label_4>');
   lines.push('      <g:identifier_exists>no</g:identifier_exists>');
   lines.push('      <g:shipping_weight>0.35 kg</g:shipping_weight>');
   lines.push('      <g:custom_label_0>' + xmlEscape(p.family || '') + '</g:custom_label_0>');
@@ -257,3 +262,4 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.send(xml);
 };
+

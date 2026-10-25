@@ -137,7 +137,7 @@
 
     .tools {
       display: grid;
-      grid-template-columns: minmax(220px, 1fr) auto;
+      grid-template-columns: minmax(200px, 1fr) minmax(220px, .8fr) auto;
       gap: 14px;
       align-items: center;
       margin-bottom: 24px;
@@ -159,6 +159,25 @@
     .search:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 4px rgba(255,79,159,.12);
+    }
+
+    .category {
+      width: 100%;
+      min-width: 0;
+      min-height: 50px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      color: var(--ink);
+      background: var(--surface);
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .category:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .filters {
@@ -362,6 +381,8 @@
 
     @media (max-width: 980px) {
       .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .tools { grid-template-columns: minmax(0, 1fr) minmax(220px, .8fr); }
+      .filters { grid-column: 1 / -1; }
     }
 
     @media (max-width: 720px) {
@@ -399,6 +420,9 @@
   <main>
     <section class="tools" aria-label="Поиск и фильтры">
       <input class="search" id="search" type="search" placeholder="Найти товар по названию или ID…" autocomplete="off">
+      <select class="category" id="category" aria-label="Группа товаров" disabled>
+        <option value="">Все группы</option>
+      </select>
       <div class="filters" aria-label="Фильтр товаров">
         <button class="filter" type="button" data-filter="all" aria-pressed="true">Все товары</button>
         <button class="filter" type="button" data-filter="sale" aria-pressed="false">Со скидкой</button>
@@ -430,12 +454,31 @@
       "use strict";
 
       var NS = "http://base.google.com/ns/1.0";
-      var state = { items: [], query: "", filter: "all", updated: "" };
+      var state = { items: [], query: "", filter: "all", category: "", updated: "" };
       var grid = document.getElementById("grid");
       var count = document.getElementById("count");
       var updated = document.getElementById("updated");
       var search = document.getElementById("search");
+      var category = document.getElementById("category");
       var filters = Array.prototype.slice.call(document.querySelectorAll(".filter"));
+      var categoryNames = {
+        tee: "Футболки", hoodie: "Худі", suit: "Костюми",
+        "sexy-set": "Комплекти білизни", long: "Подовжені футболки",
+        crop: "Топи", longsleeve: "Лонгсліви", belt: "Пояси", accessory: "Аксесуари"
+      };
+
+      function categoryKey(node) {
+        var key = text(node, "custom_label_4") || text(node, "custom_label_0");
+        key = key.toLowerCase();
+        if (key === "icons" || key === "soft-rebel") return "tee";
+        if (key === "accessories") return "accessory";
+        return key || "other";
+      }
+
+      function categoryName(node, key) {
+        var parts = text(node, "product_type").split(">");
+        return parts[parts.length - 1].trim() || categoryNames[key] || (key === "other" ? "Інші товари" : key);
+      }
 
       function text(node, tag) {
         var found = node.getElementsByTagNameNS(NS, tag)[0] || node.getElementsByTagName("g:" + tag)[0];
@@ -461,8 +504,12 @@
         state.updated = dateNode ? dateNode.textContent.trim() : "";
 
         return Array.prototype.map.call(xml.getElementsByTagName("item"), function (node) {
+          var group = categoryKey(node);
           return {
             id: text(node, "id"),
+            groupId: text(node, "item_group_id") || text(node, "id"),
+            category: group,
+            categoryName: categoryName(node, group),
             title: text(node, "title"),
             link: safeUrl(text(node, "link")),
             image: safeUrl(text(node, "image_link")),
@@ -480,6 +527,33 @@
         if (className) node.className = className;
         if (value != null) node.textContent = value;
         return node;
+      }
+
+      function productCount(items) {
+        var groups = Object.create(null);
+        items.forEach(function (item) { groups[item.groupId] = true; });
+        return Object.keys(groups).length;
+      }
+
+      function buildCategories() {
+        var groups = Object.create(null);
+        state.items.forEach(function (item) {
+          if (!groups[item.category]) groups[item.category] = { name: item.categoryName, items: [] };
+          groups[item.category].items.push(item);
+        });
+        category.replaceChildren();
+        var all = el("option", "", "Все группы · " + state.items.length + " вариантов");
+        all.value = "";
+        category.appendChild(all);
+        Object.keys(groups).sort(function (a, b) {
+          return groups[a].name.localeCompare(groups[b].name, "uk");
+        }).forEach(function (key) {
+          var group = groups[key];
+          var option = el("option", "", group.name + " · " + group.items.length + " вариантов");
+          option.value = key;
+          category.appendChild(option);
+        });
+        category.disabled = false;
       }
 
       function makeCard(item) {
@@ -533,7 +607,8 @@
             state.filter === "all" ||
             (state.filter === "sale" && !!item.salePrice) ||
             (state.filter === "stock" && item.availability === "in stock");
-          return matchesQuery && matchesFilter;
+          var matchesCategory = !state.category || item.category === state.category;
+          return matchesQuery && matchesFilter && matchesCategory;
         });
 
         grid.replaceChildren();
@@ -549,7 +624,8 @@
         count.innerHTML = "";
         var strong = el("strong", "", String(shown.length));
         count.appendChild(strong);
-        count.appendChild(document.createTextNode(" из " + state.items.length + " товаров"));
+        count.appendChild(document.createTextNode(" из " + state.items.length + " вариантов · "
+          + productCount(shown) + " из " + productCount(state.items) + " моделей"));
 
         if (state.updated) {
           var parsed = new Date(state.updated);
@@ -561,6 +637,11 @@
 
       search.addEventListener("input", function () {
         state.query = search.value.trim();
+        render();
+      });
+
+      category.addEventListener("change", function () {
+        state.category = category.value;
         render();
       });
 
@@ -581,6 +662,7 @@
         })
         .then(function (xmlText) {
           state.items = parse(xmlText);
+          buildCategories();
           render();
         })
         .catch(function (error) {
@@ -599,3 +681,4 @@
   </script>
 </body>
 </html>
+
