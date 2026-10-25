@@ -184,15 +184,18 @@ module.exports = async function handler(req, res) {
   }
 
   const isShowgirl = items.some(item => String(item.uid || '').startsWith('sg-'));
-  if (!isShowgirl && payment_method !== 'card') {
-    return res.status(400).json({ ok: false, error: 'Baby Girl: доступна повна оплата або оплата частинами через WayForPay.' });
-  }
   if (isShowgirl && payment_method !== 'card') {
     return res.status(400).json({ ok: false, error: 'Showgirl: доступна лише повна оплата карткою.' });
   }
 
   let productName, productCount, productPrice, authoritativeAmount;
-  {
+  if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
+    // COD передплата — фіксована сума, промо/bundle не застосовуються.
+    authoritativeAmount = Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
+    productName  = ['Передплата ' + cfg.PROJECT_NAME];
+    productCount = ['1'];
+    productPrice = [authoritativeAmount.toFixed(2)];
+  } else {
     const priceResult = await computeTotal(items);
     if (!priceResult || !priceResult.ok) {
       return res.status(400).json({
@@ -243,7 +246,8 @@ module.exports = async function handler(req, res) {
   // минуя /thanks: там rewrite + cleanUrls конфликтовали и страница висла
   // (белый экран после оплаты). /api/thanks принимает и GET, и POST от WFP.
   // Pass amount + num_items so thanks page can fire browser Pixel Purchase with
-  // accurate full order value; installments are selected on the payment page.
+  // accurate value. Note: for COD this is the prepayment (200), full order total
+  // goes via CAPI from wayforpay-callback (bg_orders.total).
   const numItems = items.reduce(function(s, it){ return s + (parseInt((it && it.qty) || 1, 10)); }, 0);
   const thanksQs = '&order=' + encodeURIComponent(orderReference) +
                    '&amount=' + encodeURIComponent(amountStr) +

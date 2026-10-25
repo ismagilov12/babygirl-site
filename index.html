@@ -1796,6 +1796,7 @@ body.pm-open{overflow:hidden}
       <article class="info-card yellow" id="payment">
         <h3>💳 Оплата</h3>
         <p><b>— Картою Visa або MasterCard</b><br>через WayForPay (онлайн, миттєво)</p>
+        <p><b>— Післяплата Новою Поштою</b><br>з передоплатою <b>200 грн</b> (Visa / MasterCard через WayForPay)</p>
         <p><b>— Оплата частинами</b><br>до <b>4 платежів</b> від <b>mono</b> та <b>ПриватБанк</b> — спосіб обирається на сторінці оплати</p>
         <p class="muted">Усі платежі захищені SSL-шифруванням.</p>
       </article>
@@ -1894,8 +1895,8 @@ body.pm-open{overflow:hidden}
     <input id="fld-wh" placeholder="№ 12" required="">
     <label>оплата</label>
     <select id="fld-payment">
+      <option value="cod">наложений платіж (200₴ передоплата)</option>
       <option value="card">оплата карткою повністю</option>
-      <option value="installments">оплата частинами</option>
     </select>
     <p class="cart-parts-hint">💳 на сторінці оплати доступна <b>оплата частинами</b> — до 4 платежів від mono та Приват</p>
     <button type="submit" class="cart-submit" id="cartSubmit">оформити ♥</button>
@@ -3095,7 +3096,7 @@ body.pm-open{overflow:hidden}
     var payload = {
       stage: 'final', fio: fio, phone: phone,
       city: city, wh: wh,
-      payment: document.getElementById('fld-payment').value === 'installments' ? 'card' : document.getElementById('fld-payment').value,
+      payment: document.getElementById('fld-payment').value,
       promo_code: promo,
       bundle_discount_pct: BUNDLE_DISCOUNT_PCT,
       items: cart.map(function(c){
@@ -3115,7 +3116,7 @@ body.pm-open{overflow:hidden}
       $res.textContent = '✓ замовлення ' + (data.order_num || '...');
       $res.className = 'cart-result ok';
 
-      if (payload.payment === 'card') {
+      if (payload.payment === 'card' || payload.payment === 'cod') {
         return fetch('/api/wayforpay', {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({

@@ -197,9 +197,6 @@ module.exports = async function handler(req, res) {
   const isLead = stage === 'lead';
 
   const isShowgirl = body.items.some(item => String(item.uid || '').startsWith('sg-'));
-  if (!isLead && !isShowgirl && body.payment !== 'card') {
-    return res.status(400).json({ ok: false, error: 'Baby Girl: доступна повна оплата або оплата частинами через WayForPay.' });
-  }
   if (!isLead && isShowgirl && body.payment !== 'card') {
     return res.status(400).json({ ok: false, error: 'Showgirl: доступна лише повна оплата карткою.' });
   }
