@@ -1,0 +1,61 @@
+{
+  "uid": "hoodie-baby-girl-logo",
+  "title": "baby Girl",
+  "family": "hoodie",
+  "price": 2990,
+  "price_old": null,
+  "active": true,
+  "featured": false,
+  "in_grid": true,
+  "sort_order": -88,
+  "ribbon": "NEW",
+  "photo_main": "assets/hoodie-small-logo-black.webp",
+  "photos": [
+    "assets/hoodie-small-logo-black.webp",
+    "assets/hoodie-small-logo-pink.webp",
+    "assets/hoodie-size-guide-ua.webp"
+  ],
+  "sizes": [
+    "ONE SIZE"
+  ],
+  "colors": [
+    {
+      "code": "black",
+      "name": "Black",
+      "hex": "#0A0A0A",
+      "photo": "assets/hoodie-small-logo-black.webp",
+      "photos": [
+        "assets/hoodie-small-logo-black.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    },
+    {
+      "code": "pink",
+      "name": "Pink",
+      "hex": "#EC8BB0",
+      "photo": "assets/hoodie-small-logo-pink.webp",
+      "photos": [
+        "assets/hoodie-small-logo-pink.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    }
+  ],
+  "description": "baby Girl\n\nОверсайз-худі з маленьким DTF-принтом «baby girl» на грудях. Чорне худі з рожевою надписсю або рожеве з чорною. Кишеня-кенгуру, обʼємний капюшон, манжети та пояс по низу. ONE SIZE.",
+  "attrs": {
+    "feed_enabled": true,
+    "specs": [
+      {
+        "l": "розмір",
+        "v": "ONE SIZE · oversized"
+      },
+      {
+        "l": "кольори",
+        "v": "Black / Pink"
+      },
+      {
+        "l": "лого",
+        "v": "маленький DTF-принт на грудях"
+      }
+    ]
+  }
+}
