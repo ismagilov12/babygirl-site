@@ -52,6 +52,17 @@
 
   function decorate() {
     scheduled = false;
+    // The launch copy and image badge must use the same live catalog price.
+    var catalog = window.D && window.D.all;
+    var suit = Array.isArray(catalog) && catalog.find(function (product) {
+      return product.uid === 'suit-baby-girl';
+    });
+    if (suit && suit.active !== false && Number(suit.price) > 0) {
+      var suitPrice = money.format(Number(suit.price)) + ' ₴';
+      document.querySelectorAll('#suits .suit-launch__price, #suits .suit-launch__price-sticker').forEach(function (element) {
+        if (element.textContent !== suitPrice) element.textContent = suitPrice;
+      });
+    }
     document.querySelectorAll('.card').forEach(function (card) {
       var price = card.querySelector('.card-price:not(.old)');
       show(currentPrice(price), card.querySelector('.card-meta'), 'card');
