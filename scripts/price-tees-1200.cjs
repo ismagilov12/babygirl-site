@@ -1,5 +1,5 @@
 // Apply the requested price release once; preserve later admin price edits.
-const release = 'all-tees-1200-20261027';
+const release = 'all-tees-1390-20261027';
 const families = ['tee', 'icons', 'soft-rebel', 'long'];
 async function main() {
   if (process.env.VERCEL_ENV !== 'production') return;
@@ -22,7 +22,7 @@ async function main() {
   const receipt = (await sb(receiptPath + '&select=uid,attrs'))[0];
   if (!receipt) throw new Error('T-shirt release receipt product missing');
   if (receipt.attrs?.price_release === release) {
-    console.log('T-shirt UAH 1200 price release already applied');
+    console.log('T-shirt UAH 1390 price release already applied');
     return;
   }
   const selection = 'bg_products?active=eq.true&family=in.(tee,icons,soft-rebel,long)';
@@ -32,18 +32,18 @@ async function main() {
     if (!families.includes(product.family)) throw new Error('Unexpected product family');
     const uid = encodeURIComponent(product.uid);
     const saved = await sb('bg_products?uid=eq.' + uid, {
-      method: 'PATCH', body: JSON.stringify({ price: 1200 })
+      method: 'PATCH', body: JSON.stringify({ price: 1390 })
     });
-    if (saved.length !== 1 || saved[0].price !== 1200) throw new Error('T-shirt price verification failed: ' + product.uid);
+    if (saved.length !== 1 || saved[0].price !== 1390) throw new Error('T-shirt price verification failed: ' + product.uid);
     // Keep existing CRM cards and color variants at the same price; no other fields change.
     await sb('products?bg_uid=eq.' + uid, {
-      method: 'PATCH', body: JSON.stringify({ price: 1200 })
+      method: 'PATCH', body: JSON.stringify({ price: 1390 })
     });
     const crm = await sb('products?bg_uid=eq.' + uid + '&select=price');
-    if (crm.some(row => Number(row.price) !== 1200)) throw new Error('CRM price verification failed: ' + product.uid);
+    if (crm.some(row => Number(row.price) !== 1390)) throw new Error('CRM price verification failed: ' + product.uid);
   }
   const after = await sb(selection + '&select=uid,price&limit=1000');
-  if (after.length !== before.length || after.some(p => Number(p.price) !== 1200) ||
+  if (after.length !== before.length || after.some(p => Number(p.price) !== 1390) ||
       before.some(p => !after.some(q => q.uid === p.uid))) {
     throw new Error('T-shirt catalog final price verification failed');
   }
@@ -51,6 +51,6 @@ async function main() {
   await sb(receiptPath, { method: 'PATCH', body: JSON.stringify({
     attrs: { ...freshReceipt.attrs, price_release: release }
   }) });
-  console.log('T-shirt prices verified: ' + after.length + ' active products at UAH 1200; categories tee, icons, soft-rebel, long.');
+  console.log('T-shirt prices verified: ' + after.length + ' active products at UAH 1390; categories tee, icons, soft-rebel, long.');
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
