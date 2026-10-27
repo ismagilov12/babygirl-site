@@ -1,0 +1,65 @@
+{
+  "uid": "hoodie-clear",
+  "title": "baby Girl Clear hoodie",
+  "family": "hoodie",
+  "price": 2900,
+  "price_old": null,
+  "active": true,
+  "featured": false,
+  "in_grid": true,
+  "sort_order": -89,
+  "ribbon": "NEW",
+  "photo_main": "assets/hoodie-clear-pink.webp",
+  "photos": [
+    "assets/hoodie-clear-pink.webp",
+    "assets/hoodie-clear-pink-back.webp",
+    "assets/hoodie-clear-black.webp",
+    "assets/hoodie-clear-black-back.webp",
+    "assets/hoodie-size-guide-ua.webp"
+  ],
+  "sizes": [
+    "ONE SIZE"
+  ],
+  "colors": [
+    {
+      "code": "pink",
+      "name": "Pink",
+      "hex": "#EC8BB0",
+      "photo": "assets/hoodie-clear-pink.webp",
+      "photos": [
+        "assets/hoodie-clear-pink.webp",
+        "assets/hoodie-clear-pink-back.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    },
+    {
+      "code": "black",
+      "name": "Black",
+      "hex": "#0A0A0A",
+      "photo": "assets/hoodie-clear-black.webp",
+      "photos": [
+        "assets/hoodie-clear-black.webp",
+        "assets/hoodie-clear-black-back.webp",
+        "assets/hoodie-size-guide-ua.webp"
+      ]
+    }
+  ],
+  "description": "baby Girl Clear hoodie\n\nОднотонне оверсайз-худі без принта. Обʼємний капюшон, приспущене плече, кишеня-кенгуру, манжети на рукавах і широкий пояс по низу. Без бічних утяжок.\n\nРожевий та чорний кольори. ONE SIZE.",
+  "attrs": {
+    "feed_enabled": true,
+    "specs": [
+      {
+        "l": "розмір",
+        "v": "ONE SIZE · oversized"
+      },
+      {
+        "l": "кольори",
+        "v": "Pink / Black"
+      },
+      {
+        "l": "дизайн",
+        "v": "однотонне · без принта"
+      }
+    ]
+  }
+}

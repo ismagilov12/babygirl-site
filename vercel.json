@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node --check assets/babygirl-installments.js",
+  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/seed-clear-hoodie.cjs",
   "outputDirectory": "."
 }
