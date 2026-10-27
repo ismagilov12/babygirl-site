@@ -20,6 +20,7 @@ const FEED_DISABLED_BY_DEFAULT_UIDS = new Set([
 ]);
 
 function isFeedEnabled(p, family) {
+  if (["hoodie-big-heart-bigger-ass","hoodie-pussy-power-new","hoodie-baby-doll"].includes(p.uid)) return false;
   const attrs = (p && p.attrs) || {};
   if (attrs.feed_enabled === false) return false;
   if (attrs.feed_enabled === true || attrs.in_feed === true) return true;
