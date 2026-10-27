@@ -33,7 +33,7 @@ async function main() {
     body: JSON.stringify(product)
   });
   const saved = rows[0] || (await sb(path + '&select=*'))[0];
-  if (!saved || saved.title !== product.title || saved.price !== 2990 ||
+  if (!saved || saved.title !== product.title || saved.price !== 2290 ||
       !saved.active || !saved.in_grid || saved.colors?.length !== 2 ||
       saved.photos?.length !== 3 || saved.photo_main !== product.photo_main) {
     throw new Error('Small-logo hoodie storefront verification failed');
@@ -51,7 +51,7 @@ async function main() {
     attrs: { ...saved.attrs, catalog_release: release }
   }) });
   const verified = (await sb(path + '&select=uid,price,attrs'))[0];
-  if (verified?.price !== 2990 || verified?.attrs?.catalog_release !== release) {
+  if (verified?.price !== 2290 || verified?.attrs?.catalog_release !== release) {
     throw new Error('Small-logo hoodie release marker verification failed');
   }
   console.log('Small-logo hoodie storefront and CRM verified: ' + product.uid + ', ' + expected.length + ' CRM rows.');
