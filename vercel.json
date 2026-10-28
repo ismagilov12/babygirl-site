@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/add-pink-suit-photos.cjs",
+  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/add-suit-video.cjs",
   "outputDirectory": "."
 }

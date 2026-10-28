@@ -97,3 +97,60 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
 })();
+
+(function () {
+  'use strict';
+  function bootSuitVideo() {
+    var section = document.getElementById('suits');
+    var gallery = document.getElementById('suitsGallery');
+    var frame = document.getElementById('suitsHeroButton');
+    var hero = document.getElementById('suitsHero');
+    if (!section || !gallery || !frame || !hero) return;
+    var preview = null;
+    function isVideo(url) { return /\.(mp4|webm|mov)([?#]|$)/i.test(url || ''); }
+    function reset() {
+      if (preview) { preview.pause(); preview.remove(); preview = null; }
+      hero.style.display = '';
+    }
+    function decorate() {
+      gallery.querySelectorAll('.suit-launch__thumb').forEach(function (thumb) {
+        if (!isVideo(thumb.dataset.photo) || thumb.dataset.videoReady) return;
+        thumb.dataset.videoReady = '1';
+        thumb.setAttribute('aria-label', 'Відтворити відео костюма');
+        thumb.style.position = 'relative';
+        thumb.textContent = '';
+        var clip = document.createElement('video');
+        clip.src = thumb.dataset.photo + '#t=0.1';
+        clip.muted = true; clip.playsInline = true; clip.preload = 'metadata';
+        clip.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none';
+        var play = document.createElement('span');
+        play.textContent = '▶'; play.setAttribute('aria-hidden', 'true');
+        play.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;color:white;font-size:28px;text-shadow:0 1px 5px #000;pointer-events:none';
+        thumb.append(clip, play);
+      });
+    }
+    section.addEventListener('click', function (event) {
+      if (preview && event.target === preview) { event.stopImmediatePropagation(); return; }
+      var thumb = event.target.closest('.suit-launch__thumb');
+      if (thumb && isVideo(thumb.dataset.photo)) {
+        event.preventDefault(); event.stopImmediatePropagation();
+        reset();
+        gallery.querySelectorAll('.suit-launch__thumb').forEach(function (item) { item.classList.toggle('on', item === thumb); });
+        hero.style.display = 'none';
+        preview = document.createElement('video');
+        preview.className = 'suit-launch__main';
+        preview.controls = true; preview.playsInline = true; preview.muted = true; preview.loop = true;
+        preview.setAttribute('aria-label', 'Відео Baby Girl Oversized Suit');
+        preview.src = thumb.dataset.photo; frame.appendChild(preview);
+        var playing = preview.play(); if (playing) playing.catch(function () {});
+      } else if (thumb || event.target.closest('[data-suit-color]')) reset();
+    }, true);
+    section.addEventListener('keydown', function (event) {
+      if (preview && event.target === preview) event.stopImmediatePropagation();
+    }, true);
+    new MutationObserver(function () { reset(); decorate(); }).observe(gallery, { childList: true });
+    decorate();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootSuitVideo, { once: true });
+  else bootSuitVideo();
+})();
