@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/seed-clear-hoodie.cjs && node scripts/seed-small-logo-hoodie.cjs && node scripts/price-tees-1200.cjs && node scripts/price-four-tees-1500.cjs && node scripts/price-suits-6000.cjs && node scripts/add-pink-suit-photos.cjs",
+  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/add-pink-suit-photos.cjs",
   "outputDirectory": "."
 }
