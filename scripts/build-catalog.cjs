@@ -1,6 +1,6 @@
 // Run existing catalog build steps in their established order.
 const {spawnSync}=require('node:child_process');
-const steps=[["--check","assets/babygirl-installments.js"],["scripts/add-suit-video.cjs"],["scripts/seed-bad-baby-long.cjs"],["scripts/price-tee-hoodie-plus135.cjs"],["scripts/price-tops-plus135.cjs"],["scripts/update-bb-price-barb-photo.cjs"],["scripts/update-too-sexy-description.cjs"],["scripts/update-eminem-description.cjs"],["scripts/update-pamela90s-description.cjs"],["scripts/update-tee-footers-pink-hoodie.cjs"]];
+const steps=[["--check","assets/babygirl-installments.js"],["scripts/add-suit-video.cjs"],["scripts/seed-bad-baby-long.cjs"],["scripts/price-tee-hoodie-plus135.cjs"],["scripts/price-tops-plus135.cjs"],["scripts/update-bb-price-barb-photo.cjs"],["scripts/update-too-sexy-description.cjs"],["scripts/update-eminem-description.cjs"],["scripts/update-pamela90s-description.cjs"],["scripts/update-tee-footers-pink-hoodie.cjs"],["scripts/update-pokhui-description.cjs"]];
 for(const args of steps){
  const result=spawnSync(process.execPath,args,{stdio:'inherit',env:process.env});
  if(result.error)throw result.error;
