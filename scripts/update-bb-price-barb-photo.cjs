@@ -22,7 +22,7 @@ async function runRelease(env = process.env, request = fetch) {
     if(!r.ok) throw new Error('Catalog edit failed: HTTP '+r.status);
     const txt=await r.text();return txt.trim()?JSON.parse(txt):[];
   }
-  for(const uid of ['hoodie-bad-baby','long-barbwire']) {
+  for(const uid of ['hoodie-bad-baby','long-barbwire','pamela-90s']) {
     let p=(await sb('bg_products?uid=eq.'+uid+'&select=*'))[0];
     if(!p || !p.active) throw new Error('Missing active product: '+uid);
     if(!p.attrs?.[RELEASE]) {
