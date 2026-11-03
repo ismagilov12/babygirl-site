@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node --check assets/babygirl-installments.js && node scripts/add-suit-video.cjs && node scripts/seed-bad-baby-long.cjs && node scripts/price-tee-hoodie-plus135.cjs && node scripts/price-tops-plus135.cjs && node scripts/update-bb-price-barb-photo.cjs && node scripts/update-too-sexy-description.cjs",
+  "buildCommand": "node scripts/build-catalog.cjs",
   "outputDirectory": "."
 }
