@@ -1380,6 +1380,16 @@ body.pm-open{overflow:hidden}
   </div>
 </section>
 
+<section id="tshirts" class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">Футболки <span class="alt">★</span></h2>
+      <span class="section-sub">~ обери свій принт ~</span>
+    </div>
+    <div id="tshirtsGrid" class="grid"></div>
+  </div>
+</section>
+
 <!-- ===== BABY GIRL OVERSIZED SUIT · HERO DROP ===== -->
 <style>
 .suit-launch{position:relative;overflow:hidden;background:#fff3f5;color:#0a0a0a;border-top:3px solid #0a0a0a;border-bottom:3px solid #0a0a0a;padding:0 0 64px}
@@ -2155,9 +2165,11 @@ body.pm-open{overflow:hidden}
 
   var $grid = document.getElementById('grid');
   var $hoodiesGrid = document.getElementById('hoodiesGrid');
+  var $tshirtsGrid = document.getElementById('tshirtsGrid');
   function catalogElements(selector){
     return Array.prototype.slice.call($grid.querySelectorAll(selector)).concat(
-      $hoodiesGrid ? Array.prototype.slice.call($hoodiesGrid.querySelectorAll(selector)) : []
+      $hoodiesGrid ? Array.prototype.slice.call($hoodiesGrid.querySelectorAll(selector)) : [],
+      $tshirtsGrid ? Array.prototype.slice.call($tshirtsGrid.querySelectorAll(selector)) : []
     );
   }
   var BESTSELLER_UIDS = ["tee-too-sexy-stress","eminem","pamela-90s","hoodie-porn-star"];
@@ -2440,6 +2452,16 @@ body.pm-open{overflow:hidden}
       if (hoodiesSection) hoodiesSection.hidden = !$hoodiesGrid.children.length;
     }
 
+    if ($tshirtsGrid){
+      $tshirtsGrid.innerHTML = '';
+      $grid.querySelectorAll('.card[data-family="tee"], .card[data-family="icons"], .card[data-family="self-love"], .card[data-family="soft-rebel"]').forEach(function(card){
+        $tshirtsGrid.appendChild(card);
+      });
+      $grid.querySelectorAll('.grid-section-marquee[data-to="tee"], .grid-section-marquee[data-to="oversize"]').forEach(function(el){ el.remove(); });
+      var tshirtsSection = document.getElementById('tshirts');
+      if (tshirtsSection) tshirtsSection.hidden = !$tshirtsGrid.children.length;
+    }
+
     // Card swatch: click/hover → swap card img
     catalogElements('.card-swatches').forEach(function(box){
       box.addEventListener('click', function(e){
@@ -2504,6 +2526,8 @@ body.pm-open{overflow:hidden}
     var target = null;
     if (fam === 'hoodie' && $hoodiesGrid){
       target = document.getElementById('hoodies');
+    } else if ((fam === 'tee' || fam === 'oversize' || !fam) && $tshirtsGrid && $tshirtsGrid.children.length){
+      target = document.getElementById('tshirts');
     } else if (fam === 'oversize' || !fam){
       target = $grid.querySelector('.card');
     } else {
@@ -3133,6 +3157,7 @@ body.pm-open{overflow:hidden}
   }
   $grid.addEventListener('click', handleCatalogClick);
   if ($hoodiesGrid) $hoodiesGrid.addEventListener('click', handleCatalogClick);
+  if ($tshirtsGrid) $tshirtsGrid.addEventListener('click', handleCatalogClick);
 
   document.getElementById('cartClose').addEventListener('click', closeCart);
   $overlay.addEventListener('click', closeCart);
