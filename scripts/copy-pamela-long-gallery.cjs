@@ -1,5 +1,5 @@
 const RELEASE='copy-long-pamela-gallery-20261103';
-const EXCLUDED=['assets/size-long.webp','assets/pamela-90s-1.webp'];
+const EXCLUDED=['assets/size-long.webp','assets/pamela-90s-1.webp','https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/long-barbwire-1779398186998-81kxk.webp'];
 async function runRelease(){
  if(process.env.VERCEL_ENV!=='production')return;
  const origin=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY;
