@@ -32,7 +32,7 @@ async function main() {
   await syncProductToCrm(sb, product, { siteOrigin: 'https://www.babygirl.com.ua' });
   const saved = (await sb('bg_products?uid=eq.' + uid + '&select=uid,price,in_grid,active'))[0];
   const crm = await sb('products?bg_uid=eq.' + uid + '&select=sku,price,is_active');
-  if (!saved || !saved.active || saved.in_grid !== false || Number(saved.price) !== Number(product.price) ||
+  if (!saved || !saved.active || saved.in_grid !== product.in_grid || Number(saved.price) !== Number(product.price) ||
       expectedCrmRows(product).some(row => !crm.some(x => x.sku === row.sku && Number(x.price) === Number(row.price) && x.is_active))) {
     throw new Error('Bad Baby extended version verification failed');
   }
