@@ -1370,6 +1370,16 @@ body.pm-open{overflow:hidden}
 </section>
 
 
+<section id="hoodies" class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2 class="section-title">Hoodies <span class="alt">★</span></h2>
+      <span class="section-sub">~ обери своє худі ~</span>
+    </div>
+    <div id="hoodiesGrid" class="grid"></div>
+  </div>
+</section>
+
 <!-- ===== BABY GIRL OVERSIZED SUIT · HERO DROP ===== -->
 <style>
 .suit-launch{position:relative;overflow:hidden;background:#fff3f5;color:#0a0a0a;border-top:3px solid #0a0a0a;border-bottom:3px solid #0a0a0a;padding:0 0 64px}
@@ -2130,6 +2140,12 @@ body.pm-open{overflow:hidden}
   });
 
   var $grid = document.getElementById('grid');
+  var $hoodiesGrid = document.getElementById('hoodiesGrid');
+  function catalogElements(selector){
+    return Array.prototype.slice.call($grid.querySelectorAll(selector)).concat(
+      $hoodiesGrid ? Array.prototype.slice.call($hoodiesGrid.querySelectorAll(selector)) : []
+    );
+  }
   var BESTSELLER_UIDS = ["tee-too-sexy-stress", "eminem", "pamela-90s", "hoodie-porn-star", "crop-bad-baby"];
   var $bestGrid = document.getElementById('bestsellersGrid');
   var $bestSection = document.getElementById('bestsellers');
@@ -2394,9 +2410,18 @@ body.pm-open{overflow:hidden}
         + '</article>');
     });
     $grid.innerHTML = parts.join('');
+    if ($hoodiesGrid){
+      $hoodiesGrid.innerHTML = '';
+      $grid.querySelectorAll('.card[data-family="hoodie"]').forEach(function(card){
+        $hoodiesGrid.appendChild(card);
+      });
+      $grid.querySelectorAll('.grid-section-marquee[data-to="hoodie"]').forEach(function(el){ el.remove(); });
+      var hoodiesSection = document.getElementById('hoodies');
+      if (hoodiesSection) hoodiesSection.hidden = !$hoodiesGrid.children.length;
+    }
 
     // Card swatch: click/hover → swap card img
-    $grid.querySelectorAll('.card-swatches').forEach(function(box){
+    catalogElements('.card-swatches').forEach(function(box){
       box.addEventListener('click', function(e){
         var btn = e.target.closest('.card-swatch'); if (!btn) return;
         e.stopPropagation();
@@ -2422,7 +2447,7 @@ body.pm-open{overflow:hidden}
     });
 
     // Свайп фото в плитках грида (touch + dot-tap)
-    $grid.querySelectorAll('.card').forEach(function(card){
+    catalogElements('.card').forEach(function(card){
       var count = parseInt(card.dataset.count, 10) || 1;
       if (count <= 1) return;
       var track = card.querySelector('.card-photos');
@@ -2457,7 +2482,9 @@ body.pm-open{overflow:hidden}
   function scrollToFamily(fam){
     if (!$grid) return;
     var target = null;
-    if (fam === 'oversize' || !fam){
+    if (fam === 'hoodie' && $hoodiesGrid){
+      target = document.getElementById('hoodies');
+    } else if (fam === 'oversize' || !fam){
       target = $grid.querySelector('.card');
     } else {
       target = $grid.querySelector('.grid-section-marquee[data-to="' + fam + '"]');
@@ -3050,7 +3077,7 @@ body.pm-open{overflow:hidden}
     if (card && card.dataset.uid) openProduct(card.dataset.uid);
   });
 
-  $grid.addEventListener('click', function(e){
+  function handleCatalogClick(e){
     if(handleSetChoice(e,false)) return;
     var sizeButton = e.target.closest('[data-action="set-size"]');
     if (sizeButton){
@@ -3082,7 +3109,9 @@ body.pm-open{overflow:hidden}
     // 3. Иначе — открыть product modal
     var card = e.target.closest('.card');
     if (card && card.dataset.uid) openProduct(card.dataset.uid);
-  });
+  }
+  $grid.addEventListener('click', handleCatalogClick);
+  if ($hoodiesGrid) $hoodiesGrid.addEventListener('click', handleCatalogClick);
 
   document.getElementById('cartClose').addEventListener('click', closeCart);
   $overlay.addEventListener('click', closeCart);
