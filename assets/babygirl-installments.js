@@ -265,3 +265,74 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootHoodieMeasurements, { once: true });
   else bootHoodieMeasurements();
 })();
+
+
+(function () {
+  'use strict';
+  var GUIDE = 'assets/size-long.webp';
+  var scheduled = false;
+  function isLong() {
+    var uid = '';
+    try { uid = new URL(window.location.href).searchParams.get('p') || ''; } catch (e) {}
+    return /^long-/.test(uid) || /-long$/.test(uid);
+  }
+  function guideThumb() {
+    return Array.prototype.find.call(document.querySelectorAll('#pmThumbs .pm-thumb'), function (thumb) {
+      var img = thumb.querySelector('img');
+      return !!img && (img.getAttribute('src') || '').indexOf(GUID) >= 0;
+    });
+  }
+  function showGuide() {
+    var previous = document.activeElement;
+    var dialog = document.createElement('dialog');
+    dialog.setAttribute('aria-label', 'Заміри подовженої футболки');
+    dialog.style.cssText = 'padding:0;border:3px solid #111;border-radius:18px;max-width:94vw;max-height:92vh;background:#fff0f8;overflow:auto';
+    var close = document.createElement('button');
+    close.type = 'button'; close.textContent = '✕';
+    close.setAttribute('aria-label', 'Закрити заміри');
+    close.style.cssText = 'position:sticky;top:8px;display:block;margin:8px 8px 0 auto;width:42px;height:42px;border:2px solid #111;border-radius:50%;background:#ffe443;font-size:24px;cursor:pointer';
+    var image = document.createElement('img');
+    image.src = GUIDE; image.alt = 'Заміри подовженої футболки Baby Girl';
+    image.style.cssText = 'display:block;max-width:88vw;max-height:78vh;object-fit:contain;margin:auto';
+    dialog.append(close, image);
+    close.addEventListener('click', function () { dialog.close(); });
+    dialog.addEventListener('click', function (event) { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', function () { dialog.remove(); if (previous) previous.focus(); });
+    document.body.appendChild(dialog); dialog.showModal();
+  }
+  function sync() {
+    scheduled = false;
+    var button = document.getElementById('pmMeasurements');
+    if (!button || !isLong()) return;
+    if (button.hidden) button.hidden = false;
+  }
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true; requestAnimationFrame(sync);
+  }
+  function boot() {
+    var button = document.getElementById('pmMeasurements');
+    if (!button) return;
+    button.addEventListener('click', function (event) {
+      if (!isLong()) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      var thumb = guideThumb();
+      if (thumb) {
+        thumb.click();
+        requestAnimationFrame(function () {
+          var stage = document.getElementById('pmStage');
+          if (stage) stage.scrollIntoView({behavior:'smooth',block:'start'});
+        });
+      } else showGuide();
+    }, true);
+    var thumbs = document.getElementById('pmThumbs');
+    if (thumbs) new MutationObserver(schedule).observe(thumbs, {childList:true,subtree:true});
+    new MutationObserver(schedule).observe(button, {attributes:true,attributeFilter:['hidden']});
+    document.addEventListener('click', function (event) {
+      if (event.target.closest('.card, .pm-color, #pmClose')) schedule();
+    }, true);
+    schedule();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+})();
