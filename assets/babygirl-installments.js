@@ -23,7 +23,9 @@
 
   function show(price, anchor, variant) {
     if (!anchor) return;
-    var badge = anchor.nextElementSibling;
+    var badge = variant === 'modal'
+      ? document.querySelector('#pm .bg-parts--modal[data-bg-parts]')
+      : anchor.nextElementSibling;
     if (!badge || !badge.hasAttribute('data-bg-parts')) badge = null;
     if (!price) {
       if (badge) badge.remove();
@@ -35,16 +37,16 @@
     if (badge && badge.dataset.bgParts === signature) return;
     if (!badge) {
       badge = document.createElement('div');
-      anchor.insertAdjacentElement('afterend', badge);
+      var insertAfter = variant === 'modal' ? document.getElementById('pmCta') : anchor;
+      (insertAfter || anchor).insertAdjacentElement('afterend', badge);
     }
     badge.dataset.bgParts = signature;
     badge.className = 'bg-parts bg-parts--' + variant;
     badge.setAttribute('aria-label', 'Оплата частинами: ' + PAYMENTS + ' платежі по ' + payment + ' гривень');
     if (variant === 'modal') {
       badge.innerHTML = '<div class="bg-parts__heading"><span class="bg-parts__heart" aria-hidden="true">♥</span>Оплата частинами<span class="bg-parts__tag">PAY IN 4</span></div>'
-        + '<div class="bg-parts__amount"><b>' + payment + ' ₴</b><span>× ' + PAYMENTS + ' платежі</span></div>'
-        + '<div class="bg-parts__banks">mono · ПриватБанк</div>'
-        + '<p class="bg-parts__note">Обери оплату частинами на сторінці оплати.</p>';
+        + '<div class="bg-parts__amount"><b>' + payment + ' ₴</b><span>× ' + PAYMENTS + '</span></div>'
+        + '<div class="bg-parts__banks">mono · ПриватБанк</div>';
     } else {
       badge.innerHTML = '<span class="bg-parts__heart" aria-hidden="true">♥</span><span>частинами <span class="bg-parts__plan"><b>' + payment + ' ₴</b> × ' + PAYMENTS + '</span></span>';
     }
