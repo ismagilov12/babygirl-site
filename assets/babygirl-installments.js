@@ -183,6 +183,12 @@
     var uid = currentUid();
     return catalog().find(function (product) { return product.uid === uid; }) || null;
   }
+  function currentIsHoodie() {
+    var product = currentProduct();
+    if (isHoodie(product)) return true;
+    var uid = currentUid();
+    return /^hoodie-/.test(uid) && !!document.querySelector('[data-uid="' + uid + '"]');
+  }
   function ensureCatalogPhotos() {
     catalog().forEach(function (product) {
       if (!isHoodie(product)) return;
@@ -212,7 +218,7 @@
     scheduled = false;
     var button = document.getElementById('pmMeasurements');
     var product = currentProduct();
-    if (!button || !isHoodie(product)) return;
+    if (!button || !currentIsHoodie()) return;
     ensureCatalogPhotos();
     var thumb = measurementThumb();
     if (!thumb && refreshColorGallery()) return;
@@ -231,7 +237,7 @@
     if (button && !button.dataset.hoodieMeasurements) {
       button.dataset.hoodieMeasurements = '1';
       button.addEventListener('click', function (event) {
-        if (!isHoodie(currentProduct())) return;
+        if (!currentIsHoodie()) return;
         var thumb = measurementThumb();
         if (!thumb) {
           ensureCatalogPhotos();
