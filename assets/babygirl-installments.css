@@ -35,33 +35,35 @@
 .suit-launch__buy { flex-wrap: wrap; }
 .suit-launch__buy .bg-parts--featured { order: 3; margin-top: 0; }
 .bg-parts--modal {
-  margin: 0 0 20px;
-  padding: 15px 16px;
-  border-width: 2.5px;
-  border-radius: 14px;
-  box-shadow: 4px 4px 0 var(--black, #0a0a0a);
+  box-sizing: border-box;
+  width: 80%;
+  max-width: 520px;
+  margin: 18px auto 0;
+  padding: 12px 13px;
+  border-width: 2px;
+  border-radius: 11px;
+  box-shadow: 3px 3px 0 var(--black, #0a0a0a);
   background: linear-gradient(120deg, #ffe3f0, #fff6fb);
 }
-.bg-parts__heading { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: 13px; font-weight: 900; }
-.bg-parts__heading .bg-parts__heart { font-size: 22px; line-height: 1; }
+.bg-parts__heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; }
+.bg-parts__heading .bg-parts__heart { font-size: 18px; line-height: 1; }
 .bg-parts__tag {
   margin-left: auto;
-  padding: 3px 6px;
+  padding: 2px 5px;
   border: 1.5px solid var(--black, #0a0a0a);
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--yellow, #ffdf00);
   font-family: 'VT323', monospace;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   white-space: nowrap;
 }
-.bg-parts__amount { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 10px; margin-top: 9px; }
-.bg-parts__amount b { font-family: 'Bagel Fat One', sans-serif; font-size: 32px; font-weight: 400; letter-spacing: -.02em; }
-.bg-parts__amount span { font-size: 14px; font-weight: 800; }
-.bg-parts__banks { margin-top: 5px; color: var(--pink-deep, #d72a79); font-size: 13px; font-weight: 900; }
-.bg-parts__note { margin: 5px 0 0; font-size: 11px; line-height: 1.5; }
+.bg-parts__amount { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin-top: 7px; }
+.bg-parts__amount b { font-family: 'Bagel Fat One', sans-serif; font-size: 26px; font-weight: 400; letter-spacing: -.02em; }
+.bg-parts__amount span { font-size: 12px; font-weight: 800; }
+.bg-parts__banks { margin-top: 4px; color: var(--pink-deep, #d72a79); font-size: 11px; font-weight: 900; }
 @media (max-width: 360px) {
   .bg-parts--card { gap: 3px; padding: 4px 5px; font-size: 10px; }
-  .bg-parts--modal { padding: 12px; }
-  .bg-parts__amount b { font-size: 29px; }
+  .bg-parts--modal { width: 84%; padding: 10px; }
+  .bg-parts__amount b { font-size: 24px; }
 }
