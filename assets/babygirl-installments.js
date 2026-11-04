@@ -157,9 +157,11 @@
   else bootSuitVideo();
 })();
 
+
 (function () {
   'use strict';
   var HOODIE_MEASURE_PHOTO = 'assets/hoodie-size-guide-ua.webp';
+  var scheduled = false;
 
   function isHoodie(product) {
     return !!product && product.active !== false && product.family === 'hoodie';
@@ -170,10 +172,19 @@
     if (list.indexOf(HOODIE_MEASURE_PHOTO) < 0) list.push(HOODIE_MEASURE_PHOTO);
     return list;
   }
+  function catalog() {
+    return window.D && Array.isArray(window.D.all) ? window.D.all : [];
+  }
+  function currentUid() {
+    try { return new URL(window.location.href).searchParams.get('p') || ''; }
+    catch (e) { return ''; }
+  }
+  function currentProduct() {
+    var uid = currentUid();
+    return catalog().find(function (product) { return product.uid === uid; }) || null;
+  }
   function ensureCatalogPhotos() {
-    var catalog = window.D && window.D.all;
-    if (!Array.isArray(catalog)) return;
-    catalog.forEach(function (product) {
+    catalog().forEach(function (product) {
       if (!isHoodie(product)) return;
       product.photos = withPhoto(product.photos, product.photo_main);
       if (Array.isArray(product.colors)) product.colors.forEach(function (color) {
@@ -181,45 +192,68 @@
       });
     });
   }
+  function measurementThumb() {
+    var thumbs = document.getElementById('pmThumbs');
+    if (!thumbs) return null;
+    return Array.prototype.find.call(thumbs.querySelectorAll('.pm-thumb'), function (thumb) {
+      var image = thumb.querySelector('img');
+      var src = image && (image.getAttribute('src') || '');
+      return src.indexOf(HOODIE_MEASURE_PHOTO) >= 0;
+    }) || null;
+  }
+  function refreshColorGallery() {
+    var active = document.querySelector('#pmColors .pm-color.active');
+    if (!active || active.dataset.hoodieGuideRefresh === '1') return false;
+    active.dataset.hoodieGuideRefresh = '1';
+    active.click();
+    return true;
+  }
   function syncHoodieButton() {
+    scheduled = false;
     var button = document.getElementById('pmMeasurements');
-    var product = window.pmCurrent;
+    var product = currentProduct();
     if (!button || !isHoodie(product)) return;
-    var photos = Array.isArray(window.pmPhotos) ? window.pmPhotos : [];
-    var index = photos.indexOf(HOODIE_MEASURE_PHOTO);
-    button.hidden = index < 0;
-    if (index >= 0) button.dataset.idx = String(index);
+    ensureCatalogPhotos();
+    var thumb = measurementThumb();
+    if (!thumb && refreshColorGallery()) return;
+    button.hidden = !thumb;
+    if (thumb) button.dataset.idx = thumb.dataset.idx || '';
     else button.removeAttribute('data-idx');
+  }
+  function scheduleSync() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(syncHoodieButton);
   }
   function bootHoodieMeasurements() {
     ensureCatalogPhotos();
-    var originalSync = window.pmSyncMeasurements;
-    if (typeof originalSync === 'function' && !originalSync.__hoodieMeasurements) {
-      var wrappedSync = function () {
-        originalSync.apply(this, arguments);
-        syncHoodieButton();
-      };
-      wrappedSync.__hoodieMeasurements = true;
-      window.pmSyncMeasurements = wrappedSync;
-    }
     var button = document.getElementById('pmMeasurements');
     if (button && !button.dataset.hoodieMeasurements) {
       button.dataset.hoodieMeasurements = '1';
       button.addEventListener('click', function (event) {
-        if (!isHoodie(window.pmCurrent)) return;
-        var photos = Array.isArray(window.pmPhotos) ? window.pmPhotos : [];
-        var index = photos.indexOf(HOODIE_MEASURE_PHOTO);
-        if (index < 0 || typeof window.pmGo !== 'function') return;
+        if (!isHoodie(currentProduct())) return;
+        var thumb = measurementThumb();
+        if (!thumb) {
+          ensureCatalogPhotos();
+          refreshColorGallery();
+          thumb = measurementThumb();
+        }
+        if (!thumb) return;
         event.preventDefault();
         event.stopImmediatePropagation();
-        window.pmGo(index);
+        thumb.click();
         requestAnimationFrame(function () {
           var stage = document.getElementById('pmStage');
           if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       }, true);
     }
-    syncHoodieButton();
+    var thumbs = document.getElementById('pmThumbs');
+    if (thumbs) new MutationObserver(scheduleSync).observe(thumbs, { childList: true, subtree: true });
+    document.addEventListener('click', function (event) {
+      if (event.target.closest('.card, .pm-color, #pmClose')) scheduleSync();
+    }, true);
+    scheduleSync();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootHoodieMeasurements, { once: true });
