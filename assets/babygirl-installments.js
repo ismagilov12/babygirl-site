@@ -187,7 +187,7 @@
     var product = currentProduct();
     if (isHoodie(product)) return true;
     var uid = currentUid();
-    return /^hoodie-/.test(uid) && !!document.querySelector('[data-uid="' + uid + '"]');
+    return /^hoodie-/.test(uid);
   }
   function ensureCatalogPhotos() {
     catalog().forEach(function (product) {
