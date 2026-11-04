@@ -203,7 +203,7 @@
     if (!thumbs) return null;
     return Array.prototype.find.call(thumbs.querySelectorAll('.pm-thumb'), function (thumb) {
       var image = thumb.querySelector('img');
-      var src = image && (image.getAttribute('src') || '');
+      var src = image ? (image.getAttribute('src') || '') : '';
       return src.indexOf(HOODIE_MEASURE_PHOTO) >= 0;
     }) || null;
   }
