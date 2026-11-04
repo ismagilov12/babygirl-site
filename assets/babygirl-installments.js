@@ -279,7 +279,7 @@
   function guideThumb() {
     return Array.prototype.find.call(document.querySelectorAll('#pmThumbs .pm-thumb'), function (thumb) {
       var img = thumb.querySelector('img');
-      return !!img && (img.getAttribute('src') || '').indexOf(GUID) >= 0;
+      return !!img && (img.getAttribute('src') || '').indexOf(GUIDE) >= 0;
     });
   }
   function showGuide() {
