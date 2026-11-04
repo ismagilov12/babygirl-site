@@ -156,3 +156,72 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootSuitVideo, { once: true });
   else bootSuitVideo();
 })();
+
+(function () {
+  'use strict';
+  var HOODIE_MEASURE_PHOTO = 'assets/hoodie-size-guide-ua.webp';
+
+  function isHoodie(product) {
+    return !!product && product.active !== false && product.family === 'hoodie';
+  }
+  function withPhoto(value, fallback) {
+    var list = Array.isArray(value) ? value.filter(Boolean) : [];
+    if (!list.length && fallback) list.push(fallback);
+    if (list.indexOf(HOODIE_MEASURE_PHOTO) < 0) list.push(HOODIE_MEASURE_PHOTO);
+    return list;
+  }
+  function ensureCatalogPhotos() {
+    var catalog = window.D && window.D.all;
+    if (!Array.isArray(catalog)) return;
+    catalog.forEach(function (product) {
+      if (!isHoodie(product)) return;
+      product.photos = withPhoto(product.photos, product.photo_main);
+      if (Array.isArray(product.colors)) product.colors.forEach(function (color) {
+        color.photos = withPhoto(color.photos, color.photo);
+      });
+    });
+  }
+  function syncHoodieButton() {
+    var button = document.getElementById('pmMeasurements');
+    var product = window.pmCurrent;
+    if (!button || !isHoodie(product)) return;
+    var photos = Array.isArray(window.pmPhotos) ? window.pmPhotos : [];
+    var index = photos.indexOf(HOODIE_MEASURE_PHOTO);
+    button.hidden = index < 0;
+    if (index >= 0) button.dataset.idx = String(index);
+    else button.removeAttribute('data-idx');
+  }
+  function bootHoodieMeasurements() {
+    ensureCatalogPhotos();
+    var originalSync = window.pmSyncMeasurements;
+    if (typeof originalSync === 'function' && !originalSync.__hoodieMeasurements) {
+      var wrappedSync = function () {
+        originalSync.apply(this, arguments);
+        syncHoodieButton();
+      };
+      wrappedSync.__hoodieMeasurements = true;
+      window.pmSyncMeasurements = wrappedSync;
+    }
+    var button = document.getElementById('pmMeasurements');
+    if (button && !button.dataset.hoodieMeasurements) {
+      button.dataset.hoodieMeasurements = '1';
+      button.addEventListener('click', function (event) {
+        if (!isHoodie(window.pmCurrent)) return;
+        var photos = Array.isArray(window.pmPhotos) ? window.pmPhotos : [];
+        var index = photos.indexOf(HOODIE_MEASURE_PHOTO);
+        if (index < 0 || typeof window.pmGo !== 'function') return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        window.pmGo(index);
+        requestAnimationFrame(function () {
+          var stage = document.getElementById('pmStage');
+          if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }, true);
+    }
+    syncHoodieButton();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootHoodieMeasurements, { once: true });
+  else bootHoodieMeasurements();
+})();
