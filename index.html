@@ -1956,7 +1956,14 @@ body.pm-open{overflow:hidden}
 .pm-reviews{max-width:760px;margin:0 auto;padding:16px 16px 0}
 .pm-reviews h2{margin:0 0 10px;font-size:18px}
 .pm-review-photos{display:flex;flex-wrap:wrap;gap:8px}
-.pm-review-photos a{flex:0 0 calc((100% - 24px) / 4);max-width:112px;border-radius:10px;overflow:hidden}
+.pm-review-photos button{flex:0 0 calc((100% - 24px) / 4);max-width:112px;border:0;padding:0;border-radius:10px;overflow:hidden;background:none;cursor:zoom-in}
+.pm-review-viewer{box-sizing:border-box;width:min(88vw,350px);max-width:none;max-height:calc(100dvh - 24px);padding:10px;margin:auto;border:0;border-radius:16px;background:#fff;color:#24101b;overscroll-behavior:contain}
+.pm-review-viewer::backdrop{background:rgba(25,10,20,.75)}
+.pm-review-viewer img{display:block;width:100%;height:min(56vh,410px);height:min(56dvh,410px);object-fit:contain;border-radius:8px;background:#fff0f7;touch-action:pan-y pinch-zoom}
+.pm-review-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
+.pm-review-controls button{min-width:42px;min-height:42px;border:0;border-radius:8px;background:#fff0f7;color:inherit;font-size:20px;cursor:pointer}
+.pm-review-controls button[hidden]{display:none}
+.pm-review-count{flex:1;text-align:center;font-size:14px}
 .pm-review-photos img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:#f7e9f0}
 </style>
 <!-- ===== PRODUCT MODAL ===== -->
@@ -1992,6 +1999,16 @@ body.pm-open{overflow:hidden}
     <button class="pm-cta" id="pmCta">Add to cart ♥</button>
   </div>
 </div>
+
+<dialog class="pm-review-viewer" id="pmReviewViewer" aria-label="Фото від клієнток">
+  <img id="pmReviewFull" alt="">
+  <div class="pm-review-controls">
+    <button type="button" id="pmReviewPrev" aria-label="Попереднє фото">‹</button>
+    <span class="pm-review-count" id="pmReviewCount" aria-live="polite"></span>
+    <button type="button" id="pmReviewNext" aria-label="Наступне фото">›</button>
+    <button type="button" id="pmReviewClose" aria-label="Закрити" autofocus>×</button>
+  </div>
+</dialog>
 
 <script>
 /* ========== BURGER DRAWER ========== */
@@ -2954,22 +2971,71 @@ body.pm-open{overflow:hidden}
   var pmReviews = document.getElementById('pmReviews');
   var pmReviewPhotos = document.getElementById('pmReviewPhotos');
 
+  var reviewViewer = document.getElementById('pmReviewViewer');
+  var reviewFull = document.getElementById('pmReviewFull');
+  var reviewCount = document.getElementById('pmReviewCount');
+  var reviewPrev = document.getElementById('pmReviewPrev');
+  var reviewNext = document.getElementById('pmReviewNext');
+  var reviewImages = [];
+  var reviewIndex = 0;
+  var reviewTouchStart = null;
+
+  function showReviewPhoto(index){
+    reviewIndex = (index + reviewImages.length) % reviewImages.length;
+    var photo = reviewImages[reviewIndex];
+    reviewFull.src = photo.src;
+    reviewFull.alt = photo.alt;
+    reviewCount.textContent = (reviewIndex + 1) + ' / ' + reviewImages.length;
+  }
+
+  reviewPrev.addEventListener('click', function(){ showReviewPhoto(reviewIndex - 1); });
+  reviewNext.addEventListener('click', function(){ showReviewPhoto(reviewIndex + 1); });
+  document.getElementById('pmReviewClose').addEventListener('click', function(){ reviewViewer.close(); });
+  reviewViewer.addEventListener('click', function(e){
+    if(e.target !== reviewViewer) return;
+    var bounds = reviewViewer.getBoundingClientRect();
+    if(e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom) reviewViewer.close();
+  });
+  reviewViewer.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') e.stopPropagation();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+      e.preventDefault();
+      showReviewPhoto(reviewIndex + (e.key === 'ArrowLeft' ? -1 : 1));
+    }
+  });
+  reviewFull.addEventListener('touchstart', function(e){
+    reviewTouchStart = e.touches.length === 1 ? e.touches[0] : null;
+  }, {passive:true});
+  reviewFull.addEventListener('touchcancel', function(){ reviewTouchStart = null; });
+  reviewFull.addEventListener('touchend', function(e){
+    var start = reviewTouchStart;
+    reviewTouchStart = null;
+    if(!start || e.touches.length || reviewImages.length < 2) return;
+    var end = e.changedTouches[0];
+    var dx = end.clientX - start.clientX;
+    var dy = end.clientY - start.clientY;
+    if(Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy)) showReviewPhoto(reviewIndex + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
   function renderCustomerPhotos(p){
     var photos = customerPhotos[p.uid] || [];
     pmReviews.hidden = photos.length === 0;
     pmReviewPhotos.replaceChildren();
     photos.forEach(function(id, index){
-      var path = '/assets/customer-photos/' + id + '.webp';
-      var link = document.createElement('a');
-      link.href = path;
-      link.target = '_blank';
-      link.rel = 'noopener';
+      var button = document.createElement('button');
+      button.type = 'button';
       var photo = document.createElement('img');
-      photo.src = path;
+      photo.src = '/assets/customer-photos/' + id + '.webp';
       photo.loading = 'lazy';
       photo.alt = p.title + ' — фото від клієнтки ' + (index + 1);
-      link.appendChild(photo);
-      pmReviewPhotos.appendChild(link);
+      button.appendChild(photo);
+      button.addEventListener('click', function(){
+        reviewImages = pmReviewPhotos.querySelectorAll('img');
+        reviewPrev.hidden = reviewNext.hidden = reviewImages.length < 2;
+        showReviewPhoto(index);
+        reviewViewer.showModal();
+      });
+      pmReviewPhotos.appendChild(button);
     });
   }
 
