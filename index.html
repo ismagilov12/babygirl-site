@@ -2492,7 +2492,7 @@ body.pm-open{overflow:hidden}
         +   swatches
         +   '<div class="card-body">'
         +     '<div class="card-title">' + escapeHtml(p.title) + (p.color_name ? ' / ' + escapeHtml(p.color_name) : '') + '</div>'
-        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">' + escapeHtml(p.family === 'sexy-set' ? '' : 'ONE SIZE') + '</span></div>'
+        +     '<div class="card-meta">' + priceHtml + '<span class="card-tag">' + escapeHtml(p.family === 'plate' ? ((Array.isArray(p.sizes) && p.sizes[0]) || '') : (p.family === 'sexy-set' ? '' : 'ONE SIZE')) + '</span></div>'
         +     (p.family === 'sexy-set' ? '<div class="set-size-picker" role="group" aria-label="Обери розмір"><span>Обери розмір</span>' + p.sizes.map(function(size){ return '<button type="button" class="set-size-option" data-action="set-size" data-size="' + escapeHtml(size) + '" aria-pressed="false">' + escapeHtml(size) + '</button>'; }).join('') + '</div>' : '')
         +     '<button class="card-btn' + altClass + '" data-action="buy" data-uid="' + escapeHtml(p.uid) + '"' + (p.family === 'sexy-set' ? ' disabled' : '') + '>Add to cart</button>'
         +   '</div>'
