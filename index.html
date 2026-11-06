@@ -2162,6 +2162,23 @@ body.pm-open{overflow:hidden}
   // Keep these product types consistent after both embedded and live catalog loads.
   function normalizeStorefrontCategories(){
     (D.all || []).forEach(function(p){
+      if (p.uid === 'suit-baby-girl' && Array.isArray(p.colors)){
+        var black = p.colors.find(function(color){ return color.code === 'black'; });
+        if (black){
+          var blackPhotos = Array.isArray(black.photos) && black.photos.length ? black.photos : [black.photo].filter(Boolean);
+          black.photos = Array.from(new Set(blackPhotos.concat([
+            'assets/suit-baby-girl-black-cafe-3001.webp',
+            'assets/suit-baby-girl-black-cafe-3002.webp',
+            'assets/suit-baby-girl-black-cafe-3003.webp',
+            'assets/suit-baby-girl-black-cafe-3005.webp',
+            'assets/suit-baby-girl-black-cafe-3006.webp',
+            'assets/suit-baby-girl-black-cafe-3007.webp',
+            'assets/suit-baby-girl-black-cafe-3010.webp',
+            'assets/suit-baby-girl-black-cafe-2978.webp',
+            'assets/suit-baby-girl-black-cafe-2976.webp'
+          ])));
+        }
+      }
       if (p.uid === 'soft-rebel') p.family = 'tee';
       if (p.uid === 'crop-bad-baby') p.family = 'crop';
       if (p.uid === 'bad-baby-long'){
