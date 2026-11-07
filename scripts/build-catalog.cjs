@@ -1,3 +1,10 @@
+// This release only inserts tee-damn-im-cute and syncs its own CRM variants.
+// Historical maintenance below is unchanged and remains explicitly opt-in.
+if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
+ const cuteRelease=require('node:child_process').spawnSync(process.execPath,['scripts/seed-damn-im-cute-tee.cjs'],{stdio:'inherit',env:process.env});
+ if(cuteRelease.error)throw cuteRelease.error;
+ if(cuteRelease.status!==0)process.exit(cuteRelease.status||1);
+}
 // Run existing catalog build steps in their established order.
 const {spawnSync}=require('node:child_process');
 const pillowRelease=spawnSync(process.execPath,['scripts/seed-hoodie-collection.cjs'],{stdio:'inherit',env:process.env});
