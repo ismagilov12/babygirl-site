@@ -111,6 +111,7 @@ module.exports = {
 },
   EN_HIDDEN: {
   "hoodie-pillow-talk": 1,
+  "hoodie-hey-arnold": 1,
   "hoodie-smile-horny": 1,
   "hoodie-sexual-energy": 1,
   "ls-soft-rebel": 1,

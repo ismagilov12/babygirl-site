@@ -283,5 +283,50 @@
         "after": 2990
       }
     }
+  },
+  {
+    "uid": "hoodie-hey-arnold",
+    "title": "Hey Arnold Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 4,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-hey-arnold-pink.webp",
+    "photos": [
+      "assets/hoodie-hey-arnold-pink.webp",
+      "assets/hoodie-hey-arnold-detail.webp",
+      "assets/hoodie-hey-arnold-lifestyle.webp",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-hey-arnold-pink.webp",
+        "photos": [
+          "assets/hoodie-hey-arnold-pink.webp",
+          "assets/hoodie-hey-arnold-detail.webp",
+          "assets/hoodie-hey-arnold-lifestyle.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "HEY ARNOLD! 💗\n\nХельга має настрій, Арнольд — місце в сердечку. Рожевий oversize з улюбленими героями дитинства та принтами на рукавах — для затишних днів із характером.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "hey-arnold-hoodie-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
   }
 ]

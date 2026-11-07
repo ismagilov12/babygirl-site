@@ -23,12 +23,12 @@ async function main(){
    p.colors.forEach(c=>c.photos=[c.photo,...p.photos.filter(s=>s!==c.photo)]);
   }
   if(!current)current=(await sb('bg_products?on_conflict=uid',{method:'POST',headers:{Prefer:'return=representation,resolution=ignore-duplicates'},body:JSON.stringify({...p,attrs:{...p.attrs,catalog_release:null}})}))[0];
-  if(!current||Number(current.price)!==2990||!current.active||current.colors?.length!==2)throw Error(p.uid+' storefront verification failed');
+  if(!current||Number(current.price)!==2990||!current.active||current.colors?.length!==p.colors.length)throw Error(p.uid+' storefront verification failed');
   await syncProductToCrm(sb,current,{siteOrigin:'https://www.babygirl.com.ua'});
   const crm=await sb('products?bg_uid=eq.'+p.uid+'&select=sku,price,is_active');
   if(!expectedCrmRows(current).every(e=>crm.some(r=>r.sku===e.sku&&Number(r.price)===2990&&r.is_active)))throw Error(p.uid+' CRM verification failed');
   await sb(path,{method:'PATCH',body:JSON.stringify({attrs:p.attrs})});
-  console.log(p.uid+' verified: 2990 UAH, pink/black, CRM synced');
+  console.log(p.uid+' verified: 2990 UAH, '+p.colors.length+' colors, CRM synced');
  }
 }
 main().catch(e=>{console.error(e.message);process.exitCode=1;});
