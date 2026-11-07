@@ -110,6 +110,8 @@ module.exports = {
   "beach-spray": "Salt spray for natural texture, volume and beach waves — no stickiness, no over-drying 🩷 Matte beach finish, flexible hold, effortless undone styling. Works on wet or dry hair, any type. A sea-salt & mineral formula structures the hair and defines the wave ❤️‍🔥"
 },
   EN_HIDDEN: {
+  "hoodie-smile-horny": 1,
+  "hoodie-sexual-energy": 1,
   "ls-soft-rebel": 1,
   "baby-girl": 1,
   "long-baby-girl": 1,
