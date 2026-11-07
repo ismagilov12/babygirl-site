@@ -11,7 +11,17 @@ async function main(){
  }
  const path='bg_products?uid=eq.'+product.uid;
  let current=(await sb(path+'&select=*'))[0];
- if(current?.attrs?.catalog_release===product.attrs.catalog_release){console.log('Cute tee already registered');return;}
+ if(current?.attrs?.catalog_release===product.attrs.catalog_release){
+  if(current.photo_main===product.photo_main){console.log('Cute tee already registered');return;}
+  current=(await sb(path,{method:'PATCH',body:JSON.stringify({photo_main:product.photo_main})}))[0];
+  if(!current||current.photo_main!==product.photo_main)throw Error('Cute tee pink main photo update failed');
+  await syncProductToCrm(sb,current,{siteOrigin:'https://www.babygirl.com.ua'});
+  const crm=await sb('products?bg_uid=eq.'+product.uid+'&select=sku,image_url,is_active');
+  const expectedMain='https://www.babygirl.com.ua/'+product.photo_main;
+  if(!crm.some(r=>r.sku==='BG-'+product.uid&&r.image_url===expectedMain&&r.is_active))throw Error('Cute tee pink CRM photo verification failed');
+  console.log('Cute tee pink main photo verified on storefront and CRM');
+  return;
+ }
  if(current&&!(current.title===product.title&&current.attrs?.catalog_release===null))throw Error('Cute tee UID already exists; preserving admin changes');
  if(!current)current=(await sb('bg_products?on_conflict=uid',{method:'POST',headers:{Prefer:'return=representation,resolution=ignore-duplicates'},body:JSON.stringify({...product,attrs:{...product.attrs,catalog_release:null}})}))[0];
  if(!current)current=(await sb(path+'&select=*'))[0];
