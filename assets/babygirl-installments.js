@@ -61,9 +61,20 @@
     });
     if (suit && suit.active !== false && Number(suit.price) > 0) {
       var suitPrice = money.format(Number(suit.price)) + ' ₴';
-      document.querySelectorAll('#suits .suit-launch__price, #suits .suit-launch__price-sticker').forEach(function (element) {
-        if (element.textContent !== suitPrice) element.textContent = suitPrice;
+      var previousPrice = Number(suit.price_old) || 0;
+      var onSale = previousPrice > Number(suit.price);
+      var discount = onSale ? Math.round((1 - Number(suit.price) / previousPrice) * 100) : 0;
+      var priceHtml = onSale
+        ? '<del style="font-size:.55em;opacity:.7">' + money.format(previousPrice) + ' ₴</del> ' +
+          '<span class="now">' + suitPrice + '</span> ' +
+          '<b style="font-size:.5em;background:#ff4fa1;padding:4px 7px;border-radius:8px">−' + discount + '%</b>'
+        : '<span class="now">' + suitPrice + '</span>';
+      document.querySelectorAll('#suits .suit-launch__price').forEach(function (element) {
+        if (element.innerHTML !== priceHtml) element.innerHTML = priceHtml;
       });
+      var sticker = document.querySelector('#suits .suit-launch__price-sticker');
+      var stickerText = suitPrice + (onSale ? ' · −' + discount + '%' : '');
+      if (sticker && sticker.textContent !== stickerText) sticker.textContent = stickerText;
     }
     document.querySelectorAll('.card').forEach(function (card) {
       var price = card.querySelector('.card-price:not(.old)');
