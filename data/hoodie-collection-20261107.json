@@ -1,0 +1,287 @@
+[
+  {
+    "uid": "hoodie-pillow-talk",
+    "title": "Pillow Talk Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 5,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-pillow-talk-pink.webp",
+    "photos": [
+      "assets/hoodie-pillow-talk-pink.webp",
+      "assets/hoodie-pillow-talk-black.webp",
+      "https://www.babygirl.com.ua/assets/pillow-talk-pink-20261014.jpg",
+      "https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/babygirl/shared/tee-label-20261012-354e3044edc8.png",
+      "https://www.babygirl.com.ua/assets/pillow-talk-black-20261014.jpg",
+      "https://www.babygirl.com.ua/assets/pillow-talk-white-20261014.jpg",
+      "assets/pillow-talk-video-1.mp4",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-pillow-talk-pink.webp",
+        "photos": [
+          "assets/hoodie-pillow-talk-pink.webp",
+          "assets/hoodie-pillow-talk-black.webp",
+          "https://www.babygirl.com.ua/assets/pillow-talk-pink-20261014.jpg",
+          "https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/babygirl/shared/tee-label-20261012-354e3044edc8.png",
+          "https://www.babygirl.com.ua/assets/pillow-talk-black-20261014.jpg",
+          "https://www.babygirl.com.ua/assets/pillow-talk-white-20261014.jpg",
+          "assets/pillow-talk-video-1.mp4",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      },
+      {
+        "code": "black",
+        "name": "Чорний",
+        "hex": "#0A0A0A",
+        "photo": "assets/hoodie-pillow-talk-black.webp",
+        "photos": [
+          "assets/hoodie-pillow-talk-black.webp",
+          "assets/hoodie-pillow-talk-pink.webp",
+          "https://www.babygirl.com.ua/assets/pillow-talk-pink-20261014.jpg",
+          "https://fsihlzzjewhxpogvjapu.supabase.co/storage/v1/object/public/product-photos/babygirl/shared/tee-label-20261012-354e3044edc8.png",
+          "https://www.babygirl.com.ua/assets/pillow-talk-black-20261014.jpg",
+          "https://www.babygirl.com.ua/assets/pillow-talk-white-20261014.jpg",
+          "assets/pillow-talk-video-1.mp4",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "PILLOW TALK 💗\n\nБетті Буп, довгі розмови та твій улюблений oversize. Знайомий принт тепер на теплому худі — для міста, побачень і лінивих вихідних.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.\n\nДодаткові фото футболки демонструють той самий принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "pillow-talk-hoodie-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
+  },
+  {
+    "uid": "hoodie-digital-riot",
+    "title": "Digital Riot Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 6,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-digital-riot-pink.webp",
+    "photos": [
+      "assets/hoodie-digital-riot-pink.webp",
+      "assets/hoodie-digital-riot-black.webp",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-digital-riot-pink.webp",
+        "photos": [
+          "assets/hoodie-digital-riot-pink.webp",
+          "assets/hoodie-digital-riot-black.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      },
+      {
+        "code": "black",
+        "name": "Чорний",
+        "hex": "#0A0A0A",
+        "photo": "assets/hoodie-digital-riot-black.webp",
+        "photos": [
+          "assets/hoodie-digital-riot-black.webp",
+          "assets/hoodie-digital-riot-pink.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "Цифровий бунт, кислотний акцент і твій ритм міста. Худі, яке збирає образ із джинсами, карго та улюбленими кросівками.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "hoodie-collection-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
+  },
+  {
+    "uid": "hoodie-social-club",
+    "title": "Baby Girl Social Club Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 7,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-social-club-pink.webp",
+    "photos": [
+      "assets/hoodie-social-club-pink.webp",
+      "assets/hoodie-social-club-black.webp",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-social-club-pink.webp",
+        "photos": [
+          "assets/hoodie-social-club-pink.webp",
+          "assets/hoodie-social-club-black.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      },
+      {
+        "code": "black",
+        "name": "Чорний",
+        "hex": "#0A0A0A",
+        "photo": "assets/hoodie-social-club-black.webp",
+        "photos": [
+          "assets/hoodie-social-club-black.webp",
+          "assets/hoodie-social-club-pink.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "Твій клуб — твої правила. Університетська естетика, бордовий принт і м’який oversize для кави з подругами та планів на весь день.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "hoodie-collection-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
+  },
+  {
+    "uid": "hoodie-bad-girls-club",
+    "title": "Bad Girls Club Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 8,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-bad-girls-club-pink.webp",
+    "photos": [
+      "assets/hoodie-bad-girls-club-pink.webp",
+      "assets/hoodie-bad-girls-club-black.webp",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-bad-girls-club-pink.webp",
+        "photos": [
+          "assets/hoodie-bad-girls-club-pink.webp",
+          "assets/hoodie-bad-girls-club-black.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      },
+      {
+        "code": "black",
+        "name": "Чорний",
+        "hex": "#0A0A0A",
+        "photo": "assets/hoodie-bad-girls-club-black.webp",
+        "photos": [
+          "assets/hoodie-bad-girls-club-black.webp",
+          "assets/hoodie-bad-girls-club-pink.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "Для хороших дівчат із поганими планами. Червоний принт, маленьке серце на рукаві й акцент на кишені — деталі, які роблять настрій.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "hoodie-collection-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
+  },
+  {
+    "uid": "hoodie-too-sexy-stress",
+    "title": "Too Sexy for Stress Hoodie",
+    "family": "hoodie",
+    "price": 2990,
+    "price_old": null,
+    "active": true,
+    "in_grid": true,
+    "featured": false,
+    "sort_order": 9,
+    "ribbon": "NEW",
+    "photo_main": "assets/hoodie-too-sexy-stress-pink.webp",
+    "photos": [
+      "assets/hoodie-too-sexy-stress-pink.webp",
+      "assets/hoodie-too-sexy-stress-black.webp",
+      "assets/hoodie-size-guide-ua.webp"
+    ],
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "colors": [
+      {
+        "code": "pink",
+        "name": "Рожевий",
+        "hex": "#FF8DBF",
+        "photo": "assets/hoodie-too-sexy-stress-pink.webp",
+        "photos": [
+          "assets/hoodie-too-sexy-stress-pink.webp",
+          "assets/hoodie-too-sexy-stress-black.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      },
+      {
+        "code": "black",
+        "name": "Чорний",
+        "hex": "#0A0A0A",
+        "photo": "assets/hoodie-too-sexy-stress-black.webp",
+        "photos": [
+          "assets/hoodie-too-sexy-stress-black.webp",
+          "assets/hoodie-too-sexy-stress-pink.webp",
+          "assets/hoodie-size-guide-ua.webp"
+        ]
+      }
+    ],
+    "description": "Занадто sexy для зайвого стресу. Червона заява на грудях, поцілунок на рукаві та зірочки на кишені — твій затишний спосіб сказати все.\n\nЩільна тринитка на флісі · вільний крій · ONE SIZE · DTF-принт.",
+    "attrs": {
+      "fixed_price": true,
+      "catalog_release": "hoodie-collection-20261107",
+      "tee-hoodie-plus135-20261103": {
+        "before": 2990,
+        "after": 2990
+      }
+    }
+  }
+]
