@@ -16,16 +16,16 @@
     .bgu-overlay{position:fixed;inset:0;background:rgba(10,10,10,.62);display:none;align-items:center;justify-content:center;z-index:99999;padding:12px}
     .bgu-overlay.on{display:flex}
     .bgu-modal{display:flex;flex-direction:column;width:100%;max-width:640px;max-height:90vh;max-height:90dvh;background:#fff8fc;border:2px solid #171717;border-radius:20px;box-shadow:0 18px 50px #0005;overflow:hidden;color:#171717;font-family:inherit}
-    .bgu-header{position:relative;padding:22px 42px 14px;text-align:center}
+    .bgu-header{flex-shrink:0;position:relative;padding:22px 42px 14px;text-align:center}
     .bgu-head{font-size:23px;font-weight:900;margin:0}
     .bgu-sub{font-size:13px;margin:6px 0 0}
     .bgu-x{position:absolute;right:10px;top:8px;border:0;background:transparent;font-size:30px;cursor:pointer}
-    .bgu-tabs{display:flex;gap:7px;padding:0 12px 12px}
+    .bgu-tabs{flex-shrink:0;display:flex;gap:7px;padding:0 12px 12px}
     .bgu-tab{flex:1;padding:10px 4px;border:1px solid #171717;border-radius:24px;background:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
     .bgu-tab[aria-selected=true]{background:#ff4fa1;color:#fff}
-    .bgu-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:2px 12px 16px;overflow:auto;overscroll-behavior:contain}
-    .bgu-card{display:flex;flex-direction:column;background:#fff;border:1px solid #e8dce3;border-radius:14px;overflow:hidden}
-    .bgu-img{aspect-ratio:1;display:block;width:100%;object-fit:contain;background:#fff}
+    .bgu-cards{display:grid;grid-auto-rows:max-content;min-height:0;flex:1;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:2px 12px 16px;overflow:auto;overscroll-behavior:contain}
+    .bgu-card{align-self:start;display:flex;flex-direction:column;background:#fff;border:1px solid #e8dce3;border-radius:14px;overflow:hidden}
+    .bgu-img{height:180px;flex-shrink:0;display:block;width:100%;object-fit:contain;background:#fff}
     .bgu-info{display:flex;flex:1;flex-direction:column;padding:10px;gap:8px}
     .bgu-name{font-size:14px;font-weight:800;line-height:1.3;margin:0}
     .bgu-detail{font-size:12px;color:#665561;min-height:15px}
@@ -36,7 +36,7 @@
     .bgu-sw[aria-pressed=true]{border-color:#171717;box-shadow:inset 0 0 0 2px #fff}
     .bgu-add{margin-top:auto;width:100%;border:0;border-radius:9px;background:#ff4fa1;color:#fff;padding:11px 4px;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
     .bgu-add:disabled{background:#218b64}
-    .bgu-footer{padding:12px;background:#fff;border-top:1px solid #e8dce3}
+    .bgu-footer{flex-shrink:0;padding:12px;background:#fff;border-top:1px solid #e8dce3}
     .bgu-status{min-height:18px;font-size:12px;text-align:center;margin-bottom:8px}
     .bgu-continue{width:100%;padding:13px;border:0;border-radius:10px;background:#171717;color:#fff;font:inherit;font-weight:800;cursor:pointer}
     .bgu-modal button:focus-visible{outline:3px solid #6533d6;outline-offset:2px}
