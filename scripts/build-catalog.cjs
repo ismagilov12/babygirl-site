@@ -1,18 +1,4 @@
-// This release only inserts tee-damn-im-cute and syncs its own CRM variants.
-// Historical maintenance below is unchanged and remains explicitly opt-in.
-if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
- const cuteRelease=require('node:child_process').spawnSync(process.execPath,['scripts/seed-damn-im-cute-tee.cjs'],{stdio:'inherit',env:process.env});
- if(cuteRelease.error)throw cuteRelease.error;
- if(cuteRelease.status!==0)process.exit(cuteRelease.status||1);
-}
-// Run existing catalog build steps in their established order.
 const {spawnSync}=require('node:child_process');
-const pillowRelease=spawnSync(process.execPath,['scripts/seed-hoodie-collection.cjs'],{stdio:'inherit',env:process.env});
-if(pillowRelease.error)throw pillowRelease.error;
-if(pillowRelease.status!==0)process.exit(pillowRelease.status||1);
-const showgirlPriceMigration=spawnSync(process.execPath,['scripts/migrate-showgirl-price-2000.cjs'],{stdio:'inherit',env:process.env});
-if(showgirlPriceMigration.error)throw showgirlPriceMigration.error;
-if(showgirlPriceMigration.status!==0)process.exit(showgirlPriceMigration.status||1);
 // Storefront publication must not depend on historical database releases.
 // Run those explicitly with RUN_CATALOG_MAINTENANCE=1 when catalog maintenance is intended.
 if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
@@ -33,6 +19,11 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  process.exit(0);
 }
 const steps=[["scripts/hide-requested-hoodies.cjs"],["--check","assets/babygirl-installments.js"],["scripts/add-suit-video.cjs"],["scripts/seed-bad-baby-long.cjs"],["scripts/price-tee-hoodie-plus135.cjs"],["scripts/price-tops-plus135.cjs"],["scripts/update-bb-price-barb-photo.cjs"],["scripts/update-too-sexy-description.cjs"],["scripts/update-eminem-description.cjs"],["scripts/update-pamela90s-description.cjs"],["scripts/update-tee-footers-pink-hoodie.cjs"],["scripts/update-pokhui-description.cjs"],["scripts/update-zen-pokhui-description.cjs"],["scripts/update-pizdets-description.cjs"],["scripts/hide-good-boy.cjs"],["scripts/update-amy-life-playboy-descriptions.cjs"],["scripts/update-bad-baby-descriptions.cjs"],["scripts/add-bad-baby-shared-video.cjs"],["scripts/update-doja-description.cjs"],["scripts/update-beavis-description.cjs"],["scripts/update-pillow-onlyfans-descriptions.cjs"],["scripts/update-badgirls-description.cjs"],["scripts/update-pornstar-crop-description.cjs"],["scripts/update-long-tee-descriptions.cjs"],["scripts/remove-pamela-skirt.cjs"],["scripts/copy-pamela-long-gallery.cjs"],["scripts/remove-pamela-cap-standard.cjs"],["scripts/remove-too-sexy-missing-video.cjs"],["scripts/add-too-sexy-video.cjs"],["scripts/add-tee-measurements.cjs"]];
+steps.unshift(
+ ["scripts/seed-damn-im-cute-tee.cjs"],
+ ["scripts/seed-hoodie-collection.cjs"],
+ ["scripts/migrate-showgirl-price-2000.cjs"]
+);
 steps.push(["scripts/seed-tableware.cjs"]);
 steps.push(["scripts/price-suit-sale-4500.cjs"]);
 for(const args of steps){
