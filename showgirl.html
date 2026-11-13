@@ -404,6 +404,7 @@ input,button{font-size:16px}
 
 .card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
 .card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.card-price{white-space:nowrap}
 .price-flash{animation:priceFlash .8s ease-out}
 @keyframes priceFlash{
   0%{transform:scale(1);color:var(--pink-deep)}
@@ -1158,6 +1159,8 @@ body.pm-open{overflow:hidden}
 .pm-info .crumbs b{color:var(--pink-deep)}
 .pm-price{font-family:'Playfair Display',serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:0;margin-bottom:14px;line-height:1}
 .pm-price .currency{font-size:24px;margin-left:4px}
+.pm-price-pairs{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;font-size:clamp(24px,8vw,38px)}
+.pm-price-pairs span{white-space:nowrap}
 .pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
 .pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
 .pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
@@ -1902,7 +1905,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   <div class="pm-info">
     <div class="crumbs" id="pmCrumbs">~/<b>showgirl</b>/<b id="pmCrumbName"></b></div>
     <h1 id="pmTitle">Title</h1>
-    <div class="pm-price"><span id="pmPrice">0</span><span class="currency">₴</span></div>
+    <div class="pm-price pm-price-pairs" id="pmPrice"></div>
     <p class="pm-descr" id="pmDescr"></p>
     <div class="pm-specs" id="pmSpecs">
       <div class="pm-spec"><div class="lbl">size</div><div class="val">one size</div></div>
@@ -2055,6 +2058,17 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   try { D = JSON.parse(document.getElementById('DATA').textContent); window.D = D; }
   catch(e){ console.error('[DATA] parse fail', e); }
 
+  // Match the regular and sale prices shown on showgirl-en.html.
+  var INTERNATIONAL_UAH_PER_EUR = 53.43;
+  var INTERNATIONAL_PRICE_MARKUP = 2;
+  function dualPrice(uah){
+    var euros = Number(uah) * INTERNATIONAL_PRICE_MARKUP / INTERNATIONAL_UAH_PER_EUR;
+    return Number(uah) + '₴ / €' + euros.toFixed(2);
+  }
+  document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
+    item.textContent = 'Lingerie sets from ' + dualPrice(2000);
+  });
+
   var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
   function applyShowgirlSetPrice(product){
     if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
@@ -2143,11 +2157,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       }
       if (oldPrice > newPrice) {
         priceHtml = '<span class="card-price-row">'
-          + '<span class="card-price old">' + oldPrice + '₴</span>'
-          + '<span class="card-price">' + newPrice + '₴</span>'
+          + '<span class="card-price old">' + dualPrice(oldPrice) + '</span>'
+          + '<span class="card-price">' + dualPrice(newPrice) + '</span>'
           + '</span>';
       } else {
-        priceHtml = '<span class="card-price">' + newPrice + '₴</span>';
+        priceHtml = '<span class="card-price">' + dualPrice(newPrice) + '</span>';
       }
 
       // Group: oversize / crop / long / belt
@@ -2602,11 +2616,8 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     pmCrumb.textContent = p.title.toLowerCase();
     (function(){
       var po = Number(p.price_old || 0);
-      if (po > Number(p.price)) {
-        pmPrice.innerHTML = '<span class="pm-old">' + po + '\u20b4</span>' + p.price;
-      } else {
-        pmPrice.textContent = p.price;
-      }
+      var oldPrice = po > Number(p.price) ? '<span class="pm-old">' + dualPrice(po) + '</span>' : '';
+      pmPrice.innerHTML = oldPrice + '<span>' + dualPrice(p.price) + '</span>';
     })();
     pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversized fit · 95% cotton + 5% elastane · DTF print';
     // ==== Specs (динамічні; фолбек — футболкові) ====
