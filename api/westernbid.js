@@ -231,8 +231,13 @@ module.exports = async function handler(req, res) {
   if (priced && priced.ok && Number(priced.total) > 0) {
     const subtotal = Number(priced.total);
     const promoCode = String(body.promo_code || '').toUpperCase().trim();
-    const wheelPromo = isShowgirl && /^(SHOW10|SHOW12|SHOW15|SHOW18|SHOW20)$/.test(promoCode);
-    const promo = wheelPromo ? { valid: false, percent: 0 } : await validatePromoServer(promoCode, subtotal);
+    const wheelPromoCode = promoCode;
+    const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
+      ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8, SHOW09: 9, SHOW10: 10 }[wheelPromoCode] || 0)
+      : null;
+    const promo = wheelPromoPct !== null
+      ? { valid: wheelPromoPct > 0, percent: wheelPromoPct }
+      : await validatePromoServer(promoCode, subtotal);
     if (promo.valid) {
       appliedPromoCode = String(body.promo_code || '').toUpperCase().trim();
       appliedPromoPct = promo.percent;
