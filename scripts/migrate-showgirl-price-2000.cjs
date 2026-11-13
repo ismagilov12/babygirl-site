@@ -22,11 +22,12 @@ const SET_UIDS = [
   }
 
   try {
+    const baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
     const query = new URLSearchParams({
       uid: 'in.(' + SET_UIDS.join(',') + ')',
       price: 'eq.1495'
     });
-    const response = await fetch(url.replace(/\\/$/, '') + '/rest/v1/bg_products?' + query.toString(), {
+    const response = await fetch(baseUrl + '/rest/v1/bg_products?' + query.toString(), {
       method: 'PATCH',
       headers: {
         apikey: key,
