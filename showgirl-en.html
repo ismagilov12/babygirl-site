@@ -404,6 +404,7 @@ input,button{font-size:16px}
 
 .card-price.old{text-decoration:line-through;opacity:.55;font-size:13px;margin-right:6px}
 .card-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.card-price{white-space:nowrap}
 /* ==== EN SALE -20% (showgirl, dark) ==== */
 .card-img .sale-badge{
   position:absolute;bottom:10px;left:10px;z-index:3;
@@ -1173,6 +1174,8 @@ body.pm-open{overflow:hidden}
 .pm-info .crumbs b{color:var(--pink-deep)}
 .pm-price{font-family:'Playfair Display',serif;font-size:38px;color:var(--pink-deep);-webkit-text-stroke:0;margin-bottom:14px;line-height:1}
 .pm-price .currency{font-size:24px;margin-left:4px}
+.pm-price-pairs{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;font-size:clamp(24px,8vw,38px)}
+.pm-price-pairs span{white-space:nowrap}
 .pm-descr{font-size:15px;line-height:1.6;margin-bottom:18px;color:#222}
 .pm-descr em{color:var(--pink-deep);font-style:normal;font-weight:700}
 .pm-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
@@ -1923,7 +1926,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   <div class="pm-info">
     <div class="crumbs" id="pmCrumbs">~/<b>showgirl</b>/<b id="pmCrumbName"></b></div>
     <h1 id="pmTitle">Title</h1>
-    <div class="pm-price"><span class="currency">€</span><span id="pmPrice">0</span></div>
+    <div class="pm-price pm-price-pairs" id="pmPrice"></div>
     <p class="pm-descr" id="pmDescr"></p>
     <div class="pm-specs" id="pmSpecs">
       <div class="pm-spec"><div class="lbl">size</div><div class="val">one size</div></div>
@@ -2088,6 +2091,10 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   window.eurNum = eurNum; window.fbSku = fbSku; window.fbSkuFromCart = fbSkuFromCart;
   function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
   function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
+  function dualPrice(uah, euros){ return Number(uah) + '₴ / ' + euros; }
+  document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
+    item.textContent = 'Lingerie sets · ' + dualPrice(2000, euro(2000));
+  });
 
   var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
   function applyShowgirlSetPrice(product){
@@ -2171,11 +2178,11 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       var newPrice = (pct > 0) ? Math.round(p.price * (100 - pct) / 100) : p.price;
       if (Number(p.price_old || 0) > Number(p.price || 0)) {
         priceHtml = '<span class="card-price-row">'
-          + '<span class="card-price old">' + euroOld(p.price_old || p.price) + '</span>'
-          + '<span class="card-price">' + euro(newPrice) + '</span>'
+          + '<span class="card-price old">' + dualPrice(p.price_old, euroOld(p.price_old)) + '</span>'
+          + '<span class="card-price">' + dualPrice(newPrice, euro(newPrice)) + '</span>'
           + '</span>';
       } else {
-        priceHtml = '<span class="card-price">' + euro(p.price) + '</span>';
+        priceHtml = '<span class="card-price">' + dualPrice(newPrice, euro(newPrice)) + '</span>';
       }
       var salePct = Number(p.price_old || 0) > Number(p.price || 0) ? Math.round((1 - Number(p.price || 0) / Number(p.price_old)) * 100) : 0;
       var saleBadge = salePct > 0 ? '<span class="sale-badge">−' + salePct + '%</span>' : '';
@@ -2629,9 +2636,10 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     pmTitle.textContent = p.title;
     pmCrumb.textContent = p.title.toLowerCase();
     (function(){
-      var _pNew = (Number(p.price||0)*EN_MARKUP/EUR_RATE).toFixed(2);
-      if (Number(p.price_old || 0) > Number(p.price || 0)) pmPrice.innerHTML = '<span class="pm-old">' + euroOld(p.price_old) + '</span>' + _pNew;
-      else pmPrice.textContent = _pNew;
+      var oldPrice = Number(p.price_old || 0) > Number(p.price || 0)
+        ? '<span class="pm-old">' + dualPrice(p.price_old, euroOld(p.price_old)) + '</span>'
+        : '';
+      pmPrice.innerHTML = oldPrice + '<span>' + dualPrice(p.price, euro(p.price)) + '</span>';
     })();
     var _dEn = (window.EN_DESCR || {})[p.uid];
     pmDescr.innerHTML = _dEn ? escapeHtml(_dEn) : (p.description ? escapeHtml(p.description) : 'Showgirl piece · one size · handmade in Ukraine');
