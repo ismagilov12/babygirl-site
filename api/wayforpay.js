@@ -226,8 +226,13 @@ module.exports = async function handler(req, res) {
     }
 
     // Серверна валідація промо (від min_total рахуємо ДО bundle, бо так на фронті).
-    const wheelPromo = isShowgirl && /^(SHOW10|SHOW12|SHOW15|SHOW18|SHOW20)$/.test(promoCodeIn.toUpperCase());
-    const promo = wheelPromo ? { valid: false, percent: 0 } : await validatePromoServer(promoCodeIn, subtotal);
+    const wheelPromoCode = promoCodeIn.toUpperCase();
+    const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
+      ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8, SHOW09: 9, SHOW10: 10 }[wheelPromoCode] || 0)
+      : null;
+    const promo = wheelPromoPct !== null
+      ? { valid: wheelPromoPct > 0, percent: wheelPromoPct }
+      : await validatePromoServer(promoCodeIn, subtotal);
     // Застосовуємо знижки (bundle + promo).
     const discounted = applyDiscounts(priceResult.breakdown, bundlePctIn, promo.percent);
     authoritativeAmount = discounted.total;
