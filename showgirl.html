@@ -1538,7 +1538,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
           </div>
         </div>
       </div>
-      <button id="spinBtn" class="spin-btn">прокрутити</button>
+      <button id="spinBtn" class="spin-btn">spin</button>
     </div>
     <div class="slot-lever" aria-hidden="true">
       <div class="lever-rod"></div>
@@ -2047,7 +2047,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         try { sessionStorage.setItem('bg_promo_pct',  String(win.pct)); } catch(e){}
         if (window.applyPromo) window.applyPromo(win.code, win.pct);
         if (topLight) topLight.textContent = '✓ ' + win.code + ' · −' + win.pct + '%';
-        btn.textContent = 'крутити ще'; btn.disabled = false; spinning = false;
+        btn.textContent = 'spin again'; btn.disabled = false; spinning = false;
       }, 700);
     }, 2700);
   });
