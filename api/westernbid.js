@@ -268,7 +268,7 @@ module.exports = async function handler(req, res) {
   const amountNum = Math.round((uahTotal / fx) * 100) / 100;
   const amount = amountNum.toFixed(2);
   // Showgirl charges a fixed international delivery fee; BabyGirl keeps its zone rates.
-  const shipEur = isShowgirl ? 25 : shippingEur(body.country);
+  const shipEur = isShowgirl ? 9 : shippingEur(body.country);
   const totalEur = Math.round((amountNum + shipEur) * 100) / 100;
 
   const wbLogin = process.env.WB_LOGIN;
