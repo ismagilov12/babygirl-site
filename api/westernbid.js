@@ -267,7 +267,8 @@ module.exports = async function handler(req, res) {
   if (!(fx > 0)) return res.status(500).json({ ok: false, error: 'FX rate not configured (WB_FX_UAH_PER_UNIT)' });
   const amountNum = Math.round((uahTotal / fx) * 100) / 100;
   const amount = amountNum.toFixed(2);
-  const shipEur = shippingEur(body.country);
+  // Showgirl charges a fixed international delivery fee; BabyGirl keeps its zone rates.
+  const shipEur = isShowgirl ? 25 : shippingEur(body.country);
   const totalEur = Math.round((amountNum + shipEur) * 100) / 100;
 
   const wbLogin = process.env.WB_LOGIN;
