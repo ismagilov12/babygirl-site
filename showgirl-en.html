@@ -1765,7 +1765,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 <h3>🚚 Delivery</h3>
 <p>We ship across Ukraine with <b>Nova Poshta</b> and worldwide with <b>Nova Global</b> (Nova Poshta International).</p>
 <p>Delivery within Ukraine usually takes <b>3–5 days</b>. Domestic shipping fees follow Nova Poshta’s current rates.</p>
-<p>— Worldwide shipping: <b>€25</b><br>
+<p>— Worldwide shipping: <b>€9</b><br>
 Delivery time depends on the destination.</p>
 <p>The fixed international shipping cost is shown and charged at checkout.</p>
 <p class="muted">Your tracking number arrives by email once your order ships. Ordering from Ukraine? <a href="/">Use the local checkout</a>.</p>
@@ -2815,7 +2815,7 @@ Delivery time depends on the destination.</p>
   var EN_Z2=['DE','AT','FR','IT','ES','NL','BE','LU','PT','IE','DK','SE','FI','GR','LT','LV','EE','SI','HR','BG','CH','NO'];
   var EN_Z3=['GB'];
   var EN_Z4=['US','CA'];
-  var EN_ZINFO={z1:{eur:25,days:'3–6'},z2:{eur:25,days:'4–8'},z3:{eur:25,days:'5–9'},z4:{eur:25,days:'7–14'},z5:{eur:25,days:'10–20'}};
+  var EN_ZINFO={z1:{eur:9,days:'3–6'},z2:{eur:9,days:'4–8'},z3:{eur:9,days:'5–9'},z4:{eur:9,days:'7–14'},z5:{eur:9,days:'10–20'}};
   function enZone(c){ c=String(c||'').toUpperCase(); if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
   function enShipInfo(c){ var z=enZone(c); return z?EN_ZINFO[z]:null; }
 
