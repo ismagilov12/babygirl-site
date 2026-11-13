@@ -80,15 +80,32 @@ async function verifyTurnstile(token, ip) {
 // у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
 function baseUid(u) { return String(u || '').split('|')[0]; }
 
+// Keep current Showgirl lingerie set prices authoritative for checkout.
+const SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+function applyShowgirlSetPrices(result) {
+  if (!result || !result.ok || !Array.isArray(result.breakdown)) return result;
+  let total = 0;
+  result.breakdown = result.breakdown.map(line => {
+    const uid = String(line.uid || '').split('|')[0];
+    const qty = parseInt(line.qty || 1, 10) || 1;
+    if (SHOWGIRL_SET_UIDS[uid]) line = Object.assign({}, line, { unit_price: 2000, line_total: 2000 * qty });
+    total += Number(line.unit_price || 0) * qty;
+    return line;
+  });
+  result.total = total;
+  return result;
+}
+
 async function recomputePrices(items) {
   const payload = items.map(it => ({
     uid: baseUid(it.uid),
     qty: parseInt(it.qty || 1, 10)
   }));
-  return await sb('rpc/compute_order_total', {
+  const result = await sb('rpc/compute_order_total', {
     method: 'POST',
     body: JSON.stringify({ p_items: payload, p_table: T.PRODUCTS })
   });
+  return applyShowgirlSetPrices(result);
 }
 
 // Серверна валідація промо-коду — повертає { valid, percent }.
@@ -217,7 +234,9 @@ module.exports = async function handler(req, res) {
   if (priced && priced.ok) {
     subtotal = Number(priced.total);
     // Серверно валідуємо промо (не довіряємо percent з фронту).
-    const promo = await validatePromoServer(body.promo_code, subtotal);
+    const promoCode = String(body.promo_code || '').toUpperCase().trim();
+    const wheelPromo = isShowgirl && /^(SHOW10|SHOW12|SHOW15|SHOW18|SHOW20)$/.test(promoCode);
+    const promo = wheelPromo ? { valid: false, percent: 0 } : await validatePromoServer(promoCode, subtotal);
     if (promo.valid) {
       appliedPromoCode = String(body.promo_code || '').toUpperCase().trim();
       appliedPromoPct  = promo.percent;

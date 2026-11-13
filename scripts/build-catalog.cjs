@@ -10,6 +10,9 @@ const {spawnSync}=require('node:child_process');
 const pillowRelease=spawnSync(process.execPath,['scripts/seed-hoodie-collection.cjs'],{stdio:'inherit',env:process.env});
 if(pillowRelease.error)throw pillowRelease.error;
 if(pillowRelease.status!==0)process.exit(pillowRelease.status||1);
+const showgirlPriceMigration=spawnSync(process.execPath,['scripts/migrate-showgirl-price-2000.cjs'],{stdio:'inherit',env:process.env});
+if(showgirlPriceMigration.error)throw showgirlPriceMigration.error;
+if(showgirlPriceMigration.status!==0)process.exit(showgirlPriceMigration.status||1);
 // Storefront publication must not depend on historical database releases.
 // Run those explicitly with RUN_CATALOG_MAINTENANCE=1 when catalog maintenance is intended.
 if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){

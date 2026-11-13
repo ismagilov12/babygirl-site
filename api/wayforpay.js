@@ -60,15 +60,32 @@ async function rateLimit(ip) {
 // у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
 function baseUid(u) { return String(u || '').split('|')[0]; }
 
+// Keep current Showgirl lingerie set prices authoritative for checkout.
+const SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+function applyShowgirlSetPrices(result) {
+  if (!result || !result.ok || !Array.isArray(result.breakdown)) return result;
+  let total = 0;
+  result.breakdown = result.breakdown.map(line => {
+    const uid = String(line.uid || '').split('|')[0];
+    const qty = parseInt(line.qty || 1, 10) || 1;
+    if (SHOWGIRL_SET_UIDS[uid]) line = Object.assign({}, line, { unit_price: 2000, line_total: 2000 * qty });
+    total += Number(line.unit_price || 0) * qty;
+    return line;
+  });
+  result.total = total;
+  return result;
+}
+
 async function computeTotal(items) {
   const norm = (items || []).map(it => ({
     uid: baseUid(it && it.uid),
     qty: parseInt((it && it.qty) || 1, 10) || 1
   }));
-  return await sb('rpc/compute_order_total', {
+  const result = await sb('rpc/compute_order_total', {
     method: 'POST',
     body: JSON.stringify({ p_items: norm, p_table: T.PRODUCTS })
   });
+  return applyShowgirlSetPrices(result);
 }
 
 async function getProductNames(uids) {
@@ -209,7 +226,8 @@ module.exports = async function handler(req, res) {
     }
 
     // Серверна валідація промо (від min_total рахуємо ДО bundle, бо так на фронті).
-    const promo = await validatePromoServer(promoCodeIn, subtotal);
+    const wheelPromo = isShowgirl && /^(SHOW10|SHOW12|SHOW15|SHOW18|SHOW20)$/.test(promoCodeIn.toUpperCase());
+    const promo = wheelPromo ? { valid: false, percent: 0 } : await validatePromoServer(promoCodeIn, subtotal);
     // Застосовуємо знижки (bundle + promo).
     const discounted = applyDiscounts(priceResult.breakdown, bundlePctIn, promo.percent);
     authoritativeAmount = discounted.total;

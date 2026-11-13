@@ -91,15 +91,32 @@ async function verifyTurnstile(token, remoteIp) {
   } catch (e) { return { ok: false, error: e.message }; }
 }
 
+// Keep current Showgirl lingerie set prices authoritative for checkout.
+const SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+function applyShowgirlSetPrices(result) {
+  if (!result || !result.ok || !Array.isArray(result.breakdown)) return result;
+  let total = 0;
+  result.breakdown = result.breakdown.map(line => {
+    const uid = String(line.uid || '').split('|')[0];
+    const qty = parseInt(line.qty || 1, 10) || 1;
+    if (SHOWGIRL_SET_UIDS[uid]) line = Object.assign({}, line, { unit_price: 2000, line_total: 2000 * qty });
+    total += Number(line.unit_price || 0) * qty;
+    return line;
+  });
+  result.total = total;
+  return result;
+}
+
 async function computeTotal(items) {
   const payload = (items || []).map(it => ({
     uid: String(it.uid || ''),
     qty: parseInt(it.qty || 1, 10)
   }));
-  return await sb('rpc/compute_order_total', {
+  const result = await sb('rpc/compute_order_total', {
     method: 'POST',
     body: JSON.stringify({ p_items: payload, p_table: T.PRODUCTS })
   });
+  return applyShowgirlSetPrices(result);
 }
 
 // Серверна валідація промо-коду (як в api/wayforpay.js) — НЕ довіряємо percent з фронту.
@@ -209,10 +226,13 @@ module.exports = async function handler(req, res) {
   let discounted = null;
   let appliedPromoCode = null;
   let appliedPromoPct = 0;
+  const isShowgirl = body.items.some(item => String(item.uid || '').startsWith('sg-'));
   const bundlePctIn = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
   if (priced && priced.ok && Number(priced.total) > 0) {
     const subtotal = Number(priced.total);
-    const promo = await validatePromoServer(body.promo_code, subtotal);
+    const promoCode = String(body.promo_code || '').toUpperCase().trim();
+    const wheelPromo = isShowgirl && /^(SHOW10|SHOW12|SHOW15|SHOW18|SHOW20)$/.test(promoCode);
+    const promo = wheelPromo ? { valid: false, percent: 0 } : await validatePromoServer(promoCode, subtotal);
     if (promo.valid) {
       appliedPromoCode = String(body.promo_code || '').toUpperCase().trim();
       appliedPromoPct = promo.percent;
@@ -232,7 +252,7 @@ module.exports = async function handler(req, res) {
   // Курс WB_FX_UAH_PER_UNIT=53.43 підібрано так, щоб tee 1790₴ ×2 = рівно €67.
   // Витринная скидка EN-версии (SALE). Синхронно с EN_SALE_PCT в en.html / showgirl-en.html!
   // Выключить = задать env WB_EN_SALE_PCT=0 (или убрать дефолт 20 здесь).
-  const enSalePct = Math.max(0, Math.min(90, Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20) || 0));
+  const enSalePct = isShowgirl ? 0 : Math.max(0, Math.min(90, Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20) || 0));
   const markup = Math.round(Number(process.env.WB_PRICE_MARKUP || 2) * (100 - enSalePct)) / 100;
   uahTotal = Math.round(uahTotal * markup * 100) / 100;
 
