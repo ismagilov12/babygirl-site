@@ -80,15 +80,15 @@ async function verifyTurnstile(token, ip) {
 // у bg_products лише base-uid, тому перед перерахунком цін відрізаємо суфікс.
 function baseUid(u) { return String(u || '').split('|')[0]; }
 
-// Keep current Showgirl lingerie set prices authoritative for checkout.
-const SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+// Keep the aligned Showgirl UAH prices authoritative for checkout.
+const SHOWGIRL_PRICES = {"sg-leo-black":4000,"sg-leo-red":4000,"sg-cow-pink":4000,"sg-red-velvet":4000,"sg-tension":4000,"sg-bunny":4000,"sg-pink-kiss":4000,"sg-holographic-queen":4000,"sg-blue-star":4000,"sg-wild-lime":4000,"sg-neck":740,"sg-garter":1870};
 function applyShowgirlSetPrices(result) {
   if (!result || !result.ok || !Array.isArray(result.breakdown)) return result;
   let total = 0;
   result.breakdown = result.breakdown.map(line => {
     const uid = String(line.uid || '').split('|')[0];
     const qty = parseInt(line.qty || 1, 10) || 1;
-    if (SHOWGIRL_SET_UIDS[uid]) line = Object.assign({}, line, { unit_price: 2000, line_total: 2000 * qty });
+    if (SHOWGIRL_PRICES[uid]) line = Object.assign({}, line, { unit_price: SHOWGIRL_PRICES[uid], line_total: SHOWGIRL_PRICES[uid] * qty });
     total += Number(line.unit_price || 0) * qty;
     return line;
   });
