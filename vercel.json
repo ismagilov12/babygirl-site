@@ -21,6 +21,6 @@
       "schedule": "*/10 * * * *"
     }
   ],
-  "buildCommand": "node scripts/build-catalog.cjs",
+  "buildCommand": "node scripts/build-storefront.cjs",
   "outputDirectory": "."
 }
