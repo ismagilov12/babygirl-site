@@ -1505,6 +1505,44 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   <div class="hero-scroll">▼ scroll ▼</div>
 </section>
 
+<!-- ===== SLOT MACHINE ===== -->
+<section class="slot-section">
+  <div class="slot-stars"></div>
+  <div class="slot-head">
+    <span class="kicker">promo</span>
+    <h2>win heat</h2>
+    <p class="slot-tagline">Spin & get a <b>promo code</b> ♥</p>
+  </div>
+
+  <div class="slot-machine">
+    <div class="slot-body">
+      <div class="slot-top-light" id="slotTopLight">PROMO · ROLL ME</div>
+      <div class="slot-display">
+        <div class="reel">
+          <div class="reel-strip" id="reel1">
+            <div class="reel-item">🥂</div><div class="reel-item">♥</div><div class="reel-item">★</div><div class="reel-item">💋</div><div class="reel-item">🍒</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel2">
+            <div class="reel-item percent">5%</div><div class="reel-item percent">7%</div><div class="reel-item percent">8%</div><div class="reel-item percent">9%</div><div class="reel-item percent">10%</div>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-strip" id="reel3">
+            <div class="reel-item word">OFF</div><div class="reel-item word">WIN</div><div class="reel-item word">HOT</div><div class="reel-item word">SHOW</div><div class="reel-item word">DROP</div>
+          </div>
+        </div>
+      </div>
+      <button id="spinBtn" class="spin-btn">spin</button>
+    </div>
+    <div class="slot-lever" aria-hidden="true">
+      <div class="lever-rod"></div>
+      <div class="lever-ball"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== PRODUCTS ===== -->
 
 <!-- Showgirl set price announcement -->
@@ -1966,6 +2004,71 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   onScroll(); // init
 })();
 
+/* ========== SLOT MACHINE + AUTO-APPLY PROMO ========== */
+(function(){
+  var r1 = document.getElementById('reel1');
+  var r2 = document.getElementById('reel2');
+  var r3 = document.getElementById('reel3');
+  var btn = document.getElementById('spinBtn');
+  var topLight = document.getElementById('slotTopLight');
+  if (!r1 || !btn) return;
+
+  // Колесо выдаёт скидку от 5% до 10%; SHOW10 — максимальная.
+  var WINS = [
+    {emoji:'🦋', percent:'5%',  word:'DROP', code:'SHOW05', pct:5,  msg:'5% off'},
+    {emoji:'♥',  percent:'7%',  word:'WIN',  code:'SHOW07', pct:7,  msg:'7% off'},
+    {emoji:'★',  percent:'8%',  word:'STAR', code:'SHOW08', pct:8,  msg:'8% off'},
+    {emoji:'💋', percent:'9%',  word:'SHOW', code:'SHOW09', pct:9,  msg:'9% off'},
+    {emoji:'🎀', percent:'10%', word:'OFF',  code:'SHOW10', pct:10, msg:'10% off · max'}
+  ];
+  var EMOJIS  = ['🎀','♥','★','💋','🦋'];
+  var PERCENT = ['5%','7%','8%','9%','10%'];
+  var WORDS   = ['OFF','WIN','STAR','SHOW','DROP'];
+
+  var spinning = false;
+
+  btn.addEventListener('click', function(){
+    if (spinning) return;
+    spinning = true;
+    btn.disabled = true; btn.textContent = '⌛ ...';
+    r1.classList.add('spinning'); r2.classList.add('spinning'); r3.classList.add('spinning');
+    r1.style.transition = 'none'; r2.style.transition = 'none'; r3.style.transition = 'none';
+
+    var win = WINS[Math.floor(Math.random() * WINS.length)];
+    var itemH = window.innerWidth >= 600 ? 110 : 90;
+
+    setTimeout(function(){ stopReel(r1, win.emoji,   EMOJIS,  itemH); }, 1400);
+    setTimeout(function(){ stopReel(r2, win.percent, PERCENT, itemH); }, 2000);
+    setTimeout(function(){
+      stopReel(r3, win.word, WORDS, itemH);
+      setTimeout(function(){
+        // Применить автоматически: сохранить в sessionStorage + пересчитать цены
+        try { sessionStorage.setItem('bg_promo_code', win.code); } catch(e){}
+        try { sessionStorage.setItem('bg_promo_pct',  String(win.pct)); } catch(e){}
+        if (window.applyPromo) window.applyPromo(win.code, win.pct);
+        if (topLight) topLight.textContent = '✓ ' + win.code + ' · −' + win.pct + '%';
+        btn.textContent = 'spin again'; btn.disabled = false; spinning = false;
+      }, 700);
+    }, 2700);
+  });
+
+  function stopReel(reel, target, items, itemH){
+    reel.classList.remove('spinning');
+    var idx = items.indexOf(target);
+    reel.style.transition = 'transform 0.7s cubic-bezier(.15,.7,.25,1)';
+    reel.style.transform = 'translateY(-' + (idx * itemH) + 'px)';
+  }
+
+  // Если промо уже было применено (вернулся пользователь) — восстанавливаем UI
+  try {
+    var savedCode = sessionStorage.getItem('bg_promo_code');
+    var savedPct  = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10);
+    if (savedCode && savedPct > 0 && topLight) {
+      topLight.textContent = '✓ ' + savedCode + ' · −' + savedPct + '%';
+    }
+  } catch(e){}
+})();
+
 /* ========== STOREFRONT (catalog + cart + checkout) ========== */
 (function(){
   // Read DATA
@@ -1993,7 +2096,6 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     return product;
   }
   (D.all || []).forEach(applyShowgirlSetPrice);
-  try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
 
   var $grid = document.getElementById('grid');
   var $overlay = document.getElementById('cartOverlay');
@@ -2023,8 +2125,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       return;
     }
     // Текущий применённый промо (читаем из sessionStorage — пишет slot machine)
-    var pct = 0;
-    try { pct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0; } catch(e){}
+    var pct = getSlotPct();
 
     var FAMILY_LABEL = {icons:'2000s ICONS', 'self-love':'SELF-LOVE', 'soft-rebel':'SOFT REBEL', 'crop':'CROP TOPS'};
     var FAMILY_SUB   = {icons:'~ y2k legends ~', 'self-love':'~ soft & loud ~', 'soft-rebel':'~ pink revolution ~', 'crop':'~ short & sexy ~'};
@@ -2204,7 +2305,6 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   });
 
   // Discount wheel promo state is disabled and discarded on page load.
-  try { sessionStorage.removeItem('bg_promo_code'); sessionStorage.removeItem('bg_promo_pct'); } catch(e){}
 
   // Supabase bootstrap
   function bootstrapFromSupabase(){
@@ -2259,7 +2359,24 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   var cart = [];
   var BUNDLE_DISCOUNT_PCT = 10;   // -10% на кожен товар, починаючи з 2-го
 
-  function getSlotPct(){ return 0; }
+  function getSlotPct(){
+    try { return Math.max(0, Math.min(10, parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0)); } catch(e){ return 0; }
+  }
+  function getSlotPromoCode(){
+    try {
+      var code = String(sessionStorage.getItem('bg_promo_code') || '').toUpperCase();
+      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+      return allowed[code] === getSlotPct() ? code : null;
+    } catch(e){ return null; }
+  }
+  window.applyPromo = function(code, pct){
+    var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+    code = String(code || '').toUpperCase();
+    if (!allowed[code] || Number(pct) !== allowed[code]) return;
+    try { sessionStorage.setItem('bg_promo_code', code); sessionStorage.setItem('bg_promo_pct', String(allowed[code])); } catch(e){}
+    renderGrid();
+    if (cart.length) renderCart();
+  }
 
   // Применяем slot-промо к unit-цене
   function unitPriceWithSlot(basePrice){
@@ -2747,7 +2864,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       window.bgTrack && window.bgTrack('begin_checkout',{ value: icGoodsUah, event_id: icEventId, meta:{ num_items: icNum, market: 'en-sg', value_eur: icValue } });
     } catch(err){}
 
-    var promo = null;
+    var promo = getSlotPromoCode();
 
     var payload = {
       fio: fio, phone: phone, email: email,
