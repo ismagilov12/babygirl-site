@@ -2079,7 +2079,7 @@ Delivery time depends on the destination.</p>
   catch(e){ console.error('[DATA] parse fail', e); }
   var EUR_RATE = 53.43; window.EUR_RATE = EUR_RATE;  // синхронно с env WB_FX_UAH_PER_UNIT
   var EN_SALE_PCT = 0; window.EN_SALE_PCT = EN_SALE_PCT;  // витринная скидка EN; синхронно с WB_EN_SALE_PCT в api/westernbid.js
-  var EN_MARKUP_BASE = 2; window.EN_MARKUP_BASE = EN_MARKUP_BASE;  // базовая наценка EN (для зачёркнутой старой цены)
+  var EN_MARKUP_BASE = 1; window.EN_MARKUP_BASE = EN_MARKUP_BASE;  // UAH and EUR prices use the same value at the configured exchange rate
   var EN_MARKUP = Math.round(EN_MARKUP_BASE * (100 - EN_SALE_PCT)) / 100; window.EN_MARKUP = EN_MARKUP;  // эффективная наценка = base x (1 - sale)
   // ==== Meta pixel helpers (EN market) — значения в EUR, SKU в формате фида /feed-en.xml ====
   function eurNum(u){ return Math.round((Number(u||0)*EN_MARKUP/EUR_RATE)*100)/100; }
@@ -2090,12 +2090,13 @@ Delivery time depends on the destination.</p>
   function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
   function dualPrice(uah, euros){ return Number(uah) + '₴ / ' + euros; }
   document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
-    item.textContent = 'Lingerie sets · ' + dualPrice(2000, euro(2000));
+    item.textContent = 'Lingerie sets · ' + dualPrice(4000, euro(4000));
   });
 
-  var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+  var SHOWGIRL_PRICES = {"sg-leo-black":[4000,5980],"sg-leo-red":[4000,5980],"sg-cow-pink":[4000,5980],"sg-red-velvet":[4000,5980],"sg-tension":[4000,5980],"sg-bunny":[4000,5980],"sg-pink-kiss":[4000,5980],"sg-holographic-queen":[4000,5980],"sg-blue-star":[4000,5980],"sg-wild-lime":[4000,5980],"sg-neck":[740,980],"sg-garter":[1870,3740]};
   function applyShowgirlSetPrice(product){
-    if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
+    var alignedPrice = product && SHOWGIRL_PRICES[product.uid];
+    if (alignedPrice){ product.price = alignedPrice[0]; product.price_old = alignedPrice[1]; }
     if (product){
       if (product.uid === 'sg-wild-lime') {
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp'])));
