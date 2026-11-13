@@ -2073,6 +2073,9 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   function applyShowgirlSetPrice(product){
     if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
     if (product){
+      if (['sg-cow-pink','sg-leo-black','sg-leo-red'].indexOf(product.uid) >= 0) {
+        product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/cow-leopard-shared-20260725.mp4'])));
+      }
       if (product.uid === 'sg-wild-lime') {
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp'])));
       }
