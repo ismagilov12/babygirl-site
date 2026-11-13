@@ -2059,6 +2059,9 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   function applyShowgirlSetPrice(product){
     if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
     if (product){
+      if (product.uid === 'sg-wild-lime') {
+        product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp'])));
+      }
       var translatedDescription = (window.EN_DESCR || {})[product.uid];
       if (translatedDescription) product.description = translatedDescription;
       var translatedSpecs = (window.EN_SPECS || {})[product.uid];
