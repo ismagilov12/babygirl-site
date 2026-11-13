@@ -1759,7 +1759,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   <div class="container">
     <div class="section-title-wrap">
       <h2 class="section-title">info <span class="alt">&amp; care</span></h2>
-      <span class="section-sub">Payment, обмін та returns · доставка · contacts</span>
+      <span class="section-sub">Payment, returns & exchanges · delivery · contacts</span>
     </div>
 
     <div class="info-grid">
@@ -1768,6 +1768,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         <p>We ship across Ukraine with <b>Nova Poshta</b> and worldwide with <b>Nova Global</b> (Nova Poshta International).</p>
         <p>Delivery within Ukraine usually takes <b>3–5 days</b>. Domestic shipping fees follow the carrier’s current rates.</p>
         <p>For international orders, we calculate the shipping cost in advance based on your destination and confirm it with you before payment.</p>
+        <p>Ordering from outside Ukraine? <a href="/showgirl-en">Continue to our international checkout</a>.</p>
         <p class="muted">Your tracking number will be shared once your order has shipped.</p>
       </article>
 
@@ -1803,11 +1804,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       She doesn't undress — she performs.<br>
       And she decides what you get to see.
     </p>
-    <p class="sg-philo-uk">
-      Інтимні комплекти для твого приватного шоу. Almost nothing. Not for everyone.
-      Вона не роздягається — вона грає.
-      І лише вона вирішує, що тобі дозволено побачити.
-    </p>
+    <p class="sg-philo-en body">Intimate sets for your private show. Barely there. Not for everyone.<br>She doesn’t undress — she performs.<br>And she decides what you get to see.</p>
     <div class="sg-philo-rule"></div>
     <p class="sg-philo-en body">
       Made for your own moments, whatever they look like.<br>
@@ -1815,11 +1812,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       you step into your role — it adapts to your mood.<br>
       You decide how far it goes.
     </p>
-    <p class="sg-philo-uk">
-      Створене для твоїх моментів, якими б вони не були.
-      Для себе, для когось, хто дивиться, або для моменту,
-      коли ти входиш у свою роль — воно підлаштовується під твій настрій.
-    </p>
+    <p class="sg-philo-en body">Made for your own moments, whatever they look like.<br>For yourself, for someone watching, or for the moment you step into your role — it adapts to your mood.<br>You decide how far it goes.</p>
   </div>
 </section>
 
@@ -1846,12 +1839,12 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       </div>
       <div>
         <h5>Follow</h5>
-        <a href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">Telegram-бот ✈</a>
+        <a href="https://t.me/babygirl_shop_bot" target="_blank" rel="noopener">Telegram bot ✈</a>
         <a href="https://www.instagram.com/showgirl.world/" target="_blank" rel="noopener">Instagram</a>
       </div>
       <div>
         <h5>Contact</h5>
-        <a href="#contacts">Усі contacts</a>
+        <a href="#contacts">All contacts</a>
         <a href="tel:+380958766756">+380 95 876 67 56</a>
       </div>
     </div>
@@ -2102,7 +2095,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     if (familyFilter === 'oversize') list = list.filter(function(p){ return p.family !== 'crop'; });
     else if (familyFilter) list = list.filter(function(p){ return p.family === familyFilter; });
     if (!list.length) {
-      $grid.innerHTML = '<div class="empty">~ нічого тут немає ~</div>';
+      $grid.innerHTML = '<div class="empty">~ nothing here ~</div>';
       return;
     }
     // Текущий применённый промо (читаем из sessionStorage — пишет slot machine)
@@ -2480,7 +2473,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     try { window.bgTrack && window.bgTrack('add_to_cart', { product_uid: uid, value: p.price }); } catch(e){}
     // Если перешли через границу 1→2, показать toast
     if (was < 2 && now >= 2){
-      showToast('🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> off the second item річ ♥');
+      showToast('🎁 <b>−' + BUNDLE_DISCOUNT_PCT + '%</b> discount on the second item ♥');
     }
   }
 
@@ -2606,7 +2599,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         pmPrice.textContent = p.price;
       }
     })();
-    pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversize · cotton 95% + еластан 5% · DTF print';
+    pmDescr.innerHTML = p.description ? escapeHtml(p.description) : 'Y2K oversized fit · 95% cotton + 5% elastane · DTF print';
     // ==== Specs (динамічні; фолбек — футболкові) ====
     (function(){
       var specsEl = document.getElementById('pmSpecs');
@@ -2866,7 +2859,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       } else {
         if (typeof fbq === 'function') fbq('track', 'Purchase', { value:data.authoritative_total, currency:'UAH', eventID:data.order_num });
         try { window.bgTrack && window.bgTrack('purchase', { event_id: data.order_num, value: data.authoritative_total }); } catch(e){}
-        $res.textContent = '✓ дякуємо! ми заphoneуємо.';
+        $res.textContent = '✓ Thank you! We’ll call you shortly.';
         $res.className = 'cart-result ok';
         cart = []; renderCart();
         $btn.disabled = false; $btn.textContent = 'Place order ♥';
