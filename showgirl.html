@@ -2060,18 +2060,19 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 
   // Match the regular and sale prices shown on showgirl-en.html.
   var INTERNATIONAL_UAH_PER_EUR = 53.43;
-  var INTERNATIONAL_PRICE_MARKUP = 2;
+  var INTERNATIONAL_PRICE_MARKUP = 1;
   function dualPrice(uah){
     var euros = Number(uah) * INTERNATIONAL_PRICE_MARKUP / INTERNATIONAL_UAH_PER_EUR;
     return Number(uah) + '₴ / €' + euros.toFixed(2);
   }
   document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
-    item.textContent = 'Lingerie sets from ' + dualPrice(2000);
+    item.textContent = 'Lingerie sets from ' + dualPrice(4000);
   });
 
-  var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
+  var SHOWGIRL_PRICES = {"sg-leo-black":[4000,5980],"sg-leo-red":[4000,5980],"sg-cow-pink":[4000,5980],"sg-red-velvet":[4000,5980],"sg-tension":[4000,5980],"sg-bunny":[4000,5980],"sg-pink-kiss":[4000,5980],"sg-holographic-queen":[4000,5980],"sg-blue-star":[4000,5980],"sg-wild-lime":[4000,5980],"sg-neck":[740,980],"sg-garter":[1870,3740]};
   function applyShowgirlSetPrice(product){
-    if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
+    var alignedPrice = product && SHOWGIRL_PRICES[product.uid];
+    if (alignedPrice){ product.price = alignedPrice[0]; product.price_old = alignedPrice[1]; }
     if (product){
       if (product.uid === 'sg-wild-lime') {
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp'])));
