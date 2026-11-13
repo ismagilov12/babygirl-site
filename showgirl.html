@@ -2353,7 +2353,12 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   var BUNDLE_DISCOUNT_PCT = 10;   // -10% на кожен товар, починаючи з 2-го
 
   function getSlotPct(){
-    try { return Math.max(0, Math.min(10, parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0)); } catch(e){ return 0; }
+    try {
+      var code = String(sessionStorage.getItem('bg_promo_code') || '').toUpperCase();
+      var storedPct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0;
+      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+      return allowed[code] === storedPct ? allowed[code] : 0;
+    } catch(e){ return 0; }
   }
   function getSlotPromoCode(){
     try {
