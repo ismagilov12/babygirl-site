@@ -2077,7 +2077,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/cow-leopard-shared-20260725.mp4'])));
       }
       if (product.uid === 'sg-wild-lime') {
-        product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp','assets/showgirl/wild-lime-customer-video-20261115.mp4'])));
+        product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-wild-lime-5.webp','assets/showgirl/wild-lime-stage-collage-20261115.webp','assets/showgirl/wild-lime-customer-video-20261115.mp4'])));
       }
       if (product.uid === 'sg-pink-kiss') {
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/sg-pink-kiss-customer-2.webp'])));
@@ -2096,6 +2096,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     return product;
   }
   (D.all || []).forEach(applyShowgirlSetPrice);
+  if (Array.isArray(D.grid)) D.grid = ['sg-wild-lime'].concat(D.grid.filter(function(uid){ return uid !== 'sg-wild-lime'; }));
 
   var $grid = document.getElementById('grid');
   var $overlay = document.getElementById('cartOverlay');
