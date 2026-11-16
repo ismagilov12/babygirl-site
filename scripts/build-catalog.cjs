@@ -12,10 +12,26 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  const hiddenMarker = 'var STOREFRONT_HIDDEN = {';
  const hiddenEntries = hiddenHoodies.map(uid => JSON.stringify(uid) + ':1').join(', ');
  const hiddenHeader = hiddenMarker + '\n    ' + hiddenEntries + ',';
+ const galleryMarker = "      if (p.uid === 'soft-rebel') p.family = 'tee';";
+ const oneNightGallery = `      if (p.uid === 'hoodie-one-night-only'){
+        var removedPhoto = 'assets/hoodie-new-one-night-only-flat-black.webp';
+        p.photos = (p.photos || []).filter(function(url){ return url !== removedPhoto; });
+        (p.colors || []).forEach(function(color){
+          if (Array.isArray(color.photos)){
+            color.photos = color.photos.filter(function(url){ return url !== removedPhoto; });
+          }
+          if (color.photo === removedPhoto) color.photo = (color.photos || [])[0] || p.photos[0];
+        });
+        if (p.photo_main === removedPhoto) p.photo_main = p.photos[0];
+      }
+`;
  for(const file of ['index.html','en.html']){
   const source = fs.readFileSync(file,'utf8');
   if (source.split(hiddenMarker).length !== 2) throw new Error('Storefront visibility list missing in ' + file);
-  const html = source.includes(hiddenHeader) ? source : source.replace(hiddenMarker, hiddenHeader);
+  if (source.split(galleryMarker).length !== 2) throw new Error('Storefront gallery normalization missing in ' + file);
+  const withVisibility = source.includes(hiddenHeader) ? source : source.replace(hiddenMarker, hiddenHeader);
+  const html = withVisibility.includes(oneNightGallery) ? withVisibility
+   : withVisibility.replace(galleryMarker, oneNightGallery + galleryMarker);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);
