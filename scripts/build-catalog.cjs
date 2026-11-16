@@ -25,13 +25,32 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
         if (p.photo_main === removedPhoto) p.photo_main = p.photos[0];
       }
 `;
+ const teePhotos = `      var campaign = {
+        'tee-pizdets': { color: 'white', ids: [3441, 3442, 3443, 3444, 3448, 3449] },
+        'tee-pokhui': { color: 'pink', ids: [3445, 3446, 3447] },
+        'tee-ya-ne-yibu': { color: 'black', ids: [3367] }
+      }[p.uid];
+      if (campaign){
+        var newPhotos = campaign.ids.map(function(id){ return 'assets/tee-campaign-' + id + '.webp'; });
+        var existingPhotos = (Array.isArray(p.photos) && p.photos.length ? p.photos : [p.photo_main]).filter(Boolean);
+        p.photos = Array.from(new Set(existingPhotos.concat(newPhotos)));
+        (p.colors || []).forEach(function(color){
+          if (color.code !== campaign.color) return;
+          var photos = Array.isArray(color.photos) && color.photos.length ? color.photos : [color.photo].concat(existingPhotos);
+          color.photos = Array.from(new Set(photos.filter(Boolean).concat(newPhotos)));
+        });
+      }
+`;
  for(const file of ['index.html','en.html']){
   const source = fs.readFileSync(file,'utf8');
   if (source.split(hiddenMarker).length !== 2) throw new Error('Storefront visibility list missing in ' + file);
   if (source.split(galleryMarker).length !== 2) throw new Error('Storefront gallery normalization missing in ' + file);
   const withVisibility = source.includes(hiddenHeader) ? source : source.replace(hiddenMarker, hiddenHeader);
-  const html = withVisibility.includes(oneNightGallery) ? withVisibility
+  const galleryOverrides = oneNightGallery + teePhotos;
+  const withOneNightGallery = withVisibility.includes(oneNightGallery) ? withVisibility
    : withVisibility.replace(galleryMarker, oneNightGallery + galleryMarker);
+  const html = withOneNightGallery.includes(teePhotos) ? withOneNightGallery
+   : withOneNightGallery.replace(oneNightGallery, galleryOverrides);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);
