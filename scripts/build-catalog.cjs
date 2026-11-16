@@ -6,7 +6,8 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  const vm=require('node:vm');
  const hiddenHoodies = [
   'hoodie-social-club', 'hoodie-bad-girls-club', 'hoodie-too-sexy-stress',
-  'hoodie-karma-baby-karma', 'hoodie-hey-arnold', 'hoodie-digital-riot'
+  'hoodie-karma-baby-karma', 'hoodie-hey-arnold', 'hoodie-digital-riot',
+  'hoodie-clear', 'hoodie-baby-girl-dtf-20261027'
  ];
  const hiddenMarker = 'var STOREFRONT_HIDDEN = {';
  const hiddenEntries = hiddenHoodies.map(uid => JSON.stringify(uid) + ':1').join(', ');
