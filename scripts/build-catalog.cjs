@@ -15,6 +15,9 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  const checked=spawnSync(process.execPath,['--check','assets/babygirl-installments.js'],{stdio:'inherit'});
  if(checked.error)throw checked.error;
  if(checked.status!==0)process.exit(checked.status||1);
+ const release=spawnSync(process.execPath,['scripts/release-tee-price-2100.cjs'],{stdio:'inherit'});
+ if(release.error)throw release.error;
+ if(release.status!==0)process.exit(release.status||1);
  console.log('Storefront validation passed; historical catalog maintenance is opt-in.');
  process.exit(0);
 }
