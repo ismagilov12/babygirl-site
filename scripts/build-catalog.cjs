@@ -7,12 +7,44 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  const hiddenHoodies = [
   'hoodie-social-club', 'hoodie-bad-girls-club', 'hoodie-too-sexy-stress',
   'hoodie-karma-baby-karma', 'hoodie-hey-arnold', 'hoodie-digital-riot',
-  'hoodie-clear', 'hoodie-baby-girl-dtf-20261027'
+  'hoodie-clear', 'hoodie-baby-girl-dtf-20261027', 'puff-bag'
  ];
  const hiddenMarker = 'var STOREFRONT_HIDDEN = {';
  const hiddenEntries = hiddenHoodies.map(uid => JSON.stringify(uid) + ':1').join(', ');
  const hiddenHeader = hiddenMarker + '\n    ' + hiddenEntries + ',';
  const galleryMarker = "      if (p.uid === 'soft-rebel') p.family = 'tee';";
+ const plateTransitionMarker = `        } else if (grp === 'hoodie' && lastFam){`;
+ const plateTransition = `        } else if (grp === 'plate' && lastFam){
+          unit = '<span class="marquee-item">BABY GIRL ПОСУД</span>'
+               + '<span class="marquee-emoji">🎀</span>'
+               + '<span class="marquee-item">ТАРІЛКИ ТА ЧАШКИ</span>'
+               + '<span class="marquee-emoji">☕</span>'
+               + '<span class="marquee-item">HOME COLLECTION</span>'
+               + '<span class="marquee-emoji">💗</span>';
+`;
+ const videoCheckMarker = `      // Відео не валідуємо через new Image() — вважаємо доступним; <video> сам сховається при помилці
+      if (pmIsVideo(url)) return Promise.resolve(true);`;
+ const videoCheck = `      // Перевіряємо відео окремо: пошкоджений MP4 не має залишати порожній слайд у Safari/iPhone.
+      if (pmIsVideo(url)) return new Promise(function(resolve){
+        var video = document.createElement('video');
+        var done = false;
+        var t = setTimeout(function(){ if (!done){ done = true; resolve(false); } }, 9000);
+        function finish(ok){
+          if (done) return;
+          done = true;
+          clearTimeout(t);
+          video.removeAttribute('src');
+          try { video.load(); } catch(e){}
+          resolve(ok);
+        }
+        video.preload = 'metadata';
+        video.muted = true;
+        video.playsInline = true;
+        video.onloadedmetadata = function(){ finish(video.duration > 0 && isFinite(video.duration)); };
+        video.onerror = function(){ finish(false); };
+        video.src = url;
+        try { video.load(); } catch(e){ finish(false); }
+      });`;
  const oneNightGallery = `      if (p.uid === 'hoodie-one-night-only'){
         var removedPhoto = 'assets/hoodie-new-one-night-only-flat-black.webp';
         p.photos = (p.photos || []).filter(function(url){ return url !== removedPhoto; });
@@ -63,8 +95,14 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
    : withVisibility.replace(galleryMarker, oneNightGallery + galleryMarker);
   const withTeePhotos = withOneNightGallery.includes(teePhotos) ? withOneNightGallery
    : withOneNightGallery.replace(oneNightGallery, oneNightGallery + teePhotos);
-  const html = withTeePhotos.includes(babyDollBettyBack) ? withTeePhotos
+  const withBabyDollBettyBack = withTeePhotos.includes(babyDollBettyBack) ? withTeePhotos
    : withTeePhotos.replace(teePhotos, teePhotos + babyDollBettyBack);
+  if (withBabyDollBettyBack.split(plateTransitionMarker).length !== 2) throw new Error('Plate transition marker missing in ' + file);
+  if (withBabyDollBettyBack.split(videoCheckMarker).length !== 2) throw new Error('Video validation marker missing in ' + file);
+  const withPlateTransition = withBabyDollBettyBack.includes(plateTransition)
+   ? withBabyDollBettyBack : withBabyDollBettyBack.replace(plateTransitionMarker, plateTransition + plateTransitionMarker);
+  const html = withPlateTransition.includes(videoCheck)
+   ? withPlateTransition : withPlateTransition.replace(videoCheckMarker, videoCheck);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);
