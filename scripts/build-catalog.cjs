@@ -4,13 +4,23 @@ const {spawnSync}=require('node:child_process');
 if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
  const fs=require('node:fs');
  const vm=require('node:vm');
+ const hiddenHoodies = [
+  'hoodie-social-club', 'hoodie-bad-girls-club', 'hoodie-too-sexy-stress',
+  'hoodie-karma-baby-karma', 'hoodie-hey-arnold', 'hoodie-digital-riot'
+ ];
+ const hiddenMarker = 'var STOREFRONT_HIDDEN = {';
+ const hiddenEntries = hiddenHoodies.map(uid => JSON.stringify(uid) + ':1').join(', ');
+ const hiddenHeader = hiddenMarker + '\n    ' + hiddenEntries + ',';
  for(const file of ['index.html','en.html']){
-  const html=fs.readFileSync(file,'utf8');
+  const source = fs.readFileSync(file,'utf8');
+  if (source.split(hiddenMarker).length !== 2) throw new Error('Storefront visibility list missing in ' + file);
+  const html = source.includes(hiddenHeader) ? source : source.replace(hiddenMarker, hiddenHeader);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);
    else if(!/type\s*=\s*["']module["']/.test(match[1]))new vm.Script(match[2],{filename:file});
   }
+  fs.writeFileSync(file, html);
  }
  const checked=spawnSync(process.execPath,['--check','assets/babygirl-installments.js'],{stdio:'inherit'});
  if(checked.error)throw checked.error;
