@@ -2180,7 +2180,20 @@ body.pm-open{overflow:hidden}
         }
       }
       if (p.uid === 'soft-rebel') p.family = 'tee';
-      if (p.uid === 'crop-bad-baby') p.family = 'crop';
+      if (p.uid === 'crop-bad-baby'){
+        p.family = 'crop';
+        var blackLooks = [3411, 3413, 3412, 3410].map(function(id){
+          return 'assets/crop-bad-baby-look-' + id + '.webp';
+        });
+        var whiteLook = 'assets/crop-bad-baby-look-3414.webp';
+        var looks = blackLooks.concat(whiteLook);
+        p.photos = Array.from(new Set((p.photos || [p.photo_main]).filter(Boolean).concat(looks)));
+        (p.colors || []).forEach(function(color){
+          var colorLooks = color.code === 'white' ? [whiteLook].concat(blackLooks) : looks;
+          var photos = Array.isArray(color.photos) && color.photos.length ? color.photos : [color.photo];
+          color.photos = Array.from(new Set(photos.filter(Boolean).concat(colorLooks)));
+        });
+      }
       if (p.uid === 'bad-baby-long'){
         p.family = 'long';
         p.in_grid = true;
