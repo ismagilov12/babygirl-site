@@ -43,16 +43,28 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
         });
       }
 `;
+ const babyDollBettyBack = `      if (p.uid === 'hoodie-baby-doll-betty-black'){
+        var backPhoto = 'assets/hoodie-new-baby-doll-betty-flat-back-black.webp';
+        var productPhotos = (Array.isArray(p.photos) ? p.photos : [p.photo_main]).filter(Boolean);
+        p.photos = Array.from(new Set(productPhotos.concat(backPhoto)));
+        (p.colors || []).forEach(function(color){
+          if (color.code !== 'black') return;
+          var colorPhotos = Array.isArray(color.photos) && color.photos.length ? color.photos : [color.photo].concat(productPhotos);
+          color.photos = Array.from(new Set(colorPhotos.filter(Boolean).concat(backPhoto)));
+        });
+      }
+`;
  for(const file of ['index.html','en.html']){
   const source = fs.readFileSync(file,'utf8');
   if (source.split(hiddenMarker).length !== 2) throw new Error('Storefront visibility list missing in ' + file);
   if (source.split(galleryMarker).length !== 2) throw new Error('Storefront gallery normalization missing in ' + file);
   const withVisibility = source.includes(hiddenHeader) ? source : source.replace(hiddenMarker, hiddenHeader);
-  const galleryOverrides = oneNightGallery + teePhotos;
   const withOneNightGallery = withVisibility.includes(oneNightGallery) ? withVisibility
    : withVisibility.replace(galleryMarker, oneNightGallery + galleryMarker);
-  const html = withOneNightGallery.includes(teePhotos) ? withOneNightGallery
-   : withOneNightGallery.replace(oneNightGallery, galleryOverrides);
+  const withTeePhotos = withOneNightGallery.includes(teePhotos) ? withOneNightGallery
+   : withOneNightGallery.replace(oneNightGallery, oneNightGallery + teePhotos);
+  const html = withTeePhotos.includes(babyDollBettyBack) ? withTeePhotos
+   : withTeePhotos.replace(teePhotos, teePhotos + babyDollBettyBack);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);
