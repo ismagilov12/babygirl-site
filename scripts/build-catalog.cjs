@@ -26,9 +26,9 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
       }
 `;
  const teePhotos = `      var campaign = {
-        'tee-pizdets': { color: 'white', ids: [3441, 3442, 3443, 3444, 3448, 3449] },
-        'tee-pokhui': { color: 'pink', ids: [3445, 3446, 3447] },
-        'tee-ya-ne-yibu': { color: 'black', ids: [3367, 3451] },
+        'tee-pizdets': { ids: [3441, 3442, 3443, 3444, 3448, 3449] },
+        'tee-pokhui': { ids: [3445, 3446, 3447] },
+        'tee-ya-ne-yibu': { ids: [3367, 3451] },
         'eminem': { color: 'pink', ids: [185, 186] },
         'pamela-90s': { color: 'black', ids: [978] }
       }[p.uid];
@@ -37,7 +37,7 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
         var existingPhotos = (Array.isArray(p.photos) && p.photos.length ? p.photos : [p.photo_main]).filter(Boolean);
         p.photos = Array.from(new Set(existingPhotos.concat(newPhotos)));
         (p.colors || []).forEach(function(color){
-          if (color.code !== campaign.color) return;
+          if (campaign.color && color.code !== campaign.color) return;
           var photos = Array.isArray(color.photos) && color.photos.length ? color.photos : [color.photo].concat(existingPhotos);
           color.photos = Array.from(new Set(photos.filter(Boolean).concat(newPhotos)));
         });
