@@ -171,18 +171,10 @@ async function saveOrder(order) {
 
 function md5(s) { return crypto.createHash('md5').update(String(s), 'utf8').digest('hex'); }
 
-// Nova Global shipping zones (EUR per order). Keep in sync with en.html (EN_ZINFO)!
-const SHIP_Z1 = ['PL', 'SK', 'HU', 'RO', 'CZ', 'MD'];
-const SHIP_Z2 = ['DE', 'AT', 'FR', 'IT', 'ES', 'NL', 'BE', 'LU', 'PT', 'IE', 'DK', 'SE', 'FI', 'GR', 'LT', 'LV', 'EE', 'SI', 'HR', 'BG', 'CH', 'NO'];
-const SHIP_Z3 = ['GB'];
-const SHIP_Z4 = ['US', 'CA'];
+// Fixed BabyGirl international shipping (EUR per order). Keep in sync with en.html.
 function shippingEur(country) {
-  const c = String(country || '').toUpperCase();
-  if (SHIP_Z1.indexOf(c) >= 0) return 7;
-  if (SHIP_Z2.indexOf(c) >= 0) return 9;
-  if (SHIP_Z3.indexOf(c) >= 0) return 11;
-  if (SHIP_Z4.indexOf(c) >= 0) return 15;
-  return 22;
+  void country;
+  return 20;
 }
 
 function splitName(full) {
@@ -267,7 +259,7 @@ module.exports = async function handler(req, res) {
   if (!(fx > 0)) return res.status(500).json({ ok: false, error: 'FX rate not configured (WB_FX_UAH_PER_UNIT)' });
   const amountNum = Math.round((uahTotal / fx) * 100) / 100;
   const amount = amountNum.toFixed(2);
-  // Showgirl charges a fixed international delivery fee; BabyGirl keeps its zone rates.
+  // Both storefronts use fixed international delivery fees.
   const shipEur = isShowgirl ? 9 : shippingEur(body.country);
   const totalEur = Math.round((amountNum + shipEur) * 100) / 100;
 
