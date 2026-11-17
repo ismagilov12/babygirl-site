@@ -24,6 +24,22 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
 `;
  const videoCheckMarker = `      // Відео не валідуємо через new Image() — вважаємо доступним; <video> сам сховається при помилці
       if (pmIsVideo(url)) return Promise.resolve(true);`;
+ const teeSaleMarker = `  applyHoodieSeasonSale(D.all);`;
+ const teeSaleInject = `  // Акція на звичайні футболки: стара ціна 2100 ₴, нова ціна 1500 ₴.
+  function applyRegularTeeSale(products){
+    var families = {tee:1, icons:1, 'self-love':1, 'soft-rebel':1};
+    (Array.isArray(products) ? products : []).forEach(function(p){
+      if (!p || p.active === false || p.uid === 'baby-girl' || !families[p.family]) return;
+      p.price_old = 2100;
+      p.price = 1500;
+    });
+  }
+  applyRegularTeeSale(D.all);`;
+ const teeSaleRefreshMarker = `      applyHoodieSeasonSale(D.all);
+      renderGrid();`;
+ const teeSaleRefresh = `      applyHoodieSeasonSale(D.all);
+      applyRegularTeeSale(D.all);
+      renderGrid();`;
  const videoCheck = `      // Перевіряємо відео окремо: пошкоджений MP4 не має залишати порожній слайд у Safari/iPhone.
       if (pmIsVideo(url)) return new Promise(function(resolve){
         var video = document.createElement('video');
@@ -99,10 +115,16 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
    : withTeePhotos.replace(teePhotos, teePhotos + babyDollBettyBack);
   if (withBabyDollBettyBack.split(plateTransitionMarker).length !== 2) throw new Error('Plate transition marker missing in ' + file);
   if (withBabyDollBettyBack.split(videoCheckMarker).length !== 2) throw new Error('Video validation marker missing in ' + file);
+  if (withBabyDollBettyBack.split(teeSaleMarker).length < 2) throw new Error('T-shirt sale marker missing in ' + file);
+  if (withBabyDollBettyBack.split(teeSaleRefreshMarker).length !== 2) throw new Error('T-shirt sale refresh marker missing in ' + file);
   const withPlateTransition = withBabyDollBettyBack.includes(plateTransition)
    ? withBabyDollBettyBack : withBabyDollBettyBack.replace(plateTransitionMarker, plateTransition + plateTransitionMarker);
-  const html = withPlateTransition.includes(videoCheck)
+  const withVideoCheck = withPlateTransition.includes(videoCheck)
    ? withPlateTransition : withPlateTransition.replace(videoCheckMarker, videoCheck);
+  const withTeeSale = withVideoCheck.includes(teeSaleInject)
+   ? withVideoCheck : withVideoCheck.replace(teeSaleMarker, teeSaleMarker + '\n' + teeSaleInject);
+  const html = withTeeSale.includes(teeSaleRefresh)
+   ? withTeeSale : withTeeSale.replace(teeSaleRefreshMarker, teeSaleRefresh);
   for(const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
    if(/\bsrc\s*=/.test(match[1])||!match[2].trim())continue;
    if(/application\/(?:ld\+)?json/.test(match[1]))JSON.parse(match[2]);

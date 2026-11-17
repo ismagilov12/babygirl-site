@@ -76,9 +76,9 @@ function sync(ua, en) {
   const configStart = '  // BEGIN SYNCED CATALOG RULES';
   const configEnd = '  // END SYNCED CATALOG RULES';
   const hidden = between(ua, '  var STOREFRONT_HIDDEN =', '  var $grid =');
-  const config = configStart + '\n' + fn(ua,'normalizeStorefrontCategories') + '\n' + fn(ua,'applyHoodieSeasonSale') + '\n' + hidden +
+  const config = configStart + '\n' + fn(ua,'normalizeStorefrontCategories') + '\n' + fn(ua,'applyHoodieSeasonSale') + '\n' + fn(ua,'applyRegularTeeSale') + '\n' + hidden +
     '\n  var EN_HIDDEN = STOREFRONT_HIDDEN; window.EN_HIDDEN = EN_HIDDEN;\n' +
-    '  normalizeStorefrontCategories();\n  applyHoodieSeasonSale(D.all);\n' + configEnd + '\n';
+    '  normalizeStorefrontCategories();\n  applyHoodieSeasonSale(D.all);\n  applyRegularTeeSale(D.all);\n' + configEnd + '\n';
   if (en.includes(configStart)) replace(between(en, configStart, configEnd) + configEnd + '\n', config);
   else replace(between(en, '  // EN-only:', '  var EUR_RATE'), config);
   replace(between(en, '  var $grid =', '  var $overlay ='), between(ua, '  var $grid =', '  var $overlay ='));

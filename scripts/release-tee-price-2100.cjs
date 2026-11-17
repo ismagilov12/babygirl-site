@@ -1,8 +1,9 @@
-// One-time production release for the storefront's regular T-shirts.
-const release = 'regular-tees-2100-20261116';
+// One-time production release for the storefront's regular T-shirt sale.
+const release = 'regular-tees-sale-1500-20261117';
 const selection = 'active=eq.true&family=in.(tee,icons,self-love,soft-rebel)&uid=neq.baby-girl';
 const receiptPath = 'bg_products?uid=eq.tee-too-sexy-stress';
-const price = 2100;
+const price = 1500;
+const priceOld = 2100;
 
 async function request(path, patch) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -39,9 +40,9 @@ async function main() {
   const crmProducts = await request(crm);
   if (crmProducts.length >= 1000) throw new Error('Unexpected CRM catalog size');
 
-  const updated = await request(catalog, { price });
+  const updated = await request(catalog, { price, price_old: priceOld });
   const updatedCrm = await request(crm, { price });
-  if (updated.length !== products.length || updated.some(p => Number(p.price) !== price) ||
+  if (updated.length !== products.length || updated.some(p => Number(p.price) !== price || Number(p.price_old) !== priceOld) ||
       updatedCrm.length !== crmProducts.length || updatedCrm.some(p => Number(p.price) !== price)) {
     throw new Error('T-shirt price verification failed');
   }
@@ -51,7 +52,7 @@ async function main() {
     attrs: { ...current.attrs, tee_price_release: release }
   });
   if (saved?.attrs?.tee_price_release !== release) throw new Error('Release receipt verification failed');
-  console.log('Set ' + updated.length + ' T-shirts and ' + updatedCrm.length + ' CRM records to UAH ' + price);
+  console.log('Set ' + updated.length + ' T-shirts to UAH ' + price + ' with UAH ' + priceOld + ' crossed out; updated ' + updatedCrm.length + ' CRM records.');
 }
 
 main().catch(error => {
