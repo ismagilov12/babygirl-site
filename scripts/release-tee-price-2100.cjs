@@ -31,7 +31,7 @@ async function main() {
   if (!receipt) throw new Error('T-shirt release receipt product missing');
   if (receipt.attrs?.tee_price_release === release) return;
 
-  const catalog = 'bg_products?' + selection + '&select=uid,price&limit=500';
+  const catalog = 'bg_products?' + selection + '&select=uid,price,price_old&limit=500';
   const products = await request(catalog);
   if (!products.length || products.length >= 500) throw new Error('Unexpected T-shirt catalog size');
 
