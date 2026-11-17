@@ -1802,12 +1802,8 @@ body.pm-open{overflow:hidden}
       <article class="info-card pink" id="delivery">
         <h3>🚚 Worldwide shipping</h3>
         <p>We ship worldwide with <b>Nova Global</b> (Nova Poshta international).</p>
-        <p>— Central Europe (PL · SK · HU · RO · CZ · MD): <b>€7</b> · 3–6 business days<br>
-        — Western Europe &amp; Scandinavia: <b>€9</b> · 4–8 business days<br>
-        — United Kingdom: <b>€11</b> · 5–9 business days<br>
-        — USA &amp; Canada: <b>€15</b> · 7–14 business days<br>
-        — Rest of the world: <b>€22</b> · 10–20 business days</p>
-        <p class="muted">Shipping is calculated at checkout by destination country. Your tracking number arrives by email.</p>
+        <p>— Fixed worldwide shipping: <b>€20</b></p>
+        <p class="muted">Shipping is automatically added at checkout. Your tracking number arrives by email.</p>
       </article>
 
       <article class="info-card yellow" id="payment">
@@ -3228,14 +3224,9 @@ Object.assign(window.EN_DESCR, {
 
 // ======== EN CHECKOUT (international · Western Bid) ========
   var EN_COUNTRIES=[['DE','Germany'],['PL','Poland'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['BE','Belgium'],['AT','Austria'],['CZ','Czechia'],['SK','Slovakia'],['SE','Sweden'],['FI','Finland'],['DK','Denmark'],['NO','Norway'],['IE','Ireland'],['PT','Portugal'],['GR','Greece'],['RO','Romania'],['HU','Hungary'],['BG','Bulgaria'],['HR','Croatia'],['SI','Slovenia'],['LT','Lithuania'],['LV','Latvia'],['EE','Estonia'],['LU','Luxembourg'],['CH','Switzerland'],['MD','Moldova'],['GB','United Kingdom'],['US','United States'],['CA','Canada'],['AU','Australia'],['AE','United Arab Emirates'],['SA','Saudi Arabia'],['JP','Japan'],['KR','South Korea'],['SG','Singapore'],['CN','China'],['ZA','South Africa'],['NZ','New Zealand']];
-  // Nova Global zones — держать в синхроне с api/westernbid.js (shippingEur)!
-  var EN_Z1=['PL','SK','HU','RO','CZ','MD'];
-  var EN_Z2=['DE','AT','FR','IT','ES','NL','BE','LU','PT','IE','DK','SE','FI','GR','LT','LV','EE','SI','HR','BG','CH','NO'];
-  var EN_Z3=['GB'];
-  var EN_Z4=['US','CA'];
-  var EN_ZINFO={z1:{eur:7,days:'3–6'},z2:{eur:9,days:'4–8'},z3:{eur:11,days:'5–9'},z4:{eur:15,days:'7–14'},z5:{eur:22,days:'10–20'}};
-  function enZone(c){ c=String(c||'').toUpperCase(); if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
-  function enShipInfo(c){ var z=enZone(c); return z?EN_ZINFO[z]:null; }
+  // Fixed international shipping — keep in sync with api/westernbid.js (shippingEur).
+  var EN_SHIPPING_EUR=20;
+  function enShipInfo(){ return {eur:EN_SHIPPING_EUR,days:'5–20'}; }
 
   var $cIn  = document.getElementById('fld-country-in');
   var $cHid = document.getElementById('fld-country');
