@@ -58,7 +58,7 @@ if(process.env.RUN_CATALOG_MAINTENANCE!=='1'){
       }
 `;
  const teePhotos = `      var campaign = {
-        'tee-pizdets': { ids: [3441, 3442, 3443, 3444, 3448, 3449] },
+        'tee-pizdets': { ids: [3441, 3442, 3443, 3444, 3448, 3449, 3453, 3454] },
         'tee-pokhui': { ids: [3445, 3446, 3447] },
         'tee-ya-ne-yibu': { ids: [3367, 3451] },
         'eminem': { color: 'pink', ids: [185, 186] },
