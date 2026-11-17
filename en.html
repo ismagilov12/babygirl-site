@@ -1803,7 +1803,7 @@ body.pm-open{overflow:hidden}
         <h3>🚚 Worldwide shipping</h3>
         <p>We ship worldwide with <b>Nova Global</b> (Nova Poshta international).</p>
         <p>— Fixed worldwide shipping: <b>€20</b></p>
-        <p class="muted">Shipping is automatically added at checkout. Your tracking number arrives by email.</p>
+        <p class="muted">Shipping is automatically added and paid at checkout. You won’t need to pay anything for delivery when you receive your order. Your tracking number arrives by email.</p>
       </article>
 
       <article class="info-card yellow" id="payment">
@@ -3257,7 +3257,7 @@ Object.assign(window.EN_DESCR, {
     if(info && cart.length){
       var b=calcBreakdown();
       var tot=b.total*EN_MARKUP/EUR_RATE + info.eur;
-      elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
+      elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days · nothing to pay on delivery</small></span><b>€'+info.eur.toFixed(2)+'</b>';
       if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
       if($btn && !$btn.disabled) $btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal ♥';
     } else {
