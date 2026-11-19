@@ -99,7 +99,11 @@ function applyShowgirlSetPrices(result) {
   result.breakdown = result.breakdown.map(line => {
     const uid = String(line.uid || '').split('|')[0];
     const qty = parseInt(line.qty || 1, 10) || 1;
-    if (SHOWGIRL_SET_UIDS[uid]) line = Object.assign({}, line, { unit_price: 2000, line_total: 2000 * qty });
+    const saleBasePrices = {"sg-leo-black":2000,"sg-leo-red":2000,"sg-cow-pink":2000,"sg-red-velvet":2000,"sg-tension":2000,"sg-bunny":2000,"sg-pink-kiss":2000,"sg-neck":370,"sg-garter":935,"sg-holographic-queen":2000,"sg-blue-star":2000,"sg-wild-lime":2000};
+    if (saleBasePrices[uid]) {
+      const salePrice = Math.round(saleBasePrices[uid] * 0.8 * 100) / 100;
+      line = Object.assign({}, line, { unit_price: salePrice, line_total: salePrice * qty });
+    }
     total += Number(line.unit_price || 0) * qty;
     return line;
   });
@@ -260,7 +264,7 @@ module.exports = async function handler(req, res) {
   const amountNum = Math.round((uahTotal / fx) * 100) / 100;
   const amount = amountNum.toFixed(2);
   // Both storefronts use fixed international delivery fees.
-  const shipEur = isShowgirl ? 9 : shippingEur(body.country);
+  const shipEur = isShowgirl ? 15 : shippingEur(body.country);
   const totalEur = Math.round((amountNum + shipEur) * 100) / 100;
 
   const wbLogin = process.env.WB_LOGIN;
