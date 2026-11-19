@@ -2066,12 +2066,17 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     return Number(uah) + '₴ / €' + euros.toFixed(2);
   }
   document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
-    item.textContent = 'Lingerie sets from ' + dualPrice(2000);
+    item.textContent = '20% OFF · Lingerie sets from ' + dualPrice(1600);
   });
 
   var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
   function applyShowgirlSetPrice(product){
-    if (product && SHOWGIRL_SET_UIDS[product.uid]){ product.price = 2000; product.price_old = 2990; }
+    // Showgirl campaign: 20% off the current regular price in both currencies.
+    var saleBasePrices = {"sg-leo-black":2000,"sg-leo-red":2000,"sg-cow-pink":2000,"sg-red-velvet":2000,"sg-tension":2000,"sg-bunny":2000,"sg-pink-kiss":2000,"sg-neck":370,"sg-garter":935,"sg-holographic-queen":2000,"sg-blue-star":2000,"sg-wild-lime":2000};
+    if (product && saleBasePrices[product.uid]) {
+      product.price_old = saleBasePrices[product.uid];
+      product.price = Math.round(product.price_old * 0.8 * 100) / 100;
+    }
     if (product){
       if (['sg-cow-pink','sg-leo-black','sg-leo-red'].indexOf(product.uid) >= 0) {
         product.photos = Array.from(new Set((Array.isArray(product.photos) ? product.photos : []).concat(['assets/showgirl/cow-leopard-shared-20260725.mp4'])));
