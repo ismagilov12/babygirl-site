@@ -91,7 +91,7 @@ async function verifyTurnstile(token, remoteIp) {
   } catch (e) { return { ok: false, error: e.message }; }
 }
 
-// Keep current Showgirl lingerie set prices authoritative for checkout.
+// Keep Showgirl regular prices authoritative for checkout.
 const SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
 function applyShowgirlSetPrices(result) {
   if (!result || !result.ok || !Array.isArray(result.breakdown)) return result;
@@ -101,8 +101,8 @@ function applyShowgirlSetPrices(result) {
     const qty = parseInt(line.qty || 1, 10) || 1;
     const saleBasePrices = {"sg-leo-black":2000,"sg-leo-red":2000,"sg-cow-pink":2000,"sg-red-velvet":2000,"sg-tension":2000,"sg-bunny":2000,"sg-pink-kiss":2000,"sg-neck":370,"sg-garter":935,"sg-holographic-queen":2000,"sg-blue-star":2000,"sg-wild-lime":2000};
     if (saleBasePrices[uid]) {
-      const salePrice = Math.round(saleBasePrices[uid] * 0.8 * 100) / 100;
-      line = Object.assign({}, line, { unit_price: salePrice, line_total: salePrice * qty });
+      const regularPrice = saleBasePrices[uid];
+      line = Object.assign({}, line, { unit_price: regularPrice, line_total: regularPrice * qty });
     }
     total += Number(line.unit_price || 0) * qty;
     return line;

@@ -1549,7 +1549,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 <!-- ===== PRODUCTS ===== -->
 
 <!-- Showgirl set price announcement -->
-<div class="sale-bar" aria-label="20% off all Showgirl lingerie"><div class="marquee-track"><span class="sale-item">20% OFF ALL LINGERIE</span><span class="sale-em">✦</span><span class="sale-item">SHOWGIRL</span><span class="sale-em">✦</span><span class="sale-item">20% OFF ALL LINGERIE</span><span class="sale-em">✦</span><span class="sale-item">SHOWGIRL</span><span class="sale-em">✦</span></div></div>
+<div class="sale-bar" aria-label="Showgirl lingerie sets"><div class="marquee-track"><span class="sale-item">LINGERIE SETS</span><span class="sale-em">✦</span><span class="sale-item">SHOWGIRL</span><span class="sale-em">✦</span><span class="sale-item">LINGERIE SETS</span><span class="sale-em">✦</span><span class="sale-item">SHOWGIRL</span><span class="sale-em">✦</span></div></div>
 <section id="shop" class="section" style="background:var(--cream)">
   <div class="container">
     <div class="section-title-wrap">
@@ -2090,16 +2090,16 @@ Delivery time depends on the destination.</p>
   function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
   function dualPrice(uah, euros){ return Number(uah) + '₴ / ' + euros; }
   document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
-    item.textContent = '20% OFF · Lingerie sets · ' + dualPrice(1600, euro(1600));
+    item.textContent = 'Lingerie sets · ' + dualPrice(2000, euro(2000));
   });
 
   var SHOWGIRL_SET_UIDS = {"sg-leo-black":true,"sg-leo-red":true,"sg-cow-pink":true,"sg-red-velvet":true,"sg-tension":true,"sg-bunny":true,"sg-pink-kiss":true,"sg-holographic-queen":true,"sg-blue-star":true,"sg-wild-lime":true};
   function applyShowgirlSetPrice(product){
-    // Showgirl campaign: 20% off the current regular price in both currencies.
-    var saleBasePrices = {"sg-leo-black":2000,"sg-leo-red":2000,"sg-cow-pink":2000,"sg-red-velvet":2000,"sg-tension":2000,"sg-bunny":2000,"sg-pink-kiss":2000,"sg-neck":370,"sg-garter":935,"sg-holographic-queen":2000,"sg-blue-star":2000,"sg-wild-lime":2000};
-    if (product && saleBasePrices[product.uid]) {
-      product.price_old = saleBasePrices[product.uid];
-      product.price = Math.round(product.price_old * 0.8 * 100) / 100;
+    // Restore regular prices for Showgirl items.
+    var regularPrices = {"sg-leo-black":2000,"sg-leo-red":2000,"sg-cow-pink":2000,"sg-red-velvet":2000,"sg-tension":2000,"sg-bunny":2000,"sg-pink-kiss":2000,"sg-neck":370,"sg-garter":935,"sg-holographic-queen":2000,"sg-blue-star":2000,"sg-wild-lime":2000};
+    if (product && regularPrices[product.uid]) {
+      product.price = regularPrices[product.uid];
+      delete product.price_old;
     }
     if (product){
       if (['sg-cow-pink','sg-leo-black','sg-leo-red'].indexOf(product.uid) >= 0) {
