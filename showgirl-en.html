@@ -1447,8 +1447,10 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 .en-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 0;font-size:14px}
 .en-row small{opacity:.65;font-weight:400}
 .en-row .d{opacity:.55}
+.en-row[hidden]{display:none}
 .en-row.main{font-weight:800;font-size:16px;border-top:1px dashed rgba(242,236,230,.3);padding-top:8px}
 #internationalAddressFields{display:flex;flex-direction:column;gap:8px}
+#internationalAddressFields[hidden]{display:none}
 #internationalAddressFields label{margin-top:4px}
 .np-picker-wrap{display:flex;flex-direction:column;gap:8px}
 .np-picker-wrap[hidden]{display:none}
@@ -3025,7 +3027,7 @@ Delivery time depends on the destination.</p>
     }else{
       elS.innerHTML=domestic?'<span>доставка</span><b class="d">оберіть відділення</b>':'<span>shipping</span><b class="d">select country</b>';
       if(elG)elG.hidden=true;
-      if($btn && !$btn.disabled)$btn.textContent='continue to payment';
+      if($btn && !$btn.disabled)$btn.textContent=domestic?'оформити замовлення':'continue to payment';
     }
   }
 
