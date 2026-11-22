@@ -283,6 +283,9 @@ module.exports = async function handler(req, res) {
   const baseNotes = isLead
     ? 'abandoned-cart lead'
     : ('САЙТ' + (userComment ? ' · ' + userComment : ''));
+  const largeOrderPrepaymentNote = (!isLead && total > 4000)
+    ? ' · ПЕРЕДОПЛАТА 1500₴ (замовлення понад 4000₴)'
+    : '';
 
   const orderRow = await saveOrder({
     number: orderNum,
@@ -297,7 +300,7 @@ module.exports = async function handler(req, res) {
     items: body.items,
     total: total,
     status: isLead ? 'lead' : 'new',
-    notes: baseNotes + discountNote,
+    notes: baseNotes + largeOrderPrepaymentNote + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
@@ -342,7 +345,8 @@ module.exports = async function handler(req, res) {
   const crmPayload = {
     source_id: parseInt(process.env.KEYCRM_SOURCE_ID || '1', 10),
     manager_comment: cfg.PROJECT_NAME + ' · ' + orderNum +
-      (body.payment === 'np' ? ' · наложка' : ' · картка'),
+      (body.payment === 'np' ? ' · наложка' : ' · картка') +
+      (total > 4000 ? ' · передоплата 1500₴' : ''),
     buyer: { full_name: body.fio, phone: body.phone },
     shipping: {
       delivery_service_id: parseInt(process.env.KEYCRM_DS_NP || '1', 10),

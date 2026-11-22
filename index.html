@@ -1834,6 +1834,7 @@ body.pm-open{overflow:hidden}
         <h3>💳 Оплата</h3>
         <p><b>— Картою Visa або MasterCard</b><br>через WayForPay (онлайн, миттєво)</p>
         <p><b>— Післяплата Новою Поштою</b><br>з передоплатою <b>200 грн</b> (Visa / MasterCard через WayForPay)</p>
+        <p><b>— Замовлення понад 4000 грн</b><br>передоплата <b>1500 грн</b>, решта суми сплачується пізніше</p>
         <p><b>— Оплата частинами</b><br>до <b>4 платежів</b> від <b>mono</b> та <b>ПриватБанк</b> — спосіб обирається на сторінці оплати</p>
         <p class="muted">Усі платежі захищені SSL-шифруванням.</p>
       </article>
@@ -1921,7 +1922,7 @@ body.pm-open{overflow:hidden}
   <div class="cart-total" id="cartTotal" hidden="">
     <span>total</span><span class="num" id="cartTotalNum">0₴</span>
   </div>
-  <style>.cart-parts-hint{margin:-4px 0 10px;font-size:11.5px;line-height:1.45;color:#7a7a7a;background:#fff6fb;border:1.5px dashed var(--pink);border-radius:10px;padding:8px 10px}.cart-parts-hint b{color:var(--pink)}.pm-sizes{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.pm-size{border:2px solid var(--black);background:#fff;color:var(--black);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}.pm-size.active{background:var(--black);color:#fff}.pm-preorder{margin:12px 0 14px;border:2px solid var(--pink);border-radius:14px;background:#fff6fb;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5;color:#3a3a3a}.pm-preorder .hd{font-family:'Bowlby One',sans-serif;font-size:14px;color:var(--pink);letter-spacing:.02em}.pm-preorder b{color:var(--black)}.pm-stock{margin-top:2px;display:flex;flex-direction:column;gap:6px;font-size:13px}.pm-stock .bar{height:8px;border-radius:999px;background:#ffe3f0;border:1.5px solid var(--pink);overflow:hidden}.pm-stock .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),#ffd600);transition:width .3s}.pm-stock.low .bar i{background:linear-gradient(90deg,#ff2d55,var(--pink))}.pm-stock.out{color:#c00}.pm-cta:disabled{background:#bdbdbd;border-color:#8a8a8a;cursor:not-allowed;box-shadow:none}</style>
+  <style>.cart-parts-hint{margin:-4px 0 10px;font-size:11.5px;line-height:1.45;color:#7a7a7a;background:#fff6fb;border:1.5px dashed var(--pink);border-radius:10px;padding:8px 10px}.cart-parts-hint b{color:var(--pink)}.large-order-prepay{margin:0 0 10px;padding:11px 12px;border:2px solid var(--pink);border-radius:12px;background:#fff0f7;color:#222;font-size:12.5px;line-height:1.45}.large-order-prepay b{color:var(--pink)}.pm-sizes{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.pm-size{border:2px solid var(--black);background:#fff;color:var(--black);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}.pm-size.active{background:var(--black);color:#fff}.pm-preorder{margin:12px 0 14px;border:2px solid var(--pink);border-radius:14px;background:#fff6fb;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5;color:#3a3a3a}.pm-preorder .hd{font-family:'Bowlby One',sans-serif;font-size:14px;color:var(--pink);letter-spacing:.02em}.pm-preorder b{color:var(--black)}.pm-stock{margin-top:2px;display:flex;flex-direction:column;gap:6px;font-size:13px}.pm-stock .bar{height:8px;border-radius:999px;background:#ffe3f0;border:1.5px solid var(--pink);overflow:hidden}.pm-stock .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),#ffd600);transition:width .3s}.pm-stock.low .bar i{background:linear-gradient(90deg,#ff2d55,var(--pink))}.pm-stock.out{color:#c00}.pm-cta:disabled{background:#bdbdbd;border-color:#8a8a8a;cursor:not-allowed;box-shadow:none}</style>
 <form class="cart-form" id="cartForm" hidden="">
     <label>імʼя та прізвище</label>
     <input id="fld-fio" placeholder="Maria Ivanenko" required="" autocomplete="name">
@@ -1936,6 +1937,7 @@ body.pm-open{overflow:hidden}
       <option value="cod">наложений платіж (200₴ передоплата)</option>
       <option value="card">оплата карткою повністю</option>
     </select>
+    <div class="large-order-prepay" id="largeOrderPrepay" hidden><b>Замовлення понад 4000₴</b><br>Зараз сплачується передоплата <b>1500₴</b>. Решта суми — пізніше.</div>
     <p class="cart-parts-hint">💳 на сторінці оплати доступна <b>оплата частинами</b> — до 4 платежів від mono та Приват</p>
     <button type="submit" class="cart-submit" id="cartSubmit">оформити ♥</button>
     <div id="cartResult" class="cart-result"></div>
@@ -2267,6 +2269,27 @@ body.pm-open{overflow:hidden}
   var $totalN  = document.getElementById('cartTotalNum');
   var $form    = document.getElementById('cartForm');
   var $navCart = document.getElementById('navCart');
+  var $payment = document.getElementById('fld-payment');
+  var $largeOrderPrepay = document.getElementById('largeOrderPrepay');
+  var $cartSubmit = document.getElementById('cartSubmit');
+  var LARGE_ORDER_THRESHOLD_UAH = 4000;
+  var LARGE_ORDER_PREPAYMENT_UAH = 1500;
+
+  function syncLargeOrderPayment(total){
+    var isLarge = Number(total) > LARGE_ORDER_THRESHOLD_UAH;
+    if ($largeOrderPrepay) $largeOrderPrepay.hidden = !isLarge;
+    if ($payment && $payment.options.length >= 2) {
+      $payment.options[0].textContent = isLarge
+        ? 'наложений платіж (1500₴ передоплата)'
+        : 'наложений платіж (200₴ передоплата)';
+      $payment.options[1].textContent = isLarge
+        ? 'передоплата карткою 1500₴'
+        : 'оплата карткою повністю';
+    }
+    if ($cartSubmit && !$cartSubmit.disabled) {
+      $cartSubmit.textContent = isLarge ? 'сплатити передоплату 1500₴ ♥' : 'оформити ♥';
+    }
+  }
 
   var familyFilter = null;
 
@@ -2782,7 +2805,7 @@ body.pm-open{overflow:hidden}
   function renderCart(){
     if (!cart.length) {
       $body.innerHTML = '<div class="cart-empty">кошик порожній<br>~ обери щось ~</div>';
-      $total.hidden = true; $form.hidden = true;
+      $total.hidden = true; $form.hidden = true; syncLargeOrderPayment(0);
     } else {
       var b = calcBreakdown();
       var lines = cart.map(function(i, idx){
@@ -2817,9 +2840,14 @@ body.pm-open{overflow:hidden}
       if (b.bundleDiscount > 0) {
         html += '<div class="total-row disc"><span>− знижка на другу річ (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + b.bundleDiscount + '₴</span></div>';
       }
-      html += '<div class="total-row main"><span>до сплати</span><span class="num">' + b.total + '₴</span></div>';
+      if (b.total > LARGE_ORDER_THRESHOLD_UAH) {
+        html += '<div class="total-row main"><span>сума замовлення</span><span class="num">' + b.total + '₴</span></div>';
+        html += '<div class="total-row disc"><span>до сплати зараз · передоплата</span><span>' + LARGE_ORDER_PREPAYMENT_UAH + '₴</span></div>';
+      } else {
+        html += '<div class="total-row main"><span>до сплати</span><span class="num">' + b.total + '₴</span></div>';
+      }
       $total.innerHTML = html;
-      $total.hidden = false; $form.hidden = false;
+      $total.hidden = false; $form.hidden = false; syncLargeOrderPayment(b.total);
     }
     if ($navCart) $navCart.textContent = 'Cart [' + cart.length + ']';
   }
@@ -3422,7 +3450,7 @@ body.pm-open{overflow:hidden}
           } else {
             $res.textContent = 'помилка платіжки: ' + (wfpData.error || '');
             $res.className = 'cart-result err';
-            $btn.disabled = false; $btn.textContent = 'оформити ♥';
+            $btn.disabled = false; syncLargeOrderPayment(calcTotal());
           }
         });
       } else {
@@ -3431,13 +3459,13 @@ body.pm-open{overflow:hidden}
         $res.textContent = '✓ дякуємо! ми зателефонуємо.';
         $res.className = 'cart-result ok';
         cart = []; renderCart();
-        $btn.disabled = false; $btn.textContent = 'оформити ♥';
+        $btn.disabled = false; syncLargeOrderPayment(calcTotal());
       }
     })
     .catch(function(err){
       $res.textContent = 'помилка: ' + err.message;
       $res.className = 'cart-result err';
-      $btn.disabled = false; $btn.textContent = 'оформити ♥';
+      $btn.disabled = false; syncLargeOrderPayment(calcTotal());
     });
   });
 

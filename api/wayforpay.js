@@ -209,41 +209,54 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Showgirl: доступна лише повна оплата карткою.' });
   }
 
-  let productName, productCount, productPrice, authoritativeAmount;
-  if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
-    // COD передплата — фіксована сума, промо/bundle не застосовуються.
+  // Always calculate and validate the full order total on the server first.
+  // This prevents a customer from changing the threshold or deposit in the browser.
+  const priceResult = await computeTotal(items);
+  if (!priceResult || !priceResult.ok) {
+    return res.status(400).json({
+      error: (priceResult && priceResult.error) || 'Price calculation failed',
+      missing: priceResult && priceResult.missing
+    });
+  }
+  const subtotal = Number(priceResult.total);
+  if (!(subtotal > 0)) {
+    return res.status(400).json({ error: 'Computed amount is not positive' });
+  }
+
+  // Server-side promo validation (min_total is checked before bundle discount).
+  const wheelPromoCode = promoCodeIn.toUpperCase();
+  const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
+    ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8 }[wheelPromoCode] || 0)
+    : null;
+  const promo = wheelPromoPct !== null
+    ? { valid: wheelPromoPct > 0, percent: wheelPromoPct }
+    : await validatePromoServer(promoCodeIn, subtotal);
+  const discounted = applyDiscounts(priceResult.breakdown, bundlePctIn, promo.percent);
+  const fullOrderAmount = discounted.total;
+  if (!(fullOrderAmount > 0)) {
+    return res.status(400).json({ error: 'Discounted amount is not positive' });
+  }
+
+  const LARGE_ORDER_THRESHOLD_UAH = 4000;
+  const LARGE_ORDER_PREPAYMENT_UAH = 1500;
+  const isLargeBabyGirlOrder = !isShowgirl && fullOrderAmount > LARGE_ORDER_THRESHOLD_UAH;
+
+  let productName, productCount, productPrice, authoritativeAmount, paymentType;
+  if (isLargeBabyGirlOrder) {
+    authoritativeAmount = LARGE_ORDER_PREPAYMENT_UAH;
+    paymentType = 'large_order_prepayment';
+    productName = ['Передоплата 1500 грн за замовлення ' + orderReference];
+    productCount = ['1'];
+    productPrice = [authoritativeAmount.toFixed(2)];
+  } else if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
     authoritativeAmount = Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
-    productName  = ['Передплата ' + cfg.PROJECT_NAME];
+    paymentType = 'cod_prepayment';
+    productName = ['Передплата ' + cfg.PROJECT_NAME];
     productCount = ['1'];
     productPrice = [authoritativeAmount.toFixed(2)];
   } else {
-    const priceResult = await computeTotal(items);
-    if (!priceResult || !priceResult.ok) {
-      return res.status(400).json({
-        error: (priceResult && priceResult.error) || 'Price calculation failed',
-        missing: priceResult && priceResult.missing
-      });
-    }
-    const subtotal = Number(priceResult.total);
-    if (!(subtotal > 0)) {
-      return res.status(400).json({ error: 'Computed amount is not positive' });
-    }
-
-    // Серверна валідація промо (від min_total рахуємо ДО bundle, бо так на фронті).
-    const wheelPromoCode = promoCodeIn.toUpperCase();
-    const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
-      ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8 }[wheelPromoCode] || 0)
-      : null;
-    const promo = wheelPromoPct !== null
-      ? { valid: wheelPromoPct > 0, percent: wheelPromoPct }
-      : await validatePromoServer(promoCodeIn, subtotal);
-    // Застосовуємо знижки (bundle + promo).
-    const discounted = applyDiscounts(priceResult.breakdown, bundlePctIn, promo.percent);
-    authoritativeAmount = discounted.total;
-    if (!(authoritativeAmount > 0)) {
-      return res.status(400).json({ error: 'Discounted amount is not positive' });
-    }
-
+    authoritativeAmount = fullOrderAmount;
+    paymentType = 'full_payment';
     const uids = items.map(it => baseUid(it.uid));
     const names = await getProductNames(uids);
     productName = []; productCount = []; productPrice = [];
@@ -273,8 +286,8 @@ module.exports = async function handler(req, res) {
   // минуя /thanks: там rewrite + cleanUrls конфликтовали и страница висла
   // (белый экран после оплаты). /api/thanks принимает и GET, и POST от WFP.
   // Pass amount + num_items so thanks page can fire browser Pixel Purchase with
-  // accurate value. Note: for COD this is the prepayment (200), full order total
-  // goes via CAPI from wayforpay-callback (bg_orders.total).
+  // accurate value. For any prepayment, the full order total goes via CAPI
+  // from wayforpay-callback (bg_orders.total).
   const numItems = items.reduce(function(s, it){ return s + (parseInt((it && it.qty) || 1, 10)); }, 0);
   const thanksQs = '&order=' + encodeURIComponent(orderReference) +
                    '&amount=' + encodeURIComponent(amountStr) +
@@ -306,6 +319,9 @@ module.exports = async function handler(req, res) {
       declinedUrl,
       language: 'UA'
     },
-    authoritativeAmount
+    authoritativeAmount,
+    fullOrderAmount,
+    remainingAmount: Math.max(0, Number((fullOrderAmount - authoritativeAmount).toFixed(2))),
+    paymentType
   });
 };

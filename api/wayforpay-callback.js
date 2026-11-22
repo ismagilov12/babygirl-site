@@ -5,7 +5,7 @@
 //   1. STRICT signature verify (без подпису = відмова)
 //   2. Idempotency: INSERT у {brand}_wayforpay_events з unique(order_ref, status)
 //   3. Логує raw_payload, source_ip — для аудиту.
-//   4. На першій події 'Approved' оновлює orders.payment_status='paid' і
+//   4. На першій події 'Approved' оновлює orders.payment_status (paid/prepaid) і
 //      шле Meta CAPI Purchase (server-side mirror браузерного Pixel).
 //   5. Відповідає WayForPay підписаним JSON {orderReference,status,time,signature}.
 //
@@ -102,17 +102,24 @@ module.exports = async function handler(req, res) {
 
   // Side-effects on first Approved
   if (isFirstEvent && transactionStatus === 'Approved') {
+    const selectCols = 'customer_name,customer_phone,customer_email,items,total,delivery_city,fbp,fbc,landing_url';
+    const orderRows = await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference) + '&select=' + selectCols + '&limit=1');
+    const order = (Array.isArray(orderRows) && orderRows[0]) ? orderRows[0] : {};
+    const paidAmount = amount != null ? Number(amount) : 0;
+    const fullOrderAmount = Number(order.total) || 0;
+    const isPrepayment = fullOrderAmount > 0 && paidAmount > 0 && paidAmount < fullOrderAmount;
+
     await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference), {
       method: 'PATCH',
-      body: JSON.stringify({ payment_status: 'paid', paid_at: new Date().toISOString() })
+      body: JSON.stringify({
+        payment_status: isPrepayment ? 'prepaid' : 'paid',
+        paid_at: new Date().toISOString()
+      })
     });
 
     // Meta CAPI Purchase — server-side mirror of browser Pixel.
     // event_id == orderReference -> Meta deduplicates with browser fbq Purchase.
     try {
-      const selectCols = 'customer_name,customer_phone,customer_email,items,total,delivery_city,fbp,fbc,landing_url';
-      const orderRows = await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference) + '&select=' + selectCols + '&limit=1');
-      const order = (Array.isArray(orderRows) && orderRows[0]) ? orderRows[0] : {};
       const items = Array.isArray(order.items) ? order.items : [];
       const contentIds = items.map(function(it){ return String((it && it.uid) || ''); }).filter(Boolean);
       const contents = items.map(function(it){
@@ -126,10 +133,8 @@ module.exports = async function handler(req, res) {
       capi.sendPurchaseFireAndForget({
         event_id: orderReference,
         order_id: orderReference,
-        // Prefer bg_orders.total (full order amount) over WFP amount, because for COD
-        // prepayment WFP amount=200 but actual purchase value is the full order total.
-        // For full card payment they are equal, so this is safe in both flows.
-        value: Number(order.total) || (amount != null ? Number(amount) : 0),
+        // Keep the full order value even when WayForPay collected only a deposit.
+        value: fullOrderAmount || paidAmount,
         currency: currency || 'UAH',
         content_ids: contentIds,
         contents: contents,
