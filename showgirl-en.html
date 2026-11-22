@@ -1448,6 +1448,30 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 .en-row small{opacity:.65;font-weight:400}
 .en-row .d{opacity:.55}
 .en-row.main{font-weight:800;font-size:16px;border-top:1px dashed rgba(242,236,230,.3);padding-top:8px}
+#internationalAddressFields{display:flex;flex-direction:column;gap:8px}
+#internationalAddressFields label{margin-top:4px}
+.np-picker-wrap{display:flex;flex-direction:column;gap:8px}
+.np-picker-wrap[hidden]{display:none}
+.np-picker{width:100%;display:flex;align-items:center;gap:11px;padding:13px 12px;background:#fff;border:2px solid #DA291C;border-radius:12px;text-align:left;color:var(--black);box-shadow:0 8px 20px rgba(0,0,0,.16)}
+.np-picker:focus{outline:none;box-shadow:3px 3px 0 #DA291C}
+.np-logo{width:30px;height:30px;flex:0 0 30px;border-radius:8px;background:#DA291C;color:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1}
+.np-picker-copy{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.np-picker-copy strong{font-size:14px;line-height:1.25}
+.np-picker-copy small{font-size:12px;line-height:1.3;color:#6B6670;font-weight:500}
+.np-chevron{font-size:27px;color:#DA291C;line-height:1}
+.np-modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(14,14,18,.7);display:none;align-items:center;justify-content:center;padding:20px}
+.np-modal-overlay.open{display:flex}
+.np-modal{width:min(920px,100%);height:min(760px,88vh);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+.np-modal-head{height:64px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E7E2E5;color:#171114}
+.np-modal-head h2{font:700 18px/1.2 'Manrope',sans-serif}
+.np-modal-close{width:40px;height:40px;border-radius:50%;background:#F5EEF1;color:#171114;font-size:27px;line-height:1}
+.np-modal-iframe{width:100%;height:calc(100% - 64px);border:0;background:#fff}
+@media(max-width:600px){
+  .np-modal-overlay{padding:0}
+  .np-modal{width:100vw;height:100dvh;border-radius:0}
+  .np-modal-head{height:58px}
+  .np-modal-iframe{height:calc(100% - 58px)}
+}
 </style>
 </head>
 <body>
@@ -1881,30 +1905,54 @@ Delivery time depends on the destination.</p>
     <span>total</span><span class="num" id="cartTotalNum">€0</span>
   </div>
   <form class="cart-form" id="cartForm" hidden="">
-    <label>full name</label>
+    <label id="fioLabel">full name</label>
     <input id="fld-fio" placeholder="Maria Smith" required="" autocomplete="name">
-    <label>phone</label>
+    <label id="phoneLabel">phone</label>
     <input id="fld-phone" type="tel" placeholder="+1 ..." required="" autocomplete="tel">
-    <label>email</label>
+    <label id="emailLabel">email</label>
     <input id="fld-email" type="email" placeholder="your@email.com" required="" autocomplete="email">
-    <label>country</label>
+    <label id="countryLabel">country</label>
     <div class="en-cbx">
       <input id="fld-country-in" placeholder="start typing…" autocomplete="off" required="">
       <input type="hidden" id="fld-country">
       <div class="en-cbx-list" id="enCountryList" hidden=""></div>
     </div>
-    <label>city</label>
-    <input id="fld-city" placeholder="Berlin" required="">
-    <label id="zipLabel">zip / postal code</label>
-    <input id="fld-zip" placeholder="10115" autocomplete="postal-code">
-    <label id="addrLabel">address · street, house, apt</label>
-    <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
+    <div id="internationalAddressFields">
+      <label id="cityLabel">city</label>
+      <input id="fld-city" placeholder="Berlin" required="">
+      <label id="zipLabel">zip / postal code</label>
+      <input id="fld-zip" placeholder="10115" autocomplete="postal-code">
+      <label id="addrLabel">address · street, house, apt</label>
+      <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
+    </div>
+    <div class="np-picker-wrap" id="npPickerWrap" hidden="">
+      <label>місто та відділення Нової пошти</label>
+      <button type="button" class="np-picker" id="npPicker">
+        <span class="np-logo" aria-hidden="true">✣</span>
+        <span class="np-picker-copy">
+          <strong id="npPickerTitle">Обрати місто та відділення / поштомат</strong>
+          <small id="npPickerDescription">Відкриється офіційний список Нової пошти</small>
+        </span>
+        <span class="np-chevron" aria-hidden="true">›</span>
+      </button>
+    </div>
     <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
     <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
     <button type="submit" class="cart-submit" id="cartSubmit">continue to payment</button>
     <div id="cartResult" class="cart-result"></div>
   </form>
 </aside>
+
+<!-- ===== NOVA POSHTA OFFICIAL PICKER ===== -->
+<div class="np-modal-overlay" id="npModal" aria-hidden="true">
+  <div class="np-modal" role="dialog" aria-modal="true" aria-labelledby="npModalTitle">
+    <header class="np-modal-head">
+      <h2 id="npModalTitle">Оберіть місто та відділення</h2>
+      <button type="button" class="np-modal-close" id="npModalClose" aria-label="Закрити">×</button>
+    </header>
+    <iframe class="np-modal-iframe" id="npModalFrame" title="Вибір відділення Нової пошти" src="" allow="geolocation"></iframe>
+  </div>
+</div>
 
 <!-- ===== PRODUCT MODAL ===== -->
 <div class="pm-overlay" id="pmOverlay"></div>
@@ -2835,6 +2883,91 @@ Delivery time depends on the destination.</p>
   var $zipLabel=document.getElementById('zipLabel');
   var $addr=document.getElementById('fld-addr');
   var $addrLabel=document.getElementById('addrLabel');
+  var $city=document.getElementById('fld-city');
+  var $internationalFields=document.getElementById('internationalAddressFields');
+  var $npPickerWrap=document.getElementById('npPickerWrap');
+  var $npPicker=document.getElementById('npPicker');
+  var $npPickerTitle=document.getElementById('npPickerTitle');
+  var $npPickerDescription=document.getElementById('npPickerDescription');
+  var $npModal=document.getElementById('npModal');
+  var $npModalFrame=document.getElementById('npModalFrame');
+  var npSelectedDepartmentId=null;
+  var npSelectedDepartmentData=null;
+  var checkoutDomesticMode=false;
+  var internationalAddressDraft={city:'',zip:'',addr:''};
+
+  function setCheckoutLanguage(domestic){
+    var labels={
+      fioLabel:domestic?'ПІБ отримувача':'full name',
+      phoneLabel:domestic?'телефон':'phone',
+      emailLabel:'email',
+      countryLabel:domestic?'країна':'country'
+    };
+    Object.keys(labels).forEach(function(id){ var el=document.getElementById(id); if(el)el.textContent=labels[id]; });
+    var fio=document.getElementById('fld-fio');
+    var phone=document.getElementById('fld-phone');
+    if(fio)fio.placeholder=domestic?'Прізвище та ім’я':'Maria Smith';
+    if(phone)phone.placeholder=domestic?'+380 ...':'+1 ...';
+    if($cIn)$cIn.placeholder=domestic?'Україна':'start typing…';
+  }
+
+  function applyNovaPoshtaSelection(data){
+    npSelectedDepartmentData=data||null;
+    npSelectedDepartmentId=data&&data.id?data.id:null;
+    if(!data)return;
+    var city=(data.addressParts&&data.addressParts.city)||(data.settlement&&data.settlement.name)||'';
+    var shortName=data.shortName||'Відділення / поштомат';
+    var street=(data.addressParts&&data.addressParts.street)||'';
+    var building=(data.addressParts&&data.addressParts.building)||'';
+    var address=[city,street?('вул. '+street):'',building].filter(Boolean).join(', ');
+    if($city)$city.value=city;
+    if($addr)$addr.value=[shortName,address].filter(Boolean).join(' — ');
+    if($npPickerTitle)$npPickerTitle.textContent=shortName;
+    if($npPickerDescription)$npPickerDescription.textContent=address||city||'Обрано';
+  }
+
+  function closeNovaPoshtaPicker(){
+    if(!$npModal)return;
+    $npModal.classList.remove('open');
+    $npModal.setAttribute('aria-hidden','true');
+    if($npModalFrame)$npModalFrame.src='';
+    window.removeEventListener('message',handleNovaPoshtaMessage);
+  }
+
+  function handleNovaPoshtaMessage(event){
+    if(event.origin!=='https://widget.novapost.com')return;
+    if(event.data==='closeFrame'){ closeNovaPoshtaPicker(); return; }
+    if(event.data&&typeof event.data==='object'){
+      applyNovaPoshtaSelection(event.data);
+      closeNovaPoshtaPicker();
+      var result=document.getElementById('cartResult');
+      if(result){result.textContent='';result.className='cart-result';}
+    }
+  }
+
+  function openNovaPoshtaPicker(){
+    if(!$npModal||!$npModalFrame)return;
+    $npModal.classList.add('open');
+    $npModal.setAttribute('aria-hidden','false');
+    $npModalFrame.src='https://widget.novapost.com/division/index.html';
+    $npModalFrame.onload=function(){
+      try{
+        $npModalFrame.contentWindow.postMessage({
+          placeName:($city&&$city.value)||'Київ',
+          latitude:'',
+          longitude:'',
+          domain:window.location.hostname,
+          id:npSelectedDepartmentId
+        },'*');
+      }catch(e){}
+    };
+    window.addEventListener('message',handleNovaPoshtaMessage);
+  }
+
+  if($npPicker)$npPicker.addEventListener('click',openNovaPoshtaPicker);
+  var $npModalClose=document.getElementById('npModalClose');
+  if($npModalClose)$npModalClose.addEventListener('click',closeNovaPoshtaPicker);
+  if($npModal)$npModal.addEventListener('click',function(e){if(e.target===$npModal)closeNovaPoshtaPicker();});
 
   function enRenderList(f){
     if(!$cList) return;
@@ -2862,16 +2995,27 @@ Delivery time depends on the destination.</p>
     var code=($cHid && $cHid.value)||'';
     var info=enShipInfo(code);
     var domestic=isUkraineCountry(code);
-    if($zip){ $zip.hidden=domestic; if(domestic)$zip.value=''; }
-    if($zipLabel)$zipLabel.hidden=domestic;
-    if($addrLabel)$addrLabel.textContent=domestic?'Nova Poshta branch':'address · street, house, apt';
-    if($addr)$addr.placeholder=domestic?'Branch №12':'Sesame st. 5, apt 7';
+    if(domestic&&!checkoutDomesticMode){
+      internationalAddressDraft={city:($city&&$city.value)||'',zip:($zip&&$zip.value)||'',addr:($addr&&$addr.value)||''};
+      applyNovaPoshtaSelection(npSelectedDepartmentData);
+    }else if(!domestic&&checkoutDomesticMode){
+      if($city)$city.value=internationalAddressDraft.city;
+      if($zip)$zip.value=internationalAddressDraft.zip;
+      if($addr)$addr.value=internationalAddressDraft.addr;
+    }
+    checkoutDomesticMode=domestic;
+    setCheckoutLanguage(domestic);
+    if($internationalFields)$internationalFields.hidden=domestic;
+    if($npPickerWrap)$npPickerWrap.hidden=!domestic;
+    if($zipLabel)$zipLabel.hidden=false;
+    if($addrLabel)$addrLabel.textContent='address · street, house, apt';
+    if($addr)$addr.placeholder='Sesame st. 5, apt 7';
     if(info && cart.length){
       var b=calcBreakdown();
       if(domestic){
-        elS.innerHTML='<span>shipping · Nova Poshta<br><small>'+info.days+' business days</small></span><b>carrier rate</b>';
-        if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>'+Math.round(b.total)+'₴</b>'; }
-        if($btn && !$btn.disabled)$btn.textContent='pay '+Math.round(b.total)+'₴ by card';
+        elS.innerHTML='<span>доставка · Нова пошта<br><small>'+info.days+' робочі дні</small></span><b>за тарифом перевізника</b>';
+        if(elG){ elG.hidden=false; elG.innerHTML='<span>разом</span><b>'+Math.round(b.total)+'₴</b>'; }
+        if($btn && !$btn.disabled)$btn.textContent='сплатити '+Math.round(b.total)+'₴ карткою';
       }else{
         var tot=b.total*EN_MARKUP/EUR_RATE+info.eur;
         elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
@@ -2879,7 +3023,7 @@ Delivery time depends on the destination.</p>
         if($btn && !$btn.disabled)$btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal';
       }
     }else{
-      elS.innerHTML='<span>shipping</span><b class="d">select country</b>';
+      elS.innerHTML=domestic?'<span>доставка</span><b class="d">оберіть відділення</b>':'<span>shipping</span><b class="d">select country</b>';
       if(elG)elG.hidden=true;
       if($btn && !$btn.disabled)$btn.textContent='continue to payment';
     }
@@ -2911,12 +3055,13 @@ Delivery time depends on the destination.</p>
     var addr=document.getElementById('fld-addr').value.trim();
     var domestic=isUkraineCountry(country);
     function fail(m){ $res.textContent=m; $res.className='cart-result err'; $btn.disabled=false; updateEnShip(); }
-    if(!cart.length)return fail('your cart is empty');
-    if(fio.length<2)return fail('please enter your full name');
-    if(phone.replace(/[^0-9]/g,'').length<7)return fail('please enter a valid phone number');
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return fail('please enter a valid email');
+    if(!cart.length)return fail(domestic?'ваш кошик порожній':'your cart is empty');
+    if(fio.length<2)return fail(domestic?'вкажіть прізвище та ім’я':'please enter your full name');
+    if(phone.replace(/[^0-9]/g,'').length<7)return fail(domestic?'вкажіть правильний номер телефону':'please enter a valid phone number');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return fail(domestic?'вкажіть правильний email':'please enter a valid email');
     if(!country)return fail('please pick a country from the list');
-    if(!city||!addr)return fail(domestic?'please enter city and Nova Poshta branch':'please enter city and address');
+    if(domestic&&!npSelectedDepartmentId)return fail('оберіть місто та відділення або поштомат зі списку Нової пошти');
+    if(!domestic&&(!city||!addr))return fail('please enter city and address');
     $btn.disabled=true; $btn.textContent='redirecting to payment…'; $res.textContent=''; $res.className='cart-result';
 
     var promo=getSlotPromoCode();
