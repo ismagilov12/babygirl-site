@@ -164,6 +164,22 @@ function applyDiscounts(breakdown, bundlePct, promoPct) {
   return { lines, total };
 }
 
+const SHOWGIRL_SET_EUR = 65;
+function showgirlGoodsEur(lines, markup, fx) {
+  let total = 0;
+  for (const line of (lines || [])) {
+    const uid = String(line.uid || '').split('|')[0];
+    const qty = Math.max(1, parseInt(line.qty || 1, 10));
+    const unitUah = Number(line.unitPriceAfter != null ? line.unitPriceAfter : line.price);
+    if (SHOWGIRL_SET_UIDS[uid]) {
+      total += SHOWGIRL_SET_EUR * (unitUah / 2000) * qty;
+    } else {
+      total += unitUah * markup / fx * qty;
+    }
+  }
+  return Math.round(total * 100) / 100;
+}
+
 async function saveOrder(order) {
   const rows = await sb(T.ORDERS, {
     method: 'POST',
@@ -248,22 +264,28 @@ module.exports = async function handler(req, res) {
   }
   if (!(uahTotal > 0)) return res.status(400).json({ ok: false, error: 'Invalid total' });
 
-  // Наценка EN-версії (×2 за замовчуванням). Синхронно з EN_MARKUP в en.html!
-  // Застосовується ДО конвертації і зберігається в bg_orders.total (реальна виручка в UAH).
-  // Курс WB_FX_UAH_PER_UNIT=53.43 підібрано так, щоб tee 1790₴ ×2 = рівно €67.
-  // Витринная скидка EN-версии (SALE). Синхронно с EN_SALE_PCT в en.html / showgirl-en.html!
-  // Выключить = задать env WB_EN_SALE_PCT=0 (или убрать дефолт 20 здесь).
+  // BabyGirl keeps the regular EN conversion. Showgirl sets use a fixed €65 base price.
   const enSalePct = isShowgirl ? 0 : Math.max(0, Math.min(90, Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20) || 0));
   const markup = Math.round(Number(process.env.WB_PRICE_MARKUP || 2) * (100 - enSalePct)) / 100;
-  uahTotal = Math.round(uahTotal * markup * 100) / 100;
 
-  // Конвертація (env-driven).
   const currency = String(process.env.WB_CURRENCY || 'EUR').toUpperCase();
   const fx = Number(process.env.WB_FX_UAH_PER_UNIT || 0);
   if (!(fx > 0)) return res.status(500).json({ ok: false, error: 'FX rate not configured (WB_FX_UAH_PER_UNIT)' });
-  const amountNum = Math.round((uahTotal / fx) * 100) / 100;
+
+  let amountNum;
+  if (isShowgirl) {
+    const amountLines = discounted && Array.isArray(discounted.lines)
+      ? discounted.lines
+      : (body.items || []).map(function(it) {
+          return { uid: it.uid, qty: parseInt(it.qty || 1, 10), price: parseFloat(it.price) || 0 };
+        });
+    amountNum = showgirlGoodsEur(amountLines, markup, fx);
+    uahTotal = Math.round(amountNum * fx * 100) / 100;
+  } else {
+    uahTotal = Math.round(uahTotal * markup * 100) / 100;
+    amountNum = Math.round((uahTotal / fx) * 100) / 100;
+  }
   const amount = amountNum.toFixed(2);
-  // Both storefronts use fixed international delivery fees.
   const shipEur = isShowgirl ? 15 : shippingEur(body.country);
   const totalEur = Math.round((amountNum + shipEur) * 100) / 100;
 
@@ -300,7 +322,7 @@ module.exports = async function handler(req, res) {
     total: uahTotal,
     status: 'new',
     notes: 'САЙТ ' + mkt + ' · WB ' + currency + ' goods ' + amount + ' + ship ' + shipEur.toFixed(2) +
-      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · x' + markup + (enSalePct > 0 ? ' (EN sale −' + enSalePct + '%)' : '') + discountNote,
+      ' = ' + totalEur.toFixed(2) + ' @ ' + fx + ' UAH/unit · ' + (isShowgirl ? 'fixed set €65' : 'x' + markup) + (enSalePct > 0 ? ' (EN sale −' + enSalePct + '%)' : '') + discountNote,
     session_id:  (typeof body.session_id  === 'string' ? body.session_id  : '').slice(0, 200)  || null,
     referrer:    (typeof body.referrer    === 'string' ? body.referrer    : '').slice(0, 2000) || null,
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null

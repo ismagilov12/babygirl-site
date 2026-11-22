@@ -66,6 +66,8 @@ const FX = Number(process.env.WB_FX_UAH_PER_UNIT || 53.43);
 const MARKUP_BASE = Number(process.env.WB_PRICE_MARKUP || 2);
 const SALE_PCT = Number(process.env.WB_EN_SALE_PCT != null ? process.env.WB_EN_SALE_PCT : 20);
 const MARKUP = Math.round(MARKUP_BASE * (100 - SALE_PCT)) / 100;
+const SHOWGIRL_SET_EUR = 65;
+const SHOWGIRL_SET_UIDS = new Set(['sg-leo-black','sg-leo-red','sg-cow-pink','sg-red-velvet','sg-tension','sg-bunny','sg-pink-kiss','sg-holographic-queen','sg-blue-star','sg-wild-lime']);
 const DEFAULT_HOODIE_DESCRIPTION_EN = [
   'BABY GIRL HOODIE 💗',
   '',
@@ -156,9 +158,10 @@ function makeItem(p, color) {
   const uah = Number(p.price) || 0;
   if (uah <= 0) return null;
 
-  const priceFull = eur(uah, MARKUP_BASE) + ' EUR';
-  const priceSale = eur(uah, MARKUP) + ' EUR';
-  const hasSale = SALE_PCT > 0;
+  const isSgSet = SHOWGIRL_SET_UIDS.has(p.uid);
+  const priceFull = (isSgSet ? SHOWGIRL_SET_EUR.toFixed(2) : eur(uah, MARKUP_BASE)) + ' EUR';
+  const priceSale = (isSgSet ? SHOWGIRL_SET_EUR.toFixed(2) : eur(uah, MARKUP)) + ' EUR';
+  const hasSale = !isSgSet && SALE_PCT > 0;
 
   const lines = [];
   lines.push('    <item>');

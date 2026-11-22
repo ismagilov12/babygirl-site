@@ -2130,11 +2130,17 @@ Delivery time depends on the destination.</p>
   var EN_MARKUP_BASE = 2; window.EN_MARKUP_BASE = EN_MARKUP_BASE;  // базовая наценка EN (для зачёркнутой старой цены)
   var EN_MARKUP = Math.round(EN_MARKUP_BASE * (100 - EN_SALE_PCT)) / 100; window.EN_MARKUP = EN_MARKUP;  // эффективная наценка = base x (1 - sale)
   // ==== Meta pixel helpers (EN market) — значения в EUR, SKU в формате фида /feed-en.xml ====
-  function eurNum(u){ return Math.round((Number(u||0)*EN_MARKUP/EUR_RATE)*100)/100; }
+  var SHOWGIRL_SET_EUR = 65; window.SHOWGIRL_SET_EUR = SHOWGIRL_SET_EUR;
+  var SHOWGIRL_SET_EUR_BY_UAH={2000:65,1900:61.75,1860:60.45,1840:59.80};
+  function eurNum(u){
+    var n=Number(u||0);
+    if(Object.prototype.hasOwnProperty.call(SHOWGIRL_SET_EUR_BY_UAH,n))return SHOWGIRL_SET_EUR_BY_UAH[n];
+    return Math.round((n*EN_MARKUP/EUR_RATE)*100)/100;
+  }
   function fbSku(uid, colorCode){ var b=String(uid||'').split('|')[0]; return colorCode ? (b + '-' + colorCode) : b; }
   function fbSkuFromCart(cartUid){ var s=String(cartUid||'').split('|'); return s[1] ? (s[0]+'-'+s[1]) : s[0]; }
   window.eurNum = eurNum; window.fbSku = fbSku; window.fbSkuFromCart = fbSkuFromCart;
-  function euro(u){ return '€' + (Number(u||0)*EN_MARKUP/EUR_RATE).toFixed(2); }
+  function euro(u){ return '€' + eurNum(u).toFixed(2); }
   function euroOld(u){ return '€' + (Number(u||0)*EN_MARKUP_BASE/EUR_RATE).toFixed(2); }
   function dualPrice(uah, euros){ return Number(uah) + '₴ / ' + euros; }
   document.querySelectorAll('.sale-bar .sale-item:first-child, .sale-bar .sale-item:nth-child(5)').forEach(function(item){
@@ -2489,6 +2495,32 @@ Delivery time depends on the destination.</p>
     });
     return { subtotal: subtotal, bundleDiscount: bundleDiscount, total: total, totalUnits: unitIdx, slotPct: slotPct };
   }
+  function cartEurBreakdown(){
+    var slotPct=getSlotPct();
+    var subtotal=0,bundleDiscount=0,total=0,unitIdx=0;
+    cart.forEach(function(line){
+      var uid=String(line.uid||'').split('|')[0];
+      var baseEur=SHOWGIRL_SET_UIDS[uid]?SHOWGIRL_SET_EUR:Math.round((Number(line.price||0)*EN_MARKUP/EUR_RATE)*100)/100;
+      for(var i=0;i<line.qty;i++){
+        var promoUnit=baseEur*(100-slotPct)/100;
+        subtotal+=promoUnit;
+        var finalUnit=promoUnit;
+        if(unitIdx>=1){
+          finalUnit=promoUnit*(100-BUNDLE_DISCOUNT_PCT)/100;
+          bundleDiscount+=promoUnit-finalUnit;
+        }
+        total+=finalUnit;
+        unitIdx++;
+      }
+    });
+    return {
+      subtotal:Math.round(subtotal*100)/100,
+      bundleDiscount:Math.round(bundleDiscount*100)/100,
+      total:Math.round(total*100)/100,
+      totalUnits:unitIdx,
+      slotPct:slotPct
+    };
+  }
   function calcTotal(){ return calcBreakdown().total; }
 
   function bundleBanner(totalUnits){
@@ -2524,14 +2556,17 @@ Delivery time depends on the destination.</p>
       $body.innerHTML = bundleBanner(b.totalUnits) + lines;
 
       // Разбивка в total
+      var eb=cartEurBreakdown();
+      var domesticSummary=isUkraineCountry($cHid&&$cHid.value);
+      function summaryMoney(uah,eur){return domesticSummary?Math.round(Number(uah||0))+'₴':'€'+Number(eur||0).toFixed(2);}
       var html = '';
       if (b.bundleDiscount > 0 || b.slotPct > 0) {
-        html += '<div class="total-row sub"><span>items</span><span>' + checkoutMoney(b.subtotal) + '</span></div>';
+        html += '<div class="total-row sub"><span>items</span><span>' + summaryMoney(b.subtotal,eb.subtotal) + '</span></div>';
       }
       if (b.bundleDiscount > 0) {
-        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + checkoutMoney(b.bundleDiscount) + '</span></div>';
+        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + summaryMoney(b.bundleDiscount,eb.bundleDiscount) + '</span></div>';
       }
-      html += '<div class="total-row main"><span>items total</span><span class="num">' + checkoutMoney(b.total) + '</span></div>';
+      html += '<div class="total-row main"><span>items total</span><span class="num">' + summaryMoney(b.total,eb.total) + '</span></div>';
       $total.innerHTML = html;
       $total.hidden = false; $form.hidden = false;
     }
@@ -3019,7 +3054,7 @@ Delivery time depends on the destination.</p>
         if(elG){ elG.hidden=false; elG.innerHTML='<span>разом</span><b>'+Math.round(b.total)+'₴</b>'; }
         if($btn && !$btn.disabled)$btn.textContent='сплатити '+Math.round(b.total)+'₴ карткою';
       }else{
-        var tot=b.total*EN_MARKUP/EUR_RATE+info.eur;
+        var tot=cartEurBreakdown().total+info.eur;
         elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
         if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
         if($btn && !$btn.disabled)$btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal';
@@ -3106,7 +3141,7 @@ Delivery time depends on the destination.</p>
 
     var info=enShipInfo(country);
     var icShipEur=(info&&info.eur)||0;
-    var icValue=Math.round((eurNum(icGoodsUah)+icShipEur)*100)/100;
+    var icValue=Math.round((cartEurBreakdown().total+icShipEur)*100)/100;
     try{
       if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:icValue,currency:'EUR',num_items:icNum,content_ids:icItems,contents:icContents,content_type:'product'},{eventID:icEventId});
       try{sessionStorage.setItem('bg_en_pending',JSON.stringify({ids:icItems,contents:icContents,num:icNum,value:icValue}));}catch(err2){}
