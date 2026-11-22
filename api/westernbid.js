@@ -229,7 +229,7 @@ module.exports = async function handler(req, res) {
     const promoCode = String(body.promo_code || '').toUpperCase().trim();
     const wheelPromoCode = promoCode;
     const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
-      ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8, SHOW09: 9, SHOW10: 10 }[wheelPromoCode] || 0)
+      ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8 }[wheelPromoCode] || 0)
       : null;
     const promo = wheelPromoPct !== null
       ? { valid: wheelPromoPct > 0, percent: wheelPromoPct }

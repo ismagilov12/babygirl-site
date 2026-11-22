@@ -1528,17 +1528,17 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
       <div class="slot-display">
         <div class="reel">
           <div class="reel-strip" id="reel1">
-            <div class="reel-item">🥂</div><div class="reel-item">♥</div><div class="reel-item">★</div><div class="reel-item">💋</div><div class="reel-item">🍒</div>
+            <div class="reel-item">🦋</div><div class="reel-item">♥</div><div class="reel-item">★</div>
           </div>
         </div>
         <div class="reel">
           <div class="reel-strip" id="reel2">
-            <div class="reel-item percent">5%</div><div class="reel-item percent">7%</div><div class="reel-item percent">8%</div><div class="reel-item percent">9%</div><div class="reel-item percent">10%</div>
+            <div class="reel-item percent">5%</div><div class="reel-item percent">7%</div><div class="reel-item percent">8%</div>
           </div>
         </div>
         <div class="reel">
           <div class="reel-strip" id="reel3">
-            <div class="reel-item word">OFF</div><div class="reel-item word">WIN</div><div class="reel-item word">HOT</div><div class="reel-item word">SHOW</div><div class="reel-item word">DROP</div>
+            <div class="reel-item word">DROP</div><div class="reel-item word">WIN</div><div class="reel-item word">STAR</div>
           </div>
         </div>
       </div>
@@ -1995,17 +1995,15 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   var topLight = document.getElementById('slotTopLight');
   if (!r1 || !btn) return;
 
-  // Колесо выдаёт скидку от 5% до 10%; SHOW10 — максимальная.
+  // Колесо выдаёт скидку от 5% до 8%; SHOW08 — максимальная.
   var WINS = [
     {emoji:'🦋', percent:'5%',  word:'DROP', code:'SHOW05', pct:5,  msg:'5% off'},
     {emoji:'♥',  percent:'7%',  word:'WIN',  code:'SHOW07', pct:7,  msg:'7% off'},
-    {emoji:'★',  percent:'8%',  word:'STAR', code:'SHOW08', pct:8,  msg:'8% off'},
-    {emoji:'💋', percent:'9%',  word:'SHOW', code:'SHOW09', pct:9,  msg:'9% off'},
-    {emoji:'🎀', percent:'10%', word:'OFF',  code:'SHOW10', pct:10, msg:'10% off · max'}
+    {emoji:'★',  percent:'8%',  word:'STAR', code:'SHOW08', pct:8,  msg:'8% off · max'}
   ];
-  var EMOJIS  = ['🎀','♥','★','💋','🦋'];
-  var PERCENT = ['5%','7%','8%','9%','10%'];
-  var WORDS   = ['OFF','WIN','STAR','SHOW','DROP'];
+  var EMOJIS  = ['🦋','♥','★'];
+  var PERCENT = ['5%','7%','8%'];
+  var WORDS   = ['DROP','WIN','STAR'];
 
   var spinning = false;
 
@@ -2373,19 +2371,19 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
     try {
       var code = String(sessionStorage.getItem('bg_promo_code') || '').toUpperCase();
       var storedPct = parseInt(sessionStorage.getItem('bg_promo_pct') || '0', 10) || 0;
-      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8};
       return allowed[code] === storedPct ? allowed[code] : 0;
     } catch(e){ return 0; }
   }
   function getSlotPromoCode(){
     try {
       var code = String(sessionStorage.getItem('bg_promo_code') || '').toUpperCase();
-      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+      var allowed = {SHOW05:5, SHOW07:7, SHOW08:8};
       return allowed[code] === getSlotPct() ? code : null;
     } catch(e){ return null; }
   }
   window.applyPromo = function(code, pct){
-    var allowed = {SHOW05:5, SHOW07:7, SHOW08:8, SHOW09:9, SHOW10:10};
+    var allowed = {SHOW05:5, SHOW07:7, SHOW08:8};
     code = String(code || '').toUpperCase();
     if (!allowed[code] || Number(pct) !== allowed[code]) return;
     try { sessionStorage.setItem('bg_promo_code', code); sessionStorage.setItem('bg_promo_pct', String(allowed[code])); } catch(e){}
