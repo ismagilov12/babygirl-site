@@ -6,7 +6,7 @@
 <title>Showgirl · Intimate looks & Micro bikinis</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%92%8B%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%2286%22%3E%F0%9F%92%8B%3C/text%3E%3C/svg%3E">
-<meta name="description" content="Showgirl — intimate looks & micro bikinis. BabyGirl’s sister brand. Satin, hearts and almost nothing else. Handmade in Ukraine. Worldwide shipping, checkout in EUR.">
+<meta name="description" content="Showgirl — intimate looks & micro bikinis. BabyGirl’s sister brand. Satin, hearts and almost nothing else. Handmade in Ukraine. One checkout for Ukraine and worldwide delivery, with payment in UAH or EUR.">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap">
@@ -1768,13 +1768,13 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 <p>— Worldwide shipping: <b>€15</b><br>
 Delivery time depends on the destination.</p>
 <p>The fixed international shipping cost is shown and charged at checkout.</p>
-<p class="muted">Your tracking number arrives by email once your order ships. Ordering from Ukraine? <a href="/">Use the local checkout</a>.</p>
+<p class="muted">Choose your country at checkout. The site automatically uses UAH payment for Ukraine or EUR payment for international orders.</p>
 </article>
 
       <article class="info-card yellow" id="payment">
         <h3>💳 Payment</h3>
-        <p><b>— Visa / MasterCard or PayPal</b><br>secure checkout in EUR via Western Bid</p>
-        <p>The full amount (items + shipping) is charged at checkout. No cash on delivery for international orders.</p>
+        <p><b>— Ukraine:</b> Visa / MasterCard in UAH via WayForPay<br><b>— Worldwide:</b> Visa / MasterCard or PayPal in EUR via Western Bid</p>
+        <p>The site selects the correct payment automatically after you choose your country. No cash on delivery for international orders.</p>
         <p class="muted">All payments are SSL-encrypted. Discreet packaging, always.</p>
       </article>
 
@@ -1895,13 +1895,13 @@ Delivery time depends on the destination.</p>
     </div>
     <label>city</label>
     <input id="fld-city" placeholder="Berlin" required="">
-    <label>zip / postal code</label>
+    <label id="zipLabel">zip / postal code</label>
     <input id="fld-zip" placeholder="10115" autocomplete="postal-code">
-    <label>address · street, house, apt</label>
+    <label id="addrLabel">address · street, house, apt</label>
     <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
     <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
     <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
-    <button type="submit" class="cart-submit" id="cartSubmit">pay by card / paypal</button>
+    <button type="submit" class="cart-submit" id="cartSubmit">continue to payment</button>
     <div id="cartResult" class="cart-result"></div>
   </form>
 </aside>
@@ -2461,8 +2461,8 @@ Delivery time depends on the destination.</p>
         var unitP = unitPriceWithSlot(i.price);
         var priceStr;
         var cartOld = Number(i.price_old || 0);
-        if (cartOld > unitP) priceStr = '<span class="old">' + euroOld(cartOld) + '</span> ' + euro(unitP) + ' × ' + i.qty;
-        else priceStr = euro(unitP) + ' × ' + i.qty;
+        if (cartOld > unitP) priceStr = '<span class="old">' + checkoutOldMoney(cartOld) + '</span> ' + checkoutMoney(unitP) + ' × ' + i.qty;
+        else priceStr = checkoutMoney(unitP) + ' × ' + i.qty;
         return '<div class="cart-line">'
           + img
           + '<div class="info"><div class="name">' + escapeHtml(i.title) + '</div><div class="price">' + priceStr + '</div></div>'
@@ -2476,12 +2476,12 @@ Delivery time depends on the destination.</p>
       // Разбивка в total
       var html = '';
       if (b.bundleDiscount > 0 || b.slotPct > 0) {
-        html += '<div class="total-row sub"><span>items</span><span>' + euro(b.subtotal) + '</span></div>';
+        html += '<div class="total-row sub"><span>items</span><span>' + checkoutMoney(b.subtotal) + '</span></div>';
       }
       if (b.bundleDiscount > 0) {
-        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + euro(b.bundleDiscount) + '</span></div>';
+        html += '<div class="total-row disc"><span>− 2nd item deal (' + BUNDLE_DISCOUNT_PCT + '%)</span><span>−' + checkoutMoney(b.bundleDiscount) + '</span></div>';
       }
-      html += '<div class="total-row main"><span>items total</span><span class="num">' + euro(b.total) + '</span></div>';
+      html += '<div class="total-row main"><span>items total</span><span class="num">' + checkoutMoney(b.total) + '</span></div>';
       $total.innerHTML = html;
       $total.hidden = false; $form.hidden = false;
     }
@@ -2815,20 +2815,27 @@ Delivery time depends on the destination.</p>
     renderCart();
   });
 
-// ======== EN CHECKOUT (international · Western Bid) ========
-  var EN_COUNTRIES=[['DE','Germany'],['PL','Poland'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['BE','Belgium'],['AT','Austria'],['CZ','Czechia'],['SK','Slovakia'],['SE','Sweden'],['FI','Finland'],['DK','Denmark'],['NO','Norway'],['IE','Ireland'],['PT','Portugal'],['GR','Greece'],['RO','Romania'],['HU','Hungary'],['BG','Bulgaria'],['HR','Croatia'],['SI','Slovenia'],['LT','Lithuania'],['LV','Latvia'],['EE','Estonia'],['LU','Luxembourg'],['CH','Switzerland'],['MD','Moldova'],['GB','United Kingdom'],['US','United States'],['CA','Canada'],['AU','Australia'],['AE','United Arab Emirates'],['SA','Saudi Arabia'],['JP','Japan'],['KR','South Korea'],['SG','Singapore'],['CN','China'],['ZA','South Africa'],['NZ','New Zealand']];
-  // Fixed Showgirl international shipping — keep in sync with api/westernbid.js.
+// ======== UNIFIED CHECKOUT · Ukraine (UAH) + worldwide (EUR) ========
+  var EN_COUNTRIES=[['UA','Ukraine'],['DE','Germany'],['PL','Poland'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['BE','Belgium'],['AT','Austria'],['CZ','Czechia'],['SK','Slovakia'],['SE','Sweden'],['FI','Finland'],['DK','Denmark'],['NO','Norway'],['IE','Ireland'],['PT','Portugal'],['GR','Greece'],['RO','Romania'],['HU','Hungary'],['BG','Bulgaria'],['HR','Croatia'],['SI','Slovenia'],['LT','Lithuania'],['LV','Latvia'],['EE','Estonia'],['LU','Luxembourg'],['CH','Switzerland'],['MD','Moldova'],['GB','United Kingdom'],['US','United States'],['CA','Canada'],['AU','Australia'],['AE','United Arab Emirates'],['SA','Saudi Arabia'],['JP','Japan'],['KR','South Korea'],['SG','Singapore'],['CN','China'],['ZA','South Africa'],['NZ','New Zealand']];
   var EN_Z1=['PL','SK','HU','RO','CZ','MD'];
   var EN_Z2=['DE','AT','FR','IT','ES','NL','BE','LU','PT','IE','DK','SE','FI','GR','LT','LV','EE','SI','HR','BG','CH','NO'];
   var EN_Z3=['GB'];
   var EN_Z4=['US','CA'];
   var EN_ZINFO={z1:{eur:15,days:'3–6'},z2:{eur:15,days:'4–8'},z3:{eur:15,days:'5–9'},z4:{eur:15,days:'7–14'},z5:{eur:15,days:'10–20'}};
-  function enZone(c){ c=String(c||'').toUpperCase(); if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
-  function enShipInfo(c){ var z=enZone(c); return z?EN_ZINFO[z]:null; }
+  function isUkraineCountry(c){ return String(c||'').toUpperCase()==='UA'; }
+  function enZone(c){ c=String(c||'').toUpperCase(); if(isUkraineCountry(c))return 'ua'; if(EN_Z1.indexOf(c)>=0)return 'z1'; if(EN_Z2.indexOf(c)>=0)return 'z2'; if(EN_Z3.indexOf(c)>=0)return 'z3'; if(EN_Z4.indexOf(c)>=0)return 'z4'; return c?'z5':null; }
+  function enShipInfo(c){ var z=enZone(c); if(z==='ua')return {eur:0,days:'1–3',domestic:true}; return z?EN_ZINFO[z]:null; }
+  function checkoutMoney(uah){ return isUkraineCountry($cHid && $cHid.value) ? Math.round(Number(uah||0))+'₴' : euro(uah); }
+  function checkoutOldMoney(uah){ return isUkraineCountry($cHid && $cHid.value) ? Math.round(Number(uah||0))+'₴' : euroOld(uah); }
 
-  var $cIn  = document.getElementById('fld-country-in');
-  var $cHid = document.getElementById('fld-country');
-  var $cList= document.getElementById('enCountryList');
+  var $cIn=document.getElementById('fld-country-in');
+  var $cHid=document.getElementById('fld-country');
+  var $cList=document.getElementById('enCountryList');
+  var $zip=document.getElementById('fld-zip');
+  var $zipLabel=document.getElementById('zipLabel');
+  var $addr=document.getElementById('fld-addr');
+  var $addrLabel=document.getElementById('addrLabel');
+
   function enRenderList(f){
     if(!$cList) return;
     var q=String(f||'').toLowerCase();
@@ -2838,120 +2845,159 @@ Delivery time depends on the destination.</p>
     $cList.hidden=false;
   }
   if($cIn && $cList){
-    $cIn.addEventListener('input', function(){ $cHid.value=''; enRenderList($cIn.value); updateEnShip(); });
+    $cIn.addEventListener('input', function(){ $cHid.value=''; enRenderList($cIn.value); renderCart(); });
     $cIn.addEventListener('focus', function(){ enRenderList($cIn.value); });
     document.addEventListener('click', function(e){ if(!e.target.closest('.en-cbx')) $cList.hidden=true; });
     $cList.addEventListener('click', function(e){
       var btn=e.target.closest('button[data-code]'); if(!btn) return;
-      $cHid.value=btn.dataset.code; $cIn.value=btn.textContent; $cList.hidden=true; updateEnShip();
+      $cHid.value=btn.dataset.code; $cIn.value=btn.textContent; $cList.hidden=true; renderCart();
     });
   }
+
   function updateEnShip(){
     var elS=document.getElementById('enShip');
     var elG=document.getElementById('enGrand');
-    if(!elS) return;
-    var info=enShipInfo($cHid && $cHid.value);
     var $btn=document.getElementById('cartSubmit');
+    if(!elS) return;
+    var code=($cHid && $cHid.value)||'';
+    var info=enShipInfo(code);
+    var domestic=isUkraineCountry(code);
+    if($zip){ $zip.hidden=domestic; if(domestic)$zip.value=''; }
+    if($zipLabel)$zipLabel.hidden=domestic;
+    if($addrLabel)$addrLabel.textContent=domestic?'Nova Poshta branch':'address · street, house, apt';
+    if($addr)$addr.placeholder=domestic?'Branch №12':'Sesame st. 5, apt 7';
     if(info && cart.length){
       var b=calcBreakdown();
-      var tot=b.total*EN_MARKUP/EUR_RATE + info.eur;
-      elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
-      if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
-      if($btn && !$btn.disabled) $btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal';
-    } else {
-      elS.innerHTML='<span>shipping · Nova Global</span><b class="d">select country</b>';
-      if(elG) elG.hidden=true;
-      if($btn && !$btn.disabled) $btn.textContent='pay by card / paypal';
+      if(domestic){
+        elS.innerHTML='<span>shipping · Nova Poshta<br><small>'+info.days+' business days</small></span><b>carrier rate</b>';
+        if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>'+Math.round(b.total)+'₴</b>'; }
+        if($btn && !$btn.disabled)$btn.textContent='pay '+Math.round(b.total)+'₴ by card';
+      }else{
+        var tot=b.total*EN_MARKUP/EUR_RATE+info.eur;
+        elS.innerHTML='<span>shipping · Nova Global<br><small>'+info.days+' business days</small></span><b>€'+info.eur.toFixed(2)+'</b>';
+        if(elG){ elG.hidden=false; elG.innerHTML='<span>total</span><b>€'+tot.toFixed(2)+'</b>'; }
+        if($btn && !$btn.disabled)$btn.textContent='pay €'+tot.toFixed(2)+' by card / paypal';
+      }
+    }else{
+      elS.innerHTML='<span>shipping</span><b class="d">select country</b>';
+      if(elG)elG.hidden=true;
+      if($btn && !$btn.disabled)$btn.textContent='continue to payment';
     }
   }
 
-  $form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var $btn = document.getElementById('cartSubmit');
-    var $res = document.getElementById('cartResult');
-    var fio = document.getElementById('fld-fio').value.trim();
-    var phone = document.getElementById('fld-phone').value.trim();
-    var email = document.getElementById('fld-email').value.trim();
-    var country = ($cHid && $cHid.value) || '';
-    var city = document.getElementById('fld-city').value.trim();
-    var zip = document.getElementById('fld-zip').value.trim();
-    var addr = document.getElementById('fld-addr').value.trim();
-    function fail(m){ $res.textContent = m; $res.className = 'cart-result err'; $btn.disabled = false; updateEnShip(); }
-    if (!cart.length) return fail('your cart is empty');
-    if (fio.length < 2) return fail('please enter your full name');
-    if (phone.replace(/[^0-9]/g,'').length < 7) return fail('please enter a valid phone number');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('please enter a valid email');
-    if (!country) return fail('please pick a country from the list');
-    if (!city || !addr) return fail('please enter city and address');
-    $btn.disabled = true; $btn.textContent = 'redirecting to payment…'; $res.textContent = ''; $res.className = 'cart-result';
-    try {
-      var icItems = cart.map(function(c){ return fbSkuFromCart(c.uid); });
-      var icContents = cart.map(function(c){ return { id: fbSkuFromCart(c.uid), quantity: (parseInt(c.qty,10)||1) }; });
-      var icShipEur = ((enShipInfo($cHid && $cHid.value) || {}).eur) || 0;
-      var icGoodsUah = calcBreakdown().total;
-      var icValue = Math.round((eurNum(icGoodsUah) + icShipEur)*100)/100;
-      var icNum = cart.reduce(function(s,c){ return s + (parseInt(c.qty,10)||1); },0);
-      var icEventId = 'ic-' + (window.SESSION_ID||'') + '-' + Date.now().toString(36);
-      if (typeof fbq === 'function') fbq('track','InitiateCheckout',{ value: icValue, currency:'EUR', num_items: icNum, content_ids: icItems, contents: icContents, content_type:'product' }, { eventID: icEventId });
-      // снапшот для Purchase после возврата со шлюза (страница перезагружается — cart в памяти теряется)
-      try { sessionStorage.setItem('bg_en_pending', JSON.stringify({ ids: icItems, contents: icContents, num: icNum, value: icValue })); } catch(err2){}
-      window.bgTrack && window.bgTrack('begin_checkout',{ value: icGoodsUah, event_id: icEventId, meta:{ num_items: icNum, market: 'en-sg', value_eur: icValue } });
-    } catch(err){}
-
-    var promo = getSlotPromoCode();
-
-    var payload = {
-      fio: fio, phone: phone, email: email,
-      country: country, city: city, zip: zip, address1: addr,
-      promo_code: promo,
-      bundle_discount_pct: BUNDLE_DISCOUNT_PCT,
-      return_path: '/showgirl-en',
-      items: cart.map(function(c){
-        return { uid: c.uid, qty: c.qty, title: c.title, color_name: c.color_name, price: c.price, photo: c.photo };
-      }),
-      session_id: window.SESSION_ID || null,
-      referrer: document.referrer || null,
-      landing_url: window.LANDING_URL || location.href
-    };
-
-    fetch('/api/westernbid', {
-      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
-    })
-    .then(function(r){ return r.json().then(function(d){ return { httpOk: r.ok, d: d }; }); })
-    .then(function(x){
-      if (!x.httpOk || !x.d.ok) throw new Error((x.d && x.d.error) || 'payment error, please try again');
-      var f = document.createElement('form');
-      f.method = 'POST'; f.action = x.d.endpoint; f.acceptCharset = 'utf-8';
-      Object.keys(x.d.fields).forEach(function(k){
-        var inp = document.createElement('input');
-        inp.type = 'hidden'; inp.name = k; inp.value = x.d.fields[k]; f.appendChild(inp);
+  function submitGatewayForm(action,fields){
+    var f=document.createElement('form');
+    f.method='POST'; f.action=action; f.acceptCharset='utf-8';
+    Object.keys(fields||{}).forEach(function(k){
+      var v=fields[k];
+      (Array.isArray(v)?v:[v]).forEach(function(item){
+        var inp=document.createElement('input');
+        inp.type='hidden'; inp.name=Array.isArray(v)?k+'[]':k; inp.value=item; f.appendChild(inp);
       });
-      document.body.appendChild(f); f.submit();
+    });
+    document.body.appendChild(f); f.submit();
+  }
+
+  $form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var $btn=document.getElementById('cartSubmit');
+    var $res=document.getElementById('cartResult');
+    var fio=document.getElementById('fld-fio').value.trim();
+    var phone=document.getElementById('fld-phone').value.trim();
+    var email=document.getElementById('fld-email').value.trim();
+    var country=($cHid&&$cHid.value)||'';
+    var city=document.getElementById('fld-city').value.trim();
+    var zip=document.getElementById('fld-zip').value.trim();
+    var addr=document.getElementById('fld-addr').value.trim();
+    var domestic=isUkraineCountry(country);
+    function fail(m){ $res.textContent=m; $res.className='cart-result err'; $btn.disabled=false; updateEnShip(); }
+    if(!cart.length)return fail('your cart is empty');
+    if(fio.length<2)return fail('please enter your full name');
+    if(phone.replace(/[^0-9]/g,'').length<7)return fail('please enter a valid phone number');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return fail('please enter a valid email');
+    if(!country)return fail('please pick a country from the list');
+    if(!city||!addr)return fail(domestic?'please enter city and Nova Poshta branch':'please enter city and address');
+    $btn.disabled=true; $btn.textContent='redirecting to payment…'; $res.textContent=''; $res.className='cart-result';
+
+    var promo=getSlotPromoCode();
+    var items=cart.map(function(c){ return {uid:c.uid,qty:c.qty,title:c.title,color_name:c.color_name,price:c.price,photo:c.photo}; });
+    var icItems=cart.map(function(c){ return fbSkuFromCart(c.uid); });
+    var icContents=cart.map(function(c){ return {id:fbSkuFromCart(c.uid),quantity:(parseInt(c.qty,10)||1)}; });
+    var icNum=cart.reduce(function(sum,c){ return sum+(parseInt(c.qty,10)||1); },0);
+    var icGoodsUah=calcBreakdown().total;
+    var icEventId='ic-'+(window.SESSION_ID||'')+'-'+Date.now().toString(36);
+
+    if(domestic){
+      try{
+        if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:icGoodsUah,currency:'UAH',num_items:icNum,content_ids:icItems,contents:icContents,content_type:'product'},{eventID:icEventId});
+        window.bgTrack&&window.bgTrack('begin_checkout',{value:icGoodsUah,event_id:icEventId,meta:{num_items:icNum,market:'ua-sg'}});
+      }catch(err){}
+      var orderPayload={
+        stage:'final',fio:fio,phone:phone,city:city,wh:addr,payment:'card',
+        promo_code:promo,bundle_discount_pct:BUNDLE_DISCOUNT_PCT,items:items,
+        session_id:window.SESSION_ID||null,referrer:document.referrer||null,landing_url:window.LANDING_URL||location.href
+      };
+      fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderPayload)})
+      .then(function(r){ return r.json().then(function(d){ return {httpOk:r.ok,d:d}; }); })
+      .then(function(x){
+        if(!x.httpOk||!x.d.ok)throw new Error((x.d&&x.d.error)||'order error');
+        return fetch('/api/wayforpay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          orderReference:x.d.order_num,items:cart.map(function(c){return {uid:c.uid,qty:c.qty};}),
+          payment_method:'card',promo_code:promo,bundle_discount_pct:BUNDLE_DISCOUNT_PCT,
+          clientFirstName:fio.split(' ')[0]||'',clientLastName:fio.split(' ').slice(1).join(' ')||'',
+          clientEmail:email,clientPhone:phone
+        })});
+      })
+      .then(function(r){ return r.json().then(function(d){ return {httpOk:r.ok,d:d}; }); })
+      .then(function(x){
+        if(!x.httpOk||!x.d.ok)throw new Error((x.d&&x.d.error)||'payment error');
+        submitGatewayForm(x.d.paymentUrl,x.d.formData);
+      })
+      .catch(function(err){ fail('error: '+err.message); });
+      return;
+    }
+
+    var info=enShipInfo(country);
+    var icShipEur=(info&&info.eur)||0;
+    var icValue=Math.round((eurNum(icGoodsUah)+icShipEur)*100)/100;
+    try{
+      if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:icValue,currency:'EUR',num_items:icNum,content_ids:icItems,contents:icContents,content_type:'product'},{eventID:icEventId});
+      try{sessionStorage.setItem('bg_en_pending',JSON.stringify({ids:icItems,contents:icContents,num:icNum,value:icValue}));}catch(err2){}
+      window.bgTrack&&window.bgTrack('begin_checkout',{value:icGoodsUah,event_id:icEventId,meta:{num_items:icNum,market:'en-sg',value_eur:icValue}});
+    }catch(err){}
+
+    var payload={
+      fio:fio,phone:phone,email:email,country:country,city:city,zip:zip,address1:addr,
+      promo_code:promo,bundle_discount_pct:BUNDLE_DISCOUNT_PCT,return_path:'/',items:items,
+      session_id:window.SESSION_ID||null,referrer:document.referrer||null,landing_url:window.LANDING_URL||location.href
+    };
+    fetch('/api/westernbid',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){ return r.json().then(function(d){ return {httpOk:r.ok,d:d}; }); })
+    .then(function(x){
+      if(!x.httpOk||!x.d.ok)throw new Error((x.d&&x.d.error)||'payment error, please try again');
+      submitGatewayForm(x.d.endpoint,x.d.fields);
     })
-    .catch(function(err){ fail('error: ' + err.message); });
+    .catch(function(err){ fail('error: '+err.message); });
   });
 
-  // Возврат со шлюза: ?paid=1 / ?paid=0
+  // Return from Western Bid: ?paid=1 / ?paid=0
   (function(){
-    try {
-      var q = new URLSearchParams(location.search);
-      if (q.get('paid') === '1') {
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('paid')==='1'){
         showToast("✓ payment received — thank you! ♥<br>we'll email you tracking soon");
-        // Meta Purchase: eventID === invoice, тем же id шлёт CAPI из api/westernbid-callback.js -> дедуп
-        var pInv = q.get('inv') || '';
-        var pPend = null; try { pPend = JSON.parse(sessionStorage.getItem('bg_en_pending') || 'null'); } catch(e2){}
-        var pVal = parseFloat(q.get('v'));
-        if (!isFinite(pVal) || pVal <= 0) pVal = (pPend && pPend.value) || 0;
-        if (typeof fbq === 'function' && pInv) {
-          fbq('track','Purchase',{ value: pVal, currency:'EUR', num_items: (pPend && pPend.num) || 1,
-            content_ids: (pPend && pPend.ids) || [], contents: (pPend && pPend.contents) || [], content_type:'product' }, { eventID: pInv });
+        var pInv=q.get('inv')||'';
+        var pPend=null;try{pPend=JSON.parse(sessionStorage.getItem('bg_en_pending')||'null');}catch(e2){}
+        var pVal=parseFloat(q.get('v'));
+        if(!isFinite(pVal)||pVal<=0)pVal=(pPend&&pPend.value)||0;
+        if(typeof fbq==='function'&&pInv){
+          fbq('track','Purchase',{value:pVal,currency:'EUR',num_items:(pPend&&pPend.num)||1,content_ids:(pPend&&pPend.ids)||[],contents:(pPend&&pPend.contents)||[],content_type:'product'},{eventID:pInv});
         }
-        try { window.bgTrack && window.bgTrack('purchase',{ value: pVal, event_id: pInv, meta:{ market:'en-sg', currency:'EUR' } }); } catch(e3){}
-        try { sessionStorage.removeItem('bg_en_pending'); } catch(e4){}
-        try { cart = []; renderCart(); } catch(e5){}
-      }
-      else if (q.get('paid') === '0') showToast('payment was cancelled — your cart is waiting ♥');
-    } catch(e){}
+        try{window.bgTrack&&window.bgTrack('purchase',{value:pVal,event_id:pInv,meta:{market:'en-sg',currency:'EUR'}});}catch(e3){}
+        try{sessionStorage.removeItem('bg_en_pending');}catch(e4){}
+        try{cart=[];renderCart();}catch(e5){}
+      }else if(q.get('paid')==='0')showToast('payment was cancelled — your cart is waiting ♥');
+    }catch(e){}
   })();
 
     // ======== DEEP-LINK (?p=uid&c=color) — открытие карточки по ссылке из фида/рекламы ========

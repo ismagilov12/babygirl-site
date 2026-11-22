@@ -272,8 +272,9 @@ module.exports = async function handler(req, res) {
   if (!wbLogin || !wbSecret) return res.status(500).json({ ok: false, error: 'WB credentials not configured' });
 
   // Сторінка повернення: /en (BabyGirl) або /showgirl-en (Showgirl). Whitelist!
-  const retPath = String(body.return_path || '') === '/showgirl-en' ? '/showgirl-en' : '/en';
-  const mkt = retPath === '/showgirl-en' ? 'EN-SG' : 'EN';
+  const requestedReturn = String(body.return_path || '');
+  const retPath = requestedReturn === '/' ? '/' : (requestedReturn === '/showgirl-en' ? '/showgirl-en' : '/en');
+  const mkt = (retPath === '/' || retPath === '/showgirl-en') ? 'EN-SG' : 'EN';
 
   // Номер як у api/order.js (спільний префікс BG- для дзеркала в CRM).
   const orderNum = 'BG-' + Date.now().toString(36).toUpperCase();
