@@ -32,6 +32,8 @@ const FEED_DISABLED_BY_DEFAULT_UIDS = new Set([
 ]);
 
 function isFeedEnabled(p, family) {
+  if (/^(plate|mug|cup|tableware|dish|dishes|ceramic|ceramics)$/i.test(String(family || p.family || ''))
+      || /^(plate|mug|cup)-/.test(String(p.uid || ''))) return false;
   if (["hoodie-big-heart-bigger-ass","hoodie-pussy-power-new","hoodie-baby-doll","hoodie-smile-horny","hoodie-sexual-energy"].includes(p.uid)) return false;
   const attrs = (p && p.attrs) || {};
   if (attrs.feed_enabled === false) return false;
