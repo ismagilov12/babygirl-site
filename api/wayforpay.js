@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 const cfg = require('./_config');
+const blackFriday = require('./_black-friday');
 const T = cfg.T;
 const ALLOWED_ORIGINS_EXACT = new Set(cfg.ALLOWED_ORIGINS_EXACT);
 
@@ -194,8 +195,9 @@ module.exports = async function handler(req, res) {
   const { orderReference, items, clientFirstName, clientLastName, clientEmail, clientPhone, payment_method } = body;
   // Discount inputs (опціональні): promo_code валідується серверно, bundle_discount_pct
   // береться з фронту як параметр UX, але обмежується розумним діапазоном.
-  const promoCodeIn  = (typeof body.promo_code === 'string' ? body.promo_code : '').trim();
-  const bundlePctIn  = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
+  const isBlackFriday = blackFriday.requested(body);
+  const promoCodeIn  = (!isBlackFriday && typeof body.promo_code === 'string' ? body.promo_code : '').trim();
+  const bundlePctIn  = isBlackFriday ? 0 : Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
 
   if (!orderReference || typeof orderReference !== 'string') {
     return res.status(400).json({ error: 'orderReference is required' });
@@ -211,7 +213,17 @@ module.exports = async function handler(req, res) {
 
   // Always calculate and validate the full order total on the server first.
   // This prevents a customer from changing the threshold or deposit in the browser.
-  const priceResult = await computeTotal(items);
+  let priceResult = await computeTotal(items);
+  if (isBlackFriday) {
+    priceResult = await blackFriday.apply(priceResult, sb, T.PRODUCTS);
+    if (!priceResult) {
+      return res.status(400).json({ ok: false, error: 'Не вдалося перевірити акційні ціни BabyGirl.' });
+    }
+    const orders = await sb(T.ORDERS + '?number=eq.' + encodeURIComponent(orderReference) + '&select=items,total,notes,payment_method&limit=1');
+    if (!blackFriday.matchesOrder(orders && orders[0], items, priceResult, payment_method)) {
+      return res.status(400).json({ ok: false, error: 'Кошик або ціни змінилися. Онови сторінку й оформи замовлення ще раз.' });
+    }
+  }
   if (!priceResult || !priceResult.ok) {
     return res.status(400).json({
       error: (priceResult && priceResult.error) || 'Price calculation failed',
@@ -249,7 +261,9 @@ module.exports = async function handler(req, res) {
     productCount = ['1'];
     productPrice = [authoritativeAmount.toFixed(2)];
   } else if (payment_method === 'cod' && cfg.COD_PREPAYMENT_AMOUNT_UAH > 0) {
-    authoritativeAmount = Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
+    authoritativeAmount = isBlackFriday
+      ? Math.min(Number(cfg.COD_PREPAYMENT_AMOUNT_UAH), fullOrderAmount)
+      : Number(cfg.COD_PREPAYMENT_AMOUNT_UAH);
     paymentType = 'cod_prepayment';
     productName = ['Передплата ' + cfg.PROJECT_NAME];
     productCount = ['1'];

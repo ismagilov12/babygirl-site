@@ -2,6 +2,7 @@
 // Скелет із досвіду ULTERA · v3 hardened
 
 const cfg = require('./_config');
+const blackFriday = require('./_black-friday');
 const T = cfg.T;
 const tg = require('./_tg');
 const ALLOWED_ORIGINS_EXACT = new Set(cfg.ALLOWED_ORIGINS_EXACT);
@@ -218,6 +219,10 @@ module.exports = async function handler(req, res) {
   const isLead = stage === 'lead';
 
   const isShowgirl = body.items.some(item => String(item.uid || '').startsWith('sg-'));
+  const isBlackFriday = blackFriday.requested(body);
+  if (isBlackFriday && isShowgirl) {
+    return res.status(400).json({ ok: false, error: 'Акція Black Friday діє тільки для BabyGirl.' });
+  }
   if (!isLead && isShowgirl && body.payment !== 'card') {
     return res.status(400).json({ ok: false, error: 'Showgirl: доступна лише повна оплата карткою.' });
   }
@@ -229,16 +234,26 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const priced = await recomputePrices(body.items);
+  let priced = await recomputePrices(body.items);
+  if (isBlackFriday) {
+    priced = await blackFriday.apply(priced, sb, T.PRODUCTS);
+    if (!priced) {
+      return res.status(400).json({ ok: false, error: 'Не вдалося перевірити акційні ціни. Онови сторінку та спробуй ще раз.' });
+    }
+    if (body.expected_total != null && Number(body.expected_total) !== priced.total) {
+      return res.status(409).json({ ok: false, error: 'Ціни змінилися. Онови сторінку та перевір кошик.' });
+    }
+    body.items = blackFriday.priceItems(body.items, priced);
+  }
   let total = null;
   let subtotal = null;
   let appliedPromoCode = null;
   let appliedPromoPct  = 0;
-  const bundlePctIn = Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
+  const bundlePctIn = isBlackFriday ? 0 : Math.max(0, Math.min(50, parseInt(body.bundle_discount_pct || 0, 10) || 0));
   if (priced && priced.ok) {
     subtotal = Number(priced.total);
     // Серверно валідуємо промо (не довіряємо percent з фронту).
-    const promoCode = String(body.promo_code || '').toUpperCase().trim();
+    const promoCode = isBlackFriday ? '' : String(body.promo_code || '').toUpperCase().trim();
     const wheelPromoCode = promoCode;
     const wheelPromoPct = isShowgirl && /^SHOW\\d+$/.test(wheelPromoCode)
       ? ({ SHOW05: 5, SHOW07: 7, SHOW08: 8 }[wheelPromoCode] || 0)
@@ -270,7 +285,9 @@ module.exports = async function handler(req, res) {
   const orderNum = (typeof body.num === 'string' && body.num) || ('BG-' + Date.now().toString(36).toUpperCase());
 
   // У notes коротко фіксуємо застосовану знижку для аудиту (без зміни схеми таблиці).
-  const discountNote = (appliedPromoCode || bundlePctIn > 0)
+  const discountNote = isBlackFriday
+    ? ' ' + blackFriday.NOTE + ' Black Friday · ' + (priced.original_total > total ? priced.original_total + ' → ' : '') + total + ' UAH'
+    : (appliedPromoCode || bundlePctIn > 0)
     ? ' [discount: ' + (appliedPromoCode ? appliedPromoCode + '−' + appliedPromoPct + '%' : '')
         + (bundlePctIn > 0 ? (appliedPromoCode ? ' + ' : '') + 'bundle−' + bundlePctIn + '%' : '')
         + (subtotal ? ' · subtotal=' + subtotal + ' → total=' + total : '')
@@ -306,6 +323,9 @@ module.exports = async function handler(req, res) {
     landing_url: (typeof body.landing_url === 'string' ? body.landing_url : '').slice(0, 2000) || null,
   });
 
+  if (isBlackFriday && !orderRow) {
+    return res.status(503).json({ ok: false, error: 'Не вдалося зберегти замовлення. Спробуй ще раз.' });
+  }
   if (isLead) {
     return res.status(200).json({
       ok: true, stage: 'lead',
