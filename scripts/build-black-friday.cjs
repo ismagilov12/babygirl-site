@@ -32,6 +32,8 @@ replace('</head>', '<link rel="preload" href="/assets/bf-barlow-condensed-black-
 replace('<body>', '<body class="bf-page">');
 const hero = fs.readFileSync('campaign/black-friday-hero.html', 'utf8').replace(/\{\{(tee|hoodie|crop)\}\}/g, (_, family) => offer[family]);
 between('<!-- ===== HERO ===== -->', '<style id="bgBestsellersStyle">', hero);
+replace(/<h2 class="section-title">level up your <span class="alt">look<\/span><\/h2>\s*<span class="section-sub">~ обери своє альтер-его ~<\/span>/,
+  '<h2 class="section-title">Каталог <span class="alt">Black Friday</span></h2>');
 between('<!-- ===== SLOT MACHINE ===== -->', '<!-- ===== ABOUT ===== -->', `<section class="bf-terms"><h2>Умови Black Friday</h2><p>${offerSummary} Чокери й пояси продаються за звичайною ціною.</p><p>Акційні ціни вже вказані в картках товарів. Додаткові промокоди та знижка на другу річ не діють.</p></section>`);
 if (html.includes('<style id="bgPlateLaunchStyle">')) {
   between('<style id="bgPlateLaunchStyle">', '<!-- ===== SUITS · PREORDER BLOCK ===== -->', '');
@@ -99,13 +101,9 @@ replace("    try { promo = sessionStorage.getItem('bg_promo_code'); } catch(e){}
 replace("      stage: 'final', fio: fio, phone: phone,", "      stage: 'final', fio: fio, phone: phone,\n      campaign: 'babygirl-black-friday-2026', expected_total: calcTotal(),");
 replace('            orderReference: data.order_num,', "            orderReference: data.order_num,\n            campaign: 'babygirl-black-friday-2026',");
 
-// Every price surface, including curated cards and six-option sets.
+// Curated cards, catalog cards and cart totals.
 replace("+ '<div class=\"card-img\"><span class=\"heart-tag\">♥</span><div class=\"card-photos\">'", "+ '<div class=\"card-img\">' + (bfPercent(p) ? '<span class=\"sale-badge\">' + bfPercent(p) + '</span>' : '') + '<span class=\"heart-tag\">♥</span><div class=\"card-photos\">'");
 replace("'<div class=\"card-meta\"><span class=\"card-price\">' + escapeHtml(p.price) + '₴</span><span class=\"card-tag\">ONE SIZE</span></div>'", "'<div class=\"card-meta\"><span class=\"card-price-row\">' + bfPrice(p) + '</span><span class=\"card-tag\">ONE SIZE</span></div>'");
-replace("  function setPrice(p){ return setIsEnglish ? euro(p.price) : p.price+' ₴'; }", '  function setPrice(p){ return bfPrice(p); }');
-replace("<span class=\"card-price\">'+setPrice(p)+'</span>", "<span class=\"card-price-row\">'+setPrice(p)+'</span>");
-replace("    pmPrice.textContent=setIsEnglish ? setPrice(p) : p.price;", "    pmPrice.innerHTML='<span class=\"pm-old\">'+bfMoney(p.price_old)+' ₴</span>'+bfMoney(p.price);");
-replace("    pmRibbon.textContent=setText('Обери свій комплект','Choose your set'); pmRibbon.hidden=false;", "    pmRibbon.textContent='BLACK FRIDAY ' + bfPercent(p); pmRibbon.hidden=!p.price_old;");
 replace("+ oldPrice + '₴</span>'", "+ bfMoney(oldPrice) + '₴</span>'");
 html = html.replaceAll("+ newPrice + '₴</span>'", "+ bfMoney(newPrice) + '₴</span>'");
 replace("priceStr = '<span class=\"old\">' + cartOld + '₴</span> ' + unitP + '₴ × ' + i.qty;", "priceStr = '<span class=\"old\">' + bfMoney(cartOld) + '₴</span> ' + bfMoney(unitP) + '₴ × ' + i.qty;");
@@ -128,9 +126,11 @@ replace('  // Checkout submit', "  $payment.addEventListener('change', renderCar
 replace("pmPrice.innerHTML = '<span class=\"pm-old\">' + po + '\\u20b4</span>' + p.price;", "pmPrice.innerHTML = '<span class=\"pm-old\">' + bfMoney(po) + '\\u20b4</span>' + bfMoney(p.price);");
 replace('pmPrice.textContent = p.price;', 'pmPrice.textContent = bfMoney(p.price);');
 replace("'<span class=\"hd\">⚡ передзамовлення −' + (po.discount_pct || 20) + '%</span>'", "'<span class=\"hd\">Передзамовлення</span>'");
-replace('4 500 ₴</span><button', '2 250 ₴</span><button');
-replace('4 500 ₴ · −25%', '2 250 ₴ · −50%');
-replace('★ new drop · pink & black', '★ BLACK FRIDAY · −50%');
+replace(/<span class="suit-launch__price">[^<]*<\/span>/,
+  '<span class="suit-launch__price">' + offer.babyGirlSuit + ' ₴</span>');
+replace(/<span class="suit-launch__price-sticker">[^<]*<\/span>/,
+  '<span class="suit-launch__price-sticker">' + offer.babyGirlSuit + ' ₴</span>');
+replace('★ new drop · pink & black', '★ BLACK FRIDAY');
 replace('~ обери своє худі ~', 'Усі худі за ' + offer.hoodie + ' ₴');
 replace('~ обери свій принт ~', 'Футболки за ' + offer.tee + ' ₴');
 replace('<span class="marquee-item">3490₴</span>', '<span class="marquee-item">' + offer.hoodie + ' ₴</span>');

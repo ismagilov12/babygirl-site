@@ -7,16 +7,17 @@ const NOTE = '[campaign:' + ID + ']';
 const money = value => Math.round((Number(value) + Number.EPSILON) * 100) / 100;
 const baseUid = uid => String(uid || '').split('|')[0];
 const requested = body => body && body.campaign === ID;
-const BLACK_FRIDAY_PRICES = Object.freeze({ tee: 1290, hoodie: 2190, crop: 990 });
+const BLACK_FRIDAY_PRICES = Object.freeze({ tee: 1290, hoodie: 2190, crop: 990, babyGirlSuit: 2890 });
 
 // The campaign builder embeds these same rules in the Ukrainian preview.
 function campaignIncludes(product) {
   return !!(product && product.uid && product.active !== false && product.family &&
-    !/^(?:sg-|plate-|mug-|cup-)/.test(product.uid) &&
-    !/^(?:sg-|(?:plate|mug|cup|tableware)$)/.test(product.family));
+    !/^(?:sg-|plate-|mug-|cup-|baby-girl-sexy-set-)/.test(product.uid) &&
+    !/^(?:sg-|(?:plate|mug|cup|tableware|sexy-set)$)/.test(product.family));
 }
 
 function campaignPrice(product) {
+  if (product.uid === 'suit-baby-girl') return BLACK_FRIDAY_PRICES.babyGirlSuit;
   switch (product.family) {
     case 'tee': case 'icons': case 'soft-rebel': case 'self-love': case 'long':
       return BLACK_FRIDAY_PRICES.tee;
@@ -24,7 +25,7 @@ function campaignPrice(product) {
       return BLACK_FRIDAY_PRICES.hoodie;
     case 'crop':
       return BLACK_FRIDAY_PRICES.crop;
-    case 'suit': case 'sexy-set': case 'longsleeve': case 'jacket':
+    case 'suit': case 'longsleeve': case 'jacket':
       return Math.round(Number(product.price) * 50) / 100;
     default:
       return Number(product.price);

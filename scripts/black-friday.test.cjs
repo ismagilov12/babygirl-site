@@ -8,6 +8,7 @@ const source = fs.readFileSync('black-friday.html', 'utf8');
 const catalog = Object.fromEntries(Object.entries({
   'tee-test':['tee',1500], 'hoodie-test':['hoodie',2425], 'crop-test':['crop',1235], 'long-test':['long',1525],
   'choker':['belt',370], 'belt':['belt',1130], 'small-belt':['belt',180], 'set-test':['sexy-set',1200],
+  'baby-girl-sexy-set-gothic-white':['crop',1200],
   'plate-test':['plate',499], 'mug-test':['plate',399], 'ceramics':['plate',499],
   'suit-baby-girl':['suit',4500], 'sg-test':['sg-set',2000], 'threshold':['suit',8000], 'over-threshold':['suit',8001]
 }).map(([uid,[family,price]]) => [uid,{uid,family,price,active:true}]));
@@ -86,15 +87,15 @@ test('accessories retain their ordinary unit prices and COD is capped at the ord
     assert.equal(result.data.authoritativeAmount,deposit);
   }
 });
-test('cropped tops, long tees and sets retain the correct unit prices for every quantity',async()=>{
+test('cropped tops and long tees retain the correct unit prices for every quantity',async()=>{
   const state={promoReads:0}, order=harness('api/order.js',state);
-  const result=await order(orderBody([{uid:'crop-test',qty:2},{uid:'long-test',qty:1},{uid:'set-test',qty:1}]));
-  assert.equal(result.data.authoritative_total,3870);
-  assert.deepEqual(state.saved.items.map(x=>x.price),[990,1290,600]);
-  assert.equal((await harness('api/wayforpay.js',state)(paymentBody(state.saved))).data.authoritativeAmount,3870);
+  const result=await order(orderBody([{uid:'crop-test',qty:2},{uid:'long-test',qty:1}]));
+  assert.equal(result.data.authoritative_total,3270);
+  assert.deepEqual(state.saved.items.map(x=>x.price),[990,1290]);
+  assert.equal((await harness('api/wayforpay.js',state)(paymentBody(state.saved))).data.authoritativeAmount,3270);
 });
-test('both campaign entry points reject tableware and missing trusted category records',async()=>{
-  for (const uid of ['mug-test','plate-test','ceramics','tee-test']) {
+test('both campaign entry points reject tableware, Sexy Sets and missing trusted category records',async()=>{
+  for (const uid of ['mug-test','plate-test','ceramics','set-test','baby-girl-sexy-set-gothic-white','tee-test']) {
     const state={promoReads:0,missingUid:'tee-test'};
     const items=[{uid,qty:1,family:'tee',price:1290}];
     assert.equal((await harness('api/order.js',state)(orderBody(items))).statusCode,400);
@@ -137,10 +138,12 @@ test('browser discount survives repeated rendering and fresh catalog updates',()
   const p={uid:'test',family:'hoodie',price:2425,price_old:3490,attrs:{specs:[]}};
   const tee={uid:'tee-test',family:'tee',price:2100};
   const belt={...catalog.belt,price_old:1500};
-  const ctx={D:{all:[p,tee,belt]}};vm.createContext(ctx);vm.runInContext(code,ctx);
+  const suit={...catalog['suit-baby-girl'],price_old:6000};
+  const ctx={D:{all:[p,tee,belt,suit]}};vm.createContext(ctx);vm.runInContext(code,ctx);
   assert.equal(tee.price_old,1500);assert.equal(tee.price,1290);
   assert.equal(p.price,2190);assert.equal(p.price_old,2425);
   assert.equal(belt.price_old,null);assert.equal(belt.price,1130);assert.equal(belt.ribbon,null);
+  assert.equal(suit.price,2890);assert.equal(suit.price_old,4500);
   vm.runInContext('applyBlackFridayPrices(D.all)',ctx);assert.equal(p.price,2190);
   delete p._bfApplied;Object.assign(p,{price:2990,price_old:3490});
   vm.runInContext('applyBlackFridayPrices(D.all)',ctx);assert.equal(p.price,2190);assert.equal(p.price_old,2990);
@@ -150,6 +153,13 @@ test('the embedded catalog, navigation and offer copy reflect the edited campaig
   assert.ok(data.all.every(product=>campaign.campaignIncludes(product)));
   const ids=new Set(data.all.map(p=>p.uid));
   assert.ok([...data.grid,...data.featured].every(item=>ids.has(typeof item==='string'?item:item.uid)));
+  assert.ok(ids.has('suit-baby-girl'));
+  assert.ok(!data.all.some(p=>p.family==='sexy-set' || p.uid.startsWith('baby-girl-sexy-set-')));
+  assert.doesNotMatch(source,/<a\b[^>]*(?:data-family="sexy-set"|href="#sexy-set")/);
+  const suitSection=source.match(/<section id="suits"[\s\S]*?<\/section>/)[0];
+  assert.match(suitSection,/class="suit-launch__price">2\s?890 ₴</);
+  assert.match(suitSection,/class="suit-launch__price-sticker">2\s?890 ₴</);
+  assert.doesNotMatch(suitSection,/2\s?250|−50%/);
   assert.ok(!/data-family="plate"|bgPlateLaunchTitle|−50% на (?:весь|всі|все)|HALF THE PRICE/i.test(source));
   const poster=source.match(/<dl class="bf-hero-offer"[\s\S]*?<\/dl>/)[0].replace(/\s+/g,'');
   for (const [label,price] of [['Футболки',1290],['Худі',2190],['Кроп-топи',990]]) {
@@ -158,7 +168,7 @@ test('the embedded catalog, navigation and offer copy reflect the edited campaig
 });
 test('the large-order deposit uses the discounted total and the current store threshold',async()=>{
   for (const method of ['card','cod']) {
-    for (const [uid,total] of [['suit-baby-girl',2250],['threshold',4000],['over-threshold',4000.5]]) {
+    for (const [uid,total] of [['suit-baby-girl|pink',2890],['suit-baby-girl|black',2890],['threshold',4000],['over-threshold',4000.5]]) {
       const state={promoReads:0};
       const order=await harness('api/order.js',state)(orderBody([{uid,qty:1}],{payment:method,expected_total:total}));
       assert.equal(order.data.authoritative_total,total);
