@@ -32,7 +32,7 @@ function sync(ua, en) {
   else replace('<!-- ===== BABY GIRL OVERSIZED SUIT', block + '<!-- ===== BABY GIRL OVERSIZED SUIT');
 
   const promoStart = '<!-- BEGIN SYNCED CATALOG PROMOS -->', promoEnd = '<!-- END SYNCED CATALOG PROMOS -->';
-  let promos = between(ua, '<style id="bgPlateLaunchStyle">', '<section id="shop"');
+  let promos = between(ua, '<!-- ===== SUITS · PREORDER BLOCK ===== -->', '<section id="shop"');
   const copy = {
     'НОВИНКА · BABY GIRL HOME':'NEW · BABY GIRL HOME', 'BABY GIRL ПОСУД 🎀':'BABY GIRL TABLEWARE 🎀',
     'BABY GIRL ТЕПЕР НЕ ТІЛЬКИ У ТВОЄМУ ГАРДЕРОБІ… 💋':'BABY GIRL IS NOW MORE THAN YOUR WARDROBE… 💋',
