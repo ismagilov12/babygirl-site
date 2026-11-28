@@ -1284,6 +1284,15 @@ body.pm-open{overflow:hidden}
 </style>
 <style>#pmVersions{display:flex;flex-direction:column;gap:8px;margin:0 0 18px}#pmVersions button{font:inherit;font-size:14px;line-height:1.4;text-align:left;padding:12px;border:2px solid #171717;border-radius:10px;background:#fff;cursor:pointer}#pmVersions button.active{background:#ffd8eb;box-shadow:2px 2px 0 #171717}#pmVersions .pm-colors-label{font-size:12px;font-weight:700}</style>
 <style id="syncedPlateCards">.card[data-family="plate"] .card-img{aspect-ratio:1/1}.card[data-family="plate"] .card-img img{object-fit:contain;background:#fff}</style>
+<style>
+.intl-order-note { margin: .7rem 0; font-size: .875rem; line-height: 1.5; font-weight: 400; text-transform: none; letter-spacing: normal; }
+.intl-order-note a, .intl-merchant a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+.intl-merchant h3 { margin: 0 0 .4rem; font-size: 1rem; }
+.intl-merchant p { margin: 0; font-size: .9375rem; line-height: 1.55; }
+
+.intl-merchant { max-width: 65ch; margin: 1.25rem auto 0; padding: 1rem 1.25rem; background: #fff9fc; color: #261a22; border: 2px solid currentColor; border-radius: .875rem; }
+.cart-form[hidden] .intl-order-note { display: none; }
+</style>
 </head>
 <body>
 
@@ -1440,6 +1449,7 @@ body.pm-open{overflow:hidden}
       <p class="suit-launch__text">One universal size — <b>fits XS to M beautifully</b>. Signature <b>baby girl</b> embroidery 💞 Wear the trousers loose or adjust the hem to match your mood.</p>
       <p class="suit-launch__motto"><b>Pink. Soft. Oversized. Forever.</b><br>Your everyday Baby Girl uniform 💅🏼💗</p>
       <div class="suit-launch__tags"><span>one size · XS–M</span><span>brushed fleece</span><span>embroidery</span></div>
+      <p class="intl-order-note">International customers are responsible for any customs duties, import taxes, VAT, brokerage fees, or other charges imposed by their country's customs authorities unless duties and taxes are explicitly stated as prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
       <div class="suit-launch__buy"><span class="suit-launch__price"></span><button type="button" class="suit-launch__cta" id="suitsCta">add to cart ♥</button></div>
     </div>
     <div class="suit-launch__visual">
@@ -1617,6 +1627,10 @@ body.pm-open{overflow:hidden}
         </div>
       </div>
     </div>
+    <aside class="intl-merchant">
+      <h3>International payments</h3>
+      <p>This store is integrated with the Western Bid™ e-commerce platform, and Western Bid, Inc. is the Merchant of Record for all international purchases paid in EUR in this store. Therefore, you will see "WESTERN BID" listed as the payee on your PayPal account and credit card statement. <a href="/international-policies#terms-of-service">Terms of service</a></p>
+    </aside>
   </div>
 </section>
 
@@ -1792,7 +1806,7 @@ body.pm-open{overflow:hidden}
         <h3>🚚 Worldwide shipping</h3>
         <p>We ship worldwide with <b>Nova Global</b> (Nova Poshta international).</p>
         <p>— Fixed worldwide shipping: <b>€20</b></p>
-        <p class="muted">Shipping is automatically added and paid at checkout. You won’t need to pay anything for delivery when you receive your order. Your tracking number arrives by email.</p>
+        <p class="muted">Shipping is paid at checkout. Your tracking number arrives by email. <a href="/international-policies#shipping-policy">Customs duties and taxes</a></p>
       </article>
 
       <article class="info-card yellow" id="payment">
@@ -1853,6 +1867,8 @@ body.pm-open{overflow:hidden}
         <a href="#about">About</a>
         <a href="#delivery">Shipping</a>
         <a href="#payment">Payment</a>
+        <a href="/international-policies#terms-of-service">International terms of service</a>
+        <a href="/international-policies#shipping-policy">International shipping policy</a>
         <a href="#returns">Returns</a>
       </div>
       <div>
@@ -1886,6 +1902,7 @@ body.pm-open{overflow:hidden}
     <span>total</span><span class="num" id="cartTotalNum">€0</span>
   </div>
   <form class="cart-form" id="cartForm" hidden="">
+    <p class="intl-order-note">For international orders, you pay any import duties, taxes and clearance fees unless they are explicitly prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <label>full name</label>
     <input id="fld-fio" placeholder="Maria Smith" required="" autocomplete="name">
     <label>phone</label>
@@ -1906,6 +1923,7 @@ body.pm-open{overflow:hidden}
     <input id="fld-addr" placeholder="Sesame st. 5, apt 7" required="">
     <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
     <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
+    <p class="intl-order-note">International customers are responsible for any customs duties, import taxes, VAT, brokerage fees, or other charges imposed by their country's customs authorities unless duties and taxes are explicitly stated as prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <button type="submit" class="cart-submit" id="cartSubmit">pay by card / paypal ♥</button>
     <div id="cartResult" class="cart-result"></div>
   </form>
@@ -1946,6 +1964,7 @@ body.pm-open{overflow:hidden}
       <div class="pm-spec"><div class="lbl">★ fit</div><div class="val">oversize<br>longline</div></div>
       <div class="pm-spec"><div class="lbl">★ print</div><div class="val">DTF<br>does not fade</div></div>
     </div>
+    <p class="intl-order-note">International customers are responsible for any customs duties, import taxes, VAT, brokerage fees, or other charges imposed by their country's customs authorities unless duties and taxes are explicitly stated as prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <button class="pm-cta" id="pmCta">Add to cart ♥</button>
   </div>
 </div>

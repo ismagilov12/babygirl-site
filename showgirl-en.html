@@ -1475,6 +1475,16 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
   .np-modal-iframe{height:calc(100% - 58px)}
 }
 </style>
+<style>
+.intl-order-note { margin: .7rem 0; font-size: .875rem; line-height: 1.5; font-weight: 400; text-transform: none; letter-spacing: normal; }
+.intl-order-note a, .intl-merchant a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+.intl-merchant h3 { margin: 0 0 .4rem; font-size: 1rem; }
+.intl-merchant p { margin: 0; font-size: .9375rem; line-height: 1.55; }
+
+.intl-merchant { max-width: 65ch; margin: 1.25rem auto 0; padding: 1rem 1.25rem; background: #191416; color: #f2ece6; border: 1px solid #736660; }
+.cart-form[hidden] .intl-order-note { display: none; }
+.domestic-checkout .intl-order-note, .domestic-checkout .intl-merchant { display: none; }
+</style>
 </head>
 <body>
 
@@ -1620,6 +1630,10 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
         </div>
       </div>
     </div>
+    <aside class="intl-merchant">
+      <h3>International payments</h3>
+      <p>This store is integrated with the Western Bid™ e-commerce platform, and Western Bid, Inc. is the Merchant of Record for all international purchases paid in EUR in this store. Therefore, you will see "WESTERN BID" listed as the payee on your PayPal account and credit card statement. <a href="/international-policies#terms-of-service">Terms of service</a></p>
+    </aside>
   </div>
 </section>
 
@@ -1793,7 +1807,7 @@ footer{background:#0A0809;border-top:1px solid rgba(201,163,95,.2)}
 <p>Delivery within Ukraine usually takes <b>3–5 days</b>. Domestic shipping fees follow Nova Poshta’s current rates.</p>
 <p>— Worldwide shipping: <b>€15</b><br>
 Delivery time depends on the destination.</p>
-<p>The fixed international shipping cost is shown and charged at checkout.</p>
+<p>The fixed international shipping cost is shown and charged at checkout. <a href="/international-policies#shipping-policy">Customs duties and taxes</a></p>
 <p class="muted">Choose your country at checkout. The site automatically uses UAH payment for Ukraine or EUR payment for international orders.</p>
 </article>
 
@@ -1874,6 +1888,8 @@ Delivery time depends on the destination.</p>
         <a href="#about">About</a>
         <a href="#delivery">Shipping</a>
         <a href="#payment">Payment</a>
+        <a href="/international-policies#terms-of-service">International terms of service</a>
+        <a href="/international-policies#shipping-policy">International shipping policy</a>
         <a href="#returns">Returns</a>
       </div>
       <div>
@@ -1907,6 +1923,7 @@ Delivery time depends on the destination.</p>
     <span>total</span><span class="num" id="cartTotalNum">€0</span>
   </div>
   <form class="cart-form" id="cartForm" hidden="">
+    <p class="intl-order-note">For international orders, you pay any import duties, taxes and clearance fees unless they are explicitly prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <label id="fioLabel">full name</label>
     <input id="fld-fio" placeholder="Maria Smith" required="" autocomplete="name">
     <label id="phoneLabel">phone</label>
@@ -1940,6 +1957,7 @@ Delivery time depends on the destination.</p>
     </div>
     <div class="en-row" id="enShip"><span>shipping · Nova Global</span><b class="d">select country</b></div>
     <div class="en-row main" id="enGrand" hidden=""><span>total</span><b></b></div>
+    <p class="intl-order-note">International customers are responsible for any customs duties, import taxes, VAT, brokerage fees, or other charges imposed by their country's customs authorities unless duties and taxes are explicitly stated as prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <button type="submit" class="cart-submit" id="cartSubmit">continue to payment</button>
     <div id="cartResult" class="cart-result"></div>
   </form>
@@ -1981,6 +1999,7 @@ Delivery time depends on the destination.</p>
       <div class="pm-spec"><div class="lbl">fit</div><div class="val">one size<br>fully adjustable</div></div>
       <div class="pm-spec"><div class="lbl">print</div><div class="val">DTF<br>does not fade</div></div>
     </div>
+    <p class="intl-order-note">International customers are responsible for any customs duties, import taxes, VAT, brokerage fees, or other charges imposed by their country's customs authorities unless duties and taxes are explicitly stated as prepaid (DDP). <a href="/international-policies#shipping-policy" target="_blank" rel="noopener">Shipping policy</a></p>
     <button class="pm-cta" id="pmCta">Add to cart ♥</button>
   </div>
 </div>
@@ -3041,6 +3060,7 @@ Delivery time depends on the destination.</p>
       if($addr)$addr.value=internationalAddressDraft.addr;
     }
     checkoutDomesticMode=domestic;
+    document.documentElement.classList.toggle('domestic-checkout', domestic);
     setCheckoutLanguage(domestic);
     if($internationalFields)$internationalFields.hidden=domestic;
     if($npPickerWrap)$npPickerWrap.hidden=!domestic;
